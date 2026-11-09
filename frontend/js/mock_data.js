@@ -1887,7 +1887,7 @@ const MOCK_USERS = [
   },
 ];
 
-/* ---------------- 2. TÀI KHOẢN VÍ & ESCROW BẢO CHỨNG (MOCK_ESCROW) ---------------- */
+/* ---------------- 2. TÀI KHOẢN VÍ & GIAO DỊCH THANH TOÁN (MOCK_ESCROW / MOCK_PAYMENTS) ---------------- */
 const MOCK_ESCROW = {
   summary: {
     totalTvl: 148500000000,

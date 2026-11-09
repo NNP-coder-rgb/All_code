@@ -425,8 +425,8 @@ function runAdditionalTests() {
     assert.strictEqual(invalidHigh.success, false);
   });
 
-  /* ---------------- 13. Mock Data Người dùng, Đơn, Escrow, Tranh chấp (T10) ---------------- */
-  console.log("\n--- 13. Kiểm thử Mock Data T10 (Người dùng, Đơn, Escrow, Tranh chấp) ---");
+  /* ---------------- 13. Mock Data Người dùng, Đơn, Ví thanh toán, Tranh chấp (T10) ---------------- */
+  console.log("\n--- 13. Kiểm thử Mock Data T10 (Người dùng, Đơn, Ví thanh toán, Tranh chấp) ---");
   it("Kiểm tra đầy đủ MOCK_USERS, MOCK_ESCROW, MOCK_DISPUTES", () => {
     const mockData = require("../js/mock_data.js");
     assert.ok(Array.isArray(mockData.MOCK_USERS), "MOCK_USERS phải là mảng");

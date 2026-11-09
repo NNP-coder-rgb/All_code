@@ -198,7 +198,7 @@
         flex: 1;
       }
 
-      /* So sánh Escrow vs Mô hình HYBRID.STORE */
+      /* Lợi ích nổi bật dành cho khách hàng */
       .comparison-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -213,19 +213,21 @@
         border-radius: var(--radius-lg);
         padding: 28px 24px;
       }
-      .compare-card.old-escrow {
-        background: rgba(239, 68, 68, 0.04);
-        border: 1.5px dashed rgba(239, 68, 68, 0.4);
+      .compare-card.tone-primary-card {
+        background: rgba(139, 92, 246, 0.05);
+        border: 2px solid rgba(139, 92, 246, 0.45);
+        box-shadow: 0 4px 20px rgba(139, 92, 246, 0.08);
       }
       .compare-card.new-hybrid {
         background: rgba(16, 185, 129, 0.05);
         border: 2px solid #10b981;
         box-shadow: 0 4px 20px rgba(16, 185, 129, 0.1);
       }
-      [data-theme="light"] .compare-card.old-escrow,
-      body.light-theme .compare-card.old-escrow {
-        background: #fff5f5;
-        border: 1.5px dashed #dc2626 !important;
+      [data-theme="light"] .compare-card.tone-primary-card,
+      body.light-theme .compare-card.tone-primary-card {
+        background: #faf5ff;
+        border: 2px solid #8b5cf6 !important;
+        box-shadow: 0 6px 20px rgba(139, 92, 246, 0.08);
       }
       [data-theme="light"] .compare-card.new-hybrid,
       body.light-theme .compare-card.new-hybrid {
@@ -395,7 +397,7 @@
         </nav>
         <div class="subnav-info hide-sm">
           <span class="text-success"><span class="material-symbols-outlined icon-sm">bolt</span> Thanh toán Napas 24/7</span>
-          <span class="text-secondary"><span class="material-symbols-outlined icon-sm">verified</span> Không Ký Quỹ • Zero Escrow</span>
+          <span class="text-secondary"><span class="material-symbols-outlined icon-sm">verified</span> Đồng Kiểm 100% Tận Tay</span>
         </div>
       </div>
     </div>
@@ -416,7 +418,7 @@
           </h1>
 
           <p class="about-hero-desc">
-            Chào mừng bạn đến với <strong>HYBRID.STORE</strong> — mô hình siêu thị trực tuyến kết hợp hoàn hảo giữa <strong>Brand Mall 100% Chính Hãng</strong> và <strong>Chợ Đồ Cũ Like New Tuyển Chọn</strong>. Chúng tôi mang đến cơ chế <strong>thanh toán trực tiếp Napas 24/7 khớp lệnh tức thì</strong> và <strong>quy trình đồng kiểm ngoại quan tận tay</strong>, xóa bỏ hoàn toàn sự rườm rà và rủi ro giam giữ vốn của các mô hình ký quỹ (escrow) truyền thống.
+            Chào mừng bạn đến với <strong>HYBRID.STORE</strong> — mô hình siêu thị trực tuyến thế hệ mới kết hợp hoàn hảo giữa <strong>Brand Mall 100% Chính Hãng</strong> và <strong>Chợ Đồ Cũ Like New Tuyển Chọn</strong>. Chúng tôi mang đến trải nghiệm mua sắm hiện đại với <strong>thanh toán trực tiếp Napas 24/7 khớp lệnh tức thì</strong>, <strong>quy trình đồng kiểm 100% cùng shipper</strong> và kiểm định chất lượng độc lập chuẩn ISO.
           </p>
 
           <div class="flex items-center gap-3 flex-wrap">
@@ -471,80 +473,80 @@
         </div>
       </section>
 
-      <!-- 3. TẠI SAO HYBRID.STORE THAY THẾ MÔ HÌNH KÝ QUỸ (ESCROW) CŨ? -->
+      <!-- 3. LỢI ÍCH VƯỢT TRỘI DÀNH CHO KHÁCH HÀNG TẠI HYBRID.STORE -->
       <section class="about-section">
         <div class="text-center mb-6">
-          <span class="badge badge-solid mb-2">ĐỘT PHÁ CÔNG NGHỆ TÀI CHÍNH</span>
-          <h2 class="about-section-title">Tại Sao HYBRID.STORE Thay Thế Mô Hình Ký Quỹ (Escrow) Cũ?</h2>
+          <span class="badge badge-solid mb-2">TRẢI NGHIỆM KHÁCH HÀNG LÀ TRỌNG TÂM</span>
+          <h2 class="about-section-title">Lợi Ích Vượt Trội Dành Cho Khách Hàng Tại HYBRID.STORE</h2>
           <p class="text-muted text-sm" style="max-width: 680px; margin-inline: auto; line-height: 1.6;">
-            Mô hình ký quỹ (escrow) giam giữ tiền trung gian từng khiến người bán bị đọng vốn nhiều tuần và người mua mệt mỏi vì thủ tục. HYBRID.STORE kiến tạo giải pháp thương mại thế hệ mới:
+            Chúng tôi xây dựng tiêu chuẩn thương mại điện tử hiện đại, kết hợp công nghệ thanh toán tức thì và quy chuẩn kiểm tra vật lý nghiêm ngặt:
           </p>
         </div>
 
         <div class="comparison-grid">
-          <!-- Cột Escrow cũ -->
-          <div class="compare-card old-escrow">
+          <!-- Cột 1: An Tâm Mua Sắm & Chất Lượng -->
+          <div class="compare-card tone-primary-card">
             <div class="flex items-center gap-3 mb-4">
-              <div class="icon-box tone-danger">
-                <span class="material-symbols-outlined">cancel</span>
+              <div class="icon-box tone-primary">
+                <span class="material-symbols-outlined">verified_user</span>
               </div>
               <div>
-                <strong class="text-sm block" style="color: var(--danger, #ef4444);">Mô Hình Ký Quỹ (Escrow) Truyền Thống</strong>
-                <span class="text-xs text-muted">Bất cập, giam giữ vốn &amp; thủ tục cồng kềnh</span>
+                <strong class="text-sm block text-primary">An Tâm Mua Sắm &amp; Chất Lượng</strong>
+                <span class="text-xs text-muted">Bảo vệ quyền lợi người mua tối đa</span>
               </div>
             </div>
 
             <div class="compare-item">
-              <span class="material-symbols-outlined text-danger icon-sm" style="flex-shrink: 0; margin-top: 2px;">close</span>
-              <div><strong>Giam giữ tiền người bán:</strong> Tiền bị đóng băng từ 7 đến 15 ngày, gây đứt gãy dòng vốn kinh doanh.</div>
+              <span class="material-symbols-outlined text-success icon-sm" style="flex-shrink: 0; margin-top: 2px;">check</span>
+              <div><strong>Đồng kiểm 100% tận tay:</strong> Mở hộp, bật nguồn và kiểm tra chi tiết ngoại quan cùng nhân viên giao hàng trước khi nhận.</div>
             </div>
 
             <div class="compare-item">
-              <span class="material-symbols-outlined text-danger icon-sm" style="flex-shrink: 0; margin-top: 2px;">close</span>
-              <div><strong>Phí giao dịch cao:</strong> Bên trung gian ký quỹ thu từ 3% đến 5% giá trị đơn hàng chỉ để giữ tiền.</div>
+              <span class="material-symbols-outlined text-success icon-sm" style="flex-shrink: 0; margin-top: 2px;">check</span>
+              <div><strong>Đổi trả linh hoạt trong 7 ngày:</strong> Đổi sản phẩm tương đương hoặc hoàn tiền nhanh chóng nếu sản phẩm có lỗi kỹ thuật từ nhà sản xuất hoặc người bán.</div>
             </div>
 
             <div class="compare-item">
-              <span class="material-symbols-outlined text-danger icon-sm" style="flex-shrink: 0; margin-top: 2px;">close</span>
-              <div><strong>Tranh chấp kéo dài:</strong> Quy trình đối soát thủ công phức tạp, mất nhiều tuần để mở khóa tiền.</div>
+              <span class="material-symbols-outlined text-success icon-sm" style="flex-shrink: 0; margin-top: 2px;">check</span>
+              <div><strong>Kiểm định độc lập 15 bước:</strong> Đồ cũ Like New đều được chuyên viên Lab kiểm tra, dán tem QR niêm phong chất lượng.</div>
             </div>
 
             <div class="compare-item">
-              <span class="material-symbols-outlined text-danger icon-sm" style="flex-shrink: 0; margin-top: 2px;">close</span>
-              <div><strong>Trải nghiệm chậm chạp:</strong> Người mua và người bán đều phụ thuộc vào bên thứ ba duyệt lệnh giải ngân.</div>
+              <span class="material-symbols-outlined text-success icon-sm" style="flex-shrink: 0; margin-top: 2px;">check</span>
+              <div><strong>Hỗ trợ kỹ thuật 24/7:</strong> Tổng đài chuyên viên sẵn sàng hỗ trợ giải đáp thắc mắc và kích hoạt bảo hành điện tử.</div>
             </div>
           </div>
 
-          <!-- Cột HYBRID.STORE hiện đại -->
+          <!-- Cột 2: Thanh Toán & Giao Dịch Thuận Tiện -->
           <div class="compare-card new-hybrid">
             <div class="flex items-center gap-3 mb-4">
               <div class="icon-box tone-success">
-                <span class="material-symbols-outlined">check_circle</span>
+                <span class="material-symbols-outlined">payments</span>
               </div>
               <div>
-                <strong class="text-sm block" style="color: var(--success, #10b981);">Giải Pháp HYBRID.STORE (Zero Escrow)</strong>
-                <span class="text-xs text-muted">Thanh toán trực tiếp, minh bạch &amp; an toàn</span>
+                <strong class="text-sm block text-success">Thanh Toán Tiện Lợi &amp; Minh Bạch</strong>
+                <span class="text-xs text-muted">Khớp lệnh tức thì, tối ưu chi phí</span>
               </div>
             </div>
 
             <div class="compare-item">
               <span class="material-symbols-outlined text-success icon-sm" style="flex-shrink: 0; margin-top: 2px;">check</span>
-              <div><strong>Thanh toán Napas 24/7 &amp; VietQR:</strong> Tiền về thẳng tài khoản người bán tức thì trong 1 giây, dòng tiền thông suốt.</div>
+              <div><strong>Chuyển khoản Napas 24/7 &amp; VietQR:</strong> Quét mã thanh toán bảo mật trong 1 giây, không phát sinh chi phí trung gian.</div>
             </div>
 
             <div class="compare-item">
               <span class="material-symbols-outlined text-success icon-sm" style="flex-shrink: 0; margin-top: 2px;">check</span>
-              <div><strong>Chi phí trung gian 0₫:</strong> Không thu phí giam vốn, giúp người bán tối đa hóa lợi nhuận.</div>
+              <div><strong>Hỗ trợ nhận hàng thanh toán (COD):</strong> Cho phép thanh toán tiền mặt hoặc chuyển khoản ngay tại thời điểm đồng kiểm thành công.</div>
             </div>
 
             <div class="compare-item">
               <span class="material-symbols-outlined text-success icon-sm" style="flex-shrink: 0; margin-top: 2px;">check</span>
-              <div><strong>Bảo vệ bằng Đồng Kiểm 100%:</strong> Người mua được bóc hộp kiểm tra hàng cùng shipper trước khi nhận.</div>
+              <div><strong>0₫ phụ phí thanh toán:</strong> Người mua và người bán không chịu bất kỳ phụ phí ẩn nào ngoài giá trị hàng và phí vận chuyển.</div>
             </div>
 
             <div class="compare-item">
               <span class="material-symbols-outlined text-success icon-sm" style="flex-shrink: 0; margin-top: 2px;">check</span>
-              <div><strong>Hòa giải 3 bên độc lập:</strong> Trung tâm khiếu nại minh bạch xử lý bồi thường thỏa đáng nếu có sai sót.</div>
+              <div><strong>Hóa đơn điện tử VAT đầy đủ:</strong> Xuất hóa đơn VAT tức thì theo thông tin doanh nghiệp hoặc cá nhân cho mọi đơn hàng Mall.</div>
             </div>
           </div>
         </div>
@@ -777,9 +779,9 @@
     <!-- ===== FOOTER ===== -->
     <footer class="site-footer mt-8">
       <div class="container footer-bar">
-        <span class="text-xs text-faint">© 2026 HYBRID.STORE — Hệ Thống Thương Mại Điện Tử Kết Hợp Toàn Quốc (Zero Escrow).</span>
+        <span class="text-xs text-faint">© 2026 HYBRID.STORE — Hệ Thống Thương Mại Điện Tử Tiên Phong Toàn Quốc.</span>
         <div class="flex gap-4 text-xs">
-          <a href="about-escrow.html" class="active">Giới Thiệu HYBRID</a>
+          <a href="about-intro.html" class="active">Giới Thiệu HYBRID</a>
           <a href="about.html">Tiêu Chuẩn Phòng Lab</a>
           <a href="terms_of_service.html">Điều Khoản Dịch Vụ</a>
           <a href="warranty_policy.html">Chính Sách Bảo Hành</a>
