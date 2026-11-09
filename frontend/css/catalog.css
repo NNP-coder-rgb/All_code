@@ -370,3 +370,154 @@
     position: static;
   }
 }
+
+/* =====================================================================
+   GIAO DIỆN SÁNG CHO TRANG CATALOG (LIGHT THEME CATALOG — TƯƠNG PHẢN CAO)
+   ===================================================================== */
+[data-theme="light"] .filter-sidebar,
+body.light-theme .filter-sidebar {
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+}
+
+[data-theme="light"] .filter-head,
+body.light-theme .filter-head {
+  border-bottom: 1.5px solid #e2e8f0;
+}
+
+[data-theme="light"] .filter-title,
+body.light-theme .filter-title {
+  color: #090d16;
+  font-weight: 800;
+}
+
+[data-theme="light"] .filter-reset-btn,
+body.light-theme .filter-reset-btn {
+  color: #0284c7;
+  font-weight: 700;
+}
+
+[data-theme="light"] .filter-reset-btn:hover,
+body.light-theme .filter-reset-btn:hover {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+[data-theme="light"] .filter-group-label,
+body.light-theme .filter-group-label {
+  color: #0f172a;
+  font-weight: 800;
+}
+
+[data-theme="light"] .filter-radio-item,
+body.light-theme .filter-radio-item {
+  color: #334155;
+  font-weight: 500;
+}
+
+[data-theme="light"] .filter-radio-item:hover,
+body.light-theme .filter-radio-item:hover {
+  color: #6d28d9;
+}
+
+[data-theme="light"] .filter-item-count,
+body.light-theme .filter-item-count {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  font-weight: 700;
+}
+
+[data-theme="light"] .price-tag,
+body.light-theme .price-tag {
+  background: #f1f5f9;
+  border: 1.5px solid #cbd5e1;
+  color: #334155;
+  font-weight: 600;
+}
+
+[data-theme="light"] .price-tag:hover,
+[data-theme="light"] .price-tag.active,
+body.light-theme .price-tag:hover,
+body.light-theme .price-tag.active {
+  background: #ede9fe;
+  border-color: #7c3aed;
+  color: #5b21b6;
+  font-weight: 700;
+}
+
+[data-theme="light"] .sidebar-promo-box,
+body.light-theme .sidebar-promo-box {
+  background: linear-gradient(145deg, #f5f3ff, #f0fdfa);
+  border: 1.5px solid #cbd5e1;
+}
+
+[data-theme="light"] .sidebar-promo-title,
+body.light-theme .sidebar-promo-title {
+  color: #0369a1;
+  font-weight: 800;
+}
+
+[data-theme="light"] .sidebar-promo-desc,
+body.light-theme .sidebar-promo-desc {
+  color: #334155;
+}
+
+[data-theme="light"] .catalog-toolbar,
+body.light-theme .catalog-toolbar {
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+[data-theme="light"] .catalog-count,
+body.light-theme .catalog-count {
+  color: #334155;
+}
+
+[data-theme="light"] .catalog-count strong,
+body.light-theme .catalog-count strong {
+  color: #090d16;
+  font-weight: 800;
+}
+
+[data-theme="light"] .active-filter-chip,
+body.light-theme .active-filter-chip {
+  background: #ede9fe;
+  border: 1.5px solid #8b5cf6;
+  color: #5b21b6;
+  font-weight: 700;
+}
+
+[data-theme="light"] .active-filter-chip button,
+body.light-theme .active-filter-chip button {
+  color: #5b21b6;
+}
+
+[data-theme="light"] .sort-select,
+[data-theme="light"] .size-select,
+body.light-theme .sort-select,
+body.light-theme .size-select {
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  color: #090d16;
+  font-weight: 600;
+}
+
+[data-theme="light"] .empty-state,
+body.light-theme .empty-state {
+  background: #ffffff;
+  border: 2px dashed #cbd5e1;
+}
+
+[data-theme="light"] .empty-state-title,
+body.light-theme .empty-state-title {
+  color: #090d16;
+  font-weight: 800;
+}
+
+[data-theme="light"] .empty-state-desc,
+body.light-theme .empty-state-desc {
+  color: #334155;
+}

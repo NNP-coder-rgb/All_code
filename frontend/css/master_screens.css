@@ -725,3 +725,33 @@
   color: #fff;
   border-color: var(--success);
 }
+
+/* =====================================================================
+   GIAO DIỆN SÁNG CHO MASTER SCREENS (LIGHT THEME — TƯƠNG PHẢN CAO)
+   ===================================================================== */
+[data-theme="light"] .bank-row,
+body.light-theme .bank-row {
+  border-bottom: 1px solid #e2e8f0;
+}
+[data-theme="light"] .profile-sidebar-card,
+body.light-theme .profile-sidebar-card {
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+}
+[data-theme="light"] .profile-nav-item,
+body.light-theme .profile-nav-item {
+  color: #334155;
+  font-weight: 500;
+}
+[data-theme="light"] .profile-nav-item:hover,
+body.light-theme .profile-nav-item:hover {
+  background: #f1f5f9;
+  color: #6d28d9;
+}
+[data-theme="light"] .profile-nav-item.active,
+body.light-theme .profile-nav-item.active {
+  background: #ede9fe;
+  color: #5b21b6;
+  font-weight: 700;
+}
