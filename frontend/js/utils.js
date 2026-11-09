@@ -1197,7 +1197,7 @@
   }
 
   /* =========================================================================
-     9. QUẢN LÝ GIAO DIỆN SÁNG / TỐI (Theme Manager)
+     10. QUẢN LÝ GIAO DIỆN SÁNG / TỐI (Theme Manager)
      ========================================================================= */
   const THEME_STORAGE_KEY = "hybrid_theme";
 
@@ -1294,7 +1294,7 @@
   };
 
   /* =========================================================================
-     XUẤT RA TOÀN CỤC VÀ MODULE (CHO NODE.JS / TRÌNH DUYỆT)
+     11. XUẤT RA TOÀN CỤC VÀ MODULE (CHO NODE.JS / TRÌNH DUYỆT)
      ========================================================================= */
 
   function escapeHtml(str) {
