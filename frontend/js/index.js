@@ -367,7 +367,7 @@
         '<div class="product-actions">' +
         '<button class="btn btn-outlined btn-sm" type="button" data-action="add-cart" data-id="' +
         p.id +
-        '"><span class="material-symbols-outlined icon-sm">shopping_cart</span> Thêm Giỏ</button>' +
+        '" title="Thêm vào giỏ hàng"><span class="material-symbols-outlined icon-sm">add_shopping_cart</span> Thêm Vào Giỏ</button>' +
         '<button class="btn btn-primary btn-sm" type="button" data-action="buy" data-id="' +
         p.id +
         '"><span class="material-symbols-outlined icon-sm">bolt</span> Mua Ngay</button>' +
@@ -437,13 +437,13 @@
       '<div class="product-actions c2c-actions">' +
       '<button class="btn btn-outlined btn-sm" type="button" data-action="add-cart" data-id="' +
       p.id +
-      '" title="Thêm vào giỏ hàng"><span class="material-symbols-outlined icon-sm">shopping_cart</span> Thêm Giỏ</button>' +
-      '<button class="btn btn-secondary btn-sm" type="button" data-action="offer" data-id="' +
+      '" title="Thêm vào giỏ hàng"><span class="material-symbols-outlined icon-sm">add_shopping_cart</span> Thêm Vào Giỏ</button>' +
+      '<button class="btn btn-primary btn-sm" type="button" data-action="buy" data-id="' +
       p.id +
-      '"><span class="material-symbols-outlined icon-sm">handshake</span> Trả Giá</button>' +
-      '<button class="btn btn-accent btn-sm btn-buy-now" type="button" data-action="buy" data-id="' +
+      '"><span class="material-symbols-outlined icon-sm">bolt</span> Mua Ngay</button>' +
+      '<button class="btn btn-secondary btn-sm btn-offer-c2c" type="button" data-action="offer" data-id="' +
       p.id +
-      '">Mua Ngay</button>' +
+      '" title="Thương lượng đề xuất giá khác với người bán"><span class="material-symbols-outlined icon-sm">price_change</span> Thương Lượng Trả Giá</button>' +
       "</div>" +
       "</article>"
     );

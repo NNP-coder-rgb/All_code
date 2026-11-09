@@ -185,7 +185,7 @@ body.light-theme {
   /* Primary Violet - đậm đà, tương phản cao trên nền trắng */
   --primary-50: #faf5ff;
   --primary-100: #f3e8ff;
-  --primary-200: #e9d5ff;
+  --primary-200: #5b21b6;
   --primary-300: #6d28d9;
   --primary-400: #6d28d9;
   --primary-500: #7c3aed;
@@ -319,48 +319,55 @@ hr {
 }
 
 /* Thanh cuộn toàn hệ thống - trong suốt 100%, kéo chuột mượt mà, không nút trắng hay viền thô */
+*::-webkit-scrollbar-button,
 ::-webkit-scrollbar-button {
   display: none !important;
   width: 0 !important;
   height: 0 !important;
 }
+*::-webkit-scrollbar,
 ::-webkit-scrollbar {
   width: 6px !important;
   height: 6px !important;
   background: transparent !important;
 }
+*::-webkit-scrollbar-track,
 ::-webkit-scrollbar-track {
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
 }
+*::-webkit-scrollbar-thumb,
 ::-webkit-scrollbar-thumb {
   background: rgba(139, 92, 246, 0.35) !important;
   border-radius: 9999px !important;
   border: none !important;
 }
+*::-webkit-scrollbar-thumb:hover,
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(139, 92, 246, 0.8) !important;
 }
 
+[data-theme="light"] *::-webkit-scrollbar-thumb,
 [data-theme="light"] ::-webkit-scrollbar-thumb,
+body.light-theme *::-webkit-scrollbar-thumb,
 body.light-theme ::-webkit-scrollbar-thumb {
-  background: rgba(109, 40, 217, 0.35) !important;
+  background: rgba(109, 40, 217, 0.4) !important;
 }
+[data-theme="light"] *::-webkit-scrollbar-thumb:hover,
 [data-theme="light"] ::-webkit-scrollbar-thumb:hover,
+body.light-theme *::-webkit-scrollbar-thumb:hover,
 body.light-theme ::-webkit-scrollbar-thumb:hover {
   background: #6d28d9 !important;
 }
 
-@supports not selector(::-webkit-scrollbar) {
-  * {
-    scrollbar-width: thin !important;
-    scrollbar-color: rgba(139, 92, 246, 0.35) transparent !important;
-  }
-  [data-theme="light"] *,
-  body.light-theme * {
-    scrollbar-color: rgba(109, 40, 217, 0.35) transparent !important;
-  }
+* {
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(139, 92, 246, 0.35) transparent !important;
+}
+[data-theme="light"] *,
+body.light-theme * {
+  scrollbar-color: rgba(109, 40, 217, 0.4) transparent !important;
 }
 
 /* ---------- Typography ---------- */

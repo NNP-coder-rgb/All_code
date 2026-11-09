@@ -169,14 +169,20 @@
           </div>
 
           <!-- Nhóm nút hành động -->
-          <div class="flex items-center gap-3 mb-4">
-            <button class="btn btn-secondary flex-1" id="btnUsedOffer" type="button" style="padding: 14px;">
+          <div class="product-actions-group mb-4" style="display: flex; flex-direction: column; gap: 10px;">
+            <div class="flex items-center gap-3">
+              <button class="btn btn-outlined flex-1" id="btnUsedAddCart" type="button" style="padding: 14px; font-weight: 700;" title="Thêm vào giỏ hàng">
+                <span class="material-symbols-outlined icon-sm">add_shopping_cart</span>
+                Thêm Vào Giỏ Hàng
+              </button>
+              <button class="btn btn-primary flex-1" id="btnUsedBuyNow" type="button" style="padding: 14px; font-weight: 700;" title="Mua ngay sản phẩm">
+                <span class="material-symbols-outlined icon-sm">bolt</span>
+                Mua Ngay
+              </button>
+            </div>
+            <button class="btn btn-secondary w-full" id="btnUsedOffer" type="button" style="padding: 14px; font-weight: 700;" title="Thương lượng đề xuất giá khác với người bán">
               <span class="material-symbols-outlined icon-sm">price_change</span>
-              Thương Lượng Trả Giá
-            </button>
-            <button class="btn btn-primary flex-1" id="btnUsedBuyNow" type="button" style="padding: 14px;">
-              <span class="material-symbols-outlined icon-sm">bolt</span>
-              Mua Ngay
+              Thương Lượng Trả Giá Với Người Bán
             </button>
           </div>
 
@@ -298,6 +304,7 @@
         const originalPrice = p.price || 21990000;
 
         // Elements
+        const btnUsedAddCart = document.getElementById("btnUsedAddCart");
         const btnUsedOffer = document.getElementById("btnUsedOffer");
         const btnUsedBuyNow = document.getElementById("btnUsedBuyNow");
         const modal = document.getElementById("usedOfferModal");
@@ -521,6 +528,20 @@
             Utils.toast(res.message, "danger");
           }
         });
+
+        // Nút thêm vào giỏ hàng
+        if (btnUsedAddCart) {
+          btnUsedAddCart.addEventListener("click", () => {
+            const prodTitle = p.short || p.name || "sản phẩm đồ cũ";
+            if (!Auth.ensureLogin(() => {
+              Utils.Cart.addItem(p, 1);
+            }, {
+              title: "Đăng Nhập Mua Hàng",
+              message: 'Vui lòng đăng nhập tài khoản để thêm "' + prodTitle + '" vào giỏ hàng.',
+            })) return;
+            Utils.Cart.addItem(p, 1);
+          });
+        }
 
         // Nút mua ngay trực tiếp
         btnUsedBuyNow.addEventListener("click", () => {
