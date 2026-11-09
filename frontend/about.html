@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quy Trình Mua Sắm &amp; Tiêu Chuẩn Phòng Lab 15 Bước | HYBRID.STORE</title>
+    <title>Quy Trình Kiểm Định Phòng Lab 15 Bước Cho 4 Ngành Hàng | HYBRID.STORE</title>
 
     <!-- Chống giật giao diện (Zero-FOUC Theme Init) -->
     <script>
@@ -20,35 +20,233 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
     />
-    <link rel="stylesheet" href="css/base.css" />
-    <link rel="stylesheet" href="css/catalog.css" />
-    <link rel="stylesheet" href="css/master_screens.css" />
+    <link rel="stylesheet" href="css/base.css?v=4" />
+    <link rel="stylesheet" href="css/catalog.css?v=4" />
+    <link rel="stylesheet" href="css/master_screens.css?v=4" />
+
     <style>
-      .lab-card-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: var(--sp-4);
+      /* Khoảng cách thông thoáng giữa các khối lớn, không dính liền */
+      .about-section {
+        margin-bottom: 56px;
       }
-      .lab-step-item {
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-lg);
-        padding: var(--sp-4);
-        position: relative;
-      }
-      .lab-step-num {
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
-        background: var(--accent-soft);
-        color: var(--primary-300);
-        font-weight: 700;
-        font-family: var(--font-mono);
-        display: flex;
+
+      /* Hộp Icon nổi bật, sắc nét, tương phản cao */
+      .icon-box {
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+        border-radius: 12px;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
-        font-size: 12px;
+        transition: transform var(--t-fast);
+      }
+      .icon-box .material-symbols-outlined {
+        font-size: 24px;
+      }
+      .icon-box.tone-primary {
+        background: rgba(139, 92, 246, 0.16);
+        border: 1.5px solid rgba(139, 92, 246, 0.45);
+        color: #c4b5fd;
+      }
+      .icon-box.tone-secondary {
+        background: rgba(6, 182, 212, 0.16);
+        border: 1.5px solid rgba(6, 182, 212, 0.45);
+        color: #38bdf8;
+      }
+      .icon-box.tone-tertiary {
+        background: rgba(236, 72, 153, 0.16);
+        border: 1.5px solid rgba(236, 72, 153, 0.45);
+        color: #f472b6;
+      }
+      .icon-box.tone-success {
+        background: rgba(16, 185, 129, 0.16);
+        border: 1.5px solid rgba(16, 185, 129, 0.45);
+        color: #34d399;
+      }
+      .icon-box.tone-warning {
+        background: rgba(245, 158, 11, 0.16);
+        border: 1.5px solid rgba(245, 158, 11, 0.45);
+        color: #fbbf24;
+      }
+      .icon-box.tone-danger {
+        background: rgba(239, 68, 68, 0.16);
+        border: 1.5px solid rgba(239, 68, 68, 0.45);
+        color: #f87171;
+      }
+
+      /* Light Mode cho Icon Box sắc nét */
+      [data-theme="light"] .icon-box.tone-primary,
+      body.light-theme .icon-box.tone-primary {
+        background: #ede9fe;
+        border: 1.5px solid #8b5cf6 !important;
+        color: #5b21b6 !important;
+      }
+      [data-theme="light"] .icon-box.tone-secondary,
+      body.light-theme .icon-box.tone-secondary {
+        background: #e0f2fe;
+        border: 1.5px solid #0284c7 !important;
+        color: #0369a1 !important;
+      }
+      [data-theme="light"] .icon-box.tone-tertiary,
+      body.light-theme .icon-box.tone-tertiary {
+        background: #fce7f3;
+        border: 1.5px solid #db2777 !important;
+        color: #9d174d !important;
+      }
+      [data-theme="light"] .icon-box.tone-success,
+      body.light-theme .icon-box.tone-success {
+        background: #dcfce7;
+        border: 1.5px solid #16a34a !important;
+        color: #15803d !important;
+      }
+      [data-theme="light"] .icon-box.tone-warning,
+      body.light-theme .icon-box.tone-warning {
+        background: #fef3c7;
+        border: 1.5px solid #d97706 !important;
+        color: #b45309 !important;
+      }
+
+      /* Typography vừa vặn, chuẩn công thái học */
+      .about-hero-title {
+        font-family: var(--font-head);
+        font-size: 1.85rem;
+        font-weight: 800;
+        line-height: 1.35;
+        letter-spacing: -0.01em;
+        color: var(--text);
+        margin-bottom: 12px;
+      }
+      .about-hero-desc {
+        font-size: 14px;
+        line-height: 1.7;
+        color: var(--text-muted);
+      }
+      .about-section-title {
+        font-family: var(--font-head);
+        font-size: 1.35rem;
+        font-weight: 700;
+        line-height: 1.4;
+        color: var(--text);
         margin-bottom: 8px;
+      }
+
+      /* Thẻ Category & danh sách bước */
+      .category-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+        gap: 24px;
+      }
+      @media (max-width: 768px) {
+        .category-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .category-card {
+        background: var(--bg-card);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        transition: transform var(--t-fast), border-color var(--t-fast), box-shadow var(--t-fast);
+      }
+      .category-card:hover {
+        transform: translateY(-3px);
+        border-color: rgba(139, 92, 246, 0.45);
+        box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.25);
+      }
+      [data-theme="light"] .category-card,
+      body.light-theme .category-card {
+        background: #ffffff;
+        border-color: #e2e8f0;
+      }
+      [data-theme="light"] .category-card:hover,
+      body.light-theme .category-card:hover {
+        border-color: #8b5cf6;
+        box-shadow: 0 10px 24px -4px rgba(139, 92, 246, 0.15);
+      }
+
+      .step-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 14px;
+      }
+      .step-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 10px 12px;
+        border-radius: var(--radius-md);
+        background: var(--bg-surface);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: background var(--t-fast);
+      }
+      [data-theme="light"] .step-item,
+      body.light-theme .step-item {
+        background: #f8fafc;
+        border-color: #e2e8f0;
+      }
+      .step-item:hover {
+        background: rgba(139, 92, 246, 0.06);
+      }
+      .step-tag {
+        display: inline-block;
+        min-width: 68px;
+        padding: 3px 8px;
+        font-size: 11px;
+        font-weight: 700;
+        font-family: var(--font-mono);
+        border-radius: 6px;
+        text-align: center;
+        white-space: nowrap;
+      }
+      .step-desc {
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--text-muted);
+      }
+      [data-theme="light"] .step-desc,
+      body.light-theme .step-desc {
+        color: #334155;
+      }
+
+      /* Trạm kiểm định */
+      .station-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 20px;
+      }
+      .station-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 20px;
+        transition: transform var(--t-fast), border-color var(--t-fast);
+      }
+      .station-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(6, 182, 212, 0.5);
+      }
+      [data-theme="light"] .station-card,
+      body.light-theme .station-card {
+        background: #ffffff;
+        border-color: #e2e8f0;
+      }
+
+      /* Banner liên kết trang Giới Thiệu Tổng Quan */
+      .intro-banner {
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(6, 182, 212, 0.08));
+        border: 1.5px solid rgba(139, 92, 246, 0.35);
+        border-radius: var(--radius-xl);
+        padding: 24px 28px;
+      }
+      [data-theme="light"] .intro-banner,
+      body.light-theme .intro-banner {
+        background: linear-gradient(135deg, #faf5ff, #f0f9ff);
+        border-color: #c4b5fd !important;
       }
     </style>
   </head>
@@ -84,7 +282,9 @@
         <nav>
           <a href="index.html">Trang Chủ</a>
           <span class="text-faint">/</span>
-          <span class="active">Quy Trình Kiểm Định Lab 15 Bước Cho 4 Ngành Hàng</span>
+          <a href="about-escrow.html">Giới Thiệu HYBRID</a>
+          <span class="text-faint">/</span>
+          <span class="active">Tiêu Chuẩn Phòng Lab 15 Bước</span>
         </nav>
         <div class="subnav-info hide-sm">
           <span class="text-success"><span class="material-symbols-outlined icon-sm">verified</span> Tiêu chuẩn ISO/IEC 17025</span>
@@ -94,120 +294,273 @@
     </div>
 
     <main class="container py-8">
-      <div class="text-center mb-8" style="max-width: 800px; margin-inline: auto;">
+      <!-- 1. HERO GIỚI THIỆU TIÊU CHUẨN LAB -->
+      <section class="about-section text-center" style="max-width: 820px; margin-inline: auto;">
         <span class="badge badge-solid mb-3">TIÊU CHUẨN ĐỘC QUYỀN HYBRID</span>
-        <h1 class="page-title mb-3" style="font-size: 2.3rem;">
+        <h1 class="about-hero-title">
           Quy Trình Kiểm Định Phòng Lab 15 Bước<br />
           <span class="headline-gradient">Bóc Tách Cho 4 Đại Ngành Hàng</span>
         </h1>
-        <p class="text-muted" style="line-height: 1.8;">
-          Mỗi thiết bị đồ cũ hoặc mặt hàng giá trị cao khi giao dịch qua sàn đều trải qua bài kiểm tra vật lý độc lập
-          tại hệ thống 3 trạm Lab ISO (Hà Nội, TP.HCM, Đà Nẵng) trước khi dán tem niêm phong giao đến khách hàng.
+        <p class="about-hero-desc">
+          Mỗi thiết bị đồ cũ hoặc sản phẩm giá trị cao trước khi đến tay người mua đều phải vượt qua bài kiểm tra vật lý độc lập
+          tại hệ thống 3 trạm Lab ISO (Hà Nội, TP.HCM, Đà Nẵng) và được dán tem niêm phong bảo đảm 100% cùng quyền đồng kiểm.
         </p>
-      </div>
+      </section>
 
-      <!-- 4 KHỐI NGÀNH HÀNG VỚI 15 BƯỚC -->
-      <div class="grid grid-2 gap-6 mb-8" style="align-items: start;">
-        <!-- 1. Đồ Điện Tử Hi-Tech -->
-        <div class="panel p-5">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="icon-box tone-primary"><span class="material-symbols-outlined">devices</span></span>
+      <!-- 2. BANNER LIÊN KẾT ĐẾN TRANG GIỚI THIỆU TỔNG QUAN VỀ SÀN -->
+      <section class="about-section">
+        <div class="intro-banner flex items-center justify-between gap-4 flex-wrap">
+          <div class="flex items-center gap-3">
+            <span class="icon-box tone-primary">
+              <span class="material-symbols-outlined">hub</span>
+            </span>
             <div>
-              <h2 class="text-lg fw-700">1. Đồ Điện Tử &amp; Hi-Tech (Phones, Laptops, Cameras)</h2>
-              <div class="text-xs text-secondary">Quy trình kiểm tra 5 bước phần cứng chuyên sâu</div>
+              <strong class="text-sm block mb-1">Mô Hình Sàn HYBRID.STORE: Không Giữ Vốn Ký Quỹ &bull; Napas 24/7</strong>
+              <span class="text-xs text-muted">Đồng kiểm 100% khi nhận hàng, thanh toán trực tiếp qua Napas 24/7 &amp; VietQR chỉ mất 0s, 0₫ phí giữ vốn.</span>
             </div>
           </div>
-          <div class="text-xs text-muted" style="line-height: 2;">
-            <div><strong>Bước 01:</strong> Đo độ chai pin thực tế bằng máy xả nạp chuẩn công nghiệp (yêu cầu &gt; 85%).</div>
-            <div><strong>Bước 02:</strong> Soi kính hiển vi phát hiện máy đã bung ốc đít, tráo linh kiện hoặc dính ẩm nước.</div>
-            <div><strong>Bước 03:</strong> Chạy bài test màn hình đa điểm: chống ám ố, sọc chỉ và điểm chết pixel.</div>
-            <div><strong>Bước 04:</strong> Đo thông lượng sóng 5G, Wi-Fi 6, Bluetooth và kiểm tra cảm biến Face ID / vân tay.</div>
-            <div><strong>Bước 05:</strong> Chạy bài kiểm tra nhiệt độ tải nặng (Stress test GPU/CPU) chống sập nguồn.</div>
-          </div>
+          <a class="btn btn-primary btn-sm" href="about-escrow.html">
+            <span class="material-symbols-outlined icon-sm">arrow_forward</span>
+            Khám Phá Sàn HYBRID.STORE
+          </a>
+        </div>
+      </section>
+
+      <!-- 3. KHỐI 4 NGÀNH HÀNG VỚI 15 BƯỚC BÓC TÁCH -->
+      <section class="about-section">
+        <div class="text-center mb-6">
+          <span class="badge badge-secondary mb-2">QUY CHUẨN KỸ THUẬT PHÒNG THÍ NGHIỆM</span>
+          <h2 class="about-section-title">Chi Tiết 15 Bước Kiểm Định Theo Từng Ngành Hàng</h2>
+          <p class="text-xs text-muted" style="max-width: 620px; margin-inline: auto;">
+            Mỗi ngành hàng có đặc thù cấu trúc và rủi ro khác nhau. Kỹ sư phòng Lab HYBRID áp dụng thiết bị chuyên dụng tương ứng.
+          </p>
         </div>
 
-        <!-- 2. Sneakers Hype -->
-        <div class="panel p-5">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="icon-box tone-secondary"><span class="material-symbols-outlined">steps</span></span>
-            <div>
-              <h2 class="text-lg fw-700">2. Sneakers &amp; Giày Dép Hype (Nike, Jordan, Yeezy)</h2>
-              <div class="text-xs text-secondary">Quy trình soi chiếu 4 bước xác thực hàng chuẩn</div>
+        <div class="category-grid">
+          <!-- 1. Đồ Điện Tử Hi-Tech -->
+          <div class="category-card">
+            <div class="flex items-center gap-3 mb-3">
+              <span class="icon-box tone-primary">
+                <span class="material-symbols-outlined">devices</span>
+              </span>
+              <div>
+                <h3 class="text-base fw-700">1. Đồ Điện Tử &amp; Hi-Tech</h3>
+                <div class="text-xs text-secondary">Phones, Laptops, Máy Ảnh &bull; 5 bước phần cứng chuyên sâu</div>
+              </div>
+            </div>
+            <div class="step-list">
+              <div class="step-item">
+                <span class="step-tag badge badge-primary">BƯỚC 01</span>
+                <span class="step-desc">Đo độ chai pin thực tế bằng máy xả nạp chuẩn công nghiệp (yêu cầu dung lượng thực tế &gt; 85%).</span>
+              </div>
+              <div class="step-item">
+                <span class="step-tag badge badge-primary">BƯỚC 02</span>
+                <span class="step-desc">Soi kính hiển vi quang học 50x phát hiện vết bung ốc đít, tráo linh kiện zin hoặc dính ẩm quỳ tím.</span>
+              </div>
+              <div class="step-item">
+                <span class="step-tag badge badge-primary">BƯỚC 03</span>
+                <span class="step-desc">Chạy bài kiểm tra màn hình đa điểm: chống ám ố, lưu ảnh burn-in, sọc cáp và điểm chết sub-pixel.</span>
+              </div>
+              <div class="step-item">
+                <span class="step-tag badge badge-primary">BƯỚC 04</span>
+                <span class="step-desc">Đo thông lượng băng tần sóng 5G, Wi-Fi 6, Bluetooth và kiểm tra cảm biến sinh trắc học Face ID / Touch ID.</span>
+              </div>
+              <div class="step-item">
+                <span class="step-tag badge badge-primary">BƯỚC 05</span>
+                <span class="step-desc">Chạy bài kiểm tra nhiệt độ tải nặng (Stress Test GPU/CPU trong 15 phút) chống sập nguồn hoặc nghẽn xung.</span>
+              </div>
             </div>
           </div>
-          <div class="text-xs text-muted" style="line-height: 2;">
-            <div><strong>Bước 06:</strong> Soi đèn tia cực tím UV: kiểm tra vệt keo thừa, tem ẩn huỳnh quang của nhà máy.</div>
-            <div><strong>Bước 07:</strong> Đối soát chỉ khâu đế Strobel và cấu trúc lót đệm nguyên bản.</div>
-            <div><strong>Bước 08:</strong> Đo tỷ trọng và độ nảy đệm khí Air / bọt Boost bằng máy đo lực nén.</div>
-            <div><strong>Bước 09:</strong> Quét chip NFC mã UPC hộp giày, đối soát hóa đơn mua hàng từ hãng.</div>
-          </div>
-        </div>
 
-        <!-- 3. Thời Trang & Streetwear Thiết Kế -->
-        <div class="panel p-5">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="icon-box tone-tertiary"><span class="material-symbols-outlined">checkroom</span></span>
-            <div>
-              <h2 class="text-lg fw-700">3. Thời Trang &amp; Streetwear Thiết Kế</h2>
-              <div class="text-xs text-secondary">Quy trình kiểm định 3 bước chất liệu &amp; form dáng</div>
+          <!-- 2. Sneakers & Giày Dép Hype -->
+          <div class="category-card">
+            <div class="flex items-center gap-3 mb-3">
+              <span class="icon-box tone-secondary">
+                <span class="material-symbols-outlined">steps</span>
+              </span>
+              <div>
+                <h3 class="text-base fw-700">2. Sneakers &amp; Giày Dép Hype</h3>
+                <div class="text-xs text-secondary">Nike, Jordan, Yeezy &bull; 4 bước soi chiếu xác thực chính hãng</div>
+              </div>
+            </div>
+            <div class="step-list">
+              <div class="step-item">
+                <span class="step-tag badge badge-secondary">BƯỚC 06</span>
+                <span class="step-desc">Soi đèn tia cực tím UV bước sóng 365nm: kiểm tra vệt keo nhiệt thừa, tem ẩn huỳnh quang từ xưởng chính hãng.</span>
+              </div>
+              <div class="step-item">
+                <span class="step-tag badge badge-secondary">BƯỚC 07</span>
+                <span class="step-desc">Đối soát đường may chỉ đế Strobel, mật độ mũi khâu và độ dày cấu trúc lót đệm insole nguyên bản.</span>
+              </div>
+              <div class="step-item">
+                <span class="step-tag badge badge-secondary">BƯỚC 08</span>
+                <span class="step-desc">Đo tỷ trọng bọt khí và độ đàn hồi đệm Air / bọt Boost bằng máy đo lực nén durometer.</span>
+              </div>
+              <div class="step-item">
+                <span class="step-tag badge badge-secondary">BƯỚC 09</span>
+                <span class="step-desc">Quét chip NFC, đối chiếu mã vạch UPC/EAN trên tem hộp với cơ sở dữ liệu phân phối toàn cầu.</span>
+              </div>
             </div>
           </div>
-          <div class="text-xs text-muted" style="line-height: 2;">
-            <div><strong>Bước 10:</strong> Soi sợi vải vi mô: kiểm tra mật độ sợi dệt chống thấm Gore-Tex và độ tơ tằm.</div>
-            <div><strong>Bước 11:</strong> Kiểm tra chi tiết kim loại: khóa kéo YKK/Riri, cúc dập logo khắc laser.</div>
-            <div><strong>Bước 12:</strong> Khử trùng Ozone tiêu chuẩn y tế trước khi đóng gói niêm phong.</div>
-          </div>
-        </div>
 
-        <!-- 4. Đồ Gia Dụng Smart IoT -->
-        <div class="panel p-5">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="icon-box tone-success"><span class="material-symbols-outlined">coffee_maker</span></span>
-            <div>
-              <h2 class="text-lg fw-700">4. Đồ Gia Dụng Thông Minh Smart IoT (Dyson, Roborock)</h2>
-              <div class="text-xs text-secondary">Quy trình kiểm tra 3 bước động cơ &amp; cảm biến</div>
+          <!-- 3. Thời Trang & Streetwear Thiết Kế -->
+          <div class="category-card">
+            <div class="flex items-center gap-3 mb-3">
+              <span class="icon-box tone-tertiary">
+                <span class="material-symbols-outlined">checkroom</span>
+              </span>
+              <div>
+                <h3 class="text-base fw-700">3. Thời Trang &amp; Streetwear Thiết Kế</h3>
+                <div class="text-xs text-secondary">Techwear, Hoodie, Áo Khoác &bull; 3 bước chất liệu &amp; form dáng</div>
+              </div>
+            </div>
+            <div class="step-list">
+              <div class="step-item">
+                <span class="step-tag badge badge-warning">BƯỚC 10</span>
+                <span class="step-desc">Soi sợi vải vi mô: kiểm tra mật độ dệt sợi màng chống thấm Gore-Tex, độ bóng bề mặt và nguồn gốc vải.</span>
+              </div>
+              <div class="step-item">
+                <span class="step-tag badge badge-warning">BƯỚC 11</span>
+                <span class="step-desc">Kiểm tra phụ kiện kim khí: đầu kéo khóa YKK/Riri, cúc dập hợp kim chống gỉ và nét khắc laser nhận diện.</span>
+              </div>
+              <div class="step-item">
+                <span class="step-tag badge badge-warning">BƯỚC 12</span>
+                <span class="step-desc">Khử trùng Ozone tiêu chuẩn y tế loại bỏ hoàn toàn vi khuẩn, mùi hôi trước khi đóng túi zip chân không.</span>
+              </div>
             </div>
           </div>
-          <div class="text-xs text-muted" style="line-height: 2;">
-            <div><strong>Bước 13:</strong> Đo công suất hút động cơ kỹ thuật số bằng máy đo áp suất chân không.</div>
-            <div><strong>Bước 14:</strong> Kiểm tra cảm biến LiDAR dẫn đường và radar tránh chướng ngại vật.</div>
-            <div><strong>Bước 15:</strong> Đo rò rỉ điện và độ bền pin sạc dự phòng thông minh.</div>
-          </div>
-        </div>
-      </div>
 
-      <!-- MẠNG LƯỚI 3 TRẠM LAB ISO -->
-      <div class="panel p-6 text-center" style="background: rgba(139, 92, 246, 0.05)">
-        <h3 class="panel-title mb-4">Mạng Lưới 3 Trạm Kiểm Định Lab Đạt Chuẩn ISO/IEC 17025</h3>
-        <div class="grid grid-3 gap-4 text-xs">
-          <div class="panel p-4" style="background: var(--bg-card)">
-            <strong class="text-sm text-secondary block mb-1">Trạm Lab 01 — Hà Nội</strong>
-            <span class="text-muted">Tòa Keangnam Landmark 72, Nam Từ Liêm, Hà Nội</span>
-          </div>
-          <div class="panel p-4" style="background: var(--bg-card)">
-            <strong class="text-sm text-secondary block mb-1">Trạm Lab 02 — TP. Hồ Chí Minh</strong>
-            <span class="text-muted">Tòa Bitexco Financial Tower, Quận 1, TP.HCM</span>
-          </div>
-          <div class="panel p-4" style="background: var(--bg-card)">
-            <strong class="text-sm text-secondary block mb-1">Trạm Lab 03 — Đà Nẵng</strong>
-            <span class="text-muted">Khu Công Nghệ Cao FPT City, Ngũ Hành Sơn, Đà Nẵng</span>
+          <!-- 4. Đồ Gia Dụng Smart IoT -->
+          <div class="category-card">
+            <div class="flex items-center gap-3 mb-3">
+              <span class="icon-box tone-success">
+                <span class="material-symbols-outlined">coffee_maker</span>
+              </span>
+              <div>
+                <h3 class="text-base fw-700">4. Đồ Gia Dụng Smart IoT</h3>
+                <div class="text-xs text-secondary">Dyson, Roborock, Philips &bull; 3 bước kiểm tra động cơ &amp; cảm biến</div>
+              </div>
+            </div>
+            <div class="step-list">
+              <div class="step-item">
+                <span class="step-tag badge badge-success">BƯỚC 13</span>
+                <span class="step-desc">Đo áp lực hút chân không động cơ kỹ thuật số bằng đồng hồ chênh áp kỹ thuật số (đạt &gt; 90% thông số xuất xưởng).</span>
+              </div>
+              <div class="step-item">
+                <span class="step-tag badge badge-success">BƯỚC 14</span>
+                <span class="step-desc">Hiệu chuẩn cảm biến khoảng cách Laser LiDAR, radar né vật cản và khả năng kết nối app điều khiển từ xa.</span>
+              </div>
+              <div class="step-item">
+                <span class="step-tag badge badge-success">BƯỚC 15</span>
+                <span class="step-desc">Đo an toàn dòng rò tiếp địa (chống giật) và kiểm tra mạch bảo vệ pin ngắt tự động chống quá nhiệt.</span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      <!-- 4. MẠNG LƯỚI 3 TRẠM LAB KIỂM ĐỊNH ĐẠT CHUẨN ISO/IEC 17025 -->
+      <section class="about-section">
+        <div class="panel p-6" style="background: var(--bg-card); border-radius: var(--radius-xl); border: 1.5px solid var(--border);">
+          <div class="flex items-center justify-between mb-5 flex-wrap gap-3">
+            <div>
+              <span class="badge badge-primary mb-1">HỆ THỐNG TRỰC TIẾP TOÀN QUỐC</span>
+              <h3 class="text-base fw-700">Mạng Lưới 3 Trạm Kiểm Định Lab Đạt Chuẩn ISO/IEC 17025</h3>
+            </div>
+            <span class="text-xs text-muted">Mở cửa đón tiếp khách kiểm định trực tiếp từ 8h00 - 22h00 các ngày trong tuần</span>
+          </div>
+
+          <div class="station-grid">
+            <div class="station-card">
+              <div class="flex items-center gap-2 mb-2 text-secondary">
+                <span class="material-symbols-outlined icon-sm">location_on</span>
+                <strong class="text-sm">Trạm Lab 01 — Hà Nội</strong>
+              </div>
+              <span class="text-xs text-muted block mb-3" style="line-height: 1.6;">Tầng 12, Tòa Keangnam Landmark 72, Đường Phạm Hùng, Nam Từ Liêm, Hà Nội</span>
+              <span class="text-xs mono text-primary fw-600">Hotline Kỹ Thuật: 1900 8899 (Nhánh 1)</span>
+            </div>
+
+            <div class="station-card">
+              <div class="flex items-center gap-2 mb-2 text-secondary">
+                <span class="material-symbols-outlined icon-sm">location_on</span>
+                <strong class="text-sm">Trạm Lab 02 — TP. Hồ Chí Minh</strong>
+              </div>
+              <span class="text-xs text-muted block mb-3" style="line-height: 1.6;">Tầng 18, Tòa Bitexco Financial Tower, Số 2 Hải Triều, Bến Nghé, Quận 1, TP.HCM</span>
+              <span class="text-xs mono text-primary fw-600">Hotline Kỹ Thuật: 1900 8898 (Nhánh 2)</span>
+            </div>
+
+            <div class="station-card">
+              <div class="flex items-center gap-2 mb-2 text-secondary">
+                <span class="material-symbols-outlined icon-sm">location_on</span>
+                <strong class="text-sm">Trạm Lab 03 — Đà Nẵng</strong>
+              </div>
+              <span class="text-xs text-muted block mb-3" style="line-height: 1.6;">Tòa Nhà R&amp;D, Khu Công Nghệ Cao FPT City, Hòa Hải, Ngũ Hành Sơn, Đà Nẵng</span>
+              <span class="text-xs mono text-primary fw-600">Hotline Kỹ Thuật: 1900 8897 (Nhánh 3)</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. CAM KẾT CHẤT LƯỢNG & ĐỒNG KIỂM 100% -->
+      <section class="about-section text-center">
+        <div class="panel p-6" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.08), rgba(16, 185, 129, 0.08)); border-radius: var(--radius-xl); border: 1.5px solid rgba(6, 182, 212, 0.35); max-width: 820px; margin-inline: auto;">
+          <span class="icon-box tone-success mb-3">
+            <span class="material-symbols-outlined">verified_user</span>
+          </span>
+          <h3 class="about-section-title">Cam Kết Chất Lượng Độc Quyền Tại HYBRID.STORE</h3>
+          <p class="text-xs text-muted mb-4" style="line-height: 1.8; max-width: 640px; margin-inline: auto;">
+            Mọi sản phẩm bán ra đều được dán tem niêm phong điện tử QR Code chứa đầy đủ video và biên bản kiểm tra 15 bước của kỹ sư Lab.
+            Khách hàng được quyền mở hộp đồng kiểm 100% cùng shipper trước khi nhận hàng.
+          </p>
+          <div class="flex items-center justify-center gap-3 flex-wrap">
+            <a class="btn btn-secondary btn-sm" href="pages/shop/catalog.html">
+              <span class="material-symbols-outlined icon-sm">shopping_bag</span>
+              Khám Phá Sản Phẩm Đã Kiểm Định
+            </a>
+            <a class="btn btn-outlined btn-sm" href="about-escrow.html">
+              <span class="material-symbols-outlined icon-sm">help</span>
+              Tìm Hiểu Thêm Về Nền Tảng
+            </a>
+          </div>
+        </div>
+      </section>
     </main>
 
     <!-- ===== FOOTER ===== -->
     <footer class="site-footer">
       <div class="container footer-bar">
         <span class="text-xs text-faint">© 2026 HYBRID.STORE — Hệ Thống Kiểm Định Chất Lượng Độc Lập Toàn Quốc.</span>
-        <div class="flex gap-4 text-xs">
+        <div class="flex gap-4 text-xs flex-wrap">
           <a href="about-escrow.html">Giới Thiệu HYBRID</a>
+          <a href="about.html">Tiêu Chuẩn Phòng Lab</a>
           <a href="terms_of_service.html">Điều Khoản Dịch Vụ</a>
           <a href="warranty_policy.html">Chính Sách Bảo Hành</a>
           <a href="return_policy.html">Chính Sách Đổi Trả</a>
         </div>
       </div>
     </footer>
+
     <script src="js/utils.js"></script>
+    <script>
+      // Khởi tạo chuyển đổi giao diện sáng / tối
+      document.addEventListener("DOMContentLoaded", function () {
+        var toggleBtn = document.getElementById("themeToggleBtn");
+        if (toggleBtn) {
+          toggleBtn.addEventListener("click", function () {
+            var current = document.documentElement.getAttribute("data-theme") || "dark";
+            var next = current === "dark" ? "light" : "dark";
+            document.documentElement.setAttribute("data-theme", next);
+            if (next === "light") {
+              document.documentElement.classList.add("light-theme");
+            } else {
+              document.documentElement.classList.remove("light-theme");
+            }
+            try {
+              localStorage.setItem("hybrid_theme", next);
+            } catch (e) {}
+          });
+        }
+      });
+    </script>
   </body>
 </html>

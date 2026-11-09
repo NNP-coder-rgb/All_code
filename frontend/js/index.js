@@ -434,7 +434,7 @@
       "</div>" +
       (discount > 0 ? '<div class="text-xs text-success fw-600 mt-1">Tiết kiệm ' + discount + '% (' + fmt(p.oldPrice - p.price) + ') so với mua mới</div>' : '') +
       "</div>" +
-      '<div class="product-actions c2c-actions">' +
+      '<div class="product-actions c2c-actions" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">' +
       '<button class="btn btn-outlined btn-sm" type="button" data-action="add-cart" data-id="' +
       p.id +
       '" title="Thêm vào giỏ hàng"><span class="material-symbols-outlined icon-sm">add_shopping_cart</span> Thêm Vào Giỏ</button>' +
@@ -443,7 +443,7 @@
       '"><span class="material-symbols-outlined icon-sm">bolt</span> Mua Ngay</button>' +
       '<button class="btn btn-secondary btn-sm btn-offer-c2c" type="button" data-action="offer" data-id="' +
       p.id +
-      '" title="Thương lượng đề xuất giá khác với người bán"><span class="material-symbols-outlined icon-sm">price_change</span> Thương Lượng Trả Giá</button>' +
+      '" style="grid-column: 1 / -1; width: 100%;" title="Thương lượng đề xuất giá khác với người bán"><span class="material-symbols-outlined icon-sm">price_change</span> Thương Lượng Trả Giá</button>' +
       "</div>" +
       "</article>"
     );
