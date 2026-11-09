@@ -364,16 +364,13 @@
           : '<span class="badge badge-success">-' + p.off + "%</span>") +
         "</div>" +
         "</div>" +
-        '<div class="product-actions single">' +
-        (flash
-          ? '<button class="btn btn-primary btn-sm" data-action="add-cart" data-id="' +
-            p.id +
-            '"><span class="material-symbols-outlined icon-sm">shopping_cart</span>Thêm Giỏ Hàng</button>'
-          : '<button class="btn btn-outlined btn-sm" data-action="buy" data-id="' +
-            p.id +
-            '">' +
-            (p.buy || "Mua Ngay") +
-            "</button>") +
+        '<div class="product-actions">' +
+        '<button class="btn btn-outlined btn-sm" type="button" data-action="add-cart" data-id="' +
+        p.id +
+        '"><span class="material-symbols-outlined icon-sm">shopping_cart</span> Thêm Giỏ</button>' +
+        '<button class="btn btn-primary btn-sm" type="button" data-action="buy" data-id="' +
+        p.id +
+        '"><span class="material-symbols-outlined icon-sm">bolt</span> Mua Ngay</button>' +
         "</div>" +
         "</article>"
       );
@@ -437,11 +434,14 @@
       "</div>" +
       (discount > 0 ? '<div class="text-xs text-success fw-600 mt-1">Tiết kiệm ' + discount + '% (' + fmt(p.oldPrice - p.price) + ') so với mua mới</div>' : '') +
       "</div>" +
-      '<div class="product-actions">' +
-      '<button class="btn btn-secondary btn-sm" data-action="offer" data-id="' +
+      '<div class="product-actions c2c-actions">' +
+      '<button class="btn btn-outlined btn-sm" type="button" data-action="add-cart" data-id="' +
       p.id +
-      '">Trả Giá</button>' +
-      '<button class="btn btn-accent btn-sm" data-action="buy" data-id="' +
+      '" title="Thêm vào giỏ hàng"><span class="material-symbols-outlined icon-sm">shopping_cart</span> Thêm Giỏ</button>' +
+      '<button class="btn btn-secondary btn-sm" type="button" data-action="offer" data-id="' +
+      p.id +
+      '"><span class="material-symbols-outlined icon-sm">handshake</span> Trả Giá</button>' +
+      '<button class="btn btn-accent btn-sm btn-buy-now" type="button" data-action="buy" data-id="' +
       p.id +
       '">Mua Ngay</button>' +
       "</div>" +

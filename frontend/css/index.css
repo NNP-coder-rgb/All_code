@@ -747,6 +747,14 @@
 .product-actions.single {
   grid-template-columns: 1fr;
 }
+.product-actions.c2c-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.product-actions.c2c-actions .btn-buy-now {
+  grid-column: span 2;
+}
 /* Badge trên ảnh: bố trí theo chiều dọc để nhìn thấy toàn bộ nội dung của từng ô */
 .product-tags {
   position: absolute !important;

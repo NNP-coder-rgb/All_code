@@ -129,6 +129,108 @@
           scrollbar-color: rgba(109, 40, 217, 0.35) transparent !important;
         }
       }
+
+      /* =======================================================
+         ĐỘ TƯƠNG PHẢN CAO CHO BADGE & NÚT Ở CHẾ ĐỘ SÁNG (LIGHT THEME)
+         ======================================================= */
+      [data-theme="light"] .badge,
+      body.light-theme .badge {
+        color: #5b21b6 !important;
+        background: #ede9fe !important;
+        border: 1.5px solid #8b5cf6 !important;
+        font-weight: 800 !important;
+      }
+      [data-theme="light"] .badge .material-symbols-outlined,
+      body.light-theme .badge .material-symbols-outlined {
+        color: inherit !important;
+      }
+      [data-theme="light"] .badge-primary,
+      body.light-theme .badge-primary,
+      [data-theme="light"] .hero-badge-row .badge-primary,
+      body.light-theme .hero-badge-row .badge-primary {
+        color: #5b21b6 !important;
+        background: #ede9fe !important;
+        border: 1.5px solid #7c3aed !important;
+        font-weight: 800 !important;
+      }
+      [data-theme="light"] .hero-badge-row .badge-success,
+      body.light-theme .hero-badge-row .badge-success {
+        color: #15803d !important;
+        background: #dcfce7 !important;
+        border: 1.5px solid #16a34a !important;
+        font-weight: 800 !important;
+      }
+      [data-theme="light"] .badge-secondary,
+      body.light-theme .badge-secondary {
+        color: #0369a1 !important;
+        background: #e0f2fe !important;
+        border: 1.5px solid #0284c7 !important;
+        font-weight: 800 !important;
+      }
+      [data-theme="light"] .badge-success,
+      body.light-theme .badge-success {
+        color: #15803d !important;
+        background: #dcfce7 !important;
+        border: 1.5px solid #22c55e !important;
+        font-weight: 800 !important;
+      }
+      [data-theme="light"] .brand .badge,
+      body.light-theme .brand .badge {
+        color: #5b21b6 !important;
+        background: #ede9fe !important;
+        border: 1.5px solid #7c3aed !important;
+        font-weight: 800 !important;
+      }
+      [data-theme="light"] .btn-outlined,
+      body.light-theme .btn-outlined {
+        background: #ffffff !important;
+        border: 1.5px solid #6d28d9 !important;
+        color: #6d28d9 !important;
+        font-weight: 700 !important;
+      }
+      [data-theme="light"] .btn-outlined:hover,
+      body.light-theme .btn-outlined:hover {
+        background: #f3e8ff !important;
+        border-color: #5b21b6 !important;
+        color: #5b21b6 !important;
+      }
+      [data-theme="light"] .btn-secondary,
+      body.light-theme .btn-secondary {
+        background: #f0f9ff !important;
+        border: 1.5px solid #0284c7 !important;
+        color: #0369a1 !important;
+        font-weight: 700 !important;
+      }
+      [data-theme="light"] .btn-secondary:hover,
+      body.light-theme .btn-secondary:hover {
+        background: #e0f2fe !important;
+        border-color: #0369a1 !important;
+        color: #0c4a6e !important;
+      }
+
+      /* Bố cục nút bấm trên thẻ sản phẩm (Hỗ trợ nút Thêm Giỏ Hàng cho mọi sản phẩm) */
+      .product-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        padding: 0 var(--sp-4) var(--sp-4);
+      }
+      .product-actions .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      .product-actions.c2c-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .product-actions.c2c-actions .btn-buy-now {
+        grid-column: span 2;
+      }
     </style>
   </head>
   <body>

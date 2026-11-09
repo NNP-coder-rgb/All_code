@@ -260,11 +260,14 @@
       "</div>" +
       (discount > 0 ? '<div class="text-xs text-success fw-600 mt-1">Tiết kiệm ' + discount + '% (' + Utils.formatCurrency(savedAmount) + ') so với mua mới</div>' : '') +
       "</div>" +
-      '<div class="product-actions">' +
+      '<div class="product-actions c2c-actions">' +
+      '<button class="btn btn-outlined btn-sm" type="button" data-action="add-cart" data-id="' +
+      p.id +
+      '" title="Thêm vào giỏ hàng"><span class="material-symbols-outlined icon-sm">shopping_cart</span> Thêm Giỏ</button>' +
       '<button class="btn btn-secondary btn-sm" type="button" data-action="offer" data-id="' +
       p.id +
       '"><span class="material-symbols-outlined icon-sm">handshake</span> Trả Giá</button>' +
-      '<button class="btn btn-accent btn-sm" type="button" data-action="buy" data-id="' +
+      '<button class="btn btn-accent btn-sm btn-buy-now" type="button" data-action="buy" data-id="' +
       p.id +
       '">Mua Ngay</button>' +
       "</div>" +
