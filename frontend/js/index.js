@@ -535,8 +535,12 @@
   }
   let cartCount = readCart();
   function renderCart() {
-    cartBadge.textContent = cartCount;
-    cartBadge.classList.toggle("hidden", cartCount === 0);
+    if (typeof Utils !== "undefined" && Utils.Cart) {
+      Utils.Cart.syncBadge("#cartCount");
+    } else {
+      cartBadge.textContent = cartCount;
+      cartBadge.classList.toggle("hidden", cartCount === 0);
+    }
   }
   renderCart();
 

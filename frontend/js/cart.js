@@ -94,10 +94,11 @@
       const isUsed = item.type === "c2c";
       const lineTotal = item.price * item.qty;
       const discountPercent = item.discountPercent || (isUsed && item.oldPrice ? Math.round((1 - item.price / item.oldPrice) * 100) : 0);
+      const detailUrl = isUsed ? `product_used.html?id=${item.id}` : `product_new.html?id=${item.id}`;
 
       html += `
         <div class="cart-item" data-id="${item.id}" data-variant="${item.variant || ""}">
-          <a href="product-detail.html?id=${item.id}">
+          <a href="${detailUrl}">
             <img class="cart-item-img" src="${item.img || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300"}" alt="${item.name}" />
           </a>
           <div>
@@ -110,7 +111,7 @@
               ${item.variant ? `<span class="badge badge-secondary">${item.variant}</span>` : ""}
             </div>
             <h4 class="cart-item-title mb-2">
-              <a href="product-detail.html?id=${item.id}" class="text-hover-primary">${item.name}</a>
+              <a href="${detailUrl}" class="text-hover-primary">${item.name}</a>
             </h4>
             <div class="flex items-baseline gap-2">
               <strong class="mono text-primary">${Utils.formatCurrency(item.price)}</strong>

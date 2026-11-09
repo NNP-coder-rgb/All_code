@@ -268,7 +268,7 @@
             </div>
             <div class="card-product-body">
               <h4 class="card-product-title">
-                <a href="product-detail.html?id=${p.id}">${p.short || p.name}</a>
+                <a href="${isUsed ? 'product_used.html?id=' + p.id : 'product_new.html?id=' + p.id}">${p.short || p.name}</a>
               </h4>
               <div class="card-product-prices">
                 <strong class="price text-primary">${Utils.formatCurrency(p.price)}</strong>
@@ -276,7 +276,7 @@
               </div>
             </div>
             <div class="card-product-foot">
-              <a class="btn btn-secondary w-full" href="product-detail.html?id=${p.id}">
+              <a class="btn btn-secondary w-full" href="${isUsed ? 'product_used.html?id=' + p.id : 'product_new.html?id=' + p.id}">
                 Xem Chi Tiết
               </a>
             </div>
