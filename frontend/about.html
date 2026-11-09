@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quy Trình Mua Sắm An Toàn &amp; Tiêu Chuẩn Phòng Lab 15 Bước | HYBRID.STORE</title>
+    <title>Quy Trình Kiểm Tra Kỹ Thuật &amp; Thẩm Định Chất Lượng 15 Bước | HYBRID.STORE</title>
 
     <!-- Chống giật giao diện (Zero-FOUC Theme Init) -->
     <script>
@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="css/master_screens.css?v=4" />
 
     <style>
-      /* Khoảng cách thông thoáng giữa các khối lớn */
+      /* Khoảng cách thông thoáng giữa các khối lớn, không dính liền */
       .about-section {
         margin-bottom: 56px;
       }
@@ -114,7 +114,7 @@
         margin-bottom: 8px;
       }
 
-      /* 1. Ba khối cam kết */
+      /* 1. Ba khối cam kết bán hàng */
       .pledge-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -126,6 +126,8 @@
         border: 1.5px solid var(--border);
         border-radius: var(--radius-lg);
         padding: 24px;
+        display: flex;
+        flex-direction: column;
         transition: transform var(--t-fast), border-color var(--t-fast);
       }
       .pledge-card:hover {
@@ -229,7 +231,7 @@
         border-bottom-color: #e2e8f0;
       }
       .lab-table td {
-        padding: 13px 18px;
+        padding: 14px 18px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         vertical-align: middle;
       }
@@ -247,7 +249,7 @@
         background: #f5f3ff;
       }
 
-      /* 3. Khối tem niêm phong & Khối trạng thái */
+      /* 3. Khối tem niêm phong & Khối trung tâm kỹ thuật */
       .seal-metrics-grid {
         display: grid;
         grid-template-columns: 1.15fr 0.85fr;
@@ -398,7 +400,7 @@
       <div class="container">
         <a class="brand" href="index.html">
           <span class="brand-mark"><span class="material-symbols-outlined">token</span></span>
-          <span>HYBRID<span class="text-secondary">.STORE</span> <span class="badge">LAB STANDARDS</span></span>
+          <span>HYBRID<span class="text-secondary">.STORE</span> <span class="badge">QUALITY CHECK</span></span>
         </a>
 
         <div class="header-actions">
@@ -426,11 +428,11 @@
           <span class="text-faint">/</span>
           <a href="about-web.html">Giới Thiệu HYBRID</a>
           <span class="text-faint">/</span>
-          <span class="active">Quy Trình &amp; Tiêu Chuẩn Phòng Lab</span>
+          <span class="active">Quy Trình Kiểm Tra Kỹ Thuật 15 Bước</span>
         </nav>
         <div class="subnav-info hide-sm">
-          <span class="text-success"><span class="material-symbols-outlined icon-sm">verified</span> Tiêu chuẩn ISO/IEC 17025</span>
-          <span class="text-secondary"><span class="material-symbols-outlined icon-sm">biotech</span> 3 Trạm Lab Độc Lập</span>
+          <span class="text-success"><span class="material-symbols-outlined icon-sm">verified</span> Đồng Kiểm 100% Tận Tay</span>
+          <span class="text-secondary"><span class="material-symbols-outlined icon-sm">storefront</span> 3 Trung Tâm Kỹ Thuật</span>
         </div>
       </div>
     </div>
@@ -438,24 +440,25 @@
     <main class="container py-8">
       <!-- 1. TIÊU ĐỀ, 3 KHỐI CAM KẾT & QUY TRÌNH 5 BƯỚC AN TOÀN (STEPPER) -->
       <section class="about-section text-center" style="max-width: 860px; margin-inline: auto;">
-        <span class="badge badge-solid mb-3">TIÊU CHUẨN AN TOÀN &amp; CHẤT LƯỢNG HYBRID</span>
+        <span class="badge badge-solid mb-3">TIÊU CHUẨN THẨM ĐỊNH &amp; CHẤT LƯỢNG BÁN HÀNG</span>
         <h1 class="about-hero-title">
-          Quy Trình Mua Sắm An Toàn &amp; Tiêu Chuẩn Phòng Lab 15 Bước
+          Quy Trình Kiểm Tra Kỹ Thuật &amp; Thẩm Định Chất Lượng 15 Bước
         </h1>
         <p class="about-hero-desc">
-          HYBRID.STORE kết hợp giữa <strong>Brand Mall 100% chính hãng</strong> và <strong>Chợ đồ cũ Like New tuyển chọn</strong>.
-          Mọi đơn hàng đều được bảo đảm bằng thanh toán trực tiếp Napas 24/7 và quyền đồng kiểm 100% tận tay khi nhận hàng.
+          Tại <strong>HYBRID.STORE</strong>, sự trung thực và minh bạch về tình trạng sản phẩm là ưu tiên số 1.
+          Mỗi món hàng cũ Like New đều được chuyên viên kỹ thuật test máy thực tế qua 15 bước nghiêm ngặt,
+          phân loại độ mới rõ ràng và bảo vệ quyền lợi người mua bằng chính sách <strong>đồng kiểm 100% cùng shipper</strong>.
         </p>
 
-        <!-- 3 KHỐI CAM KẾT -->
+        <!-- 3 KHỐI CAM KẾT VÀNG -->
         <div class="pledge-grid">
           <div class="pledge-card text-left">
             <span class="icon-box tone-primary mb-3">
               <span class="material-symbols-outlined">verified</span>
             </span>
-            <h3 class="text-base fw-700 mb-1">100% Chính Hãng &amp; Tuyển Chọn</h3>
+            <h3 class="text-base fw-700 mb-1">100% Đúng Tình Trạng &amp; Zin Chuẩn</h3>
             <p class="text-xs text-muted" style="line-height: 1.6;">
-              Hàng mới nguyên seal có hóa đơn VAT; đồ cũ Like New vượt qua bài test 15 bước phòng Lab, đạt dung lượng pin &gt; 85%.
+              Hàng mới nguyên seal 100%; đồ cũ Like New zin bo mạch, pin test thực tế &gt; 85%, phân loại độ mới trung thực không mập mờ.
             </p>
           </div>
 
@@ -463,9 +466,9 @@
             <span class="icon-box tone-secondary mb-3">
               <span class="material-symbols-outlined">bolt</span>
             </span>
-            <h3 class="text-base fw-700 mb-1">Thanh Toán Trực Tiếp Nhanh 24/7</h3>
+            <h3 class="text-base fw-700 mb-1">Thanh Toán Trực Tiếp Nhanh Gọn</h3>
             <p class="text-xs text-muted" style="line-height: 1.6;">
-              Quét mã VietQR hoặc chuyển khoản Napas 24/7 khớp lệnh 0 giây, không giam giữ vốn, không phụ phí ẩn.
+              Chuyển khoản VietQR &amp; Napas 24/7 khớp lệnh 0 giây hoặc trả tiền mặt khi nhận hàng (COD), 0₫ phụ phí phát sinh.
             </p>
           </div>
 
@@ -475,201 +478,201 @@
             </span>
             <h3 class="text-base fw-700 mb-1">Đồng Kiểm 100% Cùng Shipper</h3>
             <p class="text-xs text-muted" style="line-height: 1.6;">
-              Được quyền mở hộp, bật nguồn và kiểm tra chi tiết ngoại quan cùng nhân viên giao hàng trước khi ký nhận.
+              Mở hộp kiểm tra ngoại quan, bật nguồn test chức năng cùng nhân viên giao hàng trước khi thanh toán. Không ưng ý hoàn trả 0₫ phí.
             </p>
           </div>
         </div>
 
-        <!-- QUY TRÌNH 5 BƯỚC AN TOÀN (STEPPER) -->
+        <!-- QUY TRÌNH 5 BƯỚC MUA BÁN AN TOÀN (STEPPER) -->
         <div class="mt-8 text-left">
           <div class="flex items-center justify-between mb-2">
             <strong class="text-sm flex items-center gap-2 text-secondary">
               <span class="material-symbols-outlined icon-sm">timeline</span>
-              Quy Trình Giao Dịch 5 Bước An Toàn
+              Quy Trình Mua Bán 5 Bước Minh Bạch
             </strong>
-            <span class="badge badge-primary text-xs">CHUẨN BẢO VỆ 5 LỚP</span>
+            <span class="badge badge-primary text-xs">TIÊU CHUẨN AN TÂM 5 LỚP</span>
           </div>
 
           <div class="stepper-grid">
             <div class="stepper-item">
               <div class="stepper-num">01</div>
               <strong class="text-xs mb-1">Chọn Sản Phẩm</strong>
-              <span class="text-xs text-muted">Duyệt Brand Mall mới hoặc đồ cũ Like New giá tốt.</span>
+              <span class="text-xs text-muted">Xem ảnh thật, video test máy và thông số tình trạng minh bạch.</span>
             </div>
 
             <div class="stepper-item">
               <div class="stepper-num">02</div>
               <strong class="text-xs mb-1">Trả Giá Linh Hoạt</strong>
-              <span class="text-xs text-muted">Đề xuất mức giá mong muốn với người bán qua công cụ AI.</span>
+              <span class="text-xs text-muted">Đề xuất mức giá mong muốn trực tiếp với người bán qua công cụ AI.</span>
             </div>
 
             <div class="stepper-item">
               <div class="stepper-num">03</div>
-              <strong class="text-xs mb-1">Kiểm Định Phòng Lab</strong>
-              <span class="text-xs text-muted">Độc lập kiểm định 15 bước và dán tem niêm phong QR.</span>
+              <div class="text-xs mb-1"><strong>Kiểm Tra Kỹ Thuật</strong></div>
+              <span class="text-xs text-muted">Chuyên viên kỹ thuật test toàn diện 15 bước &amp; dán tem niêm phong.</span>
             </div>
 
             <div class="stepper-item">
               <div class="stepper-num">04</div>
-              <strong class="text-xs mb-1">Thanh Toán Trực Tiếp</strong>
-              <span class="text-xs text-muted">Chuyển khoản Napas 24/7 tức thì hoặc thanh toán COD.</span>
+              <strong class="text-xs mb-1">Thanh Toán Linh Hoạt</strong>
+              <span class="text-xs text-muted">Quét mã VietQR/Napas tức thì hoặc thanh toán tiền mặt khi nhận (COD).</span>
             </div>
 
             <div class="stepper-item">
               <div class="stepper-num">05</div>
               <strong class="text-xs mb-1">Đồng Kiểm &amp; Nhận Hàng</strong>
-              <span class="text-xs text-muted">Bóc hộp kiểm tra cùng shipper, kích hoạt bảo hành điện tử.</span>
+              <span class="text-xs text-muted">Bóc hộp test máy cùng shipper, kích hoạt bảo hành điện tử chính hãng.</span>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- 2. BẢNG 15 BƯỚC KIỂM ĐỊNH CHIA 3 CỘT (STT, TÊN, MÔ TẢ NGẮN) -->
+      <!-- 2. BẢNG 15 BƯỚC KIỂM TRA KỸ THUẬT (CHIA 3 CỘT RÕ RÀNG) -->
       <section class="about-section">
         <div class="text-center mb-4">
-          <span class="badge badge-secondary mb-2">QUY CHUẨN KỸ THUẬT PHÒNG THÍ NGHIỆM</span>
-          <h2 class="about-section-title">Bảng 15 Bước Kiểm Định Chi Tiết Theo Tiêu Chuẩn ISO</h2>
+          <span class="badge badge-secondary mb-2">DANH MỤC KIỂM TRA CHUYÊN SÂU</span>
+          <h2 class="about-section-title">Bảng 15 Bước Kiểm Tra &amp; Thẩm Định Chi Tiết</h2>
           <p class="text-xs text-muted" style="max-width: 640px; margin-inline: auto;">
-            Áp dụng thiết bị xả nạp công nghiệp, kính hiển vi quang học và máy quét quang phổ cho 4 đại ngành hàng.
+            Áp dụng quy trình kiểm tra thực tế cho 4 ngành hàng chủ lực: Đồ điện tử Hi-Tech, Giày Sneakers Hype, Thời trang thiết kế và Đồ gia dụng thông minh.
           </p>
         </div>
 
         <div class="lab-table-container">
-          <table class="lab-table" aria-label="Bảng 15 bước kiểm định phòng Lab">
+          <table class="lab-table" aria-label="Bảng 15 bước kiểm tra kỹ thuật">
             <thead>
               <tr>
                 <th style="width: 100px; text-align: center;">STT</th>
-                <th style="width: 320px;">Tên Bước Kiểm Định &amp; Ngành Hàng</th>
-                <th>Mô Tả Kỹ Thuật Ngắn Gọn &amp; Tiêu Chuẩn Đạt</th>
+                <th style="width: 320px;">Hạng Mục Kiểm Tra &amp; Ngành Hàng</th>
+                <th>Thao Tác Thực Tế &amp; Tiêu Chuẩn Xuất Bán</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td style="text-align: center;"><span class="badge badge-primary">Bước 01</span></td>
-                <td><strong>Đo dung lượng &amp; độ chai pin thực tế</strong> <span class="badge badge-outline text-xs">Hi-Tech</span></td>
-                <td>Đo dung lượng nạp xả bằng máy chuẩn công nghiệp; yêu cầu pin thực tế đạt &gt; 85% nguyên bản.</td>
+                <td><strong>Test pin &amp; Đo tốc độ sạc nhanh</strong> <span class="badge badge-outline text-xs">Hi-Tech</span></td>
+                <td>Đo dung lượng thực tế qua chu kỳ xả nạp; yêu cầu dung lượng pin đạt &gt; 85%, nhận diện chuẩn sạc nhanh không nóng bất thường.</td>
               </tr>
               <tr>
                 <td style="text-align: center;"><span class="badge badge-primary">Bước 02</span></td>
-                <td><strong>Soi kính hiển vi ốc đít &amp; quỳ tím chống ẩm</strong> <span class="badge badge-outline text-xs">Hi-Tech</span></td>
-                <td>Phóng đại 50x phát hiện vết cạy mở ốc, tráo bo mạch zin hoặc dính ẩm nước quỳ tím đổi màu.</td>
+                <td><strong>Soi ngoại quan, ốc máy &amp; chống ẩm</strong> <span class="badge badge-outline text-xs">Hi-Tech</span></td>
+                <td>Kiểm tra vết trầy xước, soi chân ốc đít zin chưa toét đầu, kiểm tra quỳ tím bên trong chưa đổi màu (không dính ẩm/vào nước).</td>
               </tr>
               <tr>
                 <td style="text-align: center;"><span class="badge badge-primary">Bước 03</span></td>
-                <td><strong>Kiểm tra cảm ứng đa điểm &amp; màn hình</strong> <span class="badge badge-outline text-xs">Hi-Tech</span></td>
-                <td>Chạy mẫu màu RGB toàn màn hình kiểm tra điểm chết pixel, sọc màn hình, bóng mờ lưu ảnh burn-in.</td>
+                <td><strong>Test cảm ứng &amp; Màn hình hiển thị</strong> <span class="badge badge-outline text-xs">Hi-Tech</span></td>
+                <td>Vuốt biểu tượng kiểm tra toàn dải cảm ứng; soi nền trắng/đen kiểm tra điểm chết pixel, ám ố, sọc màn và bóng mờ burn-in.</td>
               </tr>
               <tr>
                 <td style="text-align: center;"><span class="badge badge-primary">Bước 04</span></td>
-                <td><strong>Đo thông lượng băng tần sóng &amp; cảm biến</strong> <span class="badge badge-outline text-xs">Hi-Tech</span></td>
-                <td>Đo độ ổn định anten 5G, Wi-Fi 6, Bluetooth và kiểm tra cảm biến sinh trắc Face ID / Touch ID.</td>
+                <td><strong>Kiểm tra sóng, loa, mic &amp; cảm biến</strong> <span class="badge badge-outline text-xs">Hi-Tech</span></td>
+                <td>Lắp SIM test đàm thoại loa trong/ngoài trong trẻo; đo tốc độ 5G, Wi-Fi; kiểm tra độ nhạy Face ID/Vân tay và cảm biến tiệm cận.</td>
               </tr>
               <tr>
                 <td style="text-align: center;"><span class="badge badge-primary">Bước 05</span></td>
-                <td><strong>Kiểm tra tải nặng nhiệt độ (Stress Test)</strong> <span class="badge badge-outline text-xs">Hi-Tech</span></td>
-                <td>Chạy bài tải nặng GPU/CPU liên tục 15 phút, đảm bảo tản nhiệt ổn định, không sập nguồn ngắt máy.</td>
+                <td><strong>Chạy thử tải nặng &amp; Quay video 4K</strong> <span class="badge badge-outline text-xs">Hi-Tech</span></td>
+                <td>Bật quay video 4K liên tục 10 phút, kiểm tra chống rung quang học, tản nhiệt ổn định, máy không bị giật lag hay sập nguồn.</td>
               </tr>
               <tr>
                 <td style="text-align: center;"><span class="badge badge-secondary">Bước 06</span></td>
-                <td><strong>Soi đèn tia cực tím UV keo thừa &amp; tem ẩn</strong> <span class="badge badge-outline text-xs">Sneakers</span></td>
-                <td>Bật đèn UV 365nm soi đường chỉ huỳnh quang, vệt keo nhiệt thừa từ nhà máy sản xuất chính hãng.</td>
+                <td><strong>Thẩm định chất liệu da &amp; Form mũi giày</strong> <span class="badge badge-outline text-xs">Sneakers</span></td>
+                <td>Kiểm tra độ đàn hồi chất da/vải dệt, độ cong chuẩn của mũi giày, đường may viền đều đặn không có chỉ thừa hay méo form.</td>
               </tr>
               <tr>
                 <td style="text-align: center;"><span class="badge badge-secondary">Bước 07</span></td>
-                <td><strong>Đối soát đường may chỉ đế Strobel</strong> <span class="badge badge-outline text-xs">Sneakers</span></td>
-                <td>Kiểm tra mật độ mũi khâu lót Strobel và đối chiếu cấu trúc lớp đệm đế insole nguyên bản của hãng.</td>
+                <td><strong>Kiểm tra chỉ khâu Strobel &amp; Lót đệm</strong> <span class="badge badge-outline text-xs">Sneakers</span></td>
+                <td>Nhấc lót giày soi đường chỉ may Strobel dưới đế; kiểm tra họa tiết in logo trên lót và độ dày đệm lót insole nguyên bản.</td>
               </tr>
               <tr>
                 <td style="text-align: center;"><span class="badge badge-secondary">Bước 08</span></td>
-                <td><strong>Đo độ đàn hồi &amp; nảy đệm Air / bọt Boost</strong> <span class="badge badge-outline text-xs">Sneakers</span></td>
-                <td>Sử dụng máy đo lực nén durometer kiểm tra độ đàn hồi, chống lún xẹp và áp suất túi khí Air.</td>
+                <td><strong>Đo độ êm nảy đệm Air / Bọt Boost</strong> <span class="badge badge-outline text-xs">Sneakers</span></td>
+                <td>Thử lực đàn hồi khi nén, kiểm tra áp suất túi khí Air không xì xẹp, hạt bọt Boost/React đàn hồi êm ái khi vận động.</td>
               </tr>
               <tr>
                 <td style="text-align: center;"><span class="badge badge-secondary">Bước 09</span></td>
-                <td><strong>Quét chip NFC &amp; đối soát mã vạch UPC/EAN</strong> <span class="badge badge-outline text-xs">Sneakers</span></td>
-                <td>Quét chip NFC trên giày và kiểm tra mã UPC tem hộp khớp cơ sở dữ liệu phân phối toàn cầu.</td>
+                <td><strong>Đối soát mã size tag &amp; Phụ kiện hộp</strong> <span class="badge badge-outline text-xs">Sneakers</span></td>
+                <td>Đối chiếu mã số UPC/EAN trên tem nhiệt trong giày với tem hộp chính hãng; kiểm tra đầy đủ dây giày phụ, tag hãng đi kèm.</td>
               </tr>
               <tr>
                 <td style="text-align: center;"><span class="badge badge-warning">Bước 10</span></td>
-                <td><strong>Soi sợi vải vi mô màng chống thấm Gore-Tex</strong> <span class="badge badge-outline text-xs">Thời Trang</span></td>
-                <td>Soi mật độ sợi dệt màng thoáng khí chống nước, kiểm tra độ tơ tằm và nguồn gốc sợi vải cao cấp.</td>
+                <td><strong>Thẩm định sợi vải &amp; Khả năng kháng nước</strong> <span class="badge badge-outline text-xs">Thời Trang</span></td>
+                <td>Kiểm tra độ bền sợi dệt, độ co giãn, bề mặt vải không xù lông; test hạt nước lăn lá sen trên áo khoác chống thấm Gore-Tex.</td>
               </tr>
               <tr>
                 <td style="text-align: center;"><span class="badge badge-warning">Bước 11</span></td>
-                <td><strong>Kiểm tra phụ kiện kim loại khóa YKK/Riri</strong> <span class="badge badge-outline text-xs">Thời Trang</span></td>
-                <td>Độ trơn mượt của khóa kéo, cúc bấm dập logo hợp kim chống gỉ và nét khắc laser nhận diện hãng.</td>
+                <td><strong>Kiểm tra khóa kéo YKK &amp; Cúc kim loại</strong> <span class="badge badge-outline text-xs">Thời Trang</span></td>
+                <td>Kéo thử khóa kéo YKK/Riri trơn tru không cấn răng; kiểm tra cúc bấm, đinh tán kim loại dập logo sắc nét chống gỉ sét.</td>
               </tr>
               <tr>
                 <td style="text-align: center;"><span class="badge badge-warning">Bước 12</span></td>
-                <td><strong>Khử trùng buồng khí Ozone y tế</strong> <span class="badge badge-outline text-xs">Thời Trang</span></td>
-                <td>Khử khuẩn và mùi ẩm mốc bằng công nghệ Ozone tiêu chuẩn phòng sạch trước khi đóng túi niêm phong.</td>
+                <td><strong>Vệ sinh hơi nước nóng &amp; Khử mùi thơm</strong> <span class="badge badge-outline text-xs">Thời Trang</span></td>
+                <td>Hấp ủi hơi nước định hình form áo quần, loại bỏ hoàn toàn vi khuẩn và mùi ẩm mốc trước khi đóng gói túi zip chuyên dụng.</td>
               </tr>
               <tr>
                 <td style="text-align: center;"><span class="badge badge-success">Bước 13</span></td>
-                <td><strong>Đo lực hút áp suất chân không động cơ</strong> <span class="badge badge-outline text-xs">Smart IoT</span></td>
-                <td>Đo lực hút động cơ kỹ thuật số bằng đồng hồ chênh áp; yêu cầu công suất đạt &gt; 90% xuất xưởng.</td>
+                <td><strong>Test lực hút &amp; Độ êm của động cơ</strong> <span class="badge badge-outline text-xs">Smart IoT</span></td>
+                <td>Chạy thử máy hút bụi, máy lọc không khí ở các cấp độ gió; đo lực hút mạnh mẽ và đảm bảo động cơ hoạt động êm, không mùi khét.</td>
               </tr>
               <tr>
                 <td style="text-align: center;"><span class="badge badge-success">Bước 14</span></td>
-                <td><strong>Hiệu chuẩn cảm biến khoảng cách LiDAR &amp; radar</strong> <span class="badge badge-outline text-xs">Smart IoT</span></td>
-                <td>Chạy bài test bản đồ điều hướng LiDAR, radar tránh vật cản và kết nối ứng dụng điều khiển từ xa.</td>
+                <td><strong>Test cảm biến chống rơi &amp; Điều khiển App</strong> <span class="badge badge-outline text-xs">Smart IoT</span></td>
+                <td>Cho robot hút bụi chạy thử trên bàn kiểm tra cảm biến chống rơi vực; kết nối ứng dụng điện thoại điều khiển mượt mà.</td>
               </tr>
               <tr>
                 <td style="text-align: center;"><span class="badge badge-success">Bước 15</span></td>
-                <td><strong>Đo dòng rò an toàn điện &amp; mạch sạc pin</strong> <span class="badge badge-outline text-xs">Smart IoT</span></td>
-                <td>Đo an toàn cách điện chống giật và kiểm tra cơ chế ngắt mạch sạc tự động chống chai nổ pin.</td>
+                <td><strong>Kiểm tra an toàn điện &amp; Tự ngắt sạc</strong> <span class="badge badge-outline text-xs">Smart IoT</span></td>
+                <td>Kiểm tra dây nguồn không hở điện, đo củ sạc adapter chính hãng và kiểm tra rơ-le tự ngắt sạc khi pin đầy chống chai nổ.</td>
               </tr>
             </tbody>
           </table>
         </div>
       </section>
 
-      <!-- 3. KHỐI TEM NIÊM PHONG CHỐNG GIẢ MẠO & KHỐI TRẠNG THÁI HỆ THỐNG -->
+      <!-- 3. KHỐI TEM NIÊM PHONG BẢO ĐẢM & TRUNG TÂM KỸ THUẬT TRẢI NGHIỆM -->
       <section class="about-section">
         <div class="seal-metrics-grid">
-          <!-- Khối Tem Niêm Phong Chống Giả Mạo -->
+          <!-- Khối Tem Niêm Phong Đảm Bảo -->
           <div class="seal-card">
             <div class="flex items-center gap-2 mb-3">
-              <span class="badge badge-primary">HYBRID SECURITY SEAL</span>
-              <span class="badge badge-success">CHỐNG GIẢ MẠO 100%</span>
+              <span class="badge badge-primary">HYBRID AUTHENTIC SEAL</span>
+              <span class="badge badge-success">BẢO ĐẢM NGUYÊN BẢN</span>
             </div>
-            <h3 class="text-base fw-700 mb-2">Tem Niêm Phong Điện Tử QR Hologram Độc Quyền</h3>
+            <h3 class="text-base fw-700 mb-2">Tem Niêm Phong Điện Tử QR Chống Tráo Hàng</h3>
             <p class="text-xs text-muted mb-4" style="line-height: 1.7;">
-              Mỗi sản phẩm sau khi vượt qua bài test 15 bước đều được dán tem niêm phong vật lý công nghệ màng hủy (Tamper-Evident Void).
-              Khách hàng dùng camera quét mã QR trên tem để mở biên bản nghiệm thu:
+              Sau khi chuyên viên kỹ thuật hoàn tất 15 bước kiểm tra, sản phẩm được dán tem niêm phong màng vỡ tại mép hộp và cổng máy.
+              Khách hàng dùng camera điện thoại quét mã QR để xem hồ sơ kiểm tra thực tế:
             </p>
             <div class="p-3 mb-4" style="background: var(--bg-card); border-radius: var(--radius-md); border: 1px solid var(--border);">
               <div class="flex items-center justify-between text-xs mb-1.5">
-                <span class="text-muted">Mã Tem Định Danh:</span>
-                <span class="mono fw-700 text-primary">SEAL-2026-HYB-9988</span>
+                <span class="text-muted">Mã Hồ Sơ Thẩm Định:</span>
+                <span class="mono fw-700 text-primary">CHECK-2026-HYB-9988</span>
               </div>
               <div class="flex items-center justify-between text-xs mb-1.5">
-                <span class="text-muted">Trạng Thái Niêm Phong:</span>
+                <span class="text-muted">Tình Trạng Niêm Phong:</span>
                 <span class="text-success fw-700 flex items-center gap-1">
-                  <span class="material-symbols-outlined icon-xs">verified</span> Nguyên Vẹn (Chưa Bóc)
+                  <span class="material-symbols-outlined icon-xs">verified</span> Tem Nguyên Vẹn (Chưa Bóc)
                 </span>
               </div>
               <div class="flex items-center justify-between text-xs">
-                <span class="text-muted">Chứng Thư Kiểm Định:</span>
-                <span class="mono text-secondary">ISO/IEC 17025 Certified</span>
+                <span class="text-muted">Kết Quả Kiểm Tra:</span>
+                <span class="mono text-secondary">Đạt Chuẩn 15/15 Tiêu Chí</span>
               </div>
             </div>
             <div class="text-xs text-muted">
-              <strong>Cam kết bồi thường:</strong> Đền bù <strong>200%</strong> giá trị đơn hàng nếu tem có dấu hiệu cạy mở hoặc sản phẩm không đúng cam kết.
+              <strong>Cam kết uy tín:</strong> Hoàn tiền <strong>100%</strong> và tặng thêm 1.000.000₫ nếu sản phẩm nhận được có dấu hiệu tráo linh kiện hoặc sai khác so với hồ sơ thẩm định.
             </div>
           </div>
 
-          <!-- Khối Trạng Thái Hệ Thống (Số Liệu Mẫu) -->
+          <!-- Khối Trung Tâm Kỹ Thuật & Chỉ Số Vận Hành Thực Tế -->
           <div class="metrics-card">
             <div class="flex items-center gap-2 mb-3">
-              <span class="badge badge-secondary">HỆ THỐNG VẬN HÀNH THỜI GIAN THỰC</span>
+              <span class="badge badge-secondary">HỆ THỐNG TRẢI NGHIỆM TRỰC TIẾP</span>
             </div>
-            <h3 class="text-base fw-700 mb-3">Chỉ Số Vận Hành Đạt Chuẩn</h3>
+            <h3 class="text-base fw-700 mb-3">Chỉ Số Đảm Bảo Chất Lượng</h3>
 
             <div class="metric-stat-item">
               <div>
-                <strong class="text-sm block">Tỷ Lệ Đồng Kiểm Thành Công</strong>
-                <span class="text-xs text-muted">Khách hàng nghiệm thu hài lòng cùng shipper</span>
+                <strong class="text-sm block">Tỷ Lệ Đồng Kiểm Hài Lòng</strong>
+                <span class="text-xs text-muted">Khách hàng nghiệm thu ưng ý cùng shipper</span>
               </div>
               <span class="mono text-base text-success fw-700">99.8%</span>
             </div>
@@ -677,14 +680,14 @@
             <div class="metric-stat-item">
               <div>
                 <strong class="text-sm block">Tốc Độ Khớp Lệnh Napas 24/7</strong>
-                <span class="text-xs text-muted">Chuyển khoản trực tiếp VietQR tức thì</span>
+                <span class="text-xs text-muted">Thanh toán chuyển khoản VietQR tức thì</span>
               </div>
               <span class="mono text-base text-primary fw-700">0 Giây</span>
             </div>
 
             <div class="metric-stat-item">
               <div>
-                <strong class="text-sm block">Quy Chuẩn Kiểm Định</strong>
+                <strong class="text-sm block">Quy Chuẩn Kiểm Tra</strong>
                 <span class="text-xs text-muted">Áp dụng nghiêm ngặt cho toàn bộ đồ cũ</span>
               </div>
               <span class="mono text-base text-secondary fw-700">15/15 Bước</span>
@@ -692,22 +695,22 @@
 
             <div class="metric-stat-item">
               <div>
-                <strong class="text-sm block">Trạm Lab Khắp 3 Miền</strong>
-                <span class="text-xs text-muted">Keangnam HN, Bitexco HCM, FPT City ĐN</span>
+                <strong class="text-sm block">Showroom &amp; Trạm Kỹ Thuật</strong>
+                <span class="text-xs text-muted">Hà Nội, TP. Hồ Chí Minh, Đà Nẵng</span>
               </div>
-              <span class="mono text-base text-warning fw-700">3 Trạm ISO</span>
+              <span class="mono text-base text-warning fw-700">3 Trung Tâm</span>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- 4. FAQ ACCORDION (HỖ TRỢ CHUỘT & PHÍM ENTER / SPACE) -->
+      <!-- 4. FAQ ACCORDION (HỎI ĐÁP THỰC TẾ CHO NGƯỜI MUA HÀNG) -->
       <section class="about-section">
         <div class="text-center mb-4">
-          <span class="badge badge-primary mb-2">HỎI ĐÁP PHỔ BIẾN</span>
-          <h2 class="about-section-title">Câu Hỏi Thường Gặp Về Quy Trình Mua Sắm</h2>
+          <span class="badge badge-primary mb-2">HỎI ĐÁP THƯỜNG GẶP</span>
+          <h2 class="about-section-title">Thắc Mắc Phổ Biến Về Chất Lượng &amp; Mua Hàng</h2>
           <p class="text-xs text-muted">
-            Giải đáp chi tiết về quy chuẩn thanh toán trực tiếp, đồng kiểm tận tay và đổi trả tại HYBRID.STORE.
+            Giải đáp cặn kẽ về quyền lợi kiểm tra hàng, hình thức thanh toán và bảo hành tại HYBRID.STORE.
           </p>
         </div>
 
@@ -721,11 +724,11 @@
               aria-controls="faq-ans-1"
               id="faq-btn-1"
             >
-              <span>1. HYBRID.STORE hoạt động theo mô hình nào và vì sao không dùng ký quỹ?</span>
+              <span>1. Hàng cũ Like New tại HYBRID.STORE có đảm bảo chất lượng và linh kiện zin không?</span>
               <span class="material-symbols-outlined faq-icon">expand_more</span>
             </button>
             <div class="faq-answer" id="faq-ans-1" role="region" aria-labelledby="faq-btn-1">
-              HYBRID.STORE vận hành theo mô hình bán lẻ hiện đại: 100% Brand Mall chính hãng và Chợ đồ cũ Like New tuyển chọn. Chúng tôi tối ưu dòng tiền bằng thanh toán trực tiếp Napas 24/7 và VietQR khớp lệnh 0 giây, kết hợp đồng kiểm 100% khi nhận hàng. Mô hình này giúp khách hàng nhận hàng ngay và người bán thu hồi vốn tức thì mà không cần qua trung gian giam giữ vốn ký quỹ cồng kềnh.
+              Hoàn toàn yên tâm. Mọi sản phẩm cũ đăng bán đều phải qua chuyên viên kỹ thuật của chúng tôi test máy thực tế 15 bước: kiểm tra bo mạch zin chưa sửa chữa, đo dung lượng pin còn tốt (&gt; 85%), test cảm ứng và các cảm biến. Sản phẩm đạt chuẩn mới được dán tem niêm phong xuất bán kèm bảng báo cáo tình trạng chi tiết đến từng vết xước nhỏ.
             </div>
           </div>
 
@@ -738,11 +741,11 @@
               aria-controls="faq-ans-2"
               id="faq-btn-2"
             >
-              <span>2. Quyền lợi đồng kiểm 100% cùng shipper được thực hiện thế nào?</span>
+              <span>2. Quyền lợi đồng kiểm 100% cùng shipper diễn ra cụ thể như thế nào?</span>
               <span class="material-symbols-outlined faq-icon">expand_more</span>
             </button>
             <div class="faq-answer" id="faq-ans-2" role="region" aria-labelledby="faq-btn-2">
-              Khi shipper giao kiện hàng, khách hàng có toàn quyền mở hộp đồng kiểm ngoại quan, kiểm tra số serial/IMEI và bật nguồn thử nghiệm trước khi ký nhận. Nếu sản phẩm có dấu hiệu trầy xước không đúng mô tả hoặc sai sót kỹ thuật, bạn có quyền từ chối nhận hàng mà không chịu bất kỳ chi phí phát sinh nào.
+              Khi nhân viên giao hàng đến, bạn được phép mở hộp kiện hàng, cầm trực tiếp sản phẩm, kiểm tra ngoại quan và bật nguồn thử nghiệm các tính năng cơ bản trước khi thanh toán. Nếu sản phẩm không đúng như mô tả trên website, bạn có quyền từ chối nhận hàng ngay tại chỗ mà không mất bất kỳ khoản phí nào.
             </div>
           </div>
 
@@ -755,11 +758,11 @@
               aria-controls="faq-ans-3"
               id="faq-btn-3"
             >
-              <span>3. Làm sao để tôi kiểm tra tem niêm phong điện tử QR của phòng Lab?</span>
+              <span>3. Làm sao để tôi kiểm tra tem niêm phong QR và hồ sơ kỹ thuật của sản phẩm?</span>
               <span class="material-symbols-outlined faq-icon">expand_more</span>
             </button>
             <div class="faq-answer" id="faq-ans-3" role="region" aria-labelledby="faq-btn-3">
-              Mọi sản phẩm đã kiểm định đều có tem niêm phong dán trên hộp và trên thân máy. Bạn chỉ cần mở ứng dụng camera trên điện thoại và quét mã QR trên tem. Hệ thống sẽ mở ra trang chứng thư kiểm định chứa video ghi lại bài test 15 bước, mã định danh linh kiện và chữ ký số xác thực của kỹ sư phòng Lab.
+              Trên hộp và thân máy đều có dán tem niêm phong chống bóc. Bạn chỉ cần dùng camera điện thoại quét mã QR in trên tem. Màn hình sẽ hiển thị ngay biên bản kiểm tra 15 tiêu chí, hình ảnh chụp thực tế sản phẩm trước khi đóng gói và ngày giờ chuyên viên kỹ thuật ký duyệt.
             </div>
           </div>
 
@@ -776,7 +779,24 @@
               <span class="material-symbols-outlined faq-icon">expand_more</span>
             </button>
             <div class="faq-answer" id="faq-ans-4" role="region" aria-labelledby="faq-btn-4">
-              Đối với hàng Brand Mall, khách hàng được bảo hành chính hãng theo chính sách nhà phân phối tại Việt Nam. Đối với đồ cũ Like New, HYBRID.STORE cung cấp gói bảo hành điện tử tiêu chuẩn từ 6 đến 12 tháng tại 3 trạm Lab toàn quốc, đồng thời hỗ trợ 1 đổi 1 trong 7 ngày đầu nếu xuất hiện lỗi phần cứng.
+              Đối với hàng mới Brand Mall, bạn nhận đầy đủ bảo hành chính hãng theo tiêu chuẩn nhà phân phối tại Việt Nam. Đối với đồ cũ Like New, HYBRID.STORE cung cấp gói bảo hành từ 6 đến 12 tháng tại 3 trung tâm kỹ thuật toàn quốc, cùng chính sách 1 đổi 1 hoặc hoàn tiền trong 7 ngày nếu phát sinh lỗi kỹ thuật phần cứng.
+            </div>
+          </div>
+
+          <!-- FAQ 5 -->
+          <div class="faq-item">
+            <button
+              class="faq-question"
+              type="button"
+              aria-expanded="false"
+              aria-controls="faq-ans-5"
+              id="faq-btn-5"
+            >
+              <span>5. Tôi có thể đến trực tiếp các trung tâm kỹ thuật để trải nghiệm và mua máy không?</span>
+              <span class="material-symbols-outlined faq-icon">expand_more</span>
+            </button>
+            <div class="faq-answer" id="faq-ans-5" role="region" aria-labelledby="faq-btn-5">
+              Có. Chúng tôi có 3 trung tâm kỹ thuật &amp; showroom trải nghiệm tại Hà Nội (Keangnam Landmark 72), TP. Hồ Chí Minh (Bitexco Financial Tower) và Đà Nẵng (Khu Công Nghệ FPT City). Bạn có thể ghé trực tiếp từ 8h00 đến 22h00 các ngày trong tuần để tự tay trải nghiệm máy, nhờ chuyên viên tư vấn hoặc nhận máy trực tiếp.
             </div>
           </div>
         </div>
@@ -785,7 +805,7 @@
       <!-- 5. KHỐI KÊU GỌI HÀNH ĐỘNG CUỐI TRANG VỚI 2 NÚT DẪN VỀ CATALOG -->
       <section class="about-section">
         <div class="cta-box">
-          <span class="badge badge-solid mb-3">BẮT ĐẦU MUA SẮM THÔNG MINH</span>
+          <span class="badge badge-solid mb-3">BẮT ĐẦU MUA SẮM AN TÂM</span>
           <h2 class="about-section-title" style="font-size: 1.6rem;">
             Sẵn Sàng Trải Nghiệm Mua Sắm Đột Phá Tại HYBRID.STORE?
           </h2>
@@ -810,10 +830,10 @@
     <!-- ===== FOOTER ===== -->
     <footer class="site-footer">
       <div class="container footer-bar">
-        <span class="text-xs text-faint">© 2026 HYBRID.STORE — Hệ Thống Kiểm Định Chất Lượng Độc Lập Toàn Quốc.</span>
+        <span class="text-xs text-faint">© 2026 HYBRID.STORE — Hệ Thống Mua Sắm &amp; Thẩm Định Chất Lượng Toàn Quốc.</span>
         <div class="flex gap-4 text-xs flex-wrap">
           <a href="about-web.html">Giới Thiệu HYBRID</a>
-          <a href="about.html">Tiêu Chuẩn Phòng Lab</a>
+          <a href="about.html">Quy Trình Kiểm Tra 15 Bước</a>
           <a href="terms_of_service.html">Điều Khoản Dịch Vụ</a>
           <a href="warranty_policy.html">Chính Sách Bảo Hành</a>
           <a href="return_policy.html">Chính Sách Đổi Trả</a>
