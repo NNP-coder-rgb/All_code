@@ -1197,6 +1197,103 @@
   }
 
   /* =========================================================================
+     9. QUẢN LÝ GIAO DIỆN SÁNG / TỐI (Theme Manager)
+     ========================================================================= */
+  const THEME_STORAGE_KEY = "hybrid_theme";
+
+  const Theme = {
+    KEY: THEME_STORAGE_KEY,
+    DEFAULT: "dark",
+
+    get() {
+      if (typeof localStorage === "undefined") return this.DEFAULT;
+      try {
+        return localStorage.getItem(this.KEY) || this.DEFAULT;
+      } catch (e) {
+        return this.DEFAULT;
+      }
+    },
+
+    set(theme) {
+      const mode = theme === "light" ? "light" : "dark";
+      if (typeof localStorage !== "undefined") {
+        try {
+          localStorage.setItem(this.KEY, mode);
+        } catch (e) {}
+      }
+      this.apply(mode);
+      return mode;
+    },
+
+    toggle() {
+      const current = this.get();
+      const next = current === "light" ? "dark" : "light";
+      return this.set(next);
+    },
+
+    apply(theme) {
+      const mode = theme || this.get();
+      if (typeof document !== "undefined") {
+        const root = document.documentElement;
+        if (root) {
+          root.setAttribute("data-theme", mode);
+          root.classList.toggle("light-theme", mode === "light");
+        }
+        if (document.body) {
+          document.body.classList.toggle("light-theme", mode === "light");
+        }
+        this.updateButtons(mode);
+      }
+      return mode;
+    },
+
+    updateButtons(theme) {
+      if (typeof document === "undefined") return;
+      const isLight = theme === "light";
+      const iconName = isLight ? "dark_mode" : "light_mode";
+      const tooltip = isLight
+        ? "Chuyển sang giao diện Tối (Midnight Cyber)"
+        : "Chuyển sang giao diện Sáng (Nền trắng)";
+
+      const buttons = document.querySelectorAll(".theme-toggle-btn, #themeToggleBtn");
+      buttons.forEach((btn) => {
+        btn.setAttribute("title", tooltip);
+        btn.setAttribute("aria-label", tooltip);
+        const icon = btn.querySelector(".material-symbols-outlined, .theme-toggle-icon");
+        if (icon) {
+          icon.textContent = iconName;
+        }
+      });
+    },
+
+    init() {
+      if (typeof document === "undefined") return;
+      const theme = this.get();
+      this.apply(theme);
+
+      // Lắng nghe sự kiện click nút chuyển đổi giao diện
+      document.addEventListener("click", (e) => {
+        const btn = e.target.closest(".theme-toggle-btn, #themeToggleBtn");
+        if (btn) {
+          e.preventDefault();
+          const newTheme = Theme.toggle();
+          if (typeof toast === "function") {
+            toast({
+              title: newTheme === "light" ? "Giao diện Sáng" : "Giao diện Tối",
+              message:
+                newTheme === "light"
+                  ? "Đã chuyển sang giao diện nền trắng hiện đại"
+                  : "Đã chuyển sang giao diện Midnight Cyber Violet",
+              type: "info",
+              duration: 2000,
+            });
+          }
+        }
+      });
+    },
+  };
+
+  /* =========================================================================
      XUẤT RA TOÀN CỤC VÀ MODULE (CHO NODE.JS / TRÌNH DUYỆT)
      ========================================================================= */
 
@@ -1227,6 +1324,7 @@
     Validator,
     Auth,
     Offer,
+    Theme,
     getUsedDiscountPercent,
   };
 
@@ -1260,14 +1358,20 @@
       window.Auth = Auth;
     }
     window.Offer = Offer;
+    window.Theme = Theme;
     window.getUsedDiscountPercent = getUsedDiscountPercent;
 
-    // Tự động đồng bộ giỏ hàng khi trang tải xong (nếu chạy trong trình duyệt)
+    // Tự động khởi tạo Theme & Giỏ hàng khi trang tải xong (nếu chạy trong trình duyệt)
     if (typeof document !== "undefined") {
+      Theme.init();
       if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", () => Cart.syncBadge());
+        document.addEventListener("DOMContentLoaded", () => {
+          Cart.syncBadge();
+          Theme.updateButtons(Theme.get());
+        });
       } else {
         Cart.syncBadge();
+        Theme.updateButtons(Theme.get());
       }
     }
   }

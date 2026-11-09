@@ -320,7 +320,7 @@ const PRODUCTS = [
     img: IMG.bomber,
   },
 
-    {
+  {
     id: "f9",
     category: "fashion",
     type: "mall",
@@ -537,7 +537,7 @@ const PRODUCTS = [
     img: IMG.ghost,
   },
 
-    {
+  {
     id: "s9",
     category: "sneakers",
     type: "mall",
@@ -789,7 +789,7 @@ const PRODUCTS = [
     img: IMG.xm5,
   },
 
-    {
+  {
     id: "t11",
     category: "tech",
     type: "mall",
@@ -1213,7 +1213,6 @@ const PRODUCTS = [
     img: IMG.xm5,
   },
 
-
   // ---- Gaming & Bàn phím ----
   {
     id: "gm1",
@@ -1239,7 +1238,8 @@ const PRODUCTS = [
     condText: "98% Likenew",
     cond: 98,
     condPrefix: "Fullbox sạc nhanh",
-    condLabel: "Mắt đọc Focus Pro 35K Gen-2, switch quang học 90 triệu lần nhấn",
+    condLabel:
+      "Mắt đọc Focus Pro 35K Gen-2, switch quang học 90 triệu lần nhấn",
     seller: "Quốc Huy (Thanh Xuân)",
     sellerName: "Quốc Huy",
     name: "Chuột Gaming Siêu Nhẹ Razer Viper V3 Pro Wireless 54g",
@@ -1355,7 +1355,6 @@ const PRODUCTS = [
     buy: "Mua Ngay",
     img: IMG.keyboard,
   },
-
 
   // ---- Đồng hồ & Phụ kiện ----
   {
@@ -1499,7 +1498,6 @@ const PRODUCTS = [
     img: IMG.puffer,
   },
 
-
   // ---- Máy ảnh & Quay chụp ----
   {
     id: "cm1",
@@ -1641,8 +1639,6 @@ const PRODUCTS = [
     buy: "Mua Ngay",
     img: IMG.camera,
   },
-
-
 ];
 
 // Thứ tự hiển thị trong Flash Sale (id sản phẩm)
@@ -1706,7 +1702,8 @@ const MOCK_ORDERS = [
     shippingAddress: {
       fullName: "Nguyễn Ngọc Phúc",
       phone: "0912 345 678",
-      address: "Tòa Keangnam Landmark 72, Phạm Hùng, Mễ Trì, Nam Từ Liêm, Hà Nội",
+      address:
+        "Tòa Keangnam Landmark 72, Phạm Hùng, Mễ Trì, Nam Từ Liêm, Hà Nội",
     },
     trackingCode: "VNPOST-HN-884920",
     carrier: "VNPost Hỏa Tốc",
@@ -1750,7 +1747,8 @@ const MOCK_ORDERS = [
     shippingAddress: {
       fullName: "Nguyễn Ngọc Phúc",
       phone: "0912 345 678",
-      address: "Tòa Keangnam Landmark 72, Phạm Hùng, Mễ Trì, Nam Từ Liêm, Hà Nội",
+      address:
+        "Tòa Keangnam Landmark 72, Phạm Hùng, Mễ Trì, Nam Từ Liêm, Hà Nội",
     },
     trackingCode: "GHTK-HN-291840",
     carrier: "GHTK Express",
@@ -1767,7 +1765,8 @@ const MOCK_REVIEWS = [
     rating: 5,
     date: "06/11/2026",
     productType: "Đồ Cũ Like New 99%",
-    content: "Máy đẹp keng xà beng không một vết xước. Tiết kiệm được gần 8 triệu so với mua mới ở store. Pin 99%, test kỹ đúng như shop cam kết. Đồng kiểm tại chỗ với shipper rồi mới trả tiền nên cực kỳ yên tâm!",
+    content:
+      "Máy đẹp keng xà beng không một vết xước. Tiết kiệm được gần 8 triệu so với mua mới ở store. Pin 99%, test kỹ đúng như shop cam kết. Đồng kiểm tại chỗ với shipper rồi mới trả tiền nên cực kỳ yên tâm!",
     likes: 42,
   },
   {
@@ -1777,7 +1776,8 @@ const MOCK_REVIEWS = [
     rating: 5,
     date: "02/11/2026",
     productType: "Hàng Mới Chính Hãng 100%",
-    content: "Đóng gói cẩn thận 3 lớp chống sốc, nguyên seal hộp, tem bảo hành chính hãng đầy đủ. Giao hàng Hà Nội chỉ trong 2 tiếng. Rất hài lòng về dịch vụ của sàn.",
+    content:
+      "Đóng gói cẩn thận 3 lớp chống sốc, nguyên seal hộp, tem bảo hành chính hãng đầy đủ. Giao hàng Hà Nội chỉ trong 2 tiếng. Rất hài lòng về dịch vụ của sàn.",
     likes: 28,
   },
   {
@@ -1787,7 +1787,8 @@ const MOCK_REVIEWS = [
     rating: 4.5,
     date: "28/10/2026",
     productType: "Đồ Cũ Like New 95%",
-    content: "Hình thức máy còn rất mới, chỉ xước dăm cực nhẹ ở viền đáy không đáng kể. Giá rẻ hơn đồ mới tới 35% nên quá hời. Shop hỗ trợ nhiệt tình, đổi trả 7 ngày rõ ràng.",
+    content:
+      "Hình thức máy còn rất mới, chỉ xước dăm cực nhẹ ở viền đáy không đáng kể. Giá rẻ hơn đồ mới tới 35% nên quá hời. Shop hỗ trợ nhiệt tình, đổi trả 7 ngày rõ ràng.",
     likes: 19,
   },
 ];
@@ -1818,7 +1819,7 @@ const MOCK_CHAT = [
 ];
 
 /* =========================================================================
-   TASK [FE] T10 — MOCK DATA: NGƯỜI DÙNG, ĐƠN, ESCROW, TRANH CHẤP
+   TASK [FE] T10 — MOCK DATA: NGƯỜI DÙNG, ĐƠN, TRANH CHẤP
    ========================================================================= */
 
 /* ---------------- 1. NGƯỜI DÙNG MẪU (MOCK_USERS) ---------------- */
@@ -1949,7 +1950,8 @@ const MOCK_DISPUTES = [
     createdAt: "2026-11-08T15:20:00Z",
     status: "under_review", // 'under_review' | 'resolved' | 'cancelled'
     statusLabel: "Đang phân xử 3 bên",
-    reason: "Ngoại quan viền camera bị cấn xước không đúng cam kết Like New 99%",
+    reason:
+      "Ngoại quan viền camera bị cấn xước không đúng cam kết Like New 99%",
     buyer: {
       id: "u1",
       name: "Nguyễn Ngọc Phúc",

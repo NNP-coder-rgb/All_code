@@ -291,6 +291,18 @@
         assert(Array.isArray(MOCK_DISPUTES) && MOCK_DISPUTES.length > 0);
       });
 
+      // 14. Theme Manager
+      test("28. Theme Manager (Utils.Theme.get, set, toggle)", () => {
+        assert(typeof Utils.Theme === "object");
+        const current = Utils.Theme.get();
+        assert(current === "dark" || current === "light");
+        Utils.Theme.set("light");
+        assert(Utils.Theme.get() === "light");
+        Utils.Theme.toggle();
+        assert(Utils.Theme.get() === "dark");
+        Utils.Theme.set(current); // Khôi phục trạng thái ban đầu
+      });
+
       document.getElementById("totalTests").textContent = total;
       document.getElementById("passedTests").textContent = passed;
       document.getElementById("failedTests").textContent = failed;

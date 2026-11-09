@@ -445,6 +445,48 @@ function runAdditionalTests() {
     assert.strictEqual(mockData.MOCK_DISPUTES[0].proposedSolutions.length, 3, "Có 3 phương án hòa giải");
   });
 
+  /* ---------------- 14. Theme - Quản lý giao diện sáng/tối ---------------- */
+  console.log("\n--- 14. Kiểm thử Theme Quản lý Giao diện Sáng / Tối ---");
+  it("Lấy và chuyển đổi giao diện sáng tối (Theme.get, Theme.set, Theme.toggle)", () => {
+    let store = {};
+    global.localStorage = {
+      getItem: (k) => store[k] || null,
+      setItem: (k, v) => {
+        store[k] = String(v);
+      },
+      removeItem: (k) => {
+        delete store[k];
+      },
+      clear: () => {
+        store = {};
+      },
+    };
+
+    assert.ok(Utils.Theme, "Có module Utils.Theme");
+    // Mặc định là dark
+    assert.strictEqual(Utils.Theme.get(), "dark");
+
+    // Đặt thành light
+    const setRes = Utils.Theme.set("light");
+    assert.strictEqual(setRes, "light");
+    assert.strictEqual(Utils.Theme.get(), "light");
+    assert.strictEqual(global.localStorage.getItem("hybrid_theme"), "light");
+
+    // Toggle sang dark
+    const toggled = Utils.Theme.toggle();
+    assert.strictEqual(toggled, "dark");
+    assert.strictEqual(Utils.Theme.get(), "dark");
+
+    // Toggle lại sang light
+    const toggledAgain = Utils.Theme.toggle();
+    assert.strictEqual(toggledAgain, "light");
+    assert.strictEqual(Utils.Theme.get(), "light");
+
+    // Reset về dark
+    Utils.Theme.set("dark");
+    assert.strictEqual(Utils.Theme.get(), "dark");
+  });
+
   finish();
 }
 
