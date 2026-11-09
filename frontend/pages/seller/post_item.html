@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>08 — Đăng Bán &amp; Định Giá Tự Động AI C2C | HYBRID.STORE</title>
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <link rel="stylesheet" href="../../css/base.css" />
+    <link rel="stylesheet" href="../../css/catalog.css" />
+    <link rel="stylesheet" href="../../css/master_screens.css" />
+  </head>
+  <body>
+    <!-- ===== HEADER ===== -->
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href="../../index.html">
+          <span class="brand-mark"><span class="material-symbols-outlined">token</span></span>
+          <span>HYBRID<span class="text-secondary">.STORE</span> <span class="badge">ĐĂNG BÁN AI</span></span>
+        </a>
+
+        <div class="header-actions">
+          <a class="btn btn-secondary hide-sm" href="dashboard.html">Kênh Người Bán</a>
+          <a class="avatar" href="../account/profile.html" title="Tài khoản">
+            <span class="material-symbols-outlined">person</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="container py-6" style="max-width: 820px;">
+      <div class="mb-5">
+        <h1 class="page-title flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary">sell</span>
+          Đăng Bán Đồ Cũ &amp; Định Giá Tự Động Bằng AI
+        </h1>
+        <p class="text-sm text-muted">
+          Hệ thống AI thị giác máy tính sẽ quét ảnh sản phẩm, tự động nhận diện đời máy, chấm điểm độ mới và đề xuất mức giá thanh lý nhanh nhất.
+        </p>
+      </div>
+
+      <div class="panel p-6">
+        <form id="postMasterForm">
+          <!-- 1. Chọn ngành hàng -->
+          <div class="form-group">
+            <label class="form-label">Chọn ngành hàng thanh lý</label>
+            <div class="chip-row">
+              <label class="chip"><input type="radio" name="postCat" value="tech" checked /> 💻 Đồ Điện Tử &amp; Hi-Tech</label>
+              <label class="chip"><input type="radio" name="postCat" value="fashion" /> 👔 Thời Trang &amp; Streetwear</label>
+              <label class="chip"><input type="radio" name="postCat" value="sneakers" /> 👟 Sneakers Hype</label>
+              <label class="chip"><input type="radio" name="postCat" value="appliances" /> 🏠 Đồ Gia Dụng Smart IoT</label>
+            </div>
+          </div>
+
+          <!-- 2. Khu vực tải ảnh & Quét AI -->
+          <div class="form-group">
+            <label class="form-label">Tải ảnh chụp sản phẩm (Tối thiểu 3 góc chụp rõ nét)</label>
+            <div class="panel p-6 text-center" style="border: 2px dashed var(--border-strong); background: var(--bg-surface); cursor: pointer;" id="dropzoneBox">
+              <span class="material-symbols-outlined text-primary" style="font-size: 54px;">add_a_photo</span>
+              <div class="fw-600 text-sm mt-2">Bấm để chọn ảnh từ máy hoặc kéo thả vào đây</div>
+              <div class="text-xs text-muted mt-1">Hỗ trợ JPG, PNG, WEBP (Tối đa 15MB)</div>
+            </div>
+          </div>
+
+          <div class="flex justify-end mb-4">
+            <button class="btn btn-secondary btn-sm" id="btnTriggerAiScan" type="button">
+              <span class="material-symbols-outlined icon-xs text-secondary">psychology</span>
+              Kích Hoạt AI Quét Ngoại Quan &amp; Gợi Ý Giá
+            </button>
+          </div>
+
+          <!-- Khối kết quả AI gợi ý (ẩn ban đầu) -->
+          <div class="ai-scan-card mb-5" id="aiResultCard" style="display: none">
+            <div class="flex items-center justify-between mb-3">
+              <span class="ai-badge">
+                <span class="material-symbols-outlined icon-xs">smart_toy</span> KẾT QUẢ AI PHÂN TÍCH HÌNH ẢNH
+              </span>
+              <span class="text-xs text-success fw-600">Độ tin cậy: 98.4%</span>
+            </div>
+            <div class="grid grid-2 gap-3 text-xs">
+              <div>Thiết bị nhận diện: <strong class="text-text" id="aiDeviceName">Sony WH-1000XM4 (Màu Đen)</strong></div>
+              <div>Độ mới ngoại quan AI: <strong class="text-secondary" id="aiConditionScore">95% (Xước viền đáy siêu nhẹ)</strong></div>
+              <div>Giá máy mới trên thị trường: <strong class="text-faint mono" id="aiNewMarketPrice">6.290.000₫</strong></div>
+              <div>Khung giá thanh lý nhanh đề xuất: <strong class="text-gradient mono" id="aiSuggestPrice">3.400.000₫ – 3.650.000₫</strong></div>
+            </div>
+            <div class="discount-callout mt-3">
+              <span class="material-symbols-outlined icon-sm">savings</span>
+              <span>Mức giá đề xuất rẻ hơn đồ mới khoảng 44%, tỷ lệ chốt đơn trong 48h đạt 92%.</span>
+            </div>
+          </div>
+
+          <!-- 3. Tên & Giá muốn bán -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="txtPostName">Tên thiết bị hiển thị</label>
+              <input class="input" id="txtPostName" type="text" value="Tai nghe Sony WH-1000XM4 Đen Like New 95%" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="txtPostPrice">Giá muốn bán (VNĐ)</label>
+              <input class="input mono" id="txtPostPrice" type="text" value="3.500.000" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Mô tả tình trạng phụ kiện &amp; tính năng</label>
+            <textarea class="textarea" rows="3">Đầy đủ túi đựng, cáp sạc và dây 3.5mm zin theo tai nghe. Pin dùng liên tục trên 28 tiếng chống ồn cực tốt.</textarea>
+          </div>
+
+          <!-- Nút đăng bán -->
+          <div class="flex justify-end gap-3 mt-5">
+            <a class="btn btn-secondary" href="dashboard.html">Hủy</a>
+            <button class="btn btn-primary btn-lg" type="submit" style="padding-inline: 28px;">
+              <span class="material-symbols-outlined">publish</span>
+              Đăng Bán Lên Sàn Ngay
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <div class="toast-stack" id="toastStack"></div>
+
+    <script src="../../js/popup.js"></script>
+    <script src="../../js/auth.js"></script>
+    <script src="../../js/utils.js"></script>
+    <script>
+      (function () {
+        if (!Auth.requireLogin({ requireKyc: true, message: "Vui lòng đăng nhập và xác thực CCCD để đăng bán đồ cũ." })) return;
+
+        document.getElementById("btnTriggerAiScan").addEventListener("click", function () {
+          this.disabled = true;
+          this.textContent = "AI đang xử lý hình ảnh...";
+          setTimeout(() => {
+            document.getElementById("aiResultCard").style.display = "block";
+            Utils.toast("AI đã quét ảnh & đề xuất khung giá thành công!", "success");
+            this.textContent = "Đã Quét Xong AI";
+          }, 1000);
+        });
+
+        document.getElementById("postMasterForm").addEventListener("submit", (e) => {
+          e.preventDefault();
+          Utils.toast("Đang tải sản phẩm lên gian hàng...", "info");
+          setTimeout(() => {
+            window.location.href = "dashboard.html";
+          }, 800);
+        });
+      })();
+    </script>
+  </body>
+</html>

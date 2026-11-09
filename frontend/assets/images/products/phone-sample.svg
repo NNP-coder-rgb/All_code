@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <defs>
+    <linearGradient id="phoneBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#181829" />
+      <stop offset="100%" stop-color="#0f0f1b" />
+    </linearGradient>
+    <linearGradient id="titaniumGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="50%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" rx="16" fill="url(#phoneBg)" />
+  <rect x="20" y="20" width="130" height="28" rx="6" fill="rgba(6, 182, 212, 0.15)" stroke="#06b6d4" stroke-width="1" />
+  <text x="85" y="38" fill="#67e8f9" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="11" text-anchor="middle">SMARTPHONE C2C</text>
+  <!-- Phone Body -->
+  <g transform="translate(130, 75)">
+    <rect x="0" y="0" width="140" height="260" rx="26" fill="url(#titaniumGrad)" stroke="#38bdf8" stroke-width="2" />
+    <rect x="8" y="8" width="124" height="244" rx="20" fill="#09090b" />
+    <!-- Dynamic Island -->
+    <rect x="46" y="16" width="48" height="12" rx="6" fill="#000" />
+    <!-- Camera module glow -->
+    <circle cx="70" cy="130" r="32" fill="#8b5cf6" opacity="0.15" />
+    <circle cx="70" cy="130" r="14" fill="none" stroke="#22d3ee" stroke-width="2" />
+  </g>
+</svg>

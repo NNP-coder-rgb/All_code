@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>09 — Kênh Người Bán &amp; Quản Lý Doanh Thu | HYBRID.STORE</title>
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <link rel="stylesheet" href="../../css/base.css" />
+    <link rel="stylesheet" href="../../css/catalog.css" />
+    <link rel="stylesheet" href="../../css/master_screens.css" />
+  </head>
+  <body class="dash-page">
+    <!-- ===== HEADER ===== -->
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href="../../index.html">
+          <span class="brand-mark"><span class="material-symbols-outlined">token</span></span>
+          <span>HYBRID<span class="text-secondary">.STORE</span> <span class="badge badge-secondary">KÊNH NGƯỜI BÁN</span></span>
+        </a>
+
+        <div class="header-actions">
+          <a class="btn btn-primary" href="post_item.html">
+            <span class="material-symbols-outlined icon-sm">add</span>
+            Đăng Bán Món Mới
+          </a>
+          <a class="avatar" href="../account/profile.html" title="Tài khoản">
+            <span class="material-symbols-outlined">store</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <div class="dash-layout">
+      <!-- SIDEBAR NGƯỜI BÁN -->
+      <aside class="dash-sidebar">
+        <div class="panel p-3 mb-3 flex items-center gap-3" style="background: rgba(255, 255, 255, 0.02)">
+          <div class="avatar" style="background: var(--secondary-700);">VD</div>
+          <div>
+            <strong class="text-sm block">Việt Dũng Store</strong>
+            <small class="text-xs text-success">● Đã eKYC CCCD Chip L2</small>
+          </div>
+        </div>
+
+        <nav class="side-nav">
+          <a class="side-link active" href="#"><span class="material-symbols-outlined">dashboard</span> Tổng Quan Gian Hàng</a>
+          <a class="side-link" href="#"><span class="material-symbols-outlined">inventory_2</span> Sản Phẩm Đang Bán <span class="badge badge-counter">8</span></a>
+          <a class="side-link" href="#"><span class="material-symbols-outlined">local_shipping</span> Đơn Cần Giao <span class="badge badge-counter">4</span></a>
+          <a class="side-link" href="#" id="btnOpenWithdrawModal"><span class="material-symbols-outlined">payments</span> Rút Tiền 24/7 Napas</a>
+          <a class="side-link" href="../buyer/dispute.html"><span class="material-symbols-outlined">support_agent</span> Trung Tâm Khiếu Nại</a>
+        </nav>
+      </aside>
+
+      <!-- VÙNG NỘI DUNG CHÍNH -->
+      <main class="dash-content">
+        <div class="dash-title-row mb-4">
+          <div>
+            <h1 class="page-title mb-1">Tổng Quan Doanh Thu &amp; Bán Hàng</h1>
+            <p class="text-sm text-muted">Quản lý dòng tiền bán hàng, xử lý đơn khách đặt và theo dõi vận chuyển.</p>
+          </div>
+          <button class="btn btn-secondary" id="btnWithdrawAction" type="button">
+            <span class="material-symbols-outlined icon-sm">account_balance</span>
+            Rút Tiền Về Ngân Hàng
+          </button>
+        </div>
+
+        <!-- 4 Thẻ Stat Cards -->
+        <div class="grid grid-4 gap-4 mb-6">
+          <div class="stat-card">
+            <div class="stat-label">Số Dư Ví Khả Dụng</div>
+            <div class="stat-val mono text-gradient">48.250.000₫</div>
+            <div class="stat-sub text-success">Rút tiền tức thì 24/7 Napas</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Doanh Thu Tháng Này</div>
+            <div class="stat-val mono text-secondary">126.800.000₫</div>
+            <div class="stat-sub text-muted">Tăng +28% so với tháng trước</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Đơn Hàng Chờ Giao</div>
+            <div class="stat-val mono text-primary">4 Đơn</div>
+            <div class="stat-sub text-warning">Bưu tá hẹn lấy trong 1h</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Điểm Tín Nhiệm Shop</div>
+            <div class="stat-val mono text-success">99.2%</div>
+            <div class="stat-sub text-success">Hạng Bạch Kim Uy Tín</div>
+          </div>
+        </div>
+
+        <!-- Bảng Sản phẩm đang rao bán -->
+        <div class="panel">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="panel-title">Sản Phẩm Đang Rao Bán Trên Sàn</h3>
+            <a class="btn btn-secondary btn-sm" href="post_item.html">
+              <span class="material-symbols-outlined icon-xs">add</span> Thêm Món Mới
+            </a>
+          </div>
+
+          <div style="overflow-x: auto;">
+            <table class="condition-table">
+              <thead>
+                <tr>
+                  <th>Sản phẩm</th>
+                  <th>Phân loại</th>
+                  <th>Giá niêm yết</th>
+                  <th>Độ mới</th>
+                  <th>Trạng thái</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>iPhone 15 Pro Max 256GB Titan</strong></td>
+                  <td>Hi-Tech Đồ Cũ</td>
+                  <td class="mono text-primary">21.990.000₫</td>
+                  <td><span class="badge badge-secondary">99% Likenew</span></td>
+                  <td><span class="badge badge-success">Đang Hiển Thị</span></td>
+                  <td><a href="../shop/product_used.html" class="btn btn-ghost btn-sm">Xem tin</a></td>
+                </tr>
+                <tr>
+                  <td><strong>Tai nghe Sony WH-1000XM4 Đen</strong></td>
+                  <td>Hi-Tech Đồ Cũ</td>
+                  <td class="mono text-primary">3.500.000₫</td>
+                  <td><span class="badge badge-secondary">95% Rất Đẹp</span></td>
+                  <td><span class="badge badge-success">Đang Hiển Thị</span></td>
+                  <td><button class="btn btn-ghost btn-sm">Xem tin</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Body Sony Alpha A7 Mark IV</strong></td>
+                  <td>Máy Ảnh Đồ Cũ</td>
+                  <td class="mono text-primary">37.800.000₫</td>
+                  <td><span class="badge badge-secondary">98% Likenew</span></td>
+                  <td><span class="badge badge-warning">Có Đề Nghị Trả Giá</span></td>
+                  <td><button class="btn btn-secondary btn-sm">Duyệt Giá</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Modal Rút Tiền Napas -->
+    <div class="modal-backdrop" id="withdrawModal">
+      <div class="modal" role="dialog" aria-modal="true" style="max-width: 460px;">
+        <div class="modal-head">
+          <h4 class="modal-title flex items-center gap-2">
+            <span class="material-symbols-outlined text-success">account_balance</span>
+            Rút Tiền 24/7 Napas Về Ngân Hàng
+          </h4>
+          <button class="modal-close" type="button" data-close><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <div class="modal-body">
+          <div class="panel p-3 mb-3" style="background: var(--bg-surface)">
+            <div class="text-xs text-muted">Số dư khả dụng:</div>
+            <strong class="mono text-gradient" style="font-size: 1.4rem;">48.250.000₫</strong>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tài khoản nhận tiền chính chủ</label>
+            <input class="input mono" type="text" value="Techcombank • 1903 **** 8899 (NGUYEN NGOC PHUC)" readonly />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Số tiền muốn rút (VNĐ)</label>
+            <input class="input mono" type="text" value="20.000.000" />
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button class="btn btn-secondary" type="button" data-close>Hủy</button>
+          <button class="btn btn-primary" id="btnConfirmWithdraw" type="button">Xác Nhận Rút Tiền</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast-stack" id="toastStack"></div>
+
+    <script src="../../js/popup.js"></script>
+    <script src="../../js/auth.js"></script>
+    <script src="../../js/utils.js"></script>
+    <script>
+      (function () {
+        if (!Auth.requireLogin({ message: "Vui lòng đăng nhập tài khoản người bán." })) return;
+
+        const modal = document.getElementById("withdrawModal");
+        const openModal = () => Utils.openModal("withdrawModal");
+
+        document.getElementById("btnWithdrawAction").addEventListener("click", openModal);
+        document.getElementById("btnOpenWithdrawModal").addEventListener("click", (e) => {
+          e.preventDefault();
+          openModal();
+        });
+
+        document.getElementById("btnConfirmWithdraw").addEventListener("click", () => {
+          Utils.closeModal("withdrawModal");
+          Utils.toast("Lệnh rút tiền Napas 20.000.000₫ đã chuyển khoản thành công trong 30 giây!", "success");
+        });
+      })();
+    </script>
+  </body>
+</html>

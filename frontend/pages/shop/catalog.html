@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Danh Mục &amp; Khám Phá Sản Phẩm | HYBRID.STORE</title>
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+
+    <!-- CSS chung base.css trước, index.css kế tiếp, sau đó tới catalog.css -->
+    <link rel="stylesheet" href="../../css/base.css" />
+    <link rel="stylesheet" href="../../css/index.css" />
+    <link rel="stylesheet" href="../../css/catalog.css" />
+  </head>
+  <body>
+    <!-- ===== HEADER ===== -->
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href="../../index.html">
+          <span class="brand-mark"
+            ><span class="material-symbols-outlined">token</span></span
+          >
+          <span
+            >HYBRID<span class="text-secondary">.STORE</span>
+            <span class="badge">v3.2</span>
+            <small
+              ><span class="status-dot"></span> Hàng Mới 100% & Đồ Cũ Tuyển Chọn</small
+            >
+          </span>
+        </a>
+
+        <div class="header-search">
+          <div class="input-group">
+            <span class="icon-left material-symbols-outlined">search</span>
+            <input
+              id="headerSearchInput"
+              class="input input-search"
+              type="search"
+              placeholder="Tìm theo tên máy, mã Serial, hoặc người bán đã eKYC..."
+            />
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <div class="wallet-pill">
+            <span class="material-symbols-outlined text-secondary"
+              >account_balance_wallet</span
+            >
+            <div>
+              <small>Giao hàng toàn quốc</small><strong>Miễn Phí 0₫</strong>
+            </div>
+          </div>
+          <a class="icon-btn" href="../../index.html" aria-label="Trang chủ" title="Về trang chủ">
+            <span class="material-symbols-outlined">home</span>
+          </a>
+          <a class="btn btn-danger btn-sm" id="btnHeaderPost" href="../seller/post_item.html" style="padding-inline: 14px;">
+            <span class="material-symbols-outlined">add_circle</span>
+            <span class="hide-md">Đăng Bán Đồ Cũ</span>
+          </a>
+          <a class="icon-btn" href="cart.html" aria-label="Giỏ hàng">
+            <span class="material-symbols-outlined">shopping_bag</span>
+            <span class="badge badge-counter hidden" id="cartCount">0</span>
+          </a>
+          <button
+            class="avatar"
+            id="avatarBtn"
+            type="button"
+            aria-label="Tài khoản"
+          >
+            <span class="material-symbols-outlined">person</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Thanh điều hướng ngành hàng (Subnav) -->
+    <div class="subnav">
+      <div class="container">
+        <nav>
+          <a href="catalog.html" class="active"
+            ><span class="status-dot"></span>Tất Cả Ngành Hàng</a
+          >
+          <a href="catalog.html?cat=fashion"
+            ><span class="material-symbols-outlined icon-sm text-primary"
+              >checkroom</span
+            >Thời Trang &amp; Streetwear</a
+          >
+          <a href="catalog.html?cat=sneakers"
+            ><span class="material-symbols-outlined icon-sm text-secondary"
+              >steps</span
+            >Sneakers &amp; Giày Dép</a
+          >
+          <a href="catalog.html?cat=tech"
+            ><span class="material-symbols-outlined icon-sm text-tertiary"
+              >devices</span
+            >Đồ Điện Tử &amp; Hi-Tech</a
+          >
+          <a href="catalog.html?cat=appliances"
+            ><span class="material-symbols-outlined icon-sm text-success"
+              >coffee_maker</span
+            >Đồ Gia Dụng Thông Minh</a
+          >
+        </nav>
+        <div class="subnav-info">
+          <span class="text-success"><span class="material-symbols-outlined icon-sm">verified</span> Bảo hành 12 tháng hàng mới • 6 tháng đồ cũ</span>
+          <span class="text-secondary"><span class="material-symbols-outlined icon-sm">percent</span> Đồ cũ rẻ hơn đồ mới đến 50%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== NỘI DUNG CHÍNH (MAIN) ===== -->
+    <main class="catalog-page">
+      <div class="container" id="catalogMainTop">
+        <!-- Đường dẫn Breadcrumb -->
+        <nav class="catalog-breadcrumb" aria-label="Breadcrumb">
+          <a href="../../index.html">Trang Chủ</a>
+          <span>/</span>
+          <span class="text-primary fw-600">Khám Phá Danh Mục Sản Phẩm</span>
+        </nav>
+
+        <div class="catalog-layout">
+          <!-- CỘT TRÁI: SIDEBAR BỘ LỌC ĐA TIÊU CHÍ -->
+          <aside class="filter-sidebar" aria-label="Bộ lọc sản phẩm">
+            <div class="filter-head">
+              <div class="filter-title">
+                <span class="material-symbols-outlined text-primary">tune</span>
+                <span>Bộ Lọc Tìm Kiếm</span>
+              </div>
+              <button
+                class="filter-reset-btn"
+                type="button"
+                id="resetFilterBtn"
+                title="Đặt lại toàn bộ tiêu chí lọc"
+              >
+                Đặt lại
+              </button>
+            </div>
+
+            <!-- 1. Tìm kiếm từ khóa nhanh -->
+            <div class="filter-group">
+              <span class="filter-group-label">Từ Khóa Sản Phẩm</span>
+              <div class="input-group">
+                <span class="icon-left material-symbols-outlined">search</span>
+                <input
+                  class="input"
+                  id="filterKeyword"
+                  type="search"
+                  placeholder="Tên máy, model, mô tả..."
+                />
+              </div>
+            </div>
+
+            <!-- 2. Danh mục ngành hàng -->
+            <div class="filter-group">
+              <span class="filter-group-label">Ngành Hàng</span>
+              <div class="filter-options">
+                <label class="filter-radio-item">
+                  <input
+                    type="radio"
+                    name="filterCategory"
+                    value="all"
+                    checked
+                  />
+                  <span>Tất Cả Ngành Hàng</span>
+                </label>
+                <label class="filter-radio-item">
+                  <input type="radio" name="filterCategory" value="fashion" />
+                  <span>Thời Trang &amp; Streetwear</span>
+                </label>
+                <label class="filter-radio-item">
+                  <input type="radio" name="filterCategory" value="sneakers" />
+                  <span>Sneakers &amp; Giày Dép</span>
+                </label>
+                <label class="filter-radio-item">
+                  <input type="radio" name="filterCategory" value="tech" />
+                  <span>Đồ Điện Tử &amp; Hi-Tech</span>
+                </label>
+                <label class="filter-radio-item">
+                  <input
+                    type="radio"
+                    name="filterCategory"
+                    value="appliances"
+                  />
+                  <span>Đồ Gia Dụng Thông Minh</span>
+                </label>
+                <label class="filter-radio-item">
+                  <input type="radio" name="filterCategory" value="audio" />
+                  <span>Âm Thanh &amp; Tai Nghe</span>
+                </label>
+                <label class="filter-radio-item">
+                  <input type="radio" name="filterCategory" value="gaming" />
+                  <span>Gaming Gear &amp; Bàn Phím</span>
+                </label>
+                <label class="filter-radio-item">
+                  <input type="radio" name="filterCategory" value="watches" />
+                  <span>Đồng Hồ &amp; Phụ Kiện</span>
+                </label>
+                <label class="filter-radio-item">
+                  <input type="radio" name="filterCategory" value="camera" />
+                  <span>Máy Ảnh &amp; Quay Chụp</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- 3. Loại hình sản phẩm (Mall vs C2C) -->
+            <div class="filter-group">
+              <span class="filter-group-label">Nguồn Gốc &amp; Kênh Bán</span>
+              <div class="filter-options">
+                <label class="filter-radio-item">
+                  <input type="radio" name="filterType" value="all" checked />
+                  <span>Tất Cả Sản Phẩm</span>
+                </label>
+                <label class="filter-radio-item">
+                  <input type="radio" name="filterType" value="mall" />
+                  <span>Chính Hãng Brand Mall 100%</span>
+                </label>
+                <label class="filter-radio-item">
+                  <input type="radio" name="filterType" value="c2c" />
+                  <span>Đồ Cũ / Like New (Rẻ Hơn Đến 50%)</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- 4. Khoảng giá -->
+            <div class="filter-group">
+              <span class="filter-group-label">Khoảng Giá (VNĐ)</span>
+              <div class="price-inputs">
+                <input
+                  class="input mono"
+                  id="filterMinPrice"
+                  type="number"
+                  placeholder="Tối thiểu"
+                  min="0"
+                  step="100000"
+                />
+                <span class="price-sep">-</span>
+                <input
+                  class="input mono"
+                  id="filterMaxPrice"
+                  type="number"
+                  placeholder="Tối đa"
+                  min="0"
+                  step="100000"
+                />
+              </div>
+              <button
+                class="btn btn-outlined btn-sm mt-2"
+                type="button"
+                id="applyPriceBtn"
+              >
+                Áp Dụng Mức Giá
+              </button>
+              <div class="price-quick-tags">
+                <button
+                  type="button"
+                  class="price-tag"
+                  data-min="0"
+                  data-max="5000000"
+                >
+                  &lt; 5 Triệu
+                </button>
+                <button
+                  type="button"
+                  class="price-tag"
+                  data-min="5000000"
+                  data-max="15000000"
+                >
+                  5 - 15 Triệu
+                </button>
+                <button
+                  type="button"
+                  class="price-tag"
+                  data-min="15000000"
+                  data-max=""
+                >
+                  &gt; 15 Triệu
+                </button>
+              </div>
+            </div>
+
+            <!-- 5. Đánh giá sao tối thiểu -->
+            <div class="filter-group">
+              <span class="filter-group-label">Đánh Giá Sao</span>
+              <div class="filter-options">
+                <label class="filter-radio-item">
+                  <input type="radio" name="filterRating" value="all" checked />
+                  <span>Tất Cả Mức Sao</span>
+                </label>
+                <label class="filter-radio-item">
+                  <input type="radio" name="filterRating" value="4.8" />
+                  <span class="text-warning">★★★★★</span>
+                  <span class="text-xs">Từ 4.8★</span>
+                </label>
+                <label class="filter-radio-item">
+                  <input type="radio" name="filterRating" value="4.5" />
+                  <span class="text-warning">★★★★½</span>
+                  <span class="text-xs">Từ 4.5★</span>
+                </label>
+                <label class="filter-radio-item">
+                  <input type="radio" name="filterRating" value="4.0" />
+                  <span class="text-warning">★★★★☆</span>
+                  <span class="text-xs">Từ 4.0★</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- 6. Độ mới C2C -->
+            <div class="filter-group">
+              <span class="filter-group-label">Độ Mới Đồ Cũ (Like New)</span>
+              <div class="filter-options">
+                <label class="filter-radio-item">
+                  <input type="radio" name="filterCond" value="all" checked />
+                  <span>Tất Cả Tình Trạng</span>
+                </label>
+                <label class="filter-radio-item">
+                  <input type="radio" name="filterCond" value="98" />
+                  <span>98% Likenew (Như Mới)</span>
+                </label>
+                <label class="filter-radio-item">
+                  <input type="radio" name="filterCond" value="95" />
+                  <span>95% Rất Đẹp Trở Lên</span>
+                </label>
+                <label class="filter-radio-item">
+                  <input type="radio" name="filterCond" value="90" />
+                  <span>90% Hoạt Động Tốt</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- WIDGET ĐẾM NGƯỢC FLASH SALE 48H (startCountdown) -->
+            <div class="sidebar-promo-box">
+              <div class="sidebar-promo-title">
+                <span class="material-symbols-outlined icon-sm">timer</span>
+                Flash Sale Hôm Nay
+              </div>
+              <p class="sidebar-promo-desc">
+                Cơ hội săn đồ cũ chính hãng &amp; hàng mới giảm sâu trong ngày.
+              </p>
+              <div class="countdown" id="sidebarCountdown">
+                <span class="countdown-unit" data-unit="d">01</span>
+                <span class="countdown-sep">d</span>
+                <span class="countdown-unit" data-unit="h">23</span>
+                <span class="countdown-sep">:</span>
+                <span class="countdown-unit" data-unit="m">59</span>
+                <span class="countdown-sep">:</span>
+                <span class="countdown-unit" data-unit="s">59</span>
+              </div>
+            </div>
+          </aside>
+
+          <!-- CỘT PHẢI: TOOLBAR, GRID SẢN PHẨM & PHÂN TRANG -->
+          <section class="catalog-main">
+            <!-- Toolbar lọc nhanh và sắp xếp -->
+            <div class="catalog-toolbar">
+              <div class="toolbar-left">
+                <span class="catalog-count" id="catalogCountText"
+                  >Đang tải danh sách sản phẩm...</span
+                >
+                <div class="active-filters" id="activeFilters"></div>
+              </div>
+
+              <div class="toolbar-right">
+                <!-- Chọn số lượng hiển thị mỗi trang -->
+                <div class="size-group">
+                  <label for="pageSizeSelect">Hiển thị:</label>
+                  <select class="size-select" id="pageSizeSelect">
+                    <option value="10">10 sản phẩm</option>
+                    <option value="18" selected>18 sản phẩm / trang (+10)</option>
+                    <option value="24">24 sản phẩm</option>
+                    <option value="36">36 sản phẩm</option>
+                  </select>
+                </div>
+
+                <!-- Dropdown sắp xếp (sortProducts) -->
+                <div class="sort-group">
+                  <label for="sortSelect">Sắp xếp:</label>
+                  <select class="sort-select" id="sortSelect">
+                    <option value="default">Mặc Định (Gợi ý)</option>
+                    <option value="price-asc">Giá Thấp Đến Cao</option>
+                    <option value="price-desc">Giá Cao Đến Thấp</option>
+                    <option value="rating-desc">Đánh Giá Cao Nhất</option>
+                    <option value="name-asc">Tên Sản Phẩm (A-Z)</option>
+                    <option value="cond-desc">Độ Mới Cao Nhất</option>
+                    <option value="newest">Mới Nhất</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Lưới sản phẩm (Catalog Grid) -->
+            <div class="catalog-grid" id="catalogGrid">
+              <!-- Nội dung render động qua JavaScript -->
+            </div>
+
+            <!-- Thanh phân trang (Pagination Bar) -->
+            <div class="pagination-bar" id="paginationBar">
+              <!-- Render động qua JavaScript bằng paginate() -->
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <!-- ===== MODAL: TRẢ GIÁ NHANH ===== -->
+    <div class="modal-backdrop" id="offerModal">
+      <div
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="offerTitle"
+      >
+        <div class="modal-head">
+          <h4 class="modal-title" id="offerTitle">
+            <span class="material-symbols-outlined text-secondary">handshake</span>
+            Thương Lượng / Trả Giá Sản Phẩm
+          </h4>
+          <button
+            class="modal-close"
+            type="button"
+            data-close
+            aria-label="Đóng"
+          >
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <form id="offerForm">
+          <div class="modal-body">
+            <div class="card p-3 mb-3" style="background: var(--neutral-800)">
+              <div class="fw-700 text-sm" id="offerProduct">Tên Sản Phẩm</div>
+              <div class="text-xs text-muted mt-1">
+                Người bán: <span class="text-secondary" id="offerSeller">-</span> • Độ mới:
+                <span class="text-secondary" id="offerCond">-</span>
+              </div>
+              <div
+                class="text-right mono fw-700 text-secondary mt-2"
+                id="offerCurrent"
+              >
+                0₫
+              </div>
+            </div>
+            <div class="form-group mt-3">
+              <label class="form-label" for="offerPrice"
+                >Mức giá đề xuất thương lượng (VNĐ)</label
+              >
+              <input
+                class="input mono"
+                id="offerPrice"
+                type="text"
+                inputmode="numeric"
+                required
+              />
+            </div>
+            <div class="chip-row mb-3">
+              <button class="chip" type="button" data-quick="-5">-5%</button>
+              <button class="chip" type="button" data-quick="-10">-10%</button>
+              <button class="chip" type="button" data-quick="-15">-15%</button>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="offerMsg">Lời nhắn đến người bán</label>
+              <textarea
+                class="textarea"
+                id="offerMsg"
+                rows="2"
+                placeholder="Ví dụ: Em gửi anh giá này được em chốt luôn trong ngày..."
+              ></textarea>
+            </div>
+          </div>
+          <div class="modal-foot">
+            <button class="btn btn-secondary" type="button" data-close>
+              Hủy
+            </button>
+            <button class="btn btn-accent" type="submit">Gửi Đề Xuất Trả Giá</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+      <div class="container footer-bar">
+        <div class="footer-badges">
+          <span
+            ><span class="material-symbols-outlined icon-sm text-secondary"
+              >verified_user</span
+            >Hàng Chính Hãng 100%</span
+          >
+          <span
+            ><span class="material-symbols-outlined icon-sm text-secondary"
+              >published_with_changes</span
+            >Đổi Trả 7 Ngày Miễn Phí</span
+          >
+          <span
+            ><span class="material-symbols-outlined icon-sm text-secondary"
+              >local_shipping</span
+            >Giao Hàng Toàn Quốc</span
+          >
+        </div>
+        <span class="text-xs text-faint"
+          >© 2026 HYBRID.STORE — Bán Hàng Mới &amp; Đồ Cũ Tuyển Chọn. All rights
+          reserved.</span
+        >
+        <div class="flex gap-4 text-xs">
+          <a href="../../terms_of_service.html">Điều Khoản Dịch Vụ</a>
+          <a href="../../warranty_policy.html">Chính Sách Bảo Hành</a>
+          <a href="../../return_policy.html">Chính Sách Đổi Trả</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Các file kịch bản theo đúng thứ tự -->
+    <script src="../../js/popup.js"></script>
+    <script src="../../js/auth.js"></script>
+    <script src="../../js/mock_data.js"></script>
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/catalog.js"></script>
+  </body>
+</html>

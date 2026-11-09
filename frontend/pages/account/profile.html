@@ -1,0 +1,1546 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hồ Sơ Cá Nhân &amp; Xác Thực Tài Khoản | HYBRID.STORE</title>
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <link rel="stylesheet" href="../../css/base.css" />
+    <link rel="stylesheet" href="../../css/catalog.css" />
+    <link rel="stylesheet" href="../../css/master_screens.css" />
+  </head>
+  <body class="dash-page">
+    <!-- ===== HEADER ===== -->
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href="../../index.html">
+          <span class="brand-mark"><span class="material-symbols-outlined">token</span></span>
+          <span>HYBRID<span class="text-secondary">.STORE</span> <span class="badge">HỒ SƠ CÁ NHÂN</span></span>
+        </a>
+
+        <div class="header-actions">
+          <a class="btn btn-secondary hide-sm" href="../../index.html">
+            <span class="material-symbols-outlined icon-sm">home</span> Về Trang Chủ
+          </a>
+          <button class="avatar active" id="headerAvatarBtn" type="button" title="Tài khoản">
+            <span class="material-symbols-outlined">person</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===== BREADCRUMB ===== -->
+    <div class="subnav">
+      <div class="container">
+        <nav>
+          <a href="../../index.html">Trang Chủ</a>
+          <span class="text-faint">/</span>
+          <a href="#">Tài Khoản</a>
+          <span class="text-faint">/</span>
+          <span class="active">Hồ Sơ Cá Nhân</span>
+        </nav>
+        <div class="subnav-info hide-sm">
+          <span class="text-secondary"><span class="material-symbols-outlined icon-sm">lock</span> Bảo mật AES-256</span>
+          <span class="text-success"><span class="material-symbols-outlined icon-sm">verified</span> Napas 24/7 Sẵn Sàng</span>
+        </div>
+      </div>
+    </div>
+
+    <main class="container py-6">
+      <!-- TIÊU ĐỀ TRANG -->
+      <div class="mb-5 flex items-center justify-between flex-wrap gap-3">
+        <div>
+          <h1 class="profile-header-title">
+            <span class="material-symbols-outlined">account_circle</span>
+            <span>Hồ Sơ Cá Nhân &amp; Xác Thực Tài Khoản</span>
+          </h1>
+          <p class="text-sm text-muted">
+            Quản lý thông tin tài khoản, xác thực Căn cước công dân gắn chip và sổ địa chỉ giao nhận hàng.
+          </p>
+        </div>
+        <div class="flex items-center gap-2" id="topStatusBadges">
+          <!-- Render động trạng thái -->
+        </div>
+      </div>
+
+      <!-- BỐ CỤC 2 CỘT -->
+      <div class="profile-layout">
+        <!-- CỘT TRÁI: THẺ NGƯỜI DÙNG & MENU (CÁC KHỐI SẮP XẾP GỌN GÀNG, TÁCH BẠCH) -->
+        <aside class="profile-sidebar">
+          <!-- KHỐI 1: THẺ THÔNG TIN HỒ SƠ CHÍNH -->
+          <div class="profile-card-user">
+            <div class="profile-avatar-wrap" id="avatarUploadTrigger" title="Nhấp để tải ảnh đại diện từ máy tính / điện thoại">
+              <div class="profile-avatar-img" id="userAvatarText">NP</div>
+              <div class="profile-avatar-upload-overlay">
+                <span class="material-symbols-outlined">photo_camera</span>
+                <small>Đổi ảnh</small>
+              </div>
+              <div class="profile-avatar-badge" id="avatarBadgeIcon">
+                <span class="material-symbols-outlined icon-sm">check_circle</span>
+              </div>
+            </div>
+            <input type="file" id="directAvatarFileInput" accept="image/*" style="display: none;" />
+            
+            <div>
+              <button class="profile-avatar-btn-mini" type="button" id="btnChangeAvatarDirect">
+                <span class="material-symbols-outlined icon-xs">upload</span> Tải ảnh từ máy
+              </button>
+            </div>
+
+            <!-- Tên & Handle gọn gàng, cỡ chữ vừa phải -->
+            <h2 class="profile-card-name" id="userDisplayName">Nguyễn Ngọc Phúc</h2>
+            <div class="profile-card-handle" id="userHandle">@nguyenphuc230607</div>
+
+            <!-- Huy hiệu vai trò & xác thực -->
+            <div class="flex items-center justify-center gap-2 mt-2" id="userRoleBadges">
+              <span class="badge badge-primary" id="roleBadgeDisplay">VIP BUYER</span>
+              <span class="badge badge-success" id="verifiedStatusBadge">VERIFIED CITIZEN</span>
+            </div>
+
+            <!-- Khung liên hệ SĐT & Email -->
+            <div class="profile-contact-mini">
+              <div class="flex items-center mb-1.5">
+                <span class="material-symbols-outlined">phone</span>
+                <span id="userPhoneDisplay">0384 416 977</span>
+              </div>
+              <div class="flex items-center">
+                <span class="material-symbols-outlined">mail</span>
+                <span id="userEmailDisplay" class="text-truncate">nguyenphuc230607@gmail.com</span>
+              </div>
+            </div>
+
+            <!-- Nút chỉnh sửa toàn bộ hồ sơ -->
+            <button class="btn btn-secondary btn-sm is-full mt-3" id="btnOpenEditProfile" type="button">
+              <span class="material-symbols-outlined icon-xs">edit_note</span> Chỉnh Sửa Hồ Sơ Cá Nhân
+            </button>
+          </div>
+
+          <!-- KHỐI 2: TÍN NHIỆM & THỐNG KÊ ĐƠN HÀNG TÁCH RỜI -->
+          <div class="profile-card-stats">
+            <!-- Hộp tín nhiệm Hybrid -->
+            <div class="profile-trust-row mb-3">
+              <div class="text-left">
+                <div class="text-xs text-muted" style="font-size: 11px;">TÍN NHIỆM HYBRID</div>
+                <div class="text-base fw-700 text-gradient mono" style="font-size: 1.25rem;">
+                  99.8 <span class="text-xs text-muted" style="font-size: 11px;">/ 100</span>
+                </div>
+                <div class="text-xs text-secondary fw-600" id="userTrustRank">Hạng Kim Cương Elite</div>
+              </div>
+              <span class="material-symbols-outlined text-secondary" style="font-size: 30px;">verified_user</span>
+            </div>
+
+            <!-- 2 Ô thống kê giao dịch -->
+            <div class="grid grid-2 gap-2 text-center">
+              <div class="profile-stat-box">
+                <div class="stat-label">Đơn Hoàn Tất</div>
+                <div class="stat-value text-primary" id="userCompletedOrders">47</div>
+                <div class="stat-sub text-success">100% Nhận Hàng</div>
+              </div>
+              <div class="profile-stat-box">
+                <div class="stat-label">Nghiệm Thu</div>
+                <div class="stat-value text-success" id="userAcceptanceRate">100%</div>
+                <div class="stat-sub text-muted">0 Khiếu Nại</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- KHỐI 3: PHÂN BỔ GIAO DỊCH 4 NGÀNH HÀNG TÁCH RỜI -->
+          <div class="profile-card-dist">
+            <div class="profile-dist-head">
+              <span class="profile-dist-title">
+                <span class="material-symbols-outlined icon-xs text-secondary">pie_chart</span>
+                Phân Bổ Giao Dịch
+              </span>
+              <span class="badge badge-secondary" style="font-size: 10px; padding: 2px 6px;">4 NGÀNH</span>
+            </div>
+
+            <div class="profile-dist-item">
+              <div class="profile-dist-info">
+                <span>👟 Sneakers Hype C2C</span>
+                <strong class="mono text-secondary">40%</strong>
+              </div>
+              <div class="progress progress-secondary" style="--value: 40%; height: 4px;"><div class="progress-bar"></div></div>
+            </div>
+
+            <div class="profile-dist-item">
+              <div class="profile-dist-info">
+                <span>👔 Techwear &amp; Thời Trang</span>
+                <strong class="mono text-primary">30%</strong>
+              </div>
+              <div class="progress" style="--value: 30%; height: 4px;"><div class="progress-bar"></div></div>
+            </div>
+
+            <div class="profile-dist-item">
+              <div class="profile-dist-info">
+                <span>💻 Hi-Tech &amp; Audio Lab</span>
+                <strong class="mono text-tertiary">18%</strong>
+              </div>
+              <div class="progress progress-tertiary" style="--value: 18%; height: 4px;"><div class="progress-bar"></div></div>
+            </div>
+
+            <div class="profile-dist-item">
+              <div class="profile-dist-info">
+                <span>🏠 Smart Living IoT</span>
+                <strong class="mono text-success">12%</strong>
+              </div>
+              <div class="progress progress-success" style="--value: 12%; height: 4px;"><div class="progress-bar"></div></div>
+            </div>
+          </div>
+
+          <!-- KHỐI 4: MENU CÁC MỤC HỒ SƠ -->
+          <div class="panel p-3">
+            <nav class="profile-menu">
+              <button class="profile-menu-item active" type="button" onclick="document.getElementById('sectionCccd').scrollIntoView({behavior:'smooth'})">
+                <span class="flex items-center gap-2">
+                  <span class="material-symbols-outlined icon-sm">badge</span>
+                  1. Sinh Trắc Học &amp; CCCD Chip L2
+                </span>
+                <span class="material-symbols-outlined icon-xs">chevron_right</span>
+              </button>
+              <button class="profile-menu-item" type="button" onclick="document.getElementById('sectionBank').scrollIntoView({behavior:'smooth'})">
+                <span class="flex items-center gap-2">
+                  <span class="material-symbols-outlined icon-sm">account_balance</span>
+                  2. Tài Khoản Ngân Hàng Napas
+                </span>
+                <span class="material-symbols-outlined icon-xs">chevron_right</span>
+              </button>
+              <button class="profile-menu-item" type="button" onclick="document.getElementById('sectionAddress').scrollIntoView({behavior:'smooth'})">
+                <span class="flex items-center gap-2">
+                  <span class="material-symbols-outlined icon-sm">local_shipping</span>
+                  3. Sổ Địa Chỉ Giao Nhận Hỏa Tốc
+                </span>
+                <span class="material-symbols-outlined icon-xs">chevron_right</span>
+              </button>
+            </nav>
+            <div class="mt-3 pt-3 border-top">
+              <button class="btn btn-outlined btn-sm is-full text-danger" id="btnLogoutAction" type="button">
+                <span class="material-symbols-outlined icon-xs">logout</span> Đăng Xuất Tài Khoản
+              </button>
+            </div>
+          </div>
+        </aside>
+
+        <!-- CỘT PHẢI: CHI TIẾT CÁC MỤC DANH TÍNH & CCCD -->
+        <div>
+          <!-- THẺ 1: ĐỊNH DANH CCCD GẮN CHIP (ICAO 9303) -->
+          <section class="panel p-5 mb-5" id="sectionCccd">
+            <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-secondary" style="font-size: 26px;">verified_user</span>
+                <div>
+                  <h3 class="panel-title">Định Danh CCCD Gắn Chip (ICAO 9303)</h3>
+                  <div class="text-xs text-muted">XÁC THỰC CƠ SỞ DỮ LIỆU C06 BỘ CÔNG AN // HARDWARE NFC ENCRYPTED</div>
+                </div>
+              </div>
+              <div id="kycCardBadge">
+                <!-- Badge động -->
+              </div>
+            </div>
+
+            <!-- HỘP THÔNG BÁO TRẠNG THÁI XÉT DUYỆT CCCD -->
+            <div id="kycNoticeContainer">
+              <!-- Render động trạng thái: Verified / Pending / Unverified -->
+            </div>
+
+            <!-- LƯỚI THÔNG TIN CCCD CHI TIẾT -->
+            <div class="identity-meta-grid mb-4">
+              <div>
+                <div class="text-xs text-muted">HỌ VÀ TÊN CHỦ SỞ HỮU</div>
+                <div class="text-sm fw-700 text-text mono mt-1" id="cccdFullName">NGUYỄN HƯƠNG MAI</div>
+                <div class="text-xs text-success mt-1 flex items-center gap-1">
+                  <span class="material-symbols-outlined icon-xs">verified</span> Khớp 100% cơ sở dữ liệu định danh
+                </div>
+              </div>
+
+              <div>
+                <div class="text-xs text-muted">SỐ THẺ CCCD GẮN CHIP</div>
+                <div class="text-sm fw-700 text-secondary mono mt-1" id="cccdNumber">00120200****</div>
+                <div class="text-xs text-muted mt-1">ICAO 9303 Standard Cryptographic</div>
+              </div>
+
+              <div>
+                <div class="text-xs text-muted">NGÀY SINH &amp; NGÀY CẤP</div>
+                <div class="text-sm fw-600 text-text mono mt-1" id="cccdDob">18/09/1994 — Cấp: 24/02/2023</div>
+                <div class="text-xs text-muted mt-1">Thời hạn: Có giá trị vô thời hạn</div>
+              </div>
+
+              <div>
+                <div class="text-xs text-muted">ĐỘ KHỚP LIVENESS 2D FACIAL</div>
+                <div class="text-sm fw-700 text-success mono mt-1" id="cccdFaceMatch">99.6% ANTI-DEEPFAKE AI</div>
+                <div class="text-xs text-muted mt-1">Quét quang phổ camera 3D Sensor</div>
+              </div>
+            </div>
+
+            <!-- CHỨNG CHỈ ĐIỆN TỬ & NÚT HÀNH ĐỘNG -->
+            <div class="flex items-center justify-between flex-wrap gap-3 pt-3 border-top">
+              <div class="flex items-center gap-2 text-xs text-muted mono">
+                <span class="material-symbols-outlined icon-sm text-primary">lock</span>
+                <span>MÃ BẢO CHỨNG: <span class="text-secondary" id="cccdHash">4b19f4a7c2e911bce44d39f73b6a1858bc82590e</span></span>
+              </div>
+              <div class="flex items-center gap-2">
+                <button class="btn btn-secondary btn-sm" id="btnOpenKycModal" type="button">
+                  <span class="material-symbols-outlined icon-xs">add_photo_alternate</span>
+                  Gửi Yêu Cầu Xác Thực CCCD Mới
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- THẺ 2: TÀI KHOẢN NGÂN HÀNG LIÊN KẾT (NAPAS 24/7) -->
+          <section class="panel p-5 mb-5" id="sectionBank">
+            <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+              <div>
+                <h3 class="panel-title flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary">account_balance</span>
+                  Tài Khoản Ngân Hàng Rút Tiền / Thanh Toán
+                </h3>
+                <div class="text-xs text-muted">LIÊN KẾT RÚT TỰ ĐỘNG NAPAS 24/7 // ĐỐI SOÁT NHANH TRONG 30 GIÂY</div>
+              </div>
+              <button class="btn btn-secondary btn-sm" id="btnAddBank" type="button">
+                + Thêm Tài Khoản Ngân Hàng Mới
+              </button>
+            </div>
+
+            <!-- Ngân hàng chính (đồng bộ động từ hồ sơ) -->
+            <div class="item-list-row">
+              <div class="flex items-center gap-4">
+                <div class="avatar" id="primaryBankLogo" style="background: #e02424; font-size: 11px; font-weight: 700;">TCB</div>
+                <div>
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <strong class="text-sm" id="primaryBankName">Techcombank</strong>
+                    <span class="badge badge-success">MẶC ĐỊNH RÚT TIỀN</span>
+                    <span class="text-xs text-secondary">Napas 24/7 Siêu Tốc</span>
+                  </div>
+                  <div class="text-xs text-muted mono mt-1">
+                    Số TK: <strong class="text-text" id="primaryBankNumber">1903 6888 8888 8</strong> • Chủ TK: <span id="primaryBankHolder">NGUYỄN HƯƠNG MAI</span> (Khớp CCCD 100%)
+                  </div>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-xs text-success">Hạn mức: Không giới hạn</div>
+              </div>
+            </div>
+
+            <!-- Vietcombank phụ -->
+            <div class="item-list-row">
+              <div class="flex items-center gap-4">
+                <div class="avatar" style="background: #006837; font-size: 11px; font-weight: 700;">VCB</div>
+                <div>
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <strong class="text-sm">Vietcombank</strong>
+                    <span class="badge">DỰ PHÒNG</span>
+                    <span class="text-xs text-muted">Priority Digital Banking</span>
+                  </div>
+                  <div class="text-xs text-muted mono mt-1">
+                    Số TK: <strong class="text-text">0071 0009 9999 9</strong> • Chủ TK: <span id="secondaryBankHolder">NGUYỄN HƯƠNG MAI</span>
+                  </div>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-xs text-muted">Rút tối đa: 200.000.000₫/ngày</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- THẺ 3: SỔ ĐỊA CHỈ GIAO NHẬN HỎA TỐC -->
+          <section class="panel p-5 mb-5" id="sectionAddress">
+            <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+              <div>
+                <h3 class="panel-title flex items-center gap-2">
+                  <span class="material-symbols-outlined text-secondary">local_shipping</span>
+                  Sổ Địa Chỉ Giao Nhận Hỏa Tốc
+                </h3>
+                <div class="text-xs text-muted">HỖ TRỢ ĐỘI SHIPPER LAB 15 PHÚT &amp; HỎA TỐC 2H NỘI THÀNH</div>
+              </div>
+              <button class="btn btn-secondary btn-sm" id="btnAddAddress" type="button">
+                <span class="material-symbols-outlined icon-xs">add_location_alt</span>
+                + Thêm Địa Chỉ Mới
+              </button>
+            </div>
+
+            <!-- Danh sách địa chỉ nhận hàng động -->
+            <div id="addressListContainer">
+              <!-- Render động bằng JS -->
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer mt-8">
+      <div class="container footer-bar" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <span class="text-xs text-faint">© 2026 HYBRID.STORE — Quản Trị Danh Tính &amp; Hồ Sơ Khách Hàng.</span>
+        <div class="flex gap-4 text-xs">
+          <a href="../../terms_of_service.html">Điều Khoản Dịch Vụ</a>
+          <a href="../../warranty_policy.html">Chính Sách Bảo Hành</a>
+          <a href="../../return_policy.html">Chính Sách Đổi Trả</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ===== MODAL 1: NỘP HỒ SƠ XÁC THỰC CCCD GẮN CHIP ===== -->
+    <div class="modal-backdrop" id="kycModal" role="dialog" aria-modal="true" onclick="if(event.target===this)Utils.closeModal('kycModal')">
+      <div class="modal" style="max-width: 580px;">
+        <div class="modal-head">
+          <h4 class="modal-title flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">badge</span>
+            Gửi Hồ Sơ Xác Thực Căn Cước Công Dân (CCCD)
+          </h4>
+          <button class="modal-close" id="btnCloseKycModal" type="button" data-close onclick="Utils.closeModal('kycModal')" aria-label="Đóng"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <form id="kycSubmitForm">
+          <div class="modal-body">
+            <div class="panel p-3 mb-4" style="background: rgba(139, 92, 246, 0.08); border-color: rgba(139, 92, 246, 0.2);">
+              <div class="text-xs text-secondary mb-1 fw-600">Quy trình thẩm định an toàn:</div>
+              <p class="text-xs text-muted" style="margin: 0; line-height: 1.6;">
+                Hồ sơ CCCD của bạn sẽ được gửi trực tiếp tới Ban Quản Trị để đối soát dữ liệu C06 ICAO 9303. Sau khi Admin phê duyệt, tài khoản sẽ được mở khóa toàn bộ quyền mua sắm và đăng bán đồ cũ.
+              </p>
+            </div>
+
+            <div class="form-group mb-3">
+              <label class="form-label" for="inputCardFullName">Họ và tên đầy đủ trên CCCD (*)</label>
+              <input class="input" id="inputCardFullName" type="text" placeholder="VÍ DỤ: NGUYỄN HƯƠNG MAI" required />
+            </div>
+
+            <div class="grid grid-2 gap-3 mb-3">
+              <div class="form-group">
+                <label class="form-label" for="inputIdCardNumber">Số CCCD gắn chip (12 số) (*)</label>
+                <input class="input mono" id="inputIdCardNumber" type="text" maxlength="12" placeholder="001202008849" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="inputDob">Ngày tháng năm sinh (*)</label>
+                <input class="input" id="inputDob" type="text" placeholder="18/09/1994" required />
+              </div>
+            </div>
+
+            <div class="grid grid-2 gap-3 mb-3">
+              <div class="form-group">
+                <label class="form-label" for="inputIssueDate">Ngày cấp thẻ CCCD</label>
+                <input class="input" id="inputIssueDate" type="text" placeholder="24/02/2023" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="inputGender">Giới tính</label>
+                <select class="select" id="inputGender">
+                  <option value="Nam">Nam</option>
+                  <option value="Nữ">Nữ</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group mb-4">
+              <label class="form-label" for="inputAddress">Nơi thường trú / Địa chỉ cư trú (*)</label>
+              <input class="input" id="inputAddress" type="text" placeholder="Căn hộ Landmark 81, Vinhomes Central Park, TP.HCM" required />
+            </div>
+
+            <div class="form-group mb-2">
+              <label class="form-label">Tải lên ảnh chụp CCCD gắn chip (Mặt trước &amp; Mặt sau)</label>
+              <div class="grid grid-2 gap-3">
+                <div class="panel p-3 text-center" style="border: 1px dashed var(--border); background: var(--neutral-850); cursor: pointer;" id="btnUploadFront">
+                  <span class="material-symbols-outlined text-secondary" style="font-size: 28px;">add_a_photo</span>
+                  <div class="text-xs fw-600 mt-1">Ảnh Mặt Trước CCCD</div>
+                  <div class="text-xs text-success mt-1" id="frontUploadStatus">✓ Đã có ảnh chuẩn C06</div>
+                </div>
+                <div class="panel p-3 text-center" style="border: 1px dashed var(--border); background: var(--neutral-850); cursor: pointer;" id="btnUploadBack">
+                  <span class="material-symbols-outlined text-secondary" style="font-size: 28px;">add_a_photo</span>
+                  <div class="text-xs fw-600 mt-1">Ảnh Mặt Sau (Chip NFC)</div>
+                  <div class="text-xs text-success mt-1" id="backUploadStatus">✓ Đã quét vân tay &amp; chip</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-foot">
+            <button class="btn btn-secondary" id="btnCancelKycModal" type="button" data-close onclick="Utils.closeModal('kycModal')">Hủy Bỏ</button>
+            <button class="btn btn-primary" id="btnSubmitKycReq" type="submit">
+              <span class="material-symbols-outlined icon-xs">send</span>
+              Gửi Yêu Cầu Tới Admin Xét Duyệt
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ===== MODAL 2: CHỈNH SỬA TOÀN BỘ HỒ SƠ CÁ NHÂN (FULL TABS) ===== -->
+    <div class="modal-backdrop" id="editProfileModal" role="dialog" aria-modal="true" onclick="if(event.target===this)Utils.closeModal('editProfileModal')">
+      <div class="modal" style="max-width: 640px;">
+        <div class="modal-head">
+          <h4 class="modal-title flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">manage_accounts</span>
+            Chỉnh Sửa Toàn Bộ Hồ Sơ Cá Nhân
+          </h4>
+          <button class="modal-close" type="button" data-close onclick="Utils.closeModal('editProfileModal')" aria-label="Đóng"><span class="material-symbols-outlined">close</span></button>
+        </div>
+
+        <!-- THANH CHUYỂN TAB CÁC PHẦN THÔNG TIN -->
+        <div class="modal-tabs px-4 pt-3">
+          <button class="modal-tab-btn active" type="button" data-tab="tabProfileBasic">
+            <span class="material-symbols-outlined icon-xs">person</span> 1. Thông Tin Cơ Bản
+          </button>
+          <button class="modal-tab-btn" type="button" data-tab="tabProfileRole">
+            <span class="material-symbols-outlined icon-xs">verified</span> 2. Vai Trò &amp; Danh Hiệu
+          </button>
+          <button class="modal-tab-btn" type="button" data-tab="tabProfileBank">
+            <span class="material-symbols-outlined icon-xs">account_balance</span> 3. Ngân Hàng Napas
+          </button>
+          <button class="modal-tab-btn" type="button" data-tab="tabProfileSecurity">
+            <span class="material-symbols-outlined icon-xs">lock</span> 4. Đổi Mật Khẩu
+          </button>
+        </div>
+
+        <form id="editProfileForm">
+          <div class="modal-body" style="max-height: 65vh; overflow-y: auto;">
+            <!-- TAB 1: THÔNG TIN CƠ BẢN -->
+            <div class="modal-tab-pane active" id="tabProfileBasic">
+              <div class="grid grid-2 gap-3 mb-3">
+                <div class="form-group">
+                  <label class="form-label" for="profileInputFullName">Họ và tên đầy đủ (*)</label>
+                  <input class="input" id="profileInputFullName" type="text" required placeholder="Nguyễn Hương Mai" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="profileInputUsername">Tên người dùng / Handle (*)</label>
+                  <div class="flex items-center gap-1">
+                    <span class="text-sm text-secondary mono">@</span>
+                    <input class="input mono" id="profileInputUsername" type="text" required placeholder="nguyenmai2804" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid grid-2 gap-3 mb-3">
+                <div class="form-group">
+                  <label class="form-label" for="profileInputPhone">Số điện thoại (*)</label>
+                  <input class="input" id="profileInputPhone" type="tel" required placeholder="0396403893" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="profileInputEmail">Email đăng nhập / liên hệ (*)</label>
+                  <input class="input" id="profileInputEmail" type="email" required placeholder="nguyenmai2804@gmail.com" />
+                </div>
+              </div>
+
+              <div class="grid grid-2 gap-3 mb-3">
+                <div class="form-group">
+                  <label class="form-label" for="profileInputDob">Ngày tháng năm sinh</label>
+                  <input class="input" id="profileInputDob" type="text" placeholder="18/09/1994" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="profileSelectGender">Giới tính</label>
+                  <select class="select" id="profileSelectGender">
+                    <option value="Nữ">Nữ</option>
+                    <option value="Nam">Nam</option>
+                    <option value="Khác">Khác</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group mb-3">
+                <label class="form-label" for="profileInputAddress">Địa chỉ thường trú / Nơi ở</label>
+                <input class="input" id="profileInputAddress" type="text" placeholder="Căn hộ Landmark 81, Vinhomes Central Park, Phường 22, Bình Thạnh, TP.HCM" />
+              </div>
+
+              <!-- TẢI ẢNH AVATAR TRỰC TIẾP TỪ THIẾT BỊ -->
+              <div class="form-group mb-3">
+                <label class="form-label">Ảnh đại diện cá nhân (Avatar)</label>
+                <div class="flex items-center gap-4 p-3 rounded" style="background: var(--neutral-850); border: 1px solid var(--border);">
+                  <div class="profile-avatar-wrap" style="width: 72px; height: 72px; margin: 0; flex-shrink: 0; cursor: default;">
+                    <div class="profile-avatar-img" id="modalAvatarPreview" style="font-size: 1.5rem;">HM</div>
+                  </div>
+                  <div class="flex-1">
+                    <div class="text-xs fw-600 text-text mb-1">Tải ảnh chân dung từ máy tính / điện thoại</div>
+                    <div class="text-xs text-muted mb-2">Hỗ trợ JPG, PNG, WEBP (Tự động nén &amp; cắt chuẩn avatar tròn).</div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                      <button class="btn btn-secondary btn-sm" id="btnChooseAvatarModal" type="button">
+                        <span class="material-symbols-outlined icon-xs">upload_file</span> Tải Ảnh Từ Máy
+                      </button>
+                      <button class="btn btn-ghost btn-sm text-danger text-xs" id="btnRemoveAvatarModal" type="button">
+                        <span class="material-symbols-outlined icon-xs">delete</span> Dùng Chữ Viết Tắt
+                      </button>
+                    </div>
+                    <input type="file" id="modalAvatarFileInput" accept="image/*" style="display: none;" />
+                    <input type="hidden" id="profileInputAvatarHidden" value="" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group mb-3">
+                <label class="form-label" for="profileInputBio">Giới thiệu ngắn (Tiểu sử)</label>
+                <textarea class="textarea" id="profileInputBio" rows="2" placeholder="Sở thích sưu tầm Sneakers Hype &amp; Techwear..."></textarea>
+              </div>
+            </div>
+
+            <!-- TAB 2: VAI TRÒ & NGÀNH HÀNG -->
+            <div class="modal-tab-pane" id="tabProfileRole">
+              <div class="panel p-3 mb-3" style="background: rgba(139, 92, 246, 0.08); border-color: rgba(139, 92, 246, 0.25);">
+                <div class="text-xs text-secondary fw-600 mb-1">Quyền hạn &amp; vai trò trên sàn:</div>
+                <div class="text-xs text-muted">
+                  Bạn có thể chọn vai trò Người Mua, Người Bán ký gửi C2C hoặc Đa năng để tối ưu luồng giao dịch trên sàn.
+                </div>
+              </div>
+
+              <div class="form-group mb-3">
+                <label class="form-label" for="profileSelectRole">Vai trò tài khoản</label>
+                <select class="select" id="profileSelectRole">
+                  <option value="buyer">Khách Hàng Mua Sắm (Buyer Cá Nhân)</option>
+                  <option value="seller">Gian Hàng / Người Bán Hàng (Seller C2C)</option>
+                  <option value="both">Tài Khoản Đa Năng (Vừa Mua Vừa Bán C2C)</option>
+                </select>
+              </div>
+
+              <div class="form-group mb-3">
+                <label class="form-label" for="profileInputMembershipTitle">Danh hiệu / Huy hiệu hiển thị</label>
+                <input class="input" id="profileInputMembershipTitle" type="text" placeholder="VIP BUYER" />
+                <div class="text-xs text-muted mt-1">Gợi ý: VIP BUYER, TOP COLLECTOR, STORE SELLER, ELITE MEMBER...</div>
+              </div>
+
+              <div class="form-group mb-2">
+                <label class="form-label" for="profileSelectCategory">Ngành hàng quan tâm ưu tiên</label>
+                <select class="select" id="profileSelectCategory">
+                  <option value="sneakers">Sneakers Hype C2C</option>
+                  <option value="techwear">Techwear &amp; Thời Trang</option>
+                  <option value="hitech">Hi-Tech &amp; Audio Lab</option>
+                  <option value="smart-iot">Smart Living IoT</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- TAB 3: NGÂN HÀNG NAPAS 24/7 -->
+            <div class="modal-tab-pane" id="tabProfileBank">
+              <div class="panel p-3 mb-3" style="background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.25);">
+                <div class="text-xs text-success fw-600 mb-1">Tài khoản thụ hưởng nhận tiền Napas 24/7:</div>
+                <div class="text-xs text-muted">
+                  Hệ thống tự động liên kết tài khoản ngân hàng chính chủ để nhận tiền thanh toán bán đồ cũ hoặc tiền hoàn đơn ngay lập tức.
+                </div>
+              </div>
+
+              <div class="form-group mb-3">
+                <label class="form-label" for="profileSelectBank">Ngân hàng thụ hưởng (*)</label>
+                <select class="select" id="profileSelectBank">
+                  <option value="Techcombank">Techcombank (TCB - Ngân hàng Kỹ Thương)</option>
+                  <option value="Vietcombank">Vietcombank (VCB - Ngoại Thương Việt Nam)</option>
+                  <option value="MBBank">MB Bank (Ngân hàng Quân Đội)</option>
+                  <option value="VPBank">VPBank (Việt Nam Thịnh Vượng)</option>
+                  <option value="ACB">ACB (Ngân hàng Á Châu)</option>
+                  <option value="BIDV">BIDV (Đầu Tư &amp; Phát Triển)</option>
+                  <option value="Vietinbank">Vietinbank (Công Thương Việt Nam)</option>
+                  <option value="TPBank">TPBank (Tiên Phong Bank)</option>
+                  <option value="Agribank">Agribank (Nông Nghiệp &amp; PTNT)</option>
+                  <option value="Sacombank">Sacombank (Sài Gòn Thương Tín)</option>
+                </select>
+              </div>
+
+              <div class="form-group mb-3">
+                <label class="form-label" for="profileInputBankNumber">Số tài khoản ngân hàng (*)</label>
+                <input class="input mono" id="profileInputBankNumber" type="text" placeholder="1903 6888 8888 8" />
+              </div>
+
+              <div class="form-group mb-2">
+                <label class="form-label" for="profileInputBankHolder">Họ và tên chủ tài khoản (In hoa không dấu) (*)</label>
+                <input class="input mono" id="profileInputBankHolder" type="text" placeholder="NGUYEN HUONG MAI" />
+                <div class="text-xs text-secondary mt-1">Chủ tài khoản nên trùng khớp với họ tên đăng ký để đối soát Napas 24/7 tức thì.</div>
+              </div>
+            </div>
+
+            <!-- TAB 4: ĐỔI MẬT KHẨU -->
+            <div class="modal-tab-pane" id="tabProfileSecurity">
+              <div class="panel p-3 mb-3" style="background: rgba(239, 68, 68, 0.08); border-color: rgba(239, 68, 68, 0.25);">
+                <div class="text-xs text-danger fw-600 mb-1">Bảo mật tài khoản:</div>
+                <div class="text-xs text-muted">
+                  Để trống nếu bạn không có nhu cầu đổi mật khẩu. Nếu đổi, mật khẩu mới cần tối thiểu 6 ký tự.
+                </div>
+              </div>
+
+              <div class="form-group mb-3">
+                <label class="form-label" for="profileInputNewPassword">Mật khẩu mới (Tối thiểu 6 ký tự)</label>
+                <input class="input" id="profileInputNewPassword" type="password" placeholder="Nhập mật khẩu mới..." />
+              </div>
+
+              <div class="form-group mb-2">
+                <label class="form-label" for="profileInputConfirmPassword">Xác nhận mật khẩu mới</label>
+                <input class="input" id="profileInputConfirmPassword" type="password" placeholder="Nhập lại mật khẩu mới..." />
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-foot">
+            <button class="btn btn-secondary" type="button" data-close onclick="Utils.closeModal('editProfileModal')">Hủy Bỏ</button>
+            <button class="btn btn-primary" type="submit">
+              <span class="material-symbols-outlined icon-xs">save</span> Lưu Toàn Bộ Thay Đổi
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ===== MODAL 3: THÊM / CHỈNH SỬA ĐỊA CHỈ GIAO NHẬN ===== -->
+    <div class="modal-backdrop" id="addressModal" role="dialog" aria-modal="true" onclick="if(event.target===this)Utils.closeModal('addressModal')">
+      <div class="modal" style="max-width: 540px;">
+        <div class="modal-head">
+          <h4 class="modal-title flex items-center gap-2" id="addressModalTitle">
+            <span class="material-symbols-outlined text-secondary">add_location_alt</span>
+            <span>Thêm Địa Chỉ Giao Nhận Mới</span>
+          </h4>
+          <button class="modal-close" type="button" data-close onclick="Utils.closeModal('addressModal')" aria-label="Đóng"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <form id="addressForm">
+          <input type="hidden" id="addrEditId" value="" />
+          <div class="modal-body">
+            <div class="grid grid-2 gap-3 mb-3">
+              <div class="form-group">
+                <label class="form-label" for="addrReceiverName">Họ tên người nhận (*)</label>
+                <input class="input" id="addrReceiverName" type="text" required placeholder="Nguyễn Hương Mai" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="addrPhone">Số điện thoại (*)</label>
+                <input class="input" id="addrPhone" type="tel" required placeholder="0396 403 893" />
+              </div>
+            </div>
+            <div class="form-group mb-3">
+              <label class="form-label" for="addrCity">Tỉnh / Thành phố &amp; Quận / Huyện (*)</label>
+              <input class="input" id="addrCity" type="text" required placeholder="TP. Hồ Chí Minh — Quận Bình Thạnh" />
+            </div>
+            <div class="form-group mb-3">
+              <label class="form-label" for="addrDetail">Địa chỉ chi tiết (Số nhà, tên đường, tòa nhà...) (*)</label>
+              <input class="input" id="addrDetail" type="text" required placeholder="Căn hộ Landmark 81, Vinhomes Central Park, Phường 22" />
+            </div>
+            <div class="grid grid-2 gap-3 mb-3">
+              <div class="form-group">
+                <label class="form-label" for="addrType">Loại địa chỉ</label>
+                <select class="select" id="addrType">
+                  <option value="home">Nhà riêng / Căn hộ</option>
+                  <option value="office">Văn phòng / Công ty</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="addrNote">Ghi chú giao hàng</label>
+                <input class="input" id="addrNote" type="text" placeholder="Shipper bấm chuông lên phòng" />
+              </div>
+            </div>
+            <div class="flex items-center gap-2 mt-2">
+              <input type="checkbox" id="addrIsDefault" style="width: 16px; height: 16px; accent-color: var(--primary-500); cursor: pointer;" />
+              <label for="addrIsDefault" class="text-sm cursor-pointer" style="user-select: none;">Đặt làm địa chỉ nhận hàng mặc định</label>
+            </div>
+          </div>
+          <div class="modal-foot">
+            <button class="btn btn-secondary" type="button" data-close onclick="Utils.closeModal('addressModal')">Hủy Bỏ</button>
+            <button class="btn btn-primary" type="submit">
+              <span class="material-symbols-outlined icon-xs">save</span> Lưu Địa Chỉ
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="toast-stack" id="toastStack"></div>
+
+    <script src="../../js/popup.js"></script>
+    <script src="../../js/auth.js"></script>
+    <script src="../../js/mock_data.js"></script>
+    <script src="../../js/utils.js"></script>
+    <script>
+      (function () {
+        const $ = (sel, root) => (root || document).querySelector(sel);
+        const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+
+        // 1. Chốt chặn bắt buộc đăng nhập để xem trang cá nhân
+        if (!Auth.requireLogin({ message: "Vui lòng đăng nhập để xem trung tâm hồ sơ khách hàng." })) return;
+
+        const topBadges = document.getElementById("topStatusBadges");
+        const kycNoticeContainer = document.getElementById("kycNoticeContainer");
+        const kycCardBadge = document.getElementById("kycCardBadge");
+
+        // 2. Đồng bộ dữ liệu người dùng lên giao diện
+        function renderProfile() {
+          const u = Auth.current();
+          if (!u) return;
+
+          const fullName = u.fullName || "Khách Hàng";
+          let initials = "KH";
+          if (u.avatar && !u.avatar.startsWith("http") && !u.avatar.startsWith("data:") && u.avatar.length <= 4) {
+            initials = u.avatar.toUpperCase();
+          } else {
+            initials = fullName
+              .trim()
+              .split(/\s+/)
+              .slice(-2)
+              .map((w) => w[0])
+              .join("")
+              .toUpperCase() || "KH";
+          }
+
+          document.getElementById("userDisplayName").textContent = fullName;
+          const isImgAvatar = !!(u.avatar && (u.avatar.startsWith("http") || u.avatar.startsWith("data:image")));
+          const avatarWrap = document.getElementById("userAvatarText");
+          if (isImgAvatar) {
+            avatarWrap.innerHTML = `<img src="${u.avatar}" alt="${fullName}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" />`;
+          } else {
+            avatarWrap.textContent = initials;
+          }
+
+          const headerAvatar = document.getElementById("headerAvatarBtn");
+          if (headerAvatar) {
+            if (isImgAvatar) {
+              headerAvatar.innerHTML = `<img src="${u.avatar}" alt="${fullName}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" />`;
+            } else {
+              headerAvatar.textContent = initials;
+            }
+          }
+
+          const username = u.username || (u.email ? u.email.split("@")[0] : "user");
+          document.getElementById("userHandle").textContent = "@" + username;
+          document.getElementById("userPhoneDisplay").textContent = u.phone || "Chưa cập nhật";
+          document.getElementById("userEmailDisplay").textContent = u.email || "Chưa cập nhật";
+
+          // Cập nhật vai trò / danh hiệu
+          const roleLabel = u.membershipTitle || (u.role === "seller" ? "STORE SELLER" : u.role === "both" ? "BUYER & SELLER" : "VIP BUYER");
+          const roleBadgeEl = document.getElementById("roleBadgeDisplay");
+          if (roleBadgeEl) roleBadgeEl.textContent = roleLabel;
+
+          // Cập nhật thông tin ngân hàng thụ hưởng hiển thị
+          if (u.bankName) {
+            const bNameEl = document.getElementById("primaryBankName");
+            if (bNameEl) bNameEl.textContent = u.bankName;
+          }
+          if (u.bankAccountNumber) {
+            const bNumEl = document.getElementById("primaryBankNumber");
+            if (bNumEl) bNumEl.textContent = u.bankAccountNumber;
+          }
+          const holderName = (u.bankAccountName || fullName).toUpperCase();
+          const bHoldEl = document.getElementById("primaryBankHolder");
+          if (bHoldEl) bHoldEl.textContent = holderName;
+          const secHoldEl = document.getElementById("secondaryBankHolder");
+          if (secHoldEl) secHoldEl.textContent = holderName;
+
+          const kycStatus = u.kycStatus || "UNVERIFIED";
+          const kycData = u.kycData || {};
+
+          // Cập nhật thông tin chi tiết CCCD
+          if (kycData.cardFullName) {
+            document.getElementById("cccdFullName").textContent = kycData.cardFullName.toUpperCase();
+          } else {
+            document.getElementById("cccdFullName").textContent = fullName.toUpperCase();
+          }
+
+          if (kycData.idCardNumber) {
+            const raw = String(kycData.idCardNumber);
+            document.getElementById("cccdNumber").textContent = raw.slice(0, 6) + "****" + raw.slice(-2);
+          } else {
+            document.getElementById("cccdNumber").textContent = "Chưa cung cấp";
+          }
+
+          if (kycData.dob) {
+            document.getElementById("cccdDob").textContent = kycData.dob + (kycData.issueDate ? " — Cấp: " + kycData.issueDate : "");
+          } else if (u.dob) {
+            document.getElementById("cccdDob").textContent = u.dob + " — Cấp: 24/02/2023";
+          }
+
+          if (kycData.faceMatch) {
+            document.getElementById("cccdFaceMatch").textContent = kycData.faceMatch + "% ANTI-DEEPFAKE AI";
+          }
+
+          // Cập nhật trạng thái hiển thị
+          if (kycStatus === "VERIFIED") {
+            topBadges.innerHTML = `
+              <span class="badge badge-success"><span class="material-symbols-outlined icon-xs">verified</span> eKYC Level 2: ĐÃ XÁC MINH</span>
+              <span class="badge badge-primary">TÀI KHOẢN ĐÃ DUYỆT</span>
+              <span class="badge badge-secondary">NAPAS 24/7 SẴN SÀNG</span>
+            `;
+            kycCardBadge.innerHTML = `<span class="badge badge-success" style="font-size: 13px; padding: 6px 14px;"><span class="material-symbols-outlined icon-xs">verified</span> ĐÃ XÁC THỰC L2 - QUỐC GIA</span>`;
+            document.getElementById("verifiedStatusBadge").textContent = "VERIFIED CITIZEN";
+            document.getElementById("verifiedStatusBadge").className = "badge badge-success";
+            document.getElementById("avatarBadgeIcon").innerHTML = `<span class="material-symbols-outlined icon-sm text-success">check_circle</span>`;
+
+            kycNoticeContainer.innerHTML = `
+              <div class="kyc-status-box verified">
+                <span class="material-symbols-outlined text-success" style="font-size: 28px;">check_circle</span>
+                <div class="flex-1">
+                  <strong class="text-sm text-success">Tài Khoản Đã Được Admin Phê Duyệt Toàn Quyền</strong>
+                  <p class="text-xs text-muted mb-0 mt-1">
+                    Căn cước công dân gắn chip của bạn đã được đối soát hợp lệ với CSDL quốc gia C06. Bạn có toàn quyền thực hiện <strong>Mua Hàng</strong>, <strong>Nhận Hàng Đồng Kiểm 100%</strong>, <strong>Đề Nghị Trả Giá</strong> và <strong>Đăng Bán Đồ Cũ Like New</strong>.
+                  </p>
+                </div>
+              </div>
+            `;
+          } else if (kycStatus === "PENDING") {
+            topBadges.innerHTML = `
+              <span class="badge badge-warning"><span class="material-symbols-outlined icon-xs">hourglass_top</span> HỒ SƠ CCCD CHỜ DUYỆT</span>
+              <span class="badge badge-secondary">ĐÃ NỘP HỒ SƠ</span>
+            `;
+            kycCardBadge.innerHTML = `<span class="badge badge-warning" style="font-size: 13px; padding: 6px 14px;"><span class="material-symbols-outlined icon-xs">hourglass_empty</span> ĐANG CHỜ ADMIN DUYỆT</span>`;
+            document.getElementById("verifiedStatusBadge").textContent = "CHỜ XÉT DUYỆT";
+            document.getElementById("verifiedStatusBadge").className = "badge badge-warning";
+            document.getElementById("avatarBadgeIcon").innerHTML = `<span class="material-symbols-outlined icon-sm text-warning">pending</span>`;
+
+            kycNoticeContainer.innerHTML = `
+              <div class="kyc-status-box pending">
+                <span class="material-symbols-outlined text-warning" style="font-size: 28px;">hourglass_top</span>
+                <div class="flex-1">
+                  <strong class="text-sm text-warning">Hồ Sơ Xác Thực CCCD Đang Được Ban Quản Trị Xét Duyệt</strong>
+                  <p class="text-xs text-muted mb-2 mt-1">
+                    Yêu cầu xác thực Căn cước công dân của bạn đã được tiếp nhận an toàn và chuyển đến hàng đợi thẩm định. Sau khi Admin phê duyệt, tài khoản sẽ tự động kích hoạt tính năng mua hàng và đăng bán đồ cũ.
+                  </p>
+                  <div class="flex items-center gap-2">
+                    <span class="badge badge-warning" style="font-size: 12px; padding: 4px 10px;">
+                      <span class="material-symbols-outlined icon-xs">schedule</span> Dự kiến duyệt: 15-30 phút
+                    </span>
+                  </div>
+                </div>
+              </div>
+            `;
+          } else {
+            // UNVERIFIED hoặc REJECTED
+            topBadges.innerHTML = `
+              <span class="badge badge-danger"><span class="material-symbols-outlined icon-xs">error</span> CHƯA XÁC THỰC CCCD</span>
+              <span class="badge">CHƯA ĐƯỢC MUA / BÁN</span>
+            `;
+            kycCardBadge.innerHTML = `<span class="badge badge-danger" style="font-size: 13px; padding: 6px 14px;"><span class="material-symbols-outlined icon-xs">cancel</span> CHƯA XÁC THỰC</span>`;
+            document.getElementById("verifiedStatusBadge").textContent = "CHƯA XÁC THỰC";
+            document.getElementById("verifiedStatusBadge").className = "badge badge-danger";
+            document.getElementById("avatarBadgeIcon").innerHTML = `<span class="material-symbols-outlined icon-sm text-danger">error</span>`;
+
+            kycNoticeContainer.innerHTML = `
+              <div class="kyc-status-box unverified">
+                <span class="material-symbols-outlined text-danger" style="font-size: 28px;">shield_with_heart</span>
+                <div class="flex-1">
+                  <strong class="text-sm text-danger">Tài Khoản Chưa Xác Thực Căn Cước Công Dân (CCCD)</strong>
+                  <p class="text-xs text-muted mb-2 mt-1">
+                    Theo quy định an toàn sàn HYBRID.STORE, bạn cần nộp thông tin CCCD gắn chip và được Ban Quản Trị xét duyệt để kích hoạt tính năng mua sắm hoặc đăng bán đồ cũ.
+                  </p>
+                  <button class="btn btn-primary btn-sm" type="button" onclick="Utils.openModal('kycModal')">
+                    <span class="material-symbols-outlined icon-xs">badge</span>
+                    Nộp Hồ Sơ Xác Thực CCCD Ngay
+                  </button>
+                </div>
+              </div>
+            `;
+          }
+        }
+
+        renderProfile();
+
+        // Lắng nghe cập nhật KYC & hồ sơ thời gian thực
+        window.addEventListener("auth:kyc-updated", () => {
+          renderProfile();
+        });
+        window.addEventListener("auth:profile-updated", () => {
+          renderProfile();
+        });
+
+        // Hàm xử lý nén và cắt ảnh avatar chuẩn hình vuông tròn từ máy tính/điện thoại
+        function processAvatarFile(file, onComplete) {
+          if (!file) return;
+          if (!file.type || !file.type.startsWith("image/")) {
+            Utils.toast("Vui lòng chọn tệp hình ảnh hợp lệ (JPG, PNG, WEBP).", "warning");
+            return;
+          }
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+              const canvas = document.createElement("canvas");
+              const maxDim = 256;
+              let w = img.width;
+              let h = img.height;
+              const minSide = Math.min(w, h);
+              const sx = (w - minSide) / 2;
+              const sy = (h - minSide) / 2;
+              canvas.width = maxDim;
+              canvas.height = maxDim;
+              const ctx = canvas.getContext("2d");
+              ctx.drawImage(img, sx, sy, minSide, minSide, 0, 0, maxDim, maxDim);
+              const base64 = canvas.toDataURL("image/jpeg", 0.85);
+              onComplete(base64);
+            };
+            img.onerror = () => {
+              Utils.toast("Không thể đọc tệp ảnh đã chọn.", "error");
+            };
+            img.src = e.target.result;
+          };
+          reader.readAsDataURL(file);
+        }
+
+        // Tải ảnh avatar trực tiếp từ thẻ người dùng ở cột trái
+        const avatarTrigger = document.getElementById("avatarUploadTrigger");
+        const directInput = document.getElementById("directAvatarFileInput");
+        const directBtn = document.getElementById("btnChangeAvatarDirect");
+
+        if (avatarTrigger && directInput) {
+          avatarTrigger.addEventListener("click", () => directInput.click());
+        }
+        if (directBtn && directInput) {
+          directBtn.addEventListener("click", () => directInput.click());
+        }
+        if (directInput) {
+          directInput.addEventListener("change", (e) => {
+            const file = e.target.files && e.target.files[0];
+            if (!file) return;
+            processAvatarFile(file, (base64) => {
+              Auth.updateProfile({ avatar: base64 });
+              renderProfile();
+              Utils.toast("Đã tải lên và cập nhật ảnh đại diện mới từ thiết bị!", "success");
+            });
+            directInput.value = "";
+          });
+        }
+
+        // Tải ảnh avatar bên trong Modal Chỉnh Sửa Hồ Sơ
+        const modalAvatarBtn = document.getElementById("btnChooseAvatarModal");
+        const modalAvatarInput = document.getElementById("modalAvatarFileInput");
+        const modalRemoveAvatarBtn = document.getElementById("btnRemoveAvatarModal");
+        const modalAvatarHidden = document.getElementById("profileInputAvatarHidden");
+        const modalAvatarPrev = document.getElementById("modalAvatarPreview");
+
+        if (modalAvatarBtn && modalAvatarInput) {
+          modalAvatarBtn.addEventListener("click", () => modalAvatarInput.click());
+        }
+        if (modalAvatarInput) {
+          modalAvatarInput.addEventListener("change", (e) => {
+            const file = e.target.files && e.target.files[0];
+            if (!file) return;
+            processAvatarFile(file, (base64) => {
+              if (modalAvatarHidden) modalAvatarHidden.value = base64;
+              if (modalAvatarPrev) {
+                modalAvatarPrev.innerHTML = `<img src="${base64}" alt="Avatar Preview" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`;
+              }
+              Utils.toast("Đã chọn ảnh đại diện từ thiết bị!", "success");
+            });
+            modalAvatarInput.value = "";
+          });
+        }
+        if (modalRemoveAvatarBtn) {
+          modalRemoveAvatarBtn.addEventListener("click", () => {
+            if (modalAvatarHidden) modalAvatarHidden.value = "";
+            const fullName = document.getElementById("profileInputFullName").value.trim() || "User";
+            const inits = fullName.split(/\s+/).slice(-2).map((w) => w[0]).join("").toUpperCase() || "KH";
+            if (modalAvatarPrev) modalAvatarPrev.textContent = inits;
+            Utils.toast("Đã chuyển sang dùng chữ viết tắt họ tên.", "info");
+          });
+        }
+
+        // 3. Tab navigation trong Modal Chỉnh Sửa Hồ Sơ
+        document.querySelectorAll(".modal-tab-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const targetId = btn.getAttribute("data-tab");
+            document.querySelectorAll(".modal-tab-btn").forEach((b) => b.classList.remove("active"));
+            document.querySelectorAll(".modal-tab-pane").forEach((p) => p.classList.remove("active"));
+            btn.classList.add("active");
+            const targetPane = document.getElementById(targetId);
+            if (targetPane) targetPane.classList.add("active");
+          });
+        });
+
+        // Xử lý mở Modal Chỉnh Sửa Hồ Sơ Cá Nhân toàn diện
+        document.getElementById("btnOpenEditProfile").addEventListener("click", () => {
+          const u = Auth.current();
+          if (!u) return;
+
+          const fullName = u.fullName || "";
+          let initials = "KH";
+          if (u.avatar && !u.avatar.startsWith("http") && !u.avatar.startsWith("data:") && u.avatar.length <= 4) {
+            initials = u.avatar.toUpperCase();
+          } else {
+            initials = fullName
+              .trim()
+              .split(/\s+/)
+              .slice(-2)
+              .map((w) => w[0])
+              .join("")
+              .toUpperCase() || "KH";
+          }
+
+          // Tab 1: Cơ bản
+          document.getElementById("profileInputFullName").value = fullName;
+          document.getElementById("profileInputUsername").value = u.username || (u.email ? u.email.split("@")[0] : "");
+          document.getElementById("profileInputPhone").value = u.phone || "";
+          document.getElementById("profileInputEmail").value = u.email || "";
+          document.getElementById("profileInputDob").value = u.dob || u.kycData?.dob || "18/09/1994";
+          document.getElementById("profileSelectGender").value = u.gender || u.kycData?.gender || "Nữ";
+          document.getElementById("profileInputAddress").value = u.address || u.kycData?.address || "";
+          document.getElementById("profileInputBio").value = u.bio || "";
+
+          // Cập nhật xem trước avatar trong modal
+          const curAvatar = u.avatar || "";
+          if (modalAvatarHidden) modalAvatarHidden.value = curAvatar;
+          if (modalAvatarPrev) {
+            if (curAvatar && (curAvatar.startsWith("http") || curAvatar.startsWith("data:image"))) {
+              modalAvatarPrev.innerHTML = `<img src="${curAvatar}" alt="${fullName}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`;
+            } else {
+              modalAvatarPrev.textContent = initials;
+            }
+          }
+
+          // Tab 2: Vai trò & Ngành hàng
+          document.getElementById("profileSelectRole").value = u.role || "buyer";
+          document.getElementById("profileInputMembershipTitle").value = u.membershipTitle || "VIP BUYER";
+          document.getElementById("profileSelectCategory").value = u.interestCategory || "sneakers";
+
+          // Tab 3: Ngân hàng Napas
+          document.getElementById("profileSelectBank").value = u.bankName || "Techcombank";
+          document.getElementById("profileInputBankNumber").value = u.bankAccountNumber || "1903 6888 8888 8";
+          document.getElementById("profileInputBankHolder").value = (u.bankAccountName || u.fullName || "").toUpperCase();
+
+          // Tab 4: Mật khẩu
+          document.getElementById("profileInputNewPassword").value = "";
+          document.getElementById("profileInputConfirmPassword").value = "";
+
+          // Reset về tab đầu tiên
+          const firstTabBtn = document.querySelector('.modal-tab-btn[data-tab="tabProfileBasic"]');
+          if (firstTabBtn) firstTabBtn.click();
+
+          Utils.openModal("editProfileModal");
+        });
+
+        // Submit form chỉnh sửa hồ sơ toàn diện
+        document.getElementById("editProfileForm").addEventListener("submit", (e) => {
+          e.preventDefault();
+
+          const fullName = document.getElementById("profileInputFullName").value.trim();
+          const username = document.getElementById("profileInputUsername").value.trim().replace(/^@/, "");
+          const phone = document.getElementById("profileInputPhone").value.trim();
+          const email = document.getElementById("profileInputEmail").value.trim();
+          const dob = document.getElementById("profileInputDob").value.trim();
+          const gender = document.getElementById("profileSelectGender").value;
+          const address = document.getElementById("profileInputAddress").value.trim();
+          const avatar = (modalAvatarHidden ? modalAvatarHidden.value : "").trim();
+          const bio = document.getElementById("profileInputBio").value.trim();
+
+          const role = document.getElementById("profileSelectRole").value;
+          const membershipTitle = document.getElementById("profileInputMembershipTitle").value.trim();
+          const interestCategory = document.getElementById("profileSelectCategory").value;
+
+          const bankName = document.getElementById("profileSelectBank").value;
+          const bankAccountNumber = document.getElementById("profileInputBankNumber").value.trim();
+          const bankAccountName = document.getElementById("profileInputBankHolder").value.trim();
+
+          const newPassword = document.getElementById("profileInputNewPassword").value;
+          const confirmPassword = document.getElementById("profileInputConfirmPassword").value;
+
+          if (!fullName || !phone || !email || !username) {
+            Utils.toast("Vui lòng điền đầy đủ họ tên, username, số điện thoại và email.", "warning");
+            return;
+          }
+
+          if (newPassword) {
+            if (newPassword.length < 6) {
+              Utils.toast("Mật khẩu mới phải có ít nhất 6 ký tự.", "warning");
+              return;
+            }
+            if (newPassword !== confirmPassword) {
+              Utils.toast("Mật khẩu xác nhận không khớp.", "error");
+              return;
+            }
+          }
+
+          const res = Auth.updateProfile({
+            fullName,
+            username,
+            phone,
+            email,
+            dob,
+            gender,
+            address,
+            avatar,
+            bio,
+            role,
+            membershipTitle,
+            interestCategory,
+            bankName,
+            bankAccountNumber,
+            bankAccountName,
+            newPassword: newPassword || undefined,
+          });
+
+          if (res.ok) {
+            Utils.closeModal("editProfileModal");
+            renderProfile();
+            Utils.toast("Đã cập nhật toàn bộ thông tin hồ sơ cá nhân thành công!", "success");
+          } else {
+            Utils.toast(res.error || "Cập nhật hồ sơ thất bại.", "error");
+          }
+        });
+
+        // 4. Xử lý mở Modal nộp hồ sơ CCCD
+        document.getElementById("btnOpenKycModal").addEventListener("click", () => {
+          const u = Auth.current();
+          if (u) {
+            document.getElementById("inputCardFullName").value = (u.kycData?.cardFullName || u.fullName || "").toUpperCase();
+            if (u.kycData?.idCardNumber) {
+              document.getElementById("inputIdCardNumber").value = u.kycData.idCardNumber;
+            }
+          }
+          Utils.openModal("kycModal");
+        });
+
+        // Nút upload ảnh mô phỏng
+        document.getElementById("btnUploadFront").addEventListener("click", () => {
+          Utils.toast("Đã tải ảnh mặt trước CCCD gắn chip!", "success");
+        });
+        document.getElementById("btnUploadBack").addEventListener("click", () => {
+          Utils.toast("Đã quét chip NFC mặt sau CCCD thành công!", "success");
+        });
+
+        // Gửi form nộp hồ sơ CCCD cho Admin duyệt
+        document.getElementById("kycSubmitForm").addEventListener("submit", (e) => {
+          e.preventDefault();
+          const cardFullName = document.getElementById("inputCardFullName").value.trim();
+          const idCardNumber = document.getElementById("inputIdCardNumber").value.trim();
+          const dob = document.getElementById("inputDob").value.trim();
+          const issueDate = document.getElementById("inputIssueDate").value.trim();
+          const gender = document.getElementById("inputGender").value;
+          const address = document.getElementById("inputAddress").value.trim();
+
+          if (!cardFullName || !idCardNumber || !dob || !address) {
+            Utils.toast("Vui lòng điền đầy đủ các mục bắt buộc (*).", "warning");
+            return;
+          }
+
+          if (idCardNumber.length !== 12 || !/^\d+$/.test(idCardNumber)) {
+            Utils.toast("Số thẻ CCCD phải gồm đúng 12 chữ số theo quy định.", "error");
+            return;
+          }
+
+          const res = Auth.submitKyc({
+            cardFullName,
+            idCardNumber,
+            dob,
+            issueDate: issueDate || "24/02/2023",
+            gender,
+            address,
+            faceMatch: 99.6,
+          });
+
+          Utils.closeModal("kycModal");
+
+          if (res.ok) {
+            renderProfile();
+            Utils.confirm(
+              {
+                title: "Gửi Hồ Sơ Thành Công!",
+                message: "Yêu cầu xác thực CCCD của bạn đã được chuyển tới Ban Quản Trị. Vui lòng chờ Admin xét duyệt để kích hoạt đầy đủ quyền mua sắm và đăng bán.",
+                confirmText: "Đã Hiểu",
+                cancelText: "",
+              },
+              () => { renderProfile(); },
+              () => { renderProfile(); }
+            );
+          } else {
+            Utils.toast(res.error || "Gửi hồ sơ thất bại.", "error");
+          }
+        });
+
+        // 5. Quản Lý Sổ Địa Chỉ Giao Nhận Hàng (CRUD Dynamic)
+        const ADDR_KEY = "hv_user_addresses";
+
+        function getAddresses() {
+          const stored = localStorage.getItem(ADDR_KEY);
+          if (stored) {
+            try { return JSON.parse(stored); } catch (e) {}
+          }
+          const defaults = [
+            {
+              id: "addr_1",
+              name: "Nguyễn Hương Mai",
+              phone: "0396 403 893",
+              city: "TP. Hồ Chí Minh — Quận Bình Thạnh",
+              detail: "Căn hộ Landmark 81, Vinhomes Central Park, Phường 22",
+              type: "home",
+              note: "Shipper bấm chuông lên phòng",
+              isDefault: true,
+              express2h: true,
+            },
+            {
+              id: "addr_2",
+              name: "Nguyễn Hương Mai",
+              phone: "0396 403 893",
+              city: "TP. Hồ Chí Minh — Quận 1",
+              detail: "Tòa nhà Tech Hub, Số 45 Lê Duẩn, Phường Bến Nghé",
+              type: "office",
+              note: "Giao giờ hành chính 8h - 18h",
+              isDefault: false,
+              express2h: true,
+            },
+          ];
+          localStorage.setItem(ADDR_KEY, JSON.stringify(defaults));
+          return defaults;
+        }
+
+        function saveAddresses(list) {
+          localStorage.setItem(ADDR_KEY, JSON.stringify(list));
+          renderAddresses();
+        }
+
+        function renderAddresses() {
+          const container = document.getElementById("addressListContainer");
+          if (!container) return;
+          const list = getAddresses();
+
+          if (!list || list.length === 0) {
+            container.innerHTML = `
+              <div class="panel p-5 text-center text-muted">
+                <span class="material-symbols-outlined" style="font-size: 36px;">location_off</span>
+                <p class="text-sm mt-2 mb-3">Bạn chưa lưu địa chỉ nhận hàng nào.</p>
+                <button class="btn btn-secondary btn-sm" id="btnEmptyAddAddr" type="button">
+                  + Thêm Địa Chỉ Đầu Tiên
+                </button>
+              </div>
+            `;
+            const emptyBtn = document.getElementById("btnEmptyAddAddr");
+            if (emptyBtn) emptyBtn.addEventListener("click", openAddAddressModal);
+            return;
+          }
+
+          container.innerHTML = list
+            .map((item) => {
+              const typeLabel = item.type === "office" ? "VĂN PHÒNG" : "NHÀ RIÊNG";
+              const typeIcon = item.type === "office" ? "business" : "home";
+              const defaultBadge = item.isDefault
+                ? `<span class="badge badge-primary">MẶC ĐỊNH</span>`
+                : "";
+              const expressBadge = item.express2h
+                ? `<span class="badge badge-secondary">GIAO HỎA TỐC 2H</span>`
+                : "";
+
+              return `
+                <div class="address-card ${item.isDefault ? "is-default" : ""}">
+                  <div class="flex items-start gap-3 flex-1">
+                    <span class="material-symbols-outlined text-primary mt-1" style="font-size: 24px;">${typeIcon}</span>
+                    <div class="flex-1">
+                      <div class="flex items-center gap-2 flex-wrap">
+                        <strong class="text-sm">${item.name}</strong>
+                        <span class="text-xs text-muted mono">• ${item.phone}</span>
+                        ${defaultBadge}
+                        ${expressBadge}
+                        <span class="badge">${typeLabel}</span>
+                      </div>
+                      <div class="text-xs text-text mt-1">
+                        ${item.detail}
+                      </div>
+                      <div class="text-xs text-muted mt-1">
+                        ${item.city}
+                      </div>
+                      ${item.note ? `<div class="text-xs text-secondary mt-1 flex items-center gap-1"><span class="material-symbols-outlined icon-xs">info</span> Ghi chú: ${item.note}</div>` : ""}
+                    </div>
+                  </div>
+                  <div class="address-card-actions">
+                    ${
+                      !item.isDefault
+                        ? `<button class="btn btn-ghost btn-sm text-xs" type="button" onclick="window.profileSetDefaultAddr('${item.id}')" title="Đặt làm mặc định">Đặt Mặc Định</button>`
+                        : ""
+                    }
+                    <button class="icon-btn text-muted" type="button" onclick="window.profileEditAddr('${item.id}')" title="Chỉnh sửa">
+                      <span class="material-symbols-outlined icon-sm">edit</span>
+                    </button>
+                    <button class="icon-btn text-danger" type="button" onclick="window.profileDeleteAddr('${item.id}')" title="Xóa địa chỉ">
+                      <span class="material-symbols-outlined icon-sm">delete</span>
+                    </button>
+                  </div>
+                </div>
+              `;
+            })
+            .join("");
+        }
+
+        function openAddAddressModal() {
+          const u = Auth.current() || {};
+          document.getElementById("addressModalTitle").innerHTML = `
+            <span class="material-symbols-outlined text-secondary">add_location_alt</span>
+            <span>Thêm Địa Chỉ Giao Nhận Mới</span>
+          `;
+          document.getElementById("addrEditId").value = "";
+          document.getElementById("addrReceiverName").value = u.fullName || "";
+          document.getElementById("addrPhone").value = u.phone || "";
+          document.getElementById("addrCity").value = "TP. Hồ Chí Minh — ";
+          document.getElementById("addrDetail").value = "";
+          document.getElementById("addrType").value = "home";
+          document.getElementById("addrNote").value = "";
+          document.getElementById("addrIsDefault").checked = getAddresses().length === 0;
+          Utils.openModal("addressModal");
+        }
+
+        function openEditAddressModal(id) {
+          const list = getAddresses();
+          const item = list.find((a) => a.id === id);
+          if (!item) return;
+
+          document.getElementById("addressModalTitle").innerHTML = `
+            <span class="material-symbols-outlined text-secondary">edit_location_alt</span>
+            <span>Chỉnh Sửa Địa Chỉ Giao Nhận</span>
+          `;
+          document.getElementById("addrEditId").value = item.id;
+          document.getElementById("addrReceiverName").value = item.name;
+          document.getElementById("addrPhone").value = item.phone;
+          document.getElementById("addrCity").value = item.city;
+          document.getElementById("addrDetail").value = item.detail;
+          document.getElementById("addrType").value = item.type || "home";
+          document.getElementById("addrNote").value = item.note || "";
+          document.getElementById("addrIsDefault").checked = !!item.isDefault;
+          Utils.openModal("addressModal");
+        }
+
+        function deleteAddress(id) {
+          Utils.confirm(
+            {
+              title: "Xóa Địa Chỉ",
+              message: "Bạn có chắc chắn muốn xóa địa chỉ giao nhận này?",
+              confirmText: "Xóa",
+              cancelText: "Hủy",
+            },
+            () => {
+              let list = getAddresses();
+              list = list.filter((a) => a.id !== id);
+              if (list.length > 0 && !list.some((a) => a.isDefault)) {
+                list[0].isDefault = true;
+              }
+              saveAddresses(list);
+              Utils.toast("Đã xóa địa chỉ thành công.", "info");
+            }
+          );
+        }
+
+        function setDefaultAddress(id) {
+          const list = getAddresses();
+          list.forEach((a) => {
+            a.isDefault = a.id === id;
+          });
+          saveAddresses(list);
+          Utils.toast("Đã chuyển thành địa chỉ nhận hàng mặc định.", "success");
+        }
+
+        // Export globals for inline HTML onclick handlers
+        window.profileEditAddr = openEditAddressModal;
+        window.profileDeleteAddr = deleteAddress;
+        window.profileSetDefaultAddr = setDefaultAddress;
+
+        document.getElementById("btnAddAddress").addEventListener("click", openAddAddressModal);
+
+        // Submit form thêm / sửa địa chỉ
+        document.getElementById("addressForm").addEventListener("submit", (e) => {
+          e.preventDefault();
+          const editId = document.getElementById("addrEditId").value;
+          const name = document.getElementById("addrReceiverName").value.trim();
+          const phone = document.getElementById("addrPhone").value.trim();
+          const city = document.getElementById("addrCity").value.trim();
+          const detail = document.getElementById("addrDetail").value.trim();
+          const type = document.getElementById("addrType").value;
+          const note = document.getElementById("addrNote").value.trim();
+          const isDefault = document.getElementById("addrIsDefault").checked;
+
+          if (!name || !phone || !city || !detail) {
+            Utils.toast("Vui lòng điền đầy đủ tên, số điện thoại, tỉnh thành và địa chỉ chi tiết.", "warning");
+            return;
+          }
+
+          let list = getAddresses();
+
+          if (isDefault) {
+            list.forEach((a) => { a.isDefault = false; });
+          }
+
+          if (editId) {
+            // Cập nhật
+            const idx = list.findIndex((a) => a.id === editId);
+            if (idx !== -1) {
+              list[idx] = {
+                ...list[idx],
+                name,
+                phone,
+                city,
+                detail,
+                type,
+                note,
+                isDefault: isDefault || list.length === 1,
+              };
+            }
+          } else {
+            // Thêm mới
+            const newAddr = {
+              id: "addr_" + Date.now(),
+              name,
+              phone,
+              city,
+              detail,
+              type,
+              note,
+              isDefault: isDefault || list.length === 0,
+              express2h: true,
+            };
+            list.unshift(newAddr);
+          }
+
+          saveAddresses(list);
+          Utils.closeModal("addressModal");
+          Utils.toast(editId ? "Đã cập nhật địa chỉ giao nhận!" : "Đã thêm địa chỉ giao nhận mới!", "success");
+        });
+
+        // Khởi tạo danh sách địa chỉ
+        renderAddresses();
+
+        // 6. Nút ngân hàng, đăng xuất
+        document.getElementById("btnAddBank").addEventListener("click", () => {
+          // Mở tab ngân hàng trong modal chỉnh sửa hồ sơ
+          const editBtn = document.getElementById("btnOpenEditProfile");
+          if (editBtn) editBtn.click();
+          setTimeout(() => {
+            const bankTabBtn = document.querySelector('.modal-tab-btn[data-tab="tabProfileBank"]');
+            if (bankTabBtn) bankTabBtn.click();
+          }, 50);
+        });
+
+        document.getElementById("btnLogoutAction").addEventListener("click", () => {
+          Utils.confirm(
+            {
+              title: "Đăng Xuất",
+              message: "Bạn có chắc chắn muốn đăng xuất tài khoản?",
+              confirmText: "Đăng Xuất",
+              cancelText: "Ở lại",
+            },
+            () => {
+              Auth.logout();
+              window.location.href = "../../index.html";
+            }
+          );
+        });
+
+        // 7. Xử lý đóng modal KYC & hủy bỏ an toàn
+        function closeKycModal() {
+          Utils.closeModal("kycModal");
+        }
+
+        const btnCloseIcon = document.getElementById("btnCloseKycModal");
+        if (btnCloseIcon) btnCloseIcon.addEventListener("click", closeKycModal);
+
+        const btnCancel = document.getElementById("btnCancelKycModal");
+        if (btnCancel) btnCancel.addEventListener("click", closeKycModal);
+
+        // Đóng modal khi bấm các nút có data-close
+        document.querySelectorAll("[data-close]").forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            const backdrop = btn.closest(".modal-backdrop") || document.getElementById("kycModal");
+            if (backdrop) Utils.closeModal(backdrop);
+          });
+        });
+
+        // Đóng modal khi nhấp ra ngoài vùng modal (backdrop click)
+        ["kycModal", "editProfileModal", "addressModal"].forEach((id) => {
+          const mb = document.getElementById(id);
+          if (mb) {
+            mb.addEventListener("click", (e) => {
+              if (e.target === mb) Utils.closeModal(mb);
+            });
+          }
+        });
+
+        // Bấm phím ESC để đóng modal
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") {
+            document.querySelectorAll(".modal-backdrop.is-open").forEach((m) => {
+              Utils.closeModal(m);
+            });
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

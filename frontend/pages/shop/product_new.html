@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>04 — Chi Tiết SP Hàng Mới Chính Hãng Mall | HYBRID.STORE</title>
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <link rel="stylesheet" href="../../css/base.css" />
+    <link rel="stylesheet" href="../../css/catalog.css" />
+    <link rel="stylesheet" href="../../css/master_screens.css" />
+    <style>
+      .mall-hero-box {
+        background: linear-gradient(145deg, rgba(139, 92, 246, 0.12), rgba(6, 182, 212, 0.08));
+        border: 1px solid rgba(139, 92, 246, 0.3);
+        border-radius: var(--radius-xl);
+        padding: var(--sp-6);
+        margin-bottom: var(--sp-6);
+      }
+      .mall-seal-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(34, 211, 238, 0.15);
+        color: var(--secondary-300);
+        border: 1px solid rgba(34, 211, 238, 0.35);
+        padding: 6px 14px;
+        border-radius: var(--radius-pill);
+        font-weight: 700;
+        font-size: var(--fs-xs);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ===== HEADER ===== -->
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href="../../index.html">
+          <span class="brand-mark"><span class="material-symbols-outlined">token</span></span>
+          <span>HYBRID<span class="text-secondary">.STORE</span> <span class="badge badge-mall">BRAND MALL</span></span>
+        </a>
+
+        <div class="header-search">
+          <div class="input-group">
+            <span class="icon-left material-symbols-outlined">search</span>
+            <input class="input input-search" type="search" placeholder="Tìm sản phẩm mới chính hãng Mall..." />
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <a class="btn btn-secondary hide-sm" href="catalog.html">Xem Danh Mục</a>
+          <a class="icon-btn" href="cart.html" aria-label="Giỏ hàng">
+            <span class="material-symbols-outlined">shopping_bag</span>
+            <span class="badge badge-counter" id="cartCount">0</span>
+          </a>
+          <a class="avatar" href="../account/profile.html" title="Tài khoản">
+            <span class="material-symbols-outlined">person</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===== BREADCRUMB ===== -->
+    <div class="subnav">
+      <div class="container">
+        <nav>
+          <a href="../../index.html">Trang Chủ</a>
+          <span class="text-faint">/</span>
+          <a href="catalog.html?type=mall">Brand Mall Hàng Mới</a>
+          <span class="text-faint">/</span>
+          <span class="active" id="newProductName">Áo Khoác Bomber Cyberpunk J1A-GT Multi-Pocket</span>
+        </nav>
+        <div class="subnav-info hide-sm">
+          <span class="text-success"><span class="material-symbols-outlined icon-sm">verified</span> Bảo hành AASP / Hãng 24T</span>
+          <span class="text-secondary"><span class="material-symbols-outlined icon-sm">local_shipping</span> Giao hỏa tốc 2h</span>
+        </div>
+      </div>
+    </div>
+
+    <main class="container py-6">
+      <div class="grid grid-2 gap-6" style="grid-template-columns: 500px 1fr; align-items: start;">
+        <!-- Cột trái: Gallery ảnh nguyên seal -->
+        <div>
+          <div class="panel p-3" style="position: relative; border-radius: var(--radius-xl); overflow: hidden;">
+            <div style="position: absolute; top: 16px; left: 16px; z-index: 2;">
+              <span class="badge badge-solid"><span class="material-symbols-outlined icon-xs">verified</span> BRAND MALL MỚI 100%</span>
+            </div>
+            <img id="mainNewImg" src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=700" alt="Ảnh sản phẩm mới" style="width: 100%; border-radius: var(--radius-lg); aspect-ratio: 1/1; object-fit: cover;" />
+          </div>
+
+          <div class="flex gap-3 mt-3">
+            <img class="thumb-item active" src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=200" style="width: 70px; height: 70px; border-radius: 8px; object-fit: cover; border: 2px solid var(--primary-500); cursor: pointer;" />
+            <img class="thumb-item" src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200" style="width: 70px; height: 70px; border-radius: 8px; object-fit: cover; opacity: 0.6; cursor: pointer;" />
+          </div>
+
+          <div class="panel mt-4 p-4" style="background: rgba(255, 255, 255, 0.02)">
+            <h4 class="text-sm fw-700 mb-2 flex items-center gap-2">
+              <span class="material-symbols-outlined text-secondary">verified_user</span>
+              Bảo Hành Chính Hãng Ủy Quyền (AASP)
+            </h4>
+            <p class="text-xs text-muted" style="line-height: 1.6;">
+              Sản phẩm mới 100% nguyên seal hộp. Khách hàng được kích hoạt bảo hành điện tử chính hãng từ 12 đến 24 tháng tại mọi trung tâm ủy quyền toàn quốc.
+            </p>
+          </div>
+        </div>
+
+        <!-- Cột phải: Thông tin & Đặt mua -->
+        <div>
+          <div class="mall-seal-badge mb-2">
+            <span class="material-symbols-outlined icon-xs">verified</span> PHÂN PHỐI CHÍNH THỨC • NGUYÊN SEAL HỘP
+          </div>
+          <h1 class="page-title mb-2" id="prodTitle" style="font-size: 2rem;">Áo Khoác Bomber Cyberpunk J1A-GT Multi-Pocket</h1>
+          <div class="flex items-center gap-3 text-sm text-muted mb-4">
+            <span class="text-warning">★★★★★</span>
+            <span class="text-warning fw-600">4.9 / 5.0</span>
+            <span>(210 đánh giá chính hãng)</span>
+            <span class="text-faint">•</span>
+            <span class="text-success"><span class="status-dot"></span> Sẵn sàng giao ngay</span>
+          </div>
+
+          <div class="mall-hero-box">
+            <div class="text-xs text-muted">GIÁ NIÊM YẾT CHÍNH HÃNG:</div>
+            <div class="flex items-baseline gap-3 my-2">
+              <span class="mono text-gradient" style="font-size: 2.4rem; font-weight: 800;">4.690.000₫</span>
+              <span class="text-faint line-through mono text-lg">5.500.000₫</span>
+              <span class="badge badge-success">-15% ƯU ĐÃI</span>
+            </div>
+            <div class="text-xs text-secondary">
+              <span class="material-symbols-outlined icon-xs">local_shipping</span> Miễn phí giao hàng hỏa tốc toàn quốc • Đồng kiểm cùng shipper
+            </div>
+          </div>
+
+          <!-- Bộ chọn biến thể -->
+          <div class="form-group mb-4">
+            <label class="form-label">Chọn Kích Thước / Size:</label>
+            <div class="flex gap-2">
+              <button class="btn btn-secondary btn-sm" type="button">Size S</button>
+              <button class="btn btn-primary btn-sm" type="button">Size M (Chuẩn)</button>
+              <button class="btn btn-secondary btn-sm" type="button">Size L</button>
+              <button class="btn btn-secondary btn-sm" type="button">Size XL</button>
+            </div>
+          </div>
+
+          <!-- Số lượng & Mua -->
+          <div class="flex items-center gap-4 mb-5">
+            <div class="qty-control" style="height: 46px;">
+              <button class="qty-btn" type="button" style="width: 40px; height: 46px;">−</button>
+              <input class="qty-input" type="text" value="1" readonly style="width: 50px; height: 46px;" />
+              <button class="qty-btn" type="button" style="width: 40px; height: 46px;">+</button>
+            </div>
+            <button class="btn btn-secondary flex-1" id="btnMallAddCart" type="button" style="padding: 14px;">
+              <span class="material-symbols-outlined icon-sm">add_shopping_cart</span>
+              Thêm Vào Giỏ Hàng
+            </button>
+            <button class="btn btn-primary flex-1" id="btnMallBuyNow" type="button" style="padding: 14px;">
+              <span class="material-symbols-outlined icon-sm">bolt</span>
+              Mua Ngay
+            </button>
+          </div>
+
+          <!-- Điểm nổi bật -->
+          <div class="panel p-4" style="background: var(--bg-card)">
+            <h4 class="text-sm fw-700 mb-2">Thông Số &amp; Cam Kết Hàng Mới:</h4>
+            <ul class="text-xs text-muted" style="line-height: 2; padding-left: 20px;">
+              <li>Tình trạng: Mới 100% nguyên seal hộp, chưa qua kích hoạt hay sử dụng.</li>
+              <li>Chất liệu / Công nghệ: Vải Gore-Tex Pro 3L chống thấm, phụ kiện YKK chính hãng.</li>
+              <li>Đổi trả miễn phí trong 7 ngày nếu lỗi sản xuất hoặc sai mô tả.</li>
+              <li>Hóa đơn tài chính VAT điện tử cấp ngay khi nhận hàng.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer mt-8">
+      <div class="container footer-bar" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding: 20px 0;">
+        <span class="text-xs text-faint">© 2026 HYBRID.STORE — Hàng Mới Brand Mall 100% Chính Hãng.</span>
+        <div class="flex gap-4 text-xs">
+          <a href="../../terms_of_service.html">Điều Khoản Dịch Vụ</a>
+          <a href="../../warranty_policy.html">Chính Sách Bảo Hành</a>
+          <a href="../../return_policy.html">Chính Sách Đổi Trả</a>
+        </div>
+      </div>
+    </footer>
+
+    <div class="toast-stack" id="toastStack"></div>
+
+    <script src="../../js/popup.js"></script>
+    <script src="../../js/auth.js"></script>
+    <script src="../../js/mock_data.js"></script>
+    <script src="../../js/utils.js"></script>
+    <script>
+      (function () {
+        Utils.Cart.syncBadge();
+        const product = PRODUCTS.find((p) => p.type === "mall") || PRODUCTS[0];
+        const title = product.short || product.name;
+
+        document.getElementById("btnMallAddCart").addEventListener("click", () => {
+          if (!Auth.ensureLogin(() => {
+            Utils.Cart.addItem(product, 1);
+          }, {
+            title: "Đăng Nhập Mua Hàng",
+            message: 'Vui lòng đăng nhập tài khoản để thêm "' + title + '" vào giỏ hàng.',
+          })) return;
+          Utils.Cart.addItem(product, 1);
+        });
+
+        document.getElementById("btnMallBuyNow").addEventListener("click", () => {
+          if (!Auth.ensureLogin(() => {
+            Utils.Cart.addItem(product, 1);
+            window.location.href = "cart.html";
+          }, {
+            title: "Đăng Nhập Mua Hàng",
+            message: 'Vui lòng đăng nhập tài khoản để mua ngay "' + title + '".',
+            returnUrl: "cart.html"
+          })) return;
+          Utils.Cart.addItem(product, 1);
+          window.location.href = "cart.html";
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <defs>
+    <linearGradient id="sneakerBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#181829" />
+      <stop offset="100%" stop-color="#0f0f1b" />
+    </linearGradient>
+    <linearGradient id="shoeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8b5cf6" />
+      <stop offset="100%" stop-color="#ec4899" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" rx="16" fill="url(#sneakerBg)" />
+  <!-- Category Badge -->
+  <rect x="20" y="20" width="130" height="28" rx="6" fill="rgba(139, 92, 246, 0.15)" stroke="#8b5cf6" stroke-width="1" />
+  <text x="85" y="38" fill="#c4b5fd" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="11" text-anchor="middle">SNEAKERS HYPE</text>
+  <!-- Stylized Sneaker Icon -->
+  <g transform="translate(60, 110)">
+    <path d="M40 140c20-10 60-15 90-15 30 0 50 15 80 15 30 0 50-10 60-20v30H20v-10h20z" fill="#ffffff" />
+    <path d="M40 140c-15-20-20-60 0-80 15-15 40-10 60 10 20 20 40 30 70 30 20 0 40-5 60-20 10 15 20 40 10 60-30 0-50-15-80-15-30 0-70 5-90 15H40z" fill="url(#shoeGrad)" />
+    <!-- Air Bubble -->
+    <ellipse cx="210" cy="155" rx="25" ry="8" fill="#06b6d4" opacity="0.8" />
+  </g>
+</svg>
