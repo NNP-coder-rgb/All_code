@@ -251,12 +251,12 @@
   });
 
   // Hỗ trợ cuộn ngang tự nhiên bằng con lăn chuột (mouse wheel) và kéo chuột (drag)
-  const chipBar = $("#chipBar");
-  if (chipBar) {
-    chipBar.addEventListener("wheel", (e) => {
-      if (e.deltaY !== 0 && chipBar.scrollWidth > chipBar.clientWidth) {
+  function enableHorizontalDrag(el) {
+    if (!el) return;
+    el.addEventListener("wheel", (e) => {
+      if (e.deltaY !== 0 && el.scrollWidth > el.clientWidth) {
         e.preventDefault();
-        chipBar.scrollLeft += e.deltaY;
+        el.scrollLeft += e.deltaY;
       }
     }, { passive: false });
 
@@ -265,35 +265,38 @@
     let scrollLeft = 0;
     let hasDragged = false;
 
-    chipBar.addEventListener("mousedown", (e) => {
+    el.addEventListener("mousedown", (e) => {
       isDown = true;
       hasDragged = false;
-      startX = e.pageX - chipBar.offsetLeft;
-      scrollLeft = chipBar.scrollLeft;
-      chipBar.style.cursor = "grabbing";
+      startX = e.pageX - el.offsetLeft;
+      scrollLeft = el.scrollLeft;
+      el.style.cursor = "grabbing";
     });
 
     window.addEventListener("mouseup", () => {
       isDown = false;
-      if (chipBar) chipBar.style.cursor = "default";
+      if (el) el.style.cursor = "default";
     });
 
-    chipBar.addEventListener("mousemove", (e) => {
+    el.addEventListener("mousemove", (e) => {
       if (!isDown) return;
       e.preventDefault();
-      const x = e.pageX - chipBar.offsetLeft;
+      const x = e.pageX - el.offsetLeft;
       const walk = (x - startX) * 1.5;
       if (Math.abs(walk) > 5) hasDragged = true;
-      chipBar.scrollLeft = scrollLeft - walk;
+      el.scrollLeft = scrollLeft - walk;
     });
 
-    chipBar.addEventListener("click", (e) => {
+    el.addEventListener("click", (e) => {
       if (hasDragged) {
         e.preventDefault();
         e.stopPropagation();
       }
     }, true);
   }
+
+  enableHorizontalDrag($("#chipBar"));
+  enableHorizontalDrag($(".subnav .container"));
 
   $("#catJump").innerHTML = CATEGORIES.map(
     (c) =>
@@ -353,7 +356,7 @@
             p.reviews +
             "</span></div>"
           : "") +
-        '<div class="product-price"><span class="price" style="color:var(--primary-200)">' +
+        '<div class="product-price"><span class="price">' +
         fmt(p.price) +
         "</span>" +
         (flash && p.oldPrice

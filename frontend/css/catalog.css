@@ -521,3 +521,71 @@ body.light-theme .empty-state-title {
 body.light-theme .empty-state-desc {
   color: #334155;
 }
+
+/* Badge trên ảnh: bố trí theo chiều dọc để nhìn thấy toàn bộ nội dung của từng ô */
+.product-tags {
+  position: absolute !important;
+  top: 10px !important;
+  left: 10px !important;
+  right: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 5px !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
+}
+.product-tags .badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  max-width: fit-content !important;
+  width: fit-content !important;
+  white-space: nowrap !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  padding: 3.5px 8px !important;
+  line-height: 1.25 !important;
+  border-radius: var(--radius-sm) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45) !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+}
+
+/* Thanh cuộn subnav trong suốt 100%, kéo chuột mượt mà */
+.subnav .container {
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  background: transparent !important;
+}
+.subnav .container::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+.subnav .container::-webkit-scrollbar {
+  height: 5px !important;
+  background: transparent !important;
+  border: none !important;
+}
+.subnav .container::-webkit-scrollbar-track {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+.subnav .container::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.35) !important;
+  border-radius: 9999px !important;
+  border: none !important;
+  cursor: pointer;
+}
+.subnav .container::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.8) !important;
+}
+[data-theme="light"] .subnav .container::-webkit-scrollbar-thumb,
+body.light-theme .subnav .container::-webkit-scrollbar-thumb {
+  background: rgba(109, 40, 217, 0.35) !important;
+}
+[data-theme="light"] .subnav .container::-webkit-scrollbar-thumb:hover,
+body.light-theme .subnav .container::-webkit-scrollbar-thumb:hover {
+  background: #6d28d9 !important;
+}

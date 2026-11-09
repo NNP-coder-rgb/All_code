@@ -318,17 +318,49 @@ hr {
   color: #fff;
 }
 
-/* Thanh cuộn */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* Thanh cuộn toàn hệ thống - trong suốt 100%, kéo chuột mượt mà, không nút trắng hay viền thô */
+::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
-::-webkit-scrollbar-thumb {
-  background: var(--neutral-600);
-  border-radius: var(--radius-pill);
+::-webkit-scrollbar {
+  width: 6px !important;
+  height: 6px !important;
+  background: transparent !important;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.35) !important;
+  border-radius: 9999px !important;
+  border: none !important;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.8) !important;
+}
+
+[data-theme="light"] ::-webkit-scrollbar-thumb,
+body.light-theme ::-webkit-scrollbar-thumb {
+  background: rgba(109, 40, 217, 0.35) !important;
+}
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover,
+body.light-theme ::-webkit-scrollbar-thumb:hover {
+  background: #6d28d9 !important;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin !important;
+    scrollbar-color: rgba(139, 92, 246, 0.35) transparent !important;
+  }
+  [data-theme="light"] *,
+  body.light-theme * {
+    scrollbar-color: rgba(109, 40, 217, 0.35) transparent !important;
+  }
 }
 
 /* ---------- Typography ---------- */
@@ -1325,29 +1357,31 @@ body.light-theme .theme-toggle-btn:hover {
   transform: scale(1.06);
 }
 .product-tags {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  right: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 5px;
-  z-index: 1;
-  pointer-events: none;
+  position: absolute !important;
+  top: 10px !important;
+  left: 10px !important;
+  right: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 5px !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
 }
 .product-tags .badge {
-  display: inline-flex;
-  align-items: center;
-  max-width: fit-content;
-  width: fit-content;
-  white-space: nowrap;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 3.5px 8px;
-  line-height: 1.25;
-  border-radius: var(--radius-sm);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  display: inline-flex !important;
+  align-items: center !important;
+  max-width: fit-content !important;
+  width: fit-content !important;
+  white-space: nowrap !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  padding: 3.5px 8px !important;
+  line-height: 1.25 !important;
+  border-radius: var(--radius-sm) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45) !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
 }
 .product-wish {
   position: absolute;
@@ -2028,27 +2062,28 @@ body.modal-open {
   gap: var(--sp-2);
   overflow-x: auto;
   padding-bottom: 4px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+  background: transparent !important;
+  -webkit-overflow-scrolling: touch;
 }
 .chip-scroll::-webkit-scrollbar {
-  height: 5px;
-  background: transparent;
-  border: none;
+  height: 6px;
+  background: transparent !important;
+  border: none !important;
 }
 .chip-scroll::-webkit-scrollbar-track {
-  background: transparent;
-  border: none;
+  background: transparent !important;
+  border: none !important;
 }
 .chip-scroll::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(139, 92, 246, 0.35);
   border-radius: 9999px;
   border: none;
+  cursor: pointer;
 }
 .chip-scroll::-webkit-scrollbar-button {
-  display: none;
-  width: 0;
-  height: 0;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 /* =====================================================================
@@ -2960,21 +2995,33 @@ body.light-theme .product-meta {
 }
 
 [data-theme="light"] .price,
-body.light-theme .price {
-  color: #dc2626;
-  font-weight: 800;
+body.light-theme .price,
+[data-theme="light"] .product-price .price,
+body.light-theme .product-price .price,
+[data-theme="light"] .item-price,
+body.light-theme .item-price,
+[data-theme="light"] .search-dropdown-item .item-price,
+body.light-theme .search-dropdown-item .item-price,
+[data-theme="light"] span.price[style],
+body.light-theme span.price[style],
+[data-theme="light"] .product-price span[style],
+body.light-theme .product-price span[style] {
+  color: #991b1b !important; /* Đỏ sẫm Ruby / Crimson cực đậm, tương phản dứt khoát trên nền trắng */
+  font-weight: 800 !important;
 }
 
 [data-theme="light"] .price-old,
 body.light-theme .price-old {
-  color: #64748b;
+  color: #475569;
   font-weight: 500;
 }
 
 [data-theme="light"] .price-off,
 body.light-theme .price-off {
-  color: #dc2626;
-  font-weight: 700;
+  color: #991b1b;
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  font-weight: 800;
 }
 
 [data-theme="light"] .card,

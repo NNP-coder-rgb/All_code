@@ -20,9 +20,9 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
     />
-    <link rel="stylesheet" href="../../css/base.css" />
-    <link rel="stylesheet" href="../../css/catalog.css" />
-    <link rel="stylesheet" href="../../css/master_screens.css" />
+    <link rel="stylesheet" href="../../css/base.css?v=4" />
+    <link rel="stylesheet" href="../../css/catalog.css?v=4" />
+    <link rel="stylesheet" href="../../css/master_screens.css?v=4" />
     <style>
       .cond-meter-card {
         background: linear-gradient(135deg, rgba(34, 211, 238, 0.1), rgba(139, 92, 246, 0.1));
@@ -31,11 +31,23 @@
         padding: var(--sp-4);
         margin-block: var(--sp-4);
       }
+      [data-theme="light"] .cond-meter-card,
+      body.light-theme .cond-meter-card {
+        background: #faf5ff;
+        border: 2px solid #6d28d9 !important;
+        box-shadow: 0 4px 16px rgba(109, 40, 217, 0.1);
+      }
       .lab-report-box {
         background: var(--bg-surface);
         border: 1px solid var(--border);
         border-radius: var(--radius-md);
         padding: var(--sp-3);
+      }
+      [data-theme="light"] .lab-report-box,
+      body.light-theme .lab-report-box {
+        background: #ffffff;
+        border: 2px solid #6d28d9 !important;
+        box-shadow: 0 4px 16px rgba(109, 40, 217, 0.1);
       }
     </style>
   </head>

@@ -22,44 +22,112 @@
     />
 
     <!-- base.css trước, CSS riêng của trang sau -->
-    <link rel="stylesheet" href="css/base.css?v=3" />
-    <link rel="stylesheet" href="css/index.css?v=3" />
+    <link rel="stylesheet" href="css/base.css?v=4" />
+    <link rel="stylesheet" href="css/index.css?v=4" />
 
-    <!-- Style thanh cuộn trong suốt cho dải danh mục (chống cache trình duyệt) -->
+    <!-- Style thanh cuộn trong suốt & bố trí dọc badge thẻ sản phẩm -->
     <style>
+      /* Bố trí dọc các badge sản phẩm để nhìn thấy toàn bộ nội dung */
+      .product-tags {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 5px !important;
+        position: absolute !important;
+        top: 10px !important;
+        left: 10px !important;
+        right: auto !important;
+        z-index: 2 !important;
+        pointer-events: none !important;
+      }
+      .product-tags .badge {
+        display: inline-flex !important;
+        align-items: center !important;
+        max-width: fit-content !important;
+        width: fit-content !important;
+        white-space: nowrap !important;
+        font-size: 11px !important;
+        font-weight: 700 !important;
+        padding: 3.5px 8px !important;
+        line-height: 1.25 !important;
+        border-radius: 6px !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45) !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+      }
+
+      /* Thanh cuộn trong suốt 100%, không nền trắng, không nút mũi tên, kéo chuột mượt mà */
       #chipBar,
-      .chip-scroll {
-        scrollbar-width: thin !important;
-        scrollbar-color: rgba(255, 255, 255, 0.25) transparent !important;
+      .chip-scroll,
+      .subnav .container,
+      ::-webkit-scrollbar {
         background: transparent !important;
       }
       #chipBar::-webkit-scrollbar-button,
-      .chip-scroll::-webkit-scrollbar-button {
+      .chip-scroll::-webkit-scrollbar-button,
+      .subnav .container::-webkit-scrollbar-button,
+      ::-webkit-scrollbar-button {
         display: none !important;
         width: 0 !important;
         height: 0 !important;
       }
       #chipBar::-webkit-scrollbar,
-      .chip-scroll::-webkit-scrollbar {
-        height: 5px !important;
+      .chip-scroll::-webkit-scrollbar,
+      .subnav .container::-webkit-scrollbar {
+        height: 6px !important;
         background: transparent !important;
         border: none !important;
       }
       #chipBar::-webkit-scrollbar-track,
-      .chip-scroll::-webkit-scrollbar-track {
+      .chip-scroll::-webkit-scrollbar-track,
+      .subnav .container::-webkit-scrollbar-track,
+      ::-webkit-scrollbar-track {
         background: transparent !important;
         border: none !important;
         box-shadow: none !important;
       }
       #chipBar::-webkit-scrollbar-thumb,
-      .chip-scroll::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.25) !important;
+      .chip-scroll::-webkit-scrollbar-thumb,
+      .subnav .container::-webkit-scrollbar-thumb {
+        background: rgba(139, 92, 246, 0.35) !important;
         border-radius: 9999px !important;
         border: none !important;
+        cursor: pointer !important;
       }
       #chipBar::-webkit-scrollbar-thumb:hover,
-      .chip-scroll::-webkit-scrollbar-thumb:hover {
-        background: rgba(168, 85, 247, 0.7) !important;
+      .chip-scroll::-webkit-scrollbar-thumb:hover,
+      .subnav .container::-webkit-scrollbar-thumb:hover {
+        background: rgba(139, 92, 246, 0.8) !important;
+      }
+      [data-theme="light"] #chipBar::-webkit-scrollbar-thumb,
+      [data-theme="light"] .chip-scroll::-webkit-scrollbar-thumb,
+      [data-theme="light"] .subnav .container::-webkit-scrollbar-thumb,
+      body.light-theme #chipBar::-webkit-scrollbar-thumb,
+      body.light-theme .chip-scroll::-webkit-scrollbar-thumb,
+      body.light-theme .subnav .container::-webkit-scrollbar-thumb {
+        background: rgba(109, 40, 217, 0.35) !important;
+      }
+      [data-theme="light"] #chipBar::-webkit-scrollbar-thumb:hover,
+      [data-theme="light"] .chip-scroll::-webkit-scrollbar-thumb:hover,
+      [data-theme="light"] .subnav .container::-webkit-scrollbar-thumb:hover,
+      body.light-theme #chipBar::-webkit-scrollbar-thumb:hover,
+      body.light-theme .chip-scroll::-webkit-scrollbar-thumb:hover,
+      body.light-theme .subnav .container::-webkit-scrollbar-thumb:hover {
+        background: #6d28d9 !important;
+      }
+      @supports not selector(::-webkit-scrollbar) {
+        #chipBar, .chip-scroll, .subnav .container {
+          scrollbar-width: thin !important;
+          scrollbar-color: rgba(139, 92, 246, 0.35) transparent !important;
+        }
+        [data-theme="light"] #chipBar,
+        [data-theme="light"] .chip-scroll,
+        [data-theme="light"] .subnav .container,
+        body.light-theme #chipBar,
+        body.light-theme .chip-scroll,
+        body.light-theme .subnav .container {
+          scrollbar-color: rgba(109, 40, 217, 0.35) transparent !important;
+        }
       }
     </style>
   </head>

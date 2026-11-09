@@ -755,3 +755,22 @@ body.light-theme .profile-nav-item.active {
   color: #5b21b6;
   font-weight: 700;
 }
+
+[data-theme="light"] .vietqr-container,
+body.light-theme .vietqr-container {
+  background: #faf5ff;
+  border: 2px solid #6d28d9 !important;
+  box-shadow: 0 6px 24px rgba(109, 40, 217, 0.12);
+}
+
+[data-theme="light"] .product-summary-card,
+body.light-theme .product-summary-card {
+  background: #faf5ff;
+  border: 2px solid #6d28d9 !important;
+}
+
+[data-theme="light"] .ekyc-upload-box,
+body.light-theme .ekyc-upload-box {
+  background: #faf5ff;
+  border: 2px dashed #6d28d9 !important;
+}

@@ -178,7 +178,7 @@
         ")</span>" +
         "</div>" +
         '<div class="product-price mt-2">' +
-        '<span class="price" style="color:var(--primary-200)">' +
+        '<span class="price">' +
         formattedPrice +
         "</span>" +
         (formattedOldPrice ? '<span class="price-old">' + formattedOldPrice + "</span>" : "") +
@@ -819,6 +819,51 @@
     });
   }
 
+  /* ---------------- CUỘN NGANG KÉO THẢ CHO SUBNAV ---------------- */
+  function enableHorizontalDrag(el) {
+    if (!el) return;
+    el.addEventListener("wheel", (e) => {
+      if (e.deltaY !== 0 && el.scrollWidth > el.clientWidth) {
+        e.preventDefault();
+        el.scrollLeft += e.deltaY;
+      }
+    }, { passive: false });
+
+    let isDown = false;
+    let startX = 0;
+    let scrollLeft = 0;
+    let hasDragged = false;
+
+    el.addEventListener("mousedown", (e) => {
+      isDown = true;
+      hasDragged = false;
+      startX = e.pageX - el.offsetLeft;
+      scrollLeft = el.scrollLeft;
+      el.style.cursor = "grabbing";
+    });
+
+    window.addEventListener("mouseup", () => {
+      isDown = false;
+      if (el) el.style.cursor = "default";
+    });
+
+    el.addEventListener("mousemove", (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - el.offsetLeft;
+      const walk = (x - startX) * 1.5;
+      if (Math.abs(walk) > 5) hasDragged = true;
+      el.scrollLeft = scrollLeft - walk;
+    });
+
+    el.addEventListener("click", (e) => {
+      if (hasDragged) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }, true);
+  }
+
   /* ---------------- KHỞI CHẠY ---------------- */
   setupAvatar();
   syncFilterInputs();
@@ -826,6 +871,7 @@
   setupProductCardEvents();
   setupCountdown();
   render();
+  enableHorizontalDrag($(".subnav .container"));
   if (typeof Utils !== "undefined" && Utils.Cart) {
     Utils.Cart.syncBadge();
   }

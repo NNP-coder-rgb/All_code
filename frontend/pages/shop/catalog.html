@@ -22,9 +22,98 @@
     />
 
     <!-- CSS chung base.css trước, index.css kế tiếp, sau đó tới catalog.css -->
-    <link rel="stylesheet" href="../../css/base.css" />
-    <link rel="stylesheet" href="../../css/index.css" />
-    <link rel="stylesheet" href="../../css/catalog.css" />
+    <link rel="stylesheet" href="../../css/base.css?v=4" />
+    <link rel="stylesheet" href="../../css/index.css?v=4" />
+    <link rel="stylesheet" href="../../css/catalog.css?v=4" />
+
+    <!-- Style thanh cuộn trong suốt & bố trí dọc badge thẻ sản phẩm -->
+    <style>
+      /* Bố trí dọc các badge sản phẩm để nhìn thấy toàn bộ nội dung */
+      .product-tags {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 5px !important;
+        position: absolute !important;
+        top: 10px !important;
+        left: 10px !important;
+        right: auto !important;
+        z-index: 2 !important;
+        pointer-events: none !important;
+      }
+      .product-tags .badge {
+        display: inline-flex !important;
+        align-items: center !important;
+        max-width: fit-content !important;
+        width: fit-content !important;
+        white-space: nowrap !important;
+        font-size: 11px !important;
+        font-weight: 700 !important;
+        padding: 3.5px 8px !important;
+        line-height: 1.25 !important;
+        border-radius: 6px !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45) !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+      }
+
+      /* Thanh cuộn trong suốt 100%, không nền trắng, không nút mũi tên, kéo chuột mượt mà */
+      .subnav .container,
+      ::-webkit-scrollbar {
+        background: transparent !important;
+      }
+      .subnav .container::-webkit-scrollbar-button,
+      ::-webkit-scrollbar-button {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+      }
+      .subnav .container::-webkit-scrollbar,
+      ::-webkit-scrollbar {
+        height: 6px !important;
+        background: transparent !important;
+        border: none !important;
+      }
+      .subnav .container::-webkit-scrollbar-track,
+      ::-webkit-scrollbar-track {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+      .subnav .container::-webkit-scrollbar-thumb,
+      ::-webkit-scrollbar-thumb {
+        background: rgba(139, 92, 246, 0.35) !important;
+        border-radius: 9999px !important;
+        border: none !important;
+        cursor: pointer !important;
+      }
+      .subnav .container::-webkit-scrollbar-thumb:hover,
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(139, 92, 246, 0.8) !important;
+      }
+      [data-theme="light"] .subnav .container::-webkit-scrollbar-thumb,
+      body.light-theme .subnav .container::-webkit-scrollbar-thumb,
+      [data-theme="light"] ::-webkit-scrollbar-thumb,
+      body.light-theme ::-webkit-scrollbar-thumb {
+        background: rgba(109, 40, 217, 0.35) !important;
+      }
+      [data-theme="light"] .subnav .container::-webkit-scrollbar-thumb:hover,
+      body.light-theme .subnav .container::-webkit-scrollbar-thumb:hover,
+      [data-theme="light"] ::-webkit-scrollbar-thumb:hover,
+      body.light-theme ::-webkit-scrollbar-thumb:hover {
+        background: #6d28d9 !important;
+      }
+      @supports not selector(::-webkit-scrollbar) {
+        .subnav .container {
+          scrollbar-width: thin !important;
+          scrollbar-color: rgba(139, 92, 246, 0.35) transparent !important;
+        }
+        [data-theme="light"] .subnav .container,
+        body.light-theme .subnav .container {
+          scrollbar-color: rgba(109, 40, 217, 0.35) transparent !important;
+        }
+      }
+    </style>
   </head>
   <body>
     <!-- ===== HEADER ===== -->
