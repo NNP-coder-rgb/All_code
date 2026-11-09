@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Giới Thiệu Nền Tảng HYBRID.STORE — Thương Mại Điện Tử Tiên Phong 2026</title>
+
+    <!-- Chống giật giao diện (Zero-FOUC Theme Init) -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("hybrid_theme") || "dark";
+          document.documentElement.setAttribute("data-theme", t);
+          if (t === "light") document.documentElement.classList.add("light-theme");
+        } catch (e) {}
+      })();
+    </script>
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/catalog.css" />
+    <link rel="stylesheet" href="css/master_screens.css" />
+
+    <style>
+      /* Hero banner giới thiệu */
+      .about-hero {
+        position: relative;
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.16), rgba(6, 182, 212, 0.1));
+        border: 1.5px solid rgba(139, 92, 246, 0.35);
+        border-radius: var(--radius-xl);
+        padding: 56px 40px;
+        margin-bottom: var(--sp-8);
+        overflow: hidden;
+      }
+      [data-theme="light"] .about-hero,
+      body.light-theme .about-hero {
+        background: linear-gradient(135deg, #f5f0ff, #e0f2fe);
+        border: 2px solid #7c3aed !important;
+        box-shadow: 0 10px 30px rgba(109, 40, 217, 0.1);
+      }
+      .about-hero::after {
+        content: "";
+        position: absolute;
+        right: -80px;
+        top: -80px;
+        width: 320px;
+        height: 320px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(139, 92, 246, 0.25) 0%, transparent 70%);
+        pointer-events: none;
+      }
+
+      /* Thẻ trụ cột */
+      .pillar-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+        gap: var(--sp-5);
+      }
+      .pillar-card {
+        background: var(--bg-card);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: var(--sp-6);
+        transition: transform var(--t-base), border-color var(--t-base), box-shadow var(--t-base);
+        display: flex;
+        flex-direction: column;
+      }
+      .pillar-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--primary-400);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+      }
+      [data-theme="light"] .pillar-card,
+      body.light-theme .pillar-card {
+        background: #ffffff;
+        border: 1.5px solid #cbd5e1 !important;
+        box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+      }
+      [data-theme="light"] .pillar-card:hover,
+      body.light-theme .pillar-card:hover {
+        border-color: #6d28d9 !important;
+        box-shadow: 0 12px 28px rgba(109, 40, 217, 0.12);
+      }
+
+      .pillar-icon-box {
+        width: 52px;
+        height: 52px;
+        border-radius: var(--radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: var(--sp-4);
+        background: rgba(139, 92, 246, 0.15);
+        color: var(--primary-300);
+      }
+      [data-theme="light"] .pillar-icon-box,
+      body.light-theme .pillar-icon-box {
+        background: #ede9fe;
+        color: #5b21b6;
+      }
+
+      /* So sánh Escrow vs Mô hình HYBRID.STORE */
+      .comparison-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--sp-6);
+      }
+      @media (max-width: 768px) {
+        .comparison-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .compare-card {
+        border-radius: var(--radius-lg);
+        padding: var(--sp-6);
+      }
+      .compare-card.old-escrow {
+        background: rgba(239, 68, 68, 0.04);
+        border: 1.5px dashed rgba(239, 68, 68, 0.35);
+      }
+      .compare-card.new-hybrid {
+        background: rgba(16, 185, 129, 0.05);
+        border: 2px solid #10b981;
+      }
+      [data-theme="light"] .compare-card.old-escrow,
+      body.light-theme .compare-card.old-escrow {
+        background: #fff5f5;
+        border-color: #ef4444 !important;
+      }
+      [data-theme="light"] .compare-card.new-hybrid,
+      body.light-theme .compare-card.new-hybrid {
+        background: #f0fdf4;
+        border-color: #059669 !important;
+        box-shadow: 0 6px 20px rgba(5, 150, 105, 0.08);
+      }
+
+      /* Chỉ số thống kê */
+      .stats-bar {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--sp-4);
+        margin-block: var(--sp-7);
+      }
+      @media (max-width: 768px) {
+        .stats-bar {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      .stat-item {
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: var(--sp-4);
+        text-align: center;
+      }
+      [data-theme="light"] .stat-item,
+      body.light-theme .stat-item {
+        background: #ffffff;
+        border: 1.5px solid #e2e8f0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      }
+      .stat-num {
+        font-family: var(--font-head);
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--primary-400);
+        margin-bottom: 4px;
+      }
+      [data-theme="light"] .stat-num,
+      body.light-theme .stat-num {
+        color: #6d28d9;
+      }
+
+      /* Quy trình 4 bước */
+      .workflow-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: var(--sp-5);
+      }
+      .workflow-step {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: var(--sp-5);
+        position: relative;
+      }
+      [data-theme="light"] .workflow-step,
+      body.light-theme .workflow-step {
+        background: #ffffff;
+        border: 1.5px solid #cbd5e1;
+      }
+      .workflow-num {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--primary-500);
+        color: #ffffff;
+        font-weight: 800;
+        font-size: 14px;
+        margin-bottom: var(--sp-3);
+      }
+      [data-theme="light"] .workflow-num,
+      body.light-theme .workflow-num {
+        background: #6d28d9;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ===== HEADER ===== -->
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href="index.html">
+          <span class="brand-mark"><span class="material-symbols-outlined">token</span></span>
+          <span>HYBRID<span class="text-secondary">.STORE</span> <span class="badge">GIỚI THIỆU</span></span>
+        </a>
+
+        <div class="header-actions">
+          <button
+            class="icon-btn theme-toggle-btn"
+            id="themeToggleBtn"
+            type="button"
+            title="Chuyển chế độ Sáng / Tối"
+            aria-label="Chuyển đổi giao diện"
+          >
+            <span class="material-symbols-outlined theme-toggle-icon">light_mode</span>
+          </button>
+          <a class="btn btn-secondary hide-sm" href="pages/shop/catalog.html">Xem Sản Phẩm</a>
+          <a class="avatar" href="pages/account/profile.html" title="Tài khoản">
+            <span class="material-symbols-outlined">person</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===== BREADCRUMB ===== -->
+    <div class="subnav">
+      <div class="container">
+        <nav>
+          <a href="index.html">Trang Chủ</a>
+          <span class="text-faint">/</span>
+          <span class="active">Giới Thiệu HYBRID.STORE — Giải Pháp Thương Mại Điện Tử Toàn Diện</span>
+        </nav>
+        <div class="subnav-info hide-sm">
+          <span class="text-success"><span class="material-symbols-outlined icon-sm">bolt</span> Thanh toán Napas 24/7</span>
+          <span class="text-secondary"><span class="material-symbols-outlined icon-sm">verified</span> Không Ký Quỹ • Zero Escrow</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="container py-8">
+      <!-- 1. HERO BANNER -->
+      <section class="about-hero">
+        <div style="max-width: 780px;">
+          <div class="flex items-center gap-2 mb-3 flex-wrap">
+            <span class="badge badge-primary">THƯƠNG HIỆU TIÊN PHONG 2026</span>
+            <span class="badge badge-success">THANH TOÁN HỎA TỐC NAPAS 24/7</span>
+            <span class="badge badge-secondary">ĐỒNG KIỂM 100%</span>
+          </div>
+          <h1 class="page-title mb-4" style="font-size: 2.4rem; line-height: 1.25;">
+            HYBRID.STORE — Nền Tảng Thương Mại Điện Tử Đột Phá Hàng Mới Mall &amp; Đồ Cũ Like New
+          </h1>
+          <p class="text-muted mb-6" style="font-size: 1.1rem; line-height: 1.7;">
+            Chào mừng bạn đến với <strong>HYBRID.STORE</strong> — mô hình siêu thị trực tuyến kết hợp hoàn hảo giữa <strong>Brand Mall 100% Chính Hãng</strong> và <strong>Chợ Đồ Cũ Like New Tuyển Chọn</strong>. Chúng tôi mang đến cơ chế <strong>thanh toán trực tiếp Napas 24/7 khớp lệnh 0 giây</strong> và <strong>quy trình đồng kiểm ngoại quan tận tay</strong>, xóa bỏ hoàn toàn sự rườm rà, giam giữ vốn của các mô hình ký quỹ (escrow) truyền thống.
+          </p>
+          <div class="flex items-center gap-3 flex-wrap">
+            <a class="btn btn-primary" href="pages/shop/catalog.html" style="padding: 12px 24px;">
+              <span class="material-symbols-outlined icon-sm">shopping_bag</span>
+              Khám Phá Danh Mục Sản Phẩm
+            </a>
+            <a class="btn btn-secondary" href="pages/seller/post_item.html" style="padding: 12px 20px;">
+              <span class="material-symbols-outlined icon-sm">sell</span>
+              Đăng Bán Đồ Cũ C2C
+            </a>
+            <a class="btn btn-outlined" href="about.html" style="padding: 12px 20px;">
+              <span class="material-symbols-outlined icon-sm">biotech</span>
+              Tiêu Chuẩn Phòng Lab
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. CHỈ SỐ NỀN TẢNG (STATS) -->
+      <section class="stats-bar">
+        <div class="stat-item">
+          <div class="stat-num">100%</div>
+          <div class="text-xs text-muted fw-600">Brand Mall Chính Hãng Seal Hộp</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">20% - 50%</div>
+          <div class="text-xs text-muted fw-600">Tiết Kiệm Khi Mua Đồ Cũ Tuyển Chọn</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">0 Giây</div>
+          <div class="text-xs text-muted fw-600">Khớp Lệnh Thanh Toán Napas 24/7</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">100%</div>
+          <div class="text-xs text-muted fw-600">Đồng Kiểm Tận Tay Cùng Shipper</div>
+        </div>
+      </section>
+
+      <!-- 3. TẠI SAO HYBRID.STORE THAY THẾ MÔ HÌNH KÝ QUỸ (ESCROW) CŨ? -->
+      <section class="mb-10">
+        <div class="text-center mb-6">
+          <span class="badge badge-solid mb-2">ĐỘT PHÁ CÔNG NGHỆ TÀI CHÍNH</span>
+          <h2 class="section-title mb-2">Tại Sao HYBRID.STORE Thay Thế Mô Hình Ký Quỹ (Escrow) Cũ?</h2>
+          <p class="text-muted" style="max-width: 680px; margin-inline: auto;">
+            Mô hình ký quỹ (escrow) giam tiền trung gian từng khiến người bán bị đọng vốn nhiều tuần và người mua mệt mỏi vì thủ tục. HYBRID.STORE kiến tạo giải pháp thương mại thế hệ mới:
+          </p>
+        </div>
+
+        <div class="comparison-grid">
+          <!-- Cột Escrow cũ -->
+          <div class="compare-card old-escrow">
+            <div class="flex items-center gap-2 mb-3 text-danger">
+              <span class="material-symbols-outlined">cancel</span>
+              <strong class="text-base">Mô Hình Ký Quỹ (Escrow) Truyền Thống</strong>
+            </div>
+            <ul class="text-sm" style="line-height: 2; padding-left: 18px; color: var(--text-muted);">
+              <li><strong>Giam giữ tiền người bán:</strong> Tiền bị đóng băng 7 - 15 ngày, gây đứt gãy dòng vốn kinh doanh.</li>
+              <li><strong>Phí giao dịch cao:</strong> Bên trung gian ký quỹ thu từ 3% đến 5% giá trị đơn hàng.</li>
+              <li><strong>Tranh chấp kéo dài:</strong> Quy trình đối soát thủ công phức tạp, mất nhiều tuần để mở khóa tiền.</li>
+              <li><strong>Trải nghiệm rườm rà:</strong> Người mua phải chờ đợi trung gian duyệt lệnh giải ngân.</li>
+            </ul>
+          </div>
+
+          <!-- Cột HYBRID.STORE hiện đại -->
+          <div class="compare-card new-hybrid">
+            <div class="flex items-center gap-2 mb-3 text-success">
+              <span class="material-symbols-outlined">check_circle</span>
+              <strong class="text-base">Giải Pháp Trực Tiếp Của HYBRID.STORE (Zero Escrow)</strong>
+            </div>
+            <ul class="text-sm" style="line-height: 2; padding-left: 18px; color: var(--text);">
+              <li><strong>Thanh toán trực tiếp Napas 24/7 &amp; VietQR:</strong> Tiền về thẳng tài khoản người bán tức thì trong 1 giây.</li>
+              <li><strong>Chi phí trung gian 0₫:</strong> Không thu phí giam vốn, tối ưu lợi nhuận cho người bán.</li>
+              <li><strong>Bảo vệ bằng chính sách Đồng Kiểm 100%:</strong> Người mua được bóc hộp kiểm tra hàng cùng shipper trước khi nhận.</li>
+              <li><strong>Phân xử 3 bên độc lập:</strong> Trung tâm khiếu nại minh bạch xử lý bồi thường tức thì nếu có sai sót.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. 4 TRỤ CỘT CỐT LÕI CỦA HYBRID.STORE -->
+      <section class="mb-10">
+        <div class="text-center mb-6">
+          <span class="badge badge-primary mb-2">GIÁ TRỊ KHÁC BIỆT</span>
+          <h2 class="section-title mb-2">4 Trụ Cột Nền Tảng Của HYBRID.STORE</h2>
+          <p class="text-muted" style="max-width: 680px; margin-inline: auto;">
+            Sự kết hợp hoàn hảo giữa công nghệ hiện đại và sự an tâm tuyệt đối trong từng đơn hàng:
+          </p>
+        </div>
+
+        <div class="pillar-grid">
+          <!-- Trụ cột 1 -->
+          <div class="pillar-card">
+            <div class="pillar-icon-box">
+              <span class="material-symbols-outlined">verified</span>
+            </div>
+            <h3 class="text-base fw-700 mb-2">100% Brand Mall Chính Hãng</h3>
+            <p class="text-xs text-muted mb-4" style="line-height: 1.7; flex: 1;">
+              Phân phối trực tiếp từ các thương hiệu hàng đầu thế giới. Cam kết sản phẩm mới 100% nguyên seal hộp, xuất hóa đơn VAT điện tử minh bạch, kích hoạt bảo hành điện tử chính hãng từ 12 đến 24 tháng.
+            </p>
+            <div class="text-xs text-success fw-600 flex items-center gap-1">
+              <span class="material-symbols-outlined icon-xs">check</span> Bồi thường 200% nếu phát hiện giả mạo
+            </div>
+          </div>
+
+          <!-- Trụ cột 2 -->
+          <div class="pillar-card">
+            <div class="pillar-icon-box">
+              <span class="material-symbols-outlined">savings</span>
+            </div>
+            <h3 class="text-base fw-700 mb-2">Chợ Đồ Cũ Like New Tuyển Chọn</h3>
+            <p class="text-xs text-muted mb-4" style="line-height: 1.7; flex: 1;">
+              Cộng đồng mua bán đồ cũ C2C chất lượng cao. Sản phẩm được kiểm định ngoại quan từ 95% đến 99% Like New, giúp bạn sở hữu các siêu phẩm công nghệ và thời trang với mức giá tiết kiệm từ 20% đến 50%.
+            </p>
+            <div class="text-xs text-secondary fw-600 flex items-center gap-1">
+              <span class="material-symbols-outlined icon-xs">history</span> Bảo hành 6 tháng tại hệ thống + 7 ngày đổi trả
+            </div>
+          </div>
+
+          <!-- Trụ cột 3 -->
+          <div class="pillar-card">
+            <div class="pillar-icon-box">
+              <span class="material-symbols-outlined">price_change</span>
+            </div>
+            <h3 class="text-base fw-700 mb-2">Thương Lượng Trả Giá Tự Động AI</h3>
+            <p class="text-xs text-muted mb-4" style="line-height: 1.7; flex: 1;">
+              Tính năng độc quyền cho phép người mua đề xuất mức giá hợp lý với người bán. Hệ thống tự động phân tích thị trường, thông báo người bán phản hồi nhanh chóng, tạo không gian mua bán minh bạch và văn minh.
+            </p>
+            <div class="text-xs text-primary fw-600 flex items-center gap-1">
+              <span class="material-symbols-outlined icon-xs">bolt</span> Chốt đơn nhanh, giá tốt cho cả hai bên
+            </div>
+          </div>
+
+          <!-- Trụ cột 4 -->
+          <div class="pillar-card">
+            <div class="pillar-icon-box">
+              <span class="material-symbols-outlined">local_shipping</span>
+            </div>
+            <h3 class="text-base fw-700 mb-2">Giao Hàng Hỏa Tốc &amp; Đồng Kiểm</h3>
+            <p class="text-xs text-muted mb-4" style="line-height: 1.7; flex: 1;">
+              Mạng lưới vận chuyển toàn quốc với chính sách Freeship 100%. Khách hàng được quyền mở hộp đồng kiểm ngoại quan cùng nhân viên bưu tá trước khi thanh toán, đảm bảo sản phẩm chuẩn xác mới nhận.
+            </p>
+            <div class="text-xs text-warning fw-600 flex items-center gap-1">
+              <span class="material-symbols-outlined icon-xs">shield</span> An tâm tuyệt đối khi nhận hàng
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. 4 DANH MỤC NGÀNH HÀNG CHỦ LỰC -->
+      <section class="panel p-6 mb-10" style="background: var(--bg-card); border-radius: var(--radius-xl);">
+        <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+          <div>
+            <span class="badge badge-secondary mb-1">DANH MỤC TUYỂN CHỌN</span>
+            <h3 class="text-lg fw-800">4 Ngành Hàng Chủ Lực Tại HYBRID.STORE</h3>
+          </div>
+          <a class="btn btn-outlined btn-sm" href="pages/shop/catalog.html">Xem Toàn Bộ Sản Phẩm</a>
+        </div>
+
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+          <div class="p-4" style="background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md);">
+            <div class="text-2xl mb-2">🧥</div>
+            <strong class="text-sm block mb-1">Thời Trang &amp; Streetwear Cyberpunk</strong>
+            <span class="text-xs text-muted">Áo khoác bomber công nghệ, techwear chống nước, hoodie form rộng cao cấp.</span>
+          </div>
+
+          <div class="p-4" style="background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md);">
+            <div class="text-2xl mb-2">👟</div>
+            <strong class="text-sm block mb-1">Giày Sneaker &amp; Bản Giới Hạn</strong>
+            <span class="text-xs text-muted">Air Jordan, Dunk Low, Yeezy tuyển chọn mới 100% hoặc Like New có hóa đơn gốc.</span>
+          </div>
+
+          <div class="p-4" style="background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md);">
+            <div class="text-2xl mb-2">📱</div>
+            <strong class="text-sm block mb-1">Thiết Bị Công Nghệ Hi-Tech</strong>
+            <span class="text-xs text-muted">iPhone 15 Pro Max, MacBook M3, tai nghe chống ồn Sony, đồng hồ Apple Watch.</span>
+          </div>
+
+          <div class="p-4" style="background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md);">
+            <div class="text-2xl mb-2">☕</div>
+            <strong class="text-sm block mb-1">Thiết Bị Gia Dụng Thông Minh</strong>
+            <span class="text-xs text-muted">Máy pha cà phê pha chuẩn Ý, nồi chiên không dầu công nghệ cao, robot hút bụi thông minh.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. QUY TRÌNH MUA SẮM 4 BƯỚC ĐƠN GIẢN -->
+      <section class="mb-10">
+        <div class="text-center mb-6">
+          <span class="badge badge-success mb-2">MƯỢT MÀ &amp; NHANH CHÓNG</span>
+          <h2 class="section-title mb-2">Quy Trình Mua Sắm 4 Bước Tiện Lợi</h2>
+          <p class="text-muted" style="max-width: 600px; margin-inline: auto;">
+            Trải nghiệm mua sắm không khoảng cách từ chọn hàng đến khi cầm trên tay:
+          </p>
+        </div>
+
+        <div class="workflow-grid">
+          <div class="workflow-step">
+            <div class="workflow-num">1</div>
+            <h4 class="text-sm fw-700 mb-1">Lựa Chọn Sản Phẩm</h4>
+            <p class="text-xs text-muted" style="line-height: 1.6;">
+              Dễ dàng chọn lựa giữa hàng mới nguyên hộp chính hãng hoặc đồ cũ tiết kiệm 50% cùng thông số minh bạch.
+            </p>
+          </div>
+
+          <div class="workflow-step">
+            <div class="workflow-num">2</div>
+            <h4 class="text-sm fw-700 mb-1">Thương Lượng Trả Giá</h4>
+            <p class="text-xs text-muted" style="line-height: 1.6;">
+              Với đồ cũ, bạn có thể gửi đề xuất giá mong muốn trực tiếp tới người bán chỉ với 1 cú click chuột.
+            </p>
+          </div>
+
+          <div class="workflow-step">
+            <div class="workflow-num">3</div>
+            <h4 class="text-sm fw-700 mb-1">Thanh Toán Linh Hoạt</h4>
+            <p class="text-xs text-muted" style="line-height: 1.6;">
+              Quét mã VietQR chuyển khoản Napas 24/7 khớp lệnh tức thì 0 giây, hoặc lựa chọn COD thanh toán khi nhận hàng.
+            </p>
+          </div>
+
+          <div class="workflow-step">
+            <div class="workflow-num">4</div>
+            <h4 class="text-sm fw-700 mb-1">Đồng Kiểm &amp; Nhận Hàng</h4>
+            <p class="text-xs text-muted" style="line-height: 1.6;">
+              Mở hộp kiểm tra sản phẩm cùng shipper trước khi ký nhận, kích hoạt bảo hành điện tử tức thì trên hệ thống.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. THÔNG TIN LIÊN HỆ & TRẠM LAB KIỂM ĐỊNH -->
+      <section class="panel p-6" style="background: var(--bg-card); border-radius: var(--radius-xl); border: 1.5px solid var(--border);">
+        <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
+          <div>
+            <span class="badge badge-primary mb-1">HỆ THỐNG TRỰC TIẾP TOÀN QUỐC</span>
+            <h3 class="text-lg fw-800">Trạm Kiểm Định Ngoại Quan &amp; Văn Phòng HYBRID.STORE</h3>
+          </div>
+          <a class="btn btn-secondary btn-sm" href="about.html">Xem Chi Tiết Quy Trình Lab 15 Bước</a>
+        </div>
+
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+          <div class="p-4" style="background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md);">
+            <strong class="text-sm text-secondary block mb-1">Trụ Sở Hà Nội</strong>
+            <span class="text-xs text-muted block mb-2">Tòa Keangnam Landmark 72, Đường Phạm Hùng, Nam Từ Liêm, Hà Nội</span>
+            <span class="text-xs mono text-primary">Hotline: 1900 8899 (8h00 - 22h00)</span>
+          </div>
+
+          <div class="p-4" style="background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md);">
+            <strong class="text-sm text-secondary block mb-1">Chi Nhánh TP. Hồ Chí Minh</strong>
+            <span class="text-xs text-muted block mb-2">Tòa Bitexco Financial Tower, Số 2 Hải Triều, Bến Nghé, Quận 1, TP.HCM</span>
+            <span class="text-xs mono text-primary">Hotline: 1900 8898 (8h00 - 22h00)</span>
+          </div>
+
+          <div class="p-4" style="background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md);">
+            <strong class="text-sm text-secondary block mb-1">Chi Nhánh Đà Nẵng</strong>
+            <span class="text-xs text-muted block mb-2">Khu Công Nghệ Cao FPT City, Phường Hòa Hải, Ngũ Hành Sơn, Đà Nẵng</span>
+            <span class="text-xs mono text-primary">Hotline: 1900 8897 (8h00 - 22h00)</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer mt-8">
+      <div class="container footer-bar">
+        <span class="text-xs text-faint">© 2026 HYBRID.STORE — Hệ Thống Thương Mại Điện Tử Kết Hợp Toàn Quốc (Zero Escrow).</span>
+        <div class="flex gap-4 text-xs">
+          <a href="about-escrow.html" class="active">Giới Thiệu HYBRID</a>
+          <a href="about.html">Tiêu Chuẩn Phòng Lab</a>
+          <a href="terms_of_service.html">Điều Khoản Dịch Vụ</a>
+          <a href="warranty_policy.html">Chính Sách Bảo Hành</a>
+          <a href="return_policy.html">Chính Sách Đổi Trả</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="js/utils.js"></script>
+  </body>
+</html>
