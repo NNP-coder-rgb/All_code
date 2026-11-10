@@ -317,6 +317,9 @@
 
   /* ---------------- Thẻ sản phẩm ---------------- */
   function cardHTML(p, ctx) {
+    if (typeof Components !== "undefined" && typeof Components.renderProductCard === "function") {
+      return Components.renderProductCard(p, { basePath: "" });
+    }
     const flash = ctx === "flash";
     const title = p.short || p.name;
 

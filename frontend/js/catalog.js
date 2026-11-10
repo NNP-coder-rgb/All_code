@@ -130,6 +130,9 @@
 
   /* ---------------- TIỆN ÍCH TẠO THẺ SẢN PHẨM ---------------- */
   function createProductCardHTML(p) {
+    if (typeof Components !== "undefined" && typeof Components.renderProductCard === "function") {
+      return Components.renderProductCard(p);
+    }
     const isMall = p.type === "mall";
     const title = p.short || p.name;
     const formattedPrice = Utils.formatCurrency(p.price);

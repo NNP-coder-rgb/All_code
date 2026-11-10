@@ -1,0 +1,192 @@
+/**
+ * components.test.js — Kiểm tra toàn bộ UI Components trong components.js
+ * Chạy bằng: node frontend/test/components.test.js
+ */
+
+const assert = require("assert");
+const fs = require("fs");
+const path = require("path");
+
+// 1. Nạp mock data để kiểm thử trực tiếp trên dữ liệu thật của dự án
+const mockDataPath = path.resolve(__dirname, "../js/mock_data.js");
+const mockDataCode = fs.readFileSync(mockDataPath, "utf8");
+const evalMock = new Function(
+  mockDataCode.replace(/\bconst\b/g, "var") +
+    "\nreturn { PRODUCTS, CATEGORIES };"
+);
+const { PRODUCTS } = evalMock();
+
+// 2. Nạp utils.js và components.js
+const Utils = require("../js/utils.js");
+global.Utils = Utils;
+const Components = require("../js/components.js");
+
+let passed = 0;
+let failed = 0;
+
+function it(desc, fn) {
+  try {
+    fn();
+    console.log(`  \x1b[32m✔ PASS:\x1b[0m ${desc}`);
+    passed++;
+  } catch (err) {
+    console.error(`  \x1b[31m✖ FAIL:\x1b[0m ${desc}`);
+    console.error("   ", err.message);
+    failed++;
+  }
+}
+
+console.log("\n========================================================");
+console.log("KIỂM THỬ BỘ UI COMPONENTS (COMPONENTS.JS) — HYBRID.STORE");
+console.log("Tasks: [FE] T13 (Header 3 biến thể) & [FE] T14 (Footer, Breadcrumb, ProductCard)");
+console.log("========================================================\n");
+
+/* ---------------- 1. KIỂM THỬ ĐƯỜNG DẪN TƯƠNG ĐỐI ---------------- */
+console.log("--- 1. KIỂM THỬ TỰ ĐỘNG ĐỊNH TUYẾN ĐƯỜNG DẪN (BASE PATH) ---");
+
+it("detectBasePath trả về customPath nếu được truyền vào", () => {
+  assert.strictEqual(Components.detectBasePath("../../"), "../../");
+  assert.strictEqual(Components.detectBasePath(""), "");
+});
+
+it("resolveUrl xử lý chính xác URL gốc và URL con", () => {
+  assert.strictEqual(Components.resolveUrl("index.html", ""), "index.html");
+  assert.strictEqual(Components.resolveUrl("index.html", "../../"), "../../index.html");
+  assert.strictEqual(Components.resolveUrl("https://example.com", "../../"), "https://example.com");
+  assert.strictEqual(Components.resolveUrl("#section", "../../"), "#section");
+});
+
+/* ---------------- 2. KIỂM THỬ TASK T13: HEADER 3 BIẾN THỂ ---------------- */
+console.log("\n--- 2. TASK [FE] T13: HEADER BA BIẾN THỂ ---");
+
+it("Header Biến thể 1: MARKETPLACE có đầy đủ Logo, Tìm kiếm, Đăng bán, Giỏ hàng và Theme Toggle", () => {
+  const html = Components.Header.createHTML({
+    variant: Components.Header.MARKETPLACE,
+    basePath: "",
+  });
+  assert(html.includes("site-header--marketplace"), "Phải có class site-header--marketplace");
+  assert(html.includes("HYBRID"), "Phải có thương hiệu HYBRID");
+  assert(html.includes('id="headerSearchInput"'), "Phải có ô tìm kiếm headerSearchInput");
+  assert(html.includes("Đăng Bán Đồ Cũ"), "Phải có nút Đăng Bán Đồ Cũ");
+  assert(html.includes('id="themeToggleBtn"'), "Phải có nút themeToggleBtn");
+  assert(html.includes('id="cartCount"'), "Phải có badge cartCount");
+  assert(!html.includes("ký quỹ") && !html.includes("escrow"), "Tuyệt đối không chứa ký quỹ");
+});
+
+it("Header Biến thể 2: MINIMAL (Checkout/Auth/Cart) tinh giản không chứa thanh tìm kiếm rườm rà", () => {
+  const html = Components.Header.createHTML({
+    variant: Components.Header.MINIMAL,
+    title: "THANH TOÁN AN TOÀN",
+    basePath: "../../",
+  });
+  assert(html.includes("site-header--minimal"), "Phải có class site-header--minimal");
+  assert(html.includes("THANH TOÁN AN TOÀN"), "Phải hiển thị tiêu đề THANH TOÁN AN TOÀN");
+  assert(html.includes("Đồng kiểm 100%"), "Phải có cam kết đồng kiểm");
+  assert(html.includes("Napas 24/7"), "Phải có phương thức Napas 24/7");
+  assert(!html.includes('id="headerSearchInput"'), "Header Minimal không được chứa thanh tìm kiếm");
+});
+
+it("Header Biến thể 3: DASHBOARD (Kênh Người Bán & Master Admin) có nút sidebar toggle và badge portal", () => {
+  const htmlSeller = Components.Header.createHTML({
+    variant: Components.Header.DASHBOARD,
+    portalType: "seller",
+    basePath: "../../",
+  });
+  assert(htmlSeller.includes("site-header--dashboard"), "Phải có class site-header--dashboard");
+  assert(htmlSeller.includes("KÊNH NGƯỜI BÁN"), "Phải có badge KÊNH NGƯỜI BÁN");
+  assert(htmlSeller.includes('id="sidebarToggleBtn"'), "Phải có nút mở sidebar mobile");
+  assert(htmlSeller.includes("Đăng Bán Món Mới"), "Người bán có nút Đăng Bán Món Mới");
+
+  const htmlAdmin = Components.Header.createHTML({
+    variant: Components.Header.DASHBOARD,
+    portalType: "admin",
+    basePath: "../../",
+  });
+  assert(htmlAdmin.includes("MASTER ADMIN"), "Admin phải có badge MASTER ADMIN");
+  assert(htmlAdmin.includes(".SYSTEM"), "Admin phải có đuôi .SYSTEM");
+  assert(htmlAdmin.includes("HỆ THỐNG ONLINE 99.99%"), "Phải có trạng thái hệ thống");
+});
+
+/* ---------------- 3. KIỂM THỬ TASK T14: FOOTER CHUNG ---------------- */
+console.log("\n--- 3. TASK [FE] T14: FOOTER CHUNG ---");
+
+it("Footer có cấu trúc 4 cột chuẩn responsive và hiển thị 3 showroom kỹ thuật", () => {
+  const html = Components.Footer.createHTML({ basePath: "" });
+  assert(html.includes("footer-grid"), "Phải có grid footer-grid");
+  assert(html.includes("Keangnam Landmark 72"), "Phải có Showroom Hà Nội");
+  assert(html.includes("Tòa FPT Complex"), "Phải có Showroom Đà Nẵng");
+  assert(html.includes("Bitexco Financial Tower"), "Phải có Showroom TP.HCM");
+  assert(html.includes("terms_of_service.html"), "Phải có link Điều khoản dịch vụ");
+  assert(html.includes("warranty_policy.html"), "Phải có link Chính sách bảo hành");
+  assert(html.includes("return_policy.html"), "Phải có link Chính sách đổi trả");
+  assert(html.includes("Napas 24/7"), "Phải có Napas 24/7");
+  assert(html.includes("COD Đồng Kiểm 100%"), "Phải có COD Đồng Kiểm 100%");
+  assert(!html.includes("ký quỹ") && !html.includes("escrow"), "Tuyệt đối không chứa ký quỹ");
+});
+
+/* ---------------- 4. KIỂM THỬ TASK T14: BREADCRUMB ---------------- */
+console.log("\n--- 4. TASK [FE] T14: BREADCRUMB ARIA & SEO ---");
+
+it("Breadcrumb sinh đúng cấu trúc nav, ol, li và aria-current trên mục cuối cùng", () => {
+  const items = [
+    { label: "Trang Chủ", url: "index.html" },
+    { label: "Điện Thoại & Tablet", url: "pages/shop/catalog.html?category=dien-thoai" },
+    { label: "iPhone 15 Pro Max 256GB" },
+  ];
+  const html = Components.Breadcrumb.createHTML(items, { basePath: "" });
+  assert(html.includes('aria-label="Đường dẫn trang"'), "Phải có aria-label chuẩn WAI-ARIA");
+  assert(html.includes('<ol class="breadcrumb">'), "Phải có ol.breadcrumb");
+  assert(html.includes('href="index.html"'), "Mục đầu có liên kết");
+  assert(html.includes('aria-current="page"'), "Mục cuối phải có aria-current='page'");
+  assert(html.includes("iPhone 15 Pro Max 256GB"), "Hiển thị tên sản phẩm");
+});
+
+/* ---------------- 5. KIỂM THỬ TASK T14: RENDER PRODUCT CARD ---------------- */
+console.log("\n--- 5. TASK [FE] T14: RENDER PRODUCT CARD ---");
+
+it("ProductCard cho hàng Brand Mall (Hàng mới 100%) hiển thị đúng giá, sao, nút Thêm giỏ và Mua ngay", () => {
+  const mallProduct = PRODUCTS.find((p) => p.type === "mall");
+  assert(mallProduct, "Phải tìm thấy ít nhất 1 sản phẩm Mall");
+
+  const cardHtml = Components.ProductCard.createHTML(mallProduct, { basePath: "" });
+  assert(cardHtml.includes('data-type="mall"'), "Phải có data-type='mall'");
+  assert(cardHtml.includes(mallProduct.id), "Phải có id sản phẩm");
+  assert(cardHtml.includes("product_new.html"), "Link dẫn về product_new.html");
+  assert(cardHtml.includes('data-action="add-cart"'), "Phải có nút data-action='add-cart'");
+  assert(cardHtml.includes('data-action="buy"'), "Phải có nút data-action='buy'");
+  assert(!cardHtml.includes('data-action="offer"'), "Hàng Mall mới không có nút Trả giá");
+});
+
+it("ProductCard cho hàng C2C Like New hiển thị độ mới %, thanh tiến trình và đủ 3 nút (Thêm giỏ, Mua ngay, Trả giá full-width)", () => {
+  const c2cProduct = PRODUCTS.find((p) => p.type === "c2c");
+  assert(c2cProduct, "Phải tìm thấy ít nhất 1 sản phẩm C2C");
+
+  const cardHtml = Components.ProductCard.createHTML(c2cProduct, { basePath: "" });
+  assert(cardHtml.includes('data-type="c2c"'), "Phải có data-type='c2c'");
+  assert(cardHtml.includes(c2cProduct.id), "Phải có id sản phẩm");
+  assert(cardHtml.includes("product_used.html"), "Link dẫn về product_used.html");
+  assert(cardHtml.includes('data-action="add-cart"'), "Phải có nút data-action='add-cart'");
+  assert(cardHtml.includes('data-action="buy"'), "Phải có nút data-action='buy'");
+  assert(cardHtml.includes('data-action="offer"'), "Phải có nút data-action='offer'");
+  assert(cardHtml.includes("Trả Giá Với Người Bán"), "Phải có nhãn Trả Giá Với Người Bán");
+  assert(cardHtml.includes("progress-bar"), "Phải có thanh tiến trình độ mới");
+});
+
+/* ---------------- 6. KIỂM THỬ SHORTCUT VÀ TÍNH TƯƠNG THÍCH ---------------- */
+console.log("\n--- 6. KIỂM THỬ SHORTCUTS & API CONVENIENCE ---");
+
+it("Components cung cấp các hàm shortcut renderHeader, renderFooter, renderBreadcrumb, renderProductCard", () => {
+  assert(typeof Components.renderHeader === "function");
+  assert(typeof Components.renderFooter === "function");
+  assert(typeof Components.renderBreadcrumb === "function");
+  assert(typeof Components.renderProductCard === "function");
+  assert(typeof Components.initAuto === "function");
+});
+
+console.log("\n========================================================");
+console.log(`KẾT QUẢ KIỂM THỬ: ${passed} / ${passed + failed} PASS`);
+console.log("========================================================\n");
+
+if (failed > 0) {
+  process.exit(1);
+}
