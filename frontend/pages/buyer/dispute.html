@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>11 — Trung Tâm Hòa Giải &amp; Chat Khiếu Nại 3 Bên | HYBRID.STORE</title>
+    <title>Phòng Phân Xử 3 Bên &amp; Trung Tâm Khiếu Nại Sản Phẩm | HYBRID.STORE</title>
 
     <!-- Chống giật giao diện (Zero-FOUC Theme Init) -->
     <script>
@@ -23,193 +23,1138 @@
     <link rel="stylesheet" href="../../css/base.css" />
     <link rel="stylesheet" href="../../css/catalog.css" />
     <link rel="stylesheet" href="../../css/master_screens.css" />
+    <style>
+      /* ==========================================================================
+         PHÒNG PHÂN XỬ 3 BÊN: TYPOGRAPHY, SPACING & HÒA GIẢI MINH BẠCH
+         ========================================================================== */
+      .dispute-container {
+        max-width: 1280px;
+        margin-inline: auto;
+        padding-top: 24px;
+        padding-bottom: 56px;
+      }
+
+      /* Header & Countdown SLA */
+      .dispute-header-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+      .dispute-header-title {
+        font-size: 1.45rem;
+        font-weight: 800;
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .dispute-header-desc {
+        color: var(--text-muted);
+        font-size: var(--fs-sm);
+        line-height: 1.5;
+      }
+      .sla-countdown-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(245, 158, 11, 0.12);
+        border: 1px solid rgba(245, 158, 11, 0.35);
+        padding: 8px 16px;
+        border-radius: var(--radius-pill);
+        color: var(--warning);
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: var(--fs-xs);
+      }
+
+      /* Stepper 4 chặng phân xử minh bạch */
+      .dispute-stepper {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        padding: 16px 22px;
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        margin-bottom: 26px;
+      }
+      @media (max-width: 768px) {
+        .dispute-stepper {
+          grid-template-columns: repeat(2, 1fr);
+          row-gap: 14px;
+        }
+      }
+      .dispute-step-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 12px;
+        color: var(--text-faint);
+      }
+      .dispute-step-item.done {
+        color: var(--text);
+        font-weight: 600;
+      }
+      .dispute-step-item.active {
+        color: var(--warning);
+        font-weight: 700;
+      }
+      .dispute-step-circle {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-size: 11px;
+        font-weight: 700;
+        background: var(--neutral-800);
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        flex-shrink: 0;
+      }
+      .dispute-step-item.done .dispute-step-circle {
+        background: var(--success);
+        border-color: var(--success);
+        color: #fff;
+      }
+      .dispute-step-item.active .dispute-step-circle {
+        background: var(--warning);
+        border-color: var(--warning);
+        color: #000;
+        box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
+      }
+
+      /* Bố cục 3 Cột: Thông tin - Khung chat - Phán quyết */
+      .dispute-3col-layout {
+        display: grid;
+        grid-template-columns: 320px 1fr 340px;
+        gap: 20px;
+        align-items: start;
+      }
+      @media (max-width: 1120px) {
+        .dispute-3col-layout {
+          grid-template-columns: 300px 1fr;
+        }
+        .dispute-col-settlement {
+          grid-column: 1 / -1;
+        }
+      }
+      @media (max-width: 840px) {
+        .dispute-3col-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Card chung */
+      .dispute-panel {
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-xl);
+        padding: 20px;
+        margin-bottom: 20px;
+        transition: border-color var(--speed-fast);
+      }
+      .dispute-panel:hover {
+        border-color: rgba(139, 92, 246, 0.35);
+      }
+      .dispute-panel-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      /* Khung Chat 3 Bên Trực Tiếp */
+      .chat-tripartite {
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-xl);
+        display: flex;
+        flex-direction: column;
+        height: 640px;
+        overflow: hidden;
+      }
+      .chat-tripartite-head {
+        padding: 14px 20px;
+        background: rgba(255, 255, 255, 0.02);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .chat-tripartite-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 18px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        scroll-behavior: smooth;
+      }
+      .chat-tripartite-foot {
+        padding: 14px 18px;
+        background: rgba(255, 255, 255, 0.02);
+        border-top: 1px solid var(--border);
+      }
+
+      /* Tin nhắn chat định danh */
+      .chat-msg {
+        display: flex;
+        gap: 12px;
+        max-width: 88%;
+      }
+      .chat-msg.buyer {
+        align-self: flex-start;
+      }
+      .chat-msg.seller {
+        align-self: flex-start;
+      }
+      .chat-msg.arbitrator {
+        align-self: center;
+        max-width: 95%;
+        width: 100%;
+      }
+      .chat-msg.system-notice {
+        align-self: center;
+        text-align: center;
+        font-size: 11px;
+        color: var(--text-muted);
+        background: rgba(255, 255, 255, 0.04);
+        padding: 6px 14px;
+        border-radius: var(--radius-pill);
+      }
+      .chat-msg.own {
+        align-self: flex-end;
+        flex-direction: row-reverse;
+      }
+
+      .chat-avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-size: 12px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .chat-bubble-content {
+        padding: 12px 16px;
+        border-radius: var(--radius-lg);
+        font-size: 13px;
+        line-height: 1.55;
+        border: 1px solid var(--border);
+      }
+      .chat-msg.buyer .chat-bubble-content {
+        background: rgba(59, 130, 246, 0.1);
+        border-color: rgba(59, 130, 246, 0.25);
+      }
+      .chat-msg.seller .chat-bubble-content {
+        background: rgba(34, 211, 238, 0.08);
+        border-color: rgba(34, 211, 238, 0.25);
+      }
+      .chat-msg.arbitrator .chat-bubble-content {
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.12) 0%, rgba(245, 158, 11, 0.08) 100%);
+        border-color: rgba(139, 92, 246, 0.4);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      }
+      .chat-msg.own .chat-bubble-content {
+        background: var(--primary-600);
+        border-color: var(--primary-500);
+        color: #fff;
+      }
+
+      .chat-msg-meta {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 4px;
+        font-size: 11px;
+      }
+
+      /* Quick reply chips */
+      .quick-chips-bar {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        padding-bottom: 8px;
+        margin-bottom: 10px;
+        scrollbar-width: none;
+      }
+      .quick-chip-btn {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        padding: 5px 12px;
+        border-radius: var(--radius-pill);
+        font-size: 11px;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: all var(--speed-fast);
+      }
+      .quick-chip-btn:hover {
+        background: rgba(139, 92, 246, 0.15);
+        color: var(--secondary-300);
+        border-color: var(--primary-500);
+      }
+
+      /* Thẻ phương án hòa giải */
+      .settlement-option-item {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 12px 14px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        display: flex;
+        gap: 12px;
+        transition: all var(--speed-fast);
+      }
+      .settlement-option-item:hover,
+      .settlement-option-item.selected {
+        background: rgba(139, 92, 246, 0.08);
+        border-color: var(--primary-500);
+      }
+
+      /* Trạng thái đã hòa giải thành công */
+      .verdict-success-box {
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.12) 0%, rgba(59, 130, 246, 0.08) 100%);
+        border: 1.5px solid rgba(34, 197, 94, 0.4);
+        border-radius: var(--radius-lg);
+        padding: 18px 20px;
+        margin-bottom: 20px;
+      }
+    </style>
   </head>
   <body>
-    <!-- ===== HEADER ===== -->
-    <header class="site-header">
+    <!-- ===== HEADER (Task T13) ===== -->
+    <header class="site-header site-header--marketplace" id="siteHeader">
       <div class="container">
         <a class="brand" href="../../index.html">
           <span class="brand-mark"><span class="material-symbols-outlined">token</span></span>
-          <span>HYBRID<span class="text-secondary">.STORE</span> <span class="badge badge-warning">TRUNG TÂM PHÂN XỬ 3 BÊN</span></span>
+          <span>HYBRID<span class="text-secondary">.STORE</span> <span class="badge badge-warning">PHÒNG PHÂN XỬ 3 BÊN</span></span>
         </a>
 
         <div class="header-actions">
+          <a class="btn btn-secondary hide-sm" href="orders.html">
+            <span class="material-symbols-outlined icon-sm">receipt_long</span> Quản Lý Đơn Mua
+          </a>
           <button
             class="icon-btn theme-toggle-btn"
             id="themeToggleBtn"
             type="button"
-            title="Chuyển chế độ Sáng / Tối"
-            aria-label="Chuyển đổi giao diện"
+            aria-label="Chuyển chế độ sáng / tối"
+            title="Chuyển sang giao diện Sáng"
           >
             <span class="material-symbols-outlined theme-toggle-icon">light_mode</span>
           </button>
-          <a class="btn btn-secondary hide-sm" href="orders.html">Danh Sách Đơn Mua</a>
-          <a class="avatar" href="../account/profile.html" title="Tài khoản">
+          <a class="icon-btn" href="../shop/cart.html" aria-label="Giỏ hàng" title="Giỏ hàng">
+            <span class="material-symbols-outlined">shopping_bag</span>
+            <span class="badge badge-counter" id="cartCount">0</span>
+          </a>
+          <a class="avatar" id="avatarBtn" href="../account/profile.html" title="Tài khoản">
             <span class="material-symbols-outlined">person</span>
           </a>
         </div>
       </div>
     </header>
 
-    <main class="container py-6">
-      <div class="mb-4 flex items-center justify-between flex-wrap gap-2">
-        <div>
-          <h1 class="page-title flex items-center gap-2">
-            <span class="material-symbols-outlined text-warning">gavel</span>
-            Phòng Phân Xử Trực Tiếp 3 Bên: #CASE-20261108
-          </h1>
-          <p class="text-sm text-muted">Người Mua • Người Bán • Giám Định Viên Trọng Tài Sàn</p>
+    <!-- ===== BREADCRUMB (Task T14) ===== -->
+    <div class="subnav">
+      <div class="container flex items-center justify-between flex-wrap gap-3">
+        <nav class="breadcrumb-nav" aria-label="Đường dẫn trang">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="../../index.html">Trang Chủ</a></li>
+            <li class="breadcrumb-item"><a href="../account/profile.html">Tài Khoản</a></li>
+            <li class="breadcrumb-item"><a href="orders.html">Đơn Mua</a></li>
+            <li class="breadcrumb-item active" aria-current="page" id="breadcrumbCaseTitle">Phòng Phân Xử 3 Bên</li>
+          </ol>
+        </nav>
+        <div class="subnav-info hide-sm flex items-center gap-4 text-xs">
+          <span class="text-success flex items-center gap-1">
+            <span class="material-symbols-outlined icon-xs">gavel</span> Trọng tài sàn trung lập
+          </span>
+          <span class="text-secondary flex items-center gap-1">
+            <span class="material-symbols-outlined icon-xs">verified</span> Đối soát video unbox 4K
+          </span>
+          <span class="text-warning flex items-center gap-1">
+            <span class="material-symbols-outlined icon-xs">timer</span> Phán quyết trong 24 Giờ
+          </span>
         </div>
-        <span class="badge badge-secondary">TRẠNG THÁI: ĐANG HÒA GIẢI ĐỔI TRẢ</span>
+      </div>
+    </div>
+
+    <main class="container dispute-container">
+      <!-- 1. TIÊU ĐỀ PHÒNG PHÂN XỬ & ĐẾM NGƯỢC SLA -->
+      <div class="dispute-header-bar">
+        <div>
+          <h1 class="dispute-header-title">
+            <span class="material-symbols-outlined text-warning" style="font-size: 28px;">gavel</span>
+            <span id="caseHeaderCode">Hồ Sơ Hòa Giải &amp; Phân Xử: #DSP-20261108-01</span>
+          </h1>
+          <p class="dispute-header-desc">
+            Kênh đối soát trực tiếp giữa <strong>Người Mua</strong>, <strong>Người Bán</strong> và <strong>Trọng Tài Viên Ban Quản Trị HYBRID.STORE</strong> nhằm bảo vệ quyền lợi 100% người dùng.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-3 flex-wrap">
+          <div class="sla-countdown-pill" id="slaCountdownPill">
+            <span class="material-symbols-outlined icon-xs">timer</span>
+            Thời gian phản hồi còn: <span id="slaCountdownText">18:24:10</span>
+          </div>
+          <select id="selectDisputeOrder" class="input input-sm" style="width: auto; font-size: 12px;">
+            <!-- Render động danh sách đơn hàng để chuyển đổi hồ sơ -->
+          </select>
+        </div>
       </div>
 
-      <div class="dispute-grid">
-        <!-- CỘT 1: BẰNG CHỨNG & THÔNG TIN ĐƠN -->
-        <aside>
-          <div class="party-card">
-            <h3 class="panel-title mb-2">Đơn Hàng Khiếu Nại</h3>
-            <div class="text-xs text-muted mb-3">Mã đơn: <strong class="mono text-secondary">ORD-20261108-9841</strong></div>
-            <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=300" style="width: 100%; border-radius: 8px; aspect-ratio: 16/10; object-fit: cover;" />
-            <div class="mt-2 text-xs">
-              <strong>iPhone 15 Pro Max Titan</strong><br />
-              <span class="text-muted">Lý do: Phát hiện xước nhẹ góc dưới chưa đúng mô tả 99%.</span>
+      <!-- 2. STEPPER 4 CHẶNG TIẾN TRÌNH HÒA GIẢI -->
+      <div class="dispute-stepper" id="disputeStepperBar">
+        <div class="dispute-step-item done">
+          <div class="dispute-step-circle">✓</div>
+          <div>
+            <strong class="block">1. Tiếp Nhận Khiếu Nại</strong>
+            <span class="text-xs text-muted">Mở hồ sơ &amp; nạp bằng chứng</span>
+          </div>
+        </div>
+
+        <div class="dispute-step-item done">
+          <div class="dispute-step-circle">✓</div>
+          <div>
+            <strong class="block">2. Người Bán Đối Chất</strong>
+            <span class="text-xs text-muted">Giải trình &amp; đối soát video</span>
+          </div>
+        </div>
+
+        <div class="dispute-step-item active" id="stepArbitrator">
+          <div class="dispute-step-circle">3</div>
+          <div>
+            <strong class="block">3. Trọng Tài Giám Định</strong>
+            <span class="text-xs text-muted">Test tem QR &amp; phân tích lỗi</span>
+          </div>
+        </div>
+
+        <div class="dispute-step-item" id="stepVerdict">
+          <div class="dispute-step-circle">4</div>
+          <div>
+            <strong class="block">4. Phán Quyết &amp; Bồi Hoàn</strong>
+            <span class="text-xs text-muted">Hoàn tiền 100% / Đổi máy 1:1</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. BỐ CỤC 3 CỘT MINH BẠCH (THÔNG TIN - CHAT - PHÁN QUYẾT) -->
+      <div class="dispute-3col-layout">
+        <!-- CỘT 1: THÔNG TIN ĐƠN HÀNG & BẰNG CHỨNG ĐỒNG KIỂM -->
+        <aside class="dispute-col-info">
+          <!-- THẺ SẢN PHẨM KHIẾU NẠI -->
+          <div class="dispute-panel">
+            <div class="dispute-panel-title">
+              <span class="material-symbols-outlined icon-xs text-primary">devices</span> Thiết Bị Khiếu Nại
+            </div>
+            <div class="flex items-center gap-3 mb-3">
+              <img
+                id="disputeProductImg"
+                src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=300"
+                alt="Sản phẩm khiếu nại"
+                style="width: 72px; height: 72px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border);"
+              />
+              <div class="flex-1" style="min-width: 0;">
+                <h4 class="text-xs fw-700 line-clamp-1 mb-1 text-white" id="disputeProductName">iPhone 15 Pro Max 256GB Titan</h4>
+                <div class="text-xs mono text-primary fw-700" id="disputeProductPrice">21.490.000₫</div>
+                <div class="text-xs text-muted mt-0.5">Mã đơn: <a href="orders.html" class="mono text-secondary" id="disputeOrderIdLink">ORD-20261108-9841</a></div>
+              </div>
+            </div>
+
+            <div class="panel p-2.5 text-xs mb-3" style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: var(--radius-md);">
+              <span class="text-danger fw-700 block mb-0.5 flex items-center gap-1">
+                <span class="material-symbols-outlined icon-xs">report_problem</span> Lý Do Khiếu Nại:
+              </span>
+              <span class="text-muted" id="disputeReasonText">Ngoại quan viền camera có vết cấn 1.5mm không đúng cam kết Like New 99%.</span>
+            </div>
+
+            <a id="btnLinkToOrderDetail" href="order_detail.html" class="btn btn-outlined btn-sm is-full">
+              <span class="material-symbols-outlined icon-xs">visibility</span> Xem Chi Tiết Đơn Hàng
+            </a>
+          </div>
+
+          <!-- THẺ BẰNG CHỨNG VIDEO ĐỒNG KIỂM & TEM MÀNG VỠ -->
+          <div class="dispute-panel">
+            <div class="dispute-panel-title">
+              <span class="material-symbols-outlined icon-xs text-success">verified</span> Bằng Chứng Mở Hộp Đồng Kiểm
+            </div>
+
+            <div class="panel p-3 text-center mb-3" style="background: var(--bg-surface); border: 1px dashed var(--border-strong); border-radius: var(--radius-md); cursor: pointer;" id="btnViewUnboxVideo">
+              <span class="material-symbols-outlined text-secondary" style="font-size: 38px;">smart_display</span>
+              <div class="text-xs fw-700 text-white mt-1">video_unbox_4k_dongkiem.mp4</div>
+              <div class="text-xs text-muted">Thời lượng: 02:45 • Ghi hình cùng bưu tá</div>
+              <span class="badge badge-success mt-2" style="font-size: 10px;">✔ ĐÃ XÁC MINH TÍNH TOÀN VẸN</span>
+            </div>
+
+            <div class="panel p-2.5 text-xs" style="background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.25); border-radius: var(--radius-md);">
+              <div class="flex items-center gap-1.5 text-success fw-700 mb-1">
+                <span class="material-symbols-outlined icon-xs">task_alt</span> Tem Niêm Phong Màng Vỡ QR:
+              </div>
+              <div class="text-muted">Mã tem: <strong class="mono text-white">QR-HYBRID-884920</strong></div>
+              <div class="text-muted mt-0.5">Trạng thái: Tem nguyên vẹn, trùng khớp video lưu kho của kỹ thuật viên.</div>
             </div>
           </div>
 
-          <div class="party-card">
-            <h3 class="panel-title mb-2">Video Mở Hộp Đồng Kiểm</h3>
-            <div class="panel p-4 text-center" style="background: var(--bg-surface); border: 1px dashed var(--border-strong);">
-              <span class="material-symbols-outlined text-secondary" style="font-size: 36px;">smart_display</span>
-              <div class="text-xs fw-600 mt-1">video_unbox_4k_dongkiem.mp4</div>
-              <span class="badge badge-success mt-2">ĐÃ XÁC MINH NGUYÊN VẸN</span>
+          <!-- THẺ 3 BÊN THAM GIA ĐỐI CHẤT -->
+          <div class="dispute-panel">
+            <div class="dispute-panel-title">
+              <span class="material-symbols-outlined icon-xs text-warning">group</span> 3 Bên Tham Gia Phân Xử
+            </div>
+
+            <div class="flex flex-col gap-2.5 text-xs">
+              <div class="flex items-center gap-2.5">
+                <div class="chat-avatar" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid #3b82f6;">P</div>
+                <div>
+                  <strong class="text-white block" id="partyBuyerName">Nguyễn Ngọc Phúc (Người Mua)</strong>
+                  <span class="text-muted">SĐT: 0912 345 678 • Tài khoản đã xác thực</span>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2.5">
+                <div class="chat-avatar" style="background: rgba(34, 211, 238, 0.2); color: #22d3ee; border: 1px solid #06b6d4;">Đ</div>
+                <div>
+                  <strong class="text-white block" id="partySellerName">Trần Minh Đức (Người Bán)</strong>
+                  <span class="text-muted">Shop: TechZone C2C • Đánh giá 4.9★</span>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2.5">
+                <div class="chat-avatar" style="background: rgba(139, 92, 246, 0.2); color: var(--secondary-300); border: 1px solid var(--primary-500);">L</div>
+                <div>
+                  <strong class="text-white block">Trọng Tài KTV Hoàng Nam</strong>
+                  <span class="text-muted">Ban Giám Định Kỹ Thuật HYBRID.STORE</span>
+                </div>
+              </div>
             </div>
           </div>
         </aside>
 
-        <!-- CỘT 2: KHUNG CHAT 3 BÊN -->
-        <section class="chat" style="min-height: 580px;">
-          <div class="chat-head">
+        <!-- CỘT 2: PHÒNG CHAT TRỰC TIẾP 3 BÊN -->
+        <section class="chat-tripartite">
+          <div class="chat-tripartite-head">
             <div class="flex items-center gap-2">
-              <span class="status-dot"></span>
-              <strong class="text-sm">Kênh Trao Đổi Trực Tuyến 3 Bên</strong>
+              <span class="shipper-live-dot" style="width: 10px; height: 10px; background: #22c55e;"></span>
+              <div>
+                <strong class="text-sm text-white block">Kênh Đàm Phán &amp; Đối Soát Trực Tiếp 3 Bên</strong>
+                <span class="text-xs text-muted">Có lưu trữ dữ liệu đối chứng pháp lý</span>
+              </div>
             </div>
-            <span class="text-xs text-muted">Có lưu trữ lịch sử đối soát</span>
+            <span class="badge badge-warning" style="font-size: 11px;">TRỌNG TÀI SÀN ĐANG TRỰC TUYẾN</span>
           </div>
 
-          <div class="chat-body" id="disputeChatBody">
-            <div class="chat-notice">Phiên phân xử bắt đầu lúc 15:00 ngày 08/11/2026</div>
+          <div class="chat-tripartite-body" id="disputeChatBody">
+            <div class="chat-msg system-notice">
+              Phiên hòa giải #DSP-20261108-01 được mở tự động lúc 15:20 ngày 08/11/2026
+            </div>
 
-            <div class="msg">
-              <div class="msg-bubble">
-                <div class="msg-meta"><strong>Người Mua (Nguyễn Ngọc Phúc)</strong></div>
-                <div>Lúc mở hộp cùng shipper, em phát hiện cạnh đáy có một vết xước khoảng 2mm, em muốn đổi sang máy khác hoặc hoàn lại tiền ạ.</div>
-                <div class="msg-time text-right">15:02</div>
+            <!-- Tin nhắn Người mua -->
+            <div class="chat-msg buyer">
+              <div class="chat-avatar" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa;">P</div>
+              <div class="chat-bubble-content">
+                <div class="chat-msg-meta">
+                  <strong class="text-white">Nguyễn Ngọc Phúc (Người Mua)</strong>
+                  <span class="text-muted">15:22</span>
+                </div>
+                <div>
+                  Tôi vừa mở hộp cùng bưu tá, phát hiện viền camera có vết cấn sâu khoảng 1.5mm, trong khi bài đăng người bán cam kết like new 99% không tì vết. Bưu tá đã ký biên bản đồng kiểm xác nhận. Tôi muốn đổi sang máy khác hoặc hoàn lại tiền 100%.
+                </div>
               </div>
             </div>
 
-            <div class="msg">
-              <div class="msg-bubble" style="background: rgba(34, 211, 238, 0.1); border-color: rgba(34, 211, 238, 0.3);">
-                <div class="msg-meta"><strong class="text-secondary">Người Bán (Việt Dũng)</strong></div>
-                <div>Chào bạn, bên mình rất xin lỗi vì sơ suất kiểm tra. Mình đồng ý hỗ trợ đổi máy mới 100% hoặc hoàn tiền ngay lập tức cho bạn nhé!</div>
-                <div class="msg-time text-right">15:04</div>
+            <!-- Tin nhắn Trọng tài viên -->
+            <div class="chat-msg arbitrator">
+              <div class="chat-avatar" style="background: rgba(139, 92, 246, 0.2); color: var(--secondary-300);">L</div>
+              <div class="chat-bubble-content">
+                <div class="chat-msg-meta">
+                  <strong class="text-secondary flex items-center gap-1">
+                    <span class="material-symbols-outlined icon-xs">verified</span> Giám Định Viên Trọng Tài - Hoàng Nam (HYBRID.STORE Lab)
+                  </strong>
+                  <span class="text-muted">15:25</span>
+                </div>
+                <div>
+                  Chào anh Phúc và anh Đức! Ban Giám Định đã tiếp nhận khiếu nại và trích xuất video mở hộp 4K do bưu tá tải lên máy chủ. Tem niêm phong màng vỡ QR-HYBRID-884920 còn nguyên vẹn, vết cấn ngoại quan là có thật. Người bán vui lòng đưa ra phương án đền bù hoặc đồng thuận hoàn tiền trong vòng 24 giờ.
+                </div>
               </div>
             </div>
 
-            <div class="msg system">
-              <div class="msg-bubble">
-                <div class="msg-meta"><strong class="text-primary">Trọng Tài Giám Định (HYBRID.STORE Support)</strong></div>
-                <div>Chào 2 bạn! Sau khi đối soát video unbox 4K cùng bưu tá, sàn phê duyệt phương án: <strong>Hoàn tiền 100% hoặc Đổi máy tương đương trong 24h</strong>. Bạn chọn phương án nào bên dưới nhé.</div>
-                <div class="msg-time text-right">15:06</div>
+            <!-- Tin nhắn Người bán -->
+            <div class="chat-msg seller">
+              <div class="chat-avatar" style="background: rgba(34, 211, 238, 0.2); color: #22d3ee;">Đ</div>
+              <div class="chat-bubble-content">
+                <div class="chat-msg-meta">
+                  <strong class="text-secondary">Trần Minh Đức (Người Bán)</strong>
+                  <span class="text-muted">15:28</span>
+                </div>
+                <div>
+                  Dạ em xin lỗi anh Phúc và Sàn ạ! Do khâu đóng gói nhân viên em kiểm tra chưa kỹ góc viền camera. Bên em đồng ý nhận lại máy và hoàn tiền 100% hoặc đổi ngay cây iPhone 15 Pro Max khác nguyên seal 99.9% cho anh Phúc trong chiều nay ạ.
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="chat-foot">
-            <form id="disputeChatForm" class="chat-input-row">
-              <textarea class="textarea" id="disputeChatInput" rows="1" placeholder="Nhập ý kiến của bạn vào phòng phân xử..."></textarea>
-              <button class="btn btn-primary" type="submit">Gửi</button>
+          <div class="chat-tripartite-foot">
+            <!-- THANH GỢI Ý PHẢN HỒI NHANH (QUICK CHIPS) -->
+            <div class="quick-chips-bar">
+              <button class="quick-chip-btn" type="button" data-text="Tôi chọn phương án hoàn tiền 100% về tài khoản Napas 24/7.">
+                💰 Yêu cầu hoàn tiền 100%
+              </button>
+              <button class="quick-chip-btn" type="button" data-text="Tôi đồng ý phương án đổi sang thiết bị Like New 99% khác trong 24h.">
+                🔄 Đồng ý đổi máy khác
+              </button>
+              <button class="quick-chip-btn" type="button" data-text="Bưu tá đã giữ máy lại tại bưu cục để làm thủ tục hoàn trả.">
+                📦 Bưu tá đã giữ máy
+              </button>
+              <button class="quick-chip-btn" type="button" data-text="Yêu cầu sàn HYBRID.STORE ra phán quyết đóng hồ sơ và giải ngân hoàn tiền.">
+                ⚖ Ra phán quyết ngay
+              </button>
+            </div>
+
+            <form id="disputeChatForm" class="chat-input-row flex items-center gap-2">
+              <button class="icon-btn" type="button" id="btnAttachEvidence" title="Đính kèm ảnh/video bằng chứng">
+                <span class="material-symbols-outlined">attach_file</span>
+              </button>
+              <input
+                type="text"
+                class="input input-sm flex-1"
+                id="disputeChatInput"
+                placeholder="Nhập ý kiến đối chất hoặc phản hồi phương án hòa giải..."
+                style="height: 42px;"
+              />
+              <button class="btn btn-primary" type="submit" style="height: 42px; padding-inline: 20px;">
+                <span class="material-symbols-outlined icon-xs">send</span> Gửi
+              </button>
             </form>
           </div>
         </section>
 
-        <!-- CỘT 3: CÁC PHƯƠNG ÁN HÒA GIẢI -->
-        <aside>
-          <div class="party-card">
-            <h3 class="panel-title mb-3">Phương Án Xử Lý Đề Xuất</h3>
-            <div class="filter-options mb-4">
-              <label class="filter-radio-item p-3 mb-2" style="background: var(--bg-surface); border-radius: 8px;">
-                <input type="radio" name="settleOption" value="REFUND" checked />
+        <!-- CỘT 3: CÁC PHƯƠNG ÁN HÒA GIẢI & BIÊN BẢN PHÁN QUYẾT -->
+        <aside class="dispute-col-settlement">
+          <!-- HỘP PHÁN QUYẾT KHI ĐÃ ĐỒNG THUẬN THÀNH CÔNG (HIỂN THỊ KHI RESOLVED) -->
+          <div class="verdict-success-box" id="verdictSuccessBox" style="display: none;">
+            <div class="flex items-center gap-2 text-success fw-700 mb-1">
+              <span class="material-symbols-outlined">verified</span>
+              HÒA GIẢI THÀNH CÔNG &amp; ĐÓNG HỒ SƠ
+            </div>
+            <p class="text-xs text-muted mb-2">
+              Biên bản hòa giải đã được 3 bên thông qua. Sàn đã kích hoạt lệnh hoàn tiền 100% qua Napas 24/7 và gửi phiếu hoàn trả thiết bị.
+            </p>
+            <div class="vat-stamp mb-2" style="font-size: 10px;">✔ PHÁN QUYẾT CÓ HIỆU LỰC SÀN</div>
+            <div class="text-xs text-muted">Mã hoàn tiền: <strong class="mono text-white">REFUND-20261108-9841</strong></div>
+          </div>
+
+          <!-- BẢNG ĐỀ XUẤT CÁC PHƯƠNG ÁN XỬ LÝ -->
+          <div class="dispute-panel" id="settlementActionPanel">
+            <div class="dispute-panel-title">
+              <span class="material-symbols-outlined icon-xs text-primary">handshake</span> Phương Án Phán Quyết Đề Xuất
+            </div>
+            <p class="text-xs text-muted mb-3">
+              Vui lòng lựa chọn 1 trong các phương án được Trọng Tài Ban Quản Trị phê duyệt:
+            </p>
+
+            <div class="settlement-options-list mb-4" id="settleOptionsContainer">
+              <label class="settlement-option-item selected" data-value="REFUND">
+                <input type="radio" name="settleOption" value="REFUND" checked style="margin-top: 2px;" />
                 <div>
-                  <strong class="text-xs text-success">Hoàn Tiền 100%</strong>
-                  <div class="text-xs text-muted">Hoàn 21.490.000₫ về tài khoản ngân hàng của người mua ngay.</div>
+                  <strong class="text-xs text-success block">Phương Án 1: Hoàn Tiền 100%</strong>
+                  <span class="text-xs text-muted block mt-0.5">
+                    Hoàn lại <strong class="mono text-white" id="settleRefundAmount">21.490.000₫</strong> về tài khoản Napas 24/7 của bạn. Bưu tá thu hồi máy tại nhà 0₫ phí.
+                  </span>
                 </div>
               </label>
 
-              <label class="filter-radio-item p-3" style="background: var(--bg-surface); border-radius: 8px;">
-                <input type="radio" name="settleOption" value="EXCHANGE" />
+              <label class="settlement-option-item" data-value="EXCHANGE">
+                <input type="radio" name="settleOption" value="EXCHANGE" style="margin-top: 2px;" />
                 <div>
-                  <strong class="text-xs text-secondary">Đổi Máy Like New 99% Khác</strong>
-                  <div class="text-xs text-muted">Người bán gửi máy khác đạt chuẩn nguyên seal trong 24 giờ.</div>
+                  <strong class="text-xs text-secondary block">Phương Án 2: Đổi Máy 1:1 Khác</strong>
+                  <span class="text-xs text-muted block mt-0.5">
+                    Người bán chuyển máy iPhone 15 Pro Max Like New 99.9% khác đã qua test 15 bước đến tận nhà trong 24 giờ.
+                  </span>
+                </div>
+              </label>
+
+              <label class="settlement-option-item" data-value="COMPENSATION">
+                <input type="radio" name="settleOption" value="COMPENSATION" style="margin-top: 2px;" />
+                <div>
+                  <strong class="text-xs text-warning block">Phương Án 3: Bồi Thường Voucher &amp; Giữ Máy</strong>
+                  <span class="text-xs text-muted block mt-0.5">
+                    Tặng voucher 1.500.000₫ vào ví mua sắm, bạn giữ lại máy và kích hoạt gói bảo hành rơi vỡ 12 tháng.
+                  </span>
                 </div>
               </label>
             </div>
 
-            <button class="btn btn-primary is-full" id="btnApplySettlement" type="button">
+            <button class="btn btn-primary is-full py-3 mb-2" id="btnApplySettlement" type="button" style="font-weight: 700;">
               <span class="material-symbols-outlined icon-sm">handshake</span>
-              Đồng Thuận Phương Án
+              Đồng Thuận Phương Án &amp; Giải Quyết
             </button>
+
+            <button class="btn btn-ghost btn-sm is-full text-danger" id="btnEscalateCase" type="button">
+              <span class="material-symbols-outlined icon-xs">emergency</span> Yêu Cầu Trọng Tài Can Thiệp Khẩn Cấp
+            </button>
+          </div>
+
+          <!-- CHÍNH SÁCH BẢO VỆ 100% -->
+          <div class="dispute-panel" style="background: rgba(139, 92, 246, 0.05); border-color: rgba(139, 92, 246, 0.25);">
+            <div class="text-xs fw-700 text-white mb-2 flex items-center gap-1.5">
+              <span class="material-symbols-outlined icon-xs text-primary">security</span> Cam Kết Bảo Vệ Người Mua:
+            </div>
+            <ul class="text-xs text-muted" style="padding-left: 18px; margin: 0; line-height: 1.6;">
+              <li>Tiền thanh toán được bảo lưu an toàn tại cổng Napas trong suốt quá trình hòa giải.</li>
+              <li>100% đổi trả hoặc hoàn tiền nếu hàng không đúng cam kết kỹ thuật 15 bước.</li>
+              <li>Mọi quyết định của Trọng tài sàn có giá trị thi hành tự động trong 24 giờ.</li>
+            </ul>
           </div>
         </aside>
       </div>
     </main>
 
+    <!-- ===== MODAL: XEM VIDEO UNBOX 4K ĐỒNG KIỂM ===== -->
+    <div class="modal-backdrop" id="unboxVideoModal" style="display: none;">
+      <div class="modal" role="dialog" aria-modal="true" style="max-width: 640px;">
+        <div class="modal-head flex items-center justify-between pb-3" style="border-bottom: 1px solid var(--border);">
+          <h3 class="modal-title text-sm fw-700 flex items-center gap-2">
+            <span class="material-symbols-outlined text-secondary">smart_display</span>
+            Video Mở Hộp Đồng Kiểm Cùng Shipper (4K HDR)
+          </h3>
+          <button class="icon-btn" type="button" data-close title="Đóng">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <div class="modal-body py-4">
+          <div class="panel p-6 text-center" style="background: #000; border-radius: 8px; position: relative;">
+            <span class="material-symbols-outlined text-secondary" style="font-size: 64px; opacity: 0.8;">play_circle</span>
+            <div class="text-xs text-white mt-2 fw-700">video_unbox_4k_dongkiem_ORD-20261108.mp4</div>
+            <div class="text-xs text-muted mt-1">Ghi hình tại Keangnam Landmark 72 • Thời lượng: 02:45 • Khách hàng mở tem cùng bưu tá</div>
+          </div>
+          <div class="panel p-3 mt-3 text-xs" style="background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.25);">
+            <strong class="text-success block mb-0.5">Xác nhận giám định viên:</strong>
+            Video ghi rõ khoảnh khắc bóc tem màng vỡ QR-HYBRID-884920 và phát hiện vết cấn viền camera ngay tại thời điểm mở hộp.
+          </div>
+        </div>
+        <div class="modal-foot flex justify-end pt-3" style="border-top: 1px solid var(--border);">
+          <button class="btn btn-secondary btn-sm" type="button" data-close>Đóng</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== FOOTER (Task T14) ===== -->
+    <footer class="site-footer mt-8" id="siteFooter">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-col footer-col--brand">
+            <div class="brand mb-3">
+              <span class="brand-mark"><span class="material-symbols-outlined text-primary">token</span></span>
+              <span>HYBRID<span class="text-secondary">.STORE</span> <span class="badge">v3.2</span></span>
+            </div>
+            <p class="mb-3 text-sm text-muted">
+              Nền tảng thương mại điện tử mua sắm uy tín. Chuyên phân phối hàng mới chính hãng 100% và chợ đồ cũ Like New chất lượng cao với giá tiết kiệm nhất.
+            </p>
+          </div>
+          <div class="footer-col">
+            <h5>Quy Trình &amp; Pháp Lý</h5>
+            <ul class="footer-links">
+              <li><a href="../../about.html">Quy trình kiểm định kỹ thuật 15 bước</a></li>
+              <li><a href="../../return_policy.html">Chính sách đổi trả trong 7 ngày</a></li>
+              <li><a href="../../terms_of_service.html">Điều khoản phân xử trọng tài</a></li>
+              <li><a href="../../warranty_policy.html">Chính sách bảo hành điện tử</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h5>Showroom Giám Định</h5>
+            <div class="text-xs text-muted">
+              <div>• Hà Nội: Keangnam Landmark 72, Nam Từ Liêm</div>
+              <div>• Đà Nẵng: Tòa FPT Complex, Ngũ Hành Sơn</div>
+              <div>• TP.HCM: Bitexco Financial Tower, Quận 1</div>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h5>Hỗ Trợ Khẩn Cấp</h5>
+            <div class="mono text-secondary fw-700 text-sm mb-1">1900 8899 (Phím 3 - Phòng Phân Xử)</div>
+            <div class="text-xs text-muted">Trực tiếp tiếp nhận và xử lý khiếu nại đồng kiểm 24/7</div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2026 HYBRID.STORE — Bán Hàng Mới &amp; Đồ Cũ Tuyển Chọn. All rights reserved.</span>
+        </div>
+      </div>
+    </footer>
+
     <div class="toast-stack" id="toastStack"></div>
 
+    <!-- Scripts -->
     <script src="../../js/popup.js"></script>
     <script src="../../js/auth.js"></script>
+    <script src="../../js/mock_data.js"></script>
     <script src="../../js/utils.js"></script>
+    <script src="../../js/components.js"></script>
     <script>
       (function () {
-        if (!Auth.requireLogin({ message: "Vui lòng đăng nhập để vào trung tâm phân xử & khiếu nại." })) return;
+        "use strict";
 
-        document.getElementById("btnApplySettlement").addEventListener("click", () => {
-          Utils.confirm(
-            {
-              title: "Xác Nhận Hòa Giải Thành Công",
-              message: "Phương án hoàn tiền 100% đã được 3 bên thông qua. Tiền sẽ được hoàn lại ngay cho bạn.",
-              confirmText: "Đồng Ý",
-            },
-            () => {
-              Utils.toast("Vụ việc đã được giải quyết êm đẹp và đóng hồ sơ!", "success");
+        // 1. Kiểm tra đăng nhập
+        if (typeof Auth !== "undefined" && !Auth.requireLogin({ message: "Vui lòng đăng nhập để vào trung tâm phân xử & khiếu nại." })) {
+          return;
+        }
+
+        // 2. Lấy dữ liệu đơn hàng & tranh chấp
+        function getAllOrders() {
+          let savedOrders = [];
+          try {
+            savedOrders = JSON.parse(localStorage.getItem("hv_orders")) || [];
+          } catch (e) {
+            savedOrders = [];
+          }
+          const mockList = (typeof MOCK_ORDERS !== "undefined" && Array.isArray(MOCK_ORDERS)) ? MOCK_ORDERS : [];
+          const map = new Map();
+          savedOrders.forEach((o) => {
+            if (o && (o.id || o.orderCode)) map.set(o.id || o.orderCode, o);
+          });
+          mockList.forEach((o) => {
+            if (o && (o.id || o.orderCode)) {
+              const k = o.id || o.orderCode;
+              if (!map.has(k)) map.set(k, o);
             }
-          );
+          });
+          return Array.from(map.values());
+        }
+
+        function formatMoney(val) {
+          if (typeof Utils !== "undefined" && Utils.formatCurrency) {
+            return Utils.formatCurrency(val);
+          }
+          return new Intl.NumberFormat("vi-VN").format(val || 0) + "₫";
+        }
+
+        // Lấy param orderId từ URL
+        const urlParams = new URLSearchParams(window.location.search);
+        let currentOrderId = urlParams.get("orderId") || urlParams.get("id") || "ORD-20261108-9841";
+
+        const allOrders = getAllOrders();
+        let selectedOrder = allOrders.find((o) => (o.id === currentOrderId || o.orderCode === currentOrderId)) || allOrders[0];
+
+        if (selectedOrder) {
+          currentOrderId = selectedOrder.id || selectedOrder.orderCode;
+        }
+
+        // Điền danh sách đơn hàng vào dropdown chuyển đổi
+        const selectDisputeOrder = document.getElementById("selectDisputeOrder");
+        if (selectDisputeOrder) {
+          selectDisputeOrder.innerHTML = allOrders.map((o) => {
+            const id = o.id || o.orderCode;
+            const isSel = id === currentOrderId ? "selected" : "";
+            const total = formatMoney(o.total || 0);
+            return `<option value="${id}" ${isSel}>Đơn ${id} • ${total}</option>`;
+          }).join("");
+
+          selectDisputeOrder.addEventListener("change", (e) => {
+            if (e.target.value) {
+              window.location.href = `dispute.html?orderId=${encodeURIComponent(e.target.value)}`;
+            }
+          });
+        }
+
+        // Cập nhật thông tin đơn hàng lên giao diện
+        if (selectedOrder) {
+          const productImg = document.getElementById("disputeProductImg");
+          const productName = document.getElementById("disputeProductName");
+          const productPrice = document.getElementById("disputeProductPrice");
+          const orderIdLink = document.getElementById("disputeOrderIdLink");
+          const linkToOrderDetail = document.getElementById("btnLinkToOrderDetail");
+          const settleRefundAmount = document.getElementById("settleRefundAmount");
+          const partyBuyerName = document.getElementById("partyBuyerName");
+
+          const firstItem = (selectedOrder.items && selectedOrder.items[0]) || {};
+          if (productImg && (firstItem.img || firstItem.image)) {
+            productImg.src = firstItem.img || firstItem.image;
+          }
+          if (productName) {
+            productName.textContent = firstItem.name || "Thiết bị trong đơn hàng";
+          }
+          if (productPrice) {
+            productPrice.textContent = formatMoney(selectedOrder.total || 0);
+          }
+          if (orderIdLink) {
+            orderIdLink.textContent = currentOrderId;
+            orderIdLink.href = `order_detail.html?id=${encodeURIComponent(currentOrderId)}`;
+          }
+          if (linkToOrderDetail) {
+            linkToOrderDetail.href = `order_detail.html?id=${encodeURIComponent(currentOrderId)}`;
+          }
+          if (settleRefundAmount) {
+            settleRefundAmount.textContent = formatMoney(selectedOrder.total || 0);
+          }
+          if (partyBuyerName && selectedOrder.shippingAddress && selectedOrder.shippingAddress.fullName) {
+            partyBuyerName.textContent = `${selectedOrder.shippingAddress.fullName} (Người Mua)`;
+          }
+        }
+
+        // 3. Xử lý đồng thuận phương án hòa giải
+        const btnApplySettlement = document.getElementById("btnApplySettlement");
+        if (btnApplySettlement) {
+          btnApplySettlement.addEventListener("click", () => {
+            const selectedOpt = document.querySelector('input[name="settleOption"]:checked');
+            const optVal = selectedOpt ? selectedOpt.value : "REFUND";
+            let optTitle = "Hoàn Tiền 100%";
+            if (optVal === "EXCHANGE") optTitle = "Đổi Máy 1:1 Khác Trong 24H";
+            if (optVal === "COMPENSATION") optTitle = "Bồi Thường Voucher 1.500.000₫ & Giữ Lại Máy";
+
+            const conf = confirm(
+              `Bạn có chắc chắn muốn xác nhận ĐỒNG THUẬN "${optTitle}" không?\n\nPhán quyết này sẽ có hiệu lực thi hành ngay lập tức bởi Ban Quản Trị HYBRID.STORE.`
+            );
+
+            if (conf) {
+              // Cập nhật giao diện sang resolved
+              const verdictBox = document.getElementById("verdictSuccessBox");
+              const actionPanel = document.getElementById("settlementActionPanel");
+              const stepVerdict = document.getElementById("stepVerdict");
+              const slaCountdownPill = document.getElementById("slaCountdownPill");
+
+              if (verdictBox) verdictBox.style.display = "block";
+              if (actionPanel) actionPanel.style.display = "none";
+              if (stepVerdict) {
+                stepVerdict.className = "dispute-step-item done";
+                stepVerdict.querySelector(".dispute-step-circle").textContent = "✓";
+              }
+              if (slaCountdownPill) {
+                slaCountdownPill.innerHTML = '<span class="material-symbols-outlined icon-xs text-success">verified</span> ĐÃ HOÀN TẤT PHÁN QUYẾT';
+                slaCountdownPill.className = "sla-countdown-pill text-success";
+                slaCountdownPill.style.background = "rgba(34, 197, 94, 0.12)";
+                slaCountdownPill.style.borderColor = "rgba(34, 197, 94, 0.35)";
+              }
+
+              // Thêm tin nhắn hệ thống vào chat
+              const chatBody = document.getElementById("disputeChatBody");
+              if (chatBody) {
+                const now = new Date();
+                const timeStr = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+                const verdictMsg = `
+                  <div class="chat-msg arbitrator">
+                    <div class="chat-avatar" style="background: rgba(34, 197, 94, 0.2); color: #22c55e;">✔</div>
+                    <div class="chat-bubble-content" style="background: rgba(34, 197, 94, 0.12); border-color: rgba(34, 197, 94, 0.4);">
+                      <div class="chat-msg-meta">
+                        <strong class="text-success flex items-center gap-1">
+                          <span class="material-symbols-outlined icon-xs">gavel</span> Phán Quyết Hòa Giải Chính Thức Có Hiệu Lực
+                        </strong>
+                        <span class="text-muted">${timeStr}</span>
+                      </div>
+                      <div>
+                        Chúc mừng hai bên! Phương án <strong>${optTitle}</strong> đã được cả 3 bên chính thức thông qua. Lệnh thực hiện giải ngân bồi hoàn đã được chuyển tới Cổng Napas 24/7. Hồ sơ #DSP-20261108 được đóng lại thành công.
+                      </div>
+                    </div>
+                  </div>
+                `;
+                chatBody.insertAdjacentHTML("beforeend", verdictMsg);
+                chatBody.scrollTop = chatBody.scrollHeight;
+              }
+
+              if (typeof Utils !== "undefined" && Utils.toast) {
+                Utils.toast("Đồng thuận hòa giải thành công! Lệnh hoàn tiền đã được ban hành.", "success");
+              } else {
+                alert("Chúc mừng! Phương án hòa giải đã được 3 bên thông qua thành công.");
+              }
+            }
+          });
+        }
+
+        // 4. Chọn radio phương án hòa giải
+        document.querySelectorAll(".settlement-option-item").forEach((item) => {
+          item.addEventListener("click", () => {
+            document.querySelectorAll(".settlement-option-item").forEach((i) => i.classList.remove("selected"));
+            item.classList.add("selected");
+            const radio = item.querySelector('input[type="radio"]');
+            if (radio) radio.checked = true;
+          });
         });
 
-        document.getElementById("disputeChatForm").addEventListener("submit", (e) => {
-          e.preventDefault();
-          const input = document.getElementById("disputeChatInput");
-          const text = input.value.trim();
-          if (!text) return;
+        // 5. Yêu cầu trọng tài khẩn cấp
+        const btnEscalate = document.getElementById("btnEscalateCase");
+        if (btnEscalate) {
+          btnEscalate.addEventListener("click", () => {
+            const conf = confirm("Bạn muốn đẩy hồ sơ lên Giám Đốc Kỹ Thuật sàn HYBRID.STORE để can thiệp cưỡng chế phán quyết trong 2 giờ?");
+            if (conf) {
+              alert("Đã gửi yêu cầu can thiệp khẩn cấp. Kỹ thuật viên trưởng cấp cao sẽ chủ trì giải quyết trong 2 giờ tới!");
+              const chatBody = document.getElementById("disputeChatBody");
+              if (chatBody) {
+                chatBody.insertAdjacentHTML(
+                  "beforeend",
+                  `<div class="chat-msg system-notice" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">
+                    ⚠ Khách hàng đã kích hoạt quyền yêu cầu can thiệp khẩn cấp từ Giám Đốc Kỹ Thuật sàn.
+                  </div>`
+                );
+                chatBody.scrollTop = chatBody.scrollHeight;
+              }
+            }
+          });
+        }
 
-          const html = `
-            <div class="msg own">
-              <div class="msg-bubble">
-                <div class="msg-meta"><strong>Bạn</strong></div>
-                <div>${text}</div>
-                <div class="msg-time text-right">Vừa xong</div>
+        // 6. Gửi tin nhắn chat & Tự động phản hồi mô phỏng thông minh
+        const chatForm = document.getElementById("disputeChatForm");
+        const chatInput = document.getElementById("disputeChatInput");
+        const chatBody = document.getElementById("disputeChatBody");
+
+        if (chatForm && chatInput && chatBody) {
+          chatForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const text = chatInput.value.trim();
+            if (!text) return;
+
+            const now = new Date();
+            const timeStr = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+
+            // Tin nhắn của Bạn
+            const userHtml = `
+              <div class="chat-msg own">
+                <div class="chat-avatar" style="background: var(--primary-500); color: #fff;">Bạn</div>
+                <div class="chat-bubble-content">
+                  <div class="chat-msg-meta">
+                    <strong class="text-white">Bạn</strong>
+                    <span class="text-white" style="opacity: 0.8;">${timeStr}</span>
+                  </div>
+                  <div>${text}</div>
+                </div>
               </div>
-            </div>
-          `;
-          document.getElementById("disputeChatBody").insertAdjacentHTML("beforeend", html);
-          input.value = "";
-          document.getElementById("disputeChatBody").scrollTop = document.getElementById("disputeChatBody").scrollHeight;
+            `;
+            chatBody.insertAdjacentHTML("beforeend", userHtml);
+            chatInput.value = "";
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            // Phản hồi tự động thông minh từ Trọng tài viên hoặc Người bán sau 1.2s
+            setTimeout(() => {
+              const autoReplies = [
+                {
+                  sender: "arbitrator",
+                  name: "KTV Hoàng Nam (Trọng Tài)",
+                  avatar: "L",
+                  color: "var(--secondary-300)",
+                  bg: "rgba(139, 92, 246, 0.2)",
+                  text: "Ban Quản Trị đã ghi nhận thông tin đối chất từ bạn. Dữ liệu này đã được lưu vào biên bản điện tử có hiệu lực sàn.",
+                },
+                {
+                  sender: "seller",
+                  name: "Trần Minh Đức (Người Bán)",
+                  avatar: "Đ",
+                  color: "#22d3ee",
+                  bg: "rgba(34, 211, 238, 0.2)",
+                  text: "Dạ shop đã nắm được ý kiến của bạn và cam kết tuân thủ tuyệt đối phán quyết của Trọng tài sàn ạ!",
+                },
+              ];
+              const reply = autoReplies[Math.floor(Math.random() * autoReplies.length)];
+
+              const replyHtml = `
+                <div class="chat-msg ${reply.sender}">
+                  <div class="chat-avatar" style="background: ${reply.bg}; color: ${reply.color};">${reply.avatar}</div>
+                  <div class="chat-bubble-content">
+                    <div class="chat-msg-meta">
+                      <strong class="text-white">${reply.name}</strong>
+                      <span class="text-muted">${timeStr}</span>
+                    </div>
+                    <div>${reply.text}</div>
+                  </div>
+                </div>
+              `;
+              chatBody.insertAdjacentHTML("beforeend", replyHtml);
+              chatBody.scrollTop = chatBody.scrollHeight;
+            }, 1200);
+          });
+        }
+
+        // 7. Gắn sự kiện các nút gợi ý tin nhắn nhanh (Quick Chips)
+        document.querySelectorAll(".quick-chip-btn").forEach((chip) => {
+          chip.addEventListener("click", () => {
+            const text = chip.dataset.text;
+            if (chatInput && text) {
+              chatInput.value = text;
+              chatInput.focus();
+            }
+          });
         });
+
+        // 8. Nút đính kèm bằng chứng
+        const btnAttach = document.getElementById("btnAttachEvidence");
+        if (btnAttach) {
+          btnAttach.addEventListener("click", () => {
+            const sampleFiles = [
+              "anh_chup_macro_vet_can_1.jpg",
+              "bien_ban_dong_kiem_buu_ta_ky_ten.pdf",
+              "anh_tem_niem_phong_qr_mang_vo.png",
+            ];
+            const chosen = sampleFiles[Math.floor(Math.random() * sampleFiles.length)];
+            const conf = confirm(`Bạn có muốn tải tệp bằng chứng [${chosen}] vào phòng phân xử không?`);
+            if (conf) {
+              const now = new Date();
+              const timeStr = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+              const attachMsg = `
+                <div class="chat-msg own">
+                  <div class="chat-avatar" style="background: var(--primary-500); color: #fff;">Bạn</div>
+                  <div class="chat-bubble-content">
+                    <div class="chat-msg-meta"><strong class="text-white">Bạn</strong><span class="text-white" style="opacity:0.8;">${timeStr}</span></div>
+                    <div class="flex items-center gap-2 p-2 rounded" style="background: rgba(0,0,0,0.25); border: 1px dashed rgba(255,255,255,0.2);">
+                      <span class="material-symbols-outlined text-secondary">attachment</span>
+                      <div>
+                        <strong>${chosen}</strong>
+                        <div style="font-size: 10px; opacity: 0.8;">Đã tải lên &amp; đính kèm vào hồ sơ đối soát</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              `;
+              if (chatBody) {
+                chatBody.insertAdjacentHTML("beforeend", attachMsg);
+                chatBody.scrollTop = chatBody.scrollHeight;
+              }
+            }
+          });
+        }
+
+        // 9. Xem video mở hộp unbox 4K modal
+        const btnViewVideo = document.getElementById("btnViewUnboxVideo");
+        const unboxModal = document.getElementById("unboxVideoModal");
+        if (btnViewVideo && unboxModal) {
+          btnViewVideo.addEventListener("click", () => {
+            unboxModal.style.display = "flex";
+          });
+        }
+
+        // 10. Đóng modal
+        document.querySelectorAll("[data-close]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            if (unboxModal) unboxModal.style.display = "none";
+          });
+        });
+        if (unboxModal) {
+          unboxModal.addEventListener("click", (e) => {
+            if (e.target === unboxModal) unboxModal.style.display = "none";
+          });
+        }
+
+        // 11. Đếm ngược SLA
+        const slaText = document.getElementById("slaCountdownText");
+        if (slaText) {
+          let s = 18 * 3600 + 24 * 60 + 10;
+          setInterval(() => {
+            if (s > 0) {
+              s--;
+              const h = String(Math.floor(s / 3600)).padStart(2, "0");
+              const m = String(Math.floor((s % 3600) / 60)).padStart(2, "0");
+              const sec = String(s % 60).padStart(2, "0");
+              slaText.textContent = `${h}:${m}:${sec}`;
+            }
+          }, 1000);
+        }
       })();
     </script>
-
-    <!-- ===== FOOTER ===== -->
-    <footer class="site-footer" data-component="footer"></footer>
-
-    <script src="../../js/components.js"></script>
   </body>
 </html>
