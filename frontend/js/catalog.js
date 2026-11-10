@@ -174,11 +174,6 @@
         "</h3>" +
         '<div class="stars-container">' +
         starsHtml +
-        '<span class="stars-text" title="' +
-        starsText +
-        '">(' +
-        (p.rating ? p.rating.toFixed(1) : "5.0") +
-        ")</span>" +
         "</div>" +
         '<div class="product-price mt-2">' +
         '<span class="price">' +

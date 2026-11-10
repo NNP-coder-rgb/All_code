@@ -617,7 +617,6 @@
           "</h3>" +
           '<div class="stars-container">' +
           starsHtml +
-          '<span class="stars-text">(' + ratingNumber + ")</span>" +
           "</div>" +
           '<div class="product-price mt-2">' +
           '<span class="price">' + formattedPrice + "</span>" +
