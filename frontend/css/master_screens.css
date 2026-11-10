@@ -1199,3 +1199,114 @@ body.light-theme .gps-badge-card {
   background: #f8fafc;
   border-color: #0284c7;
 }
+
+/* =====================================================================
+   ORDER MANAGEMENT TABS & TRACKING TIMELINE
+   ===================================================================== */
+.order-tabs-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 20px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+.order-tab-btn {
+  padding: 10px 18px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--speed-fast);
+}
+.order-tab-btn:hover {
+  color: var(--text);
+}
+.order-tab-btn.active {
+  color: var(--primary-400);
+  border-bottom-color: var(--primary-500);
+}
+.order-tab-btn .badge {
+  font-size: 10px;
+  padding: 2px 7px;
+}
+
+.order-tracking-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  margin-bottom: 16px;
+}
+.order-track-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-faint);
+}
+.order-track-step.done {
+  color: var(--text);
+}
+.order-track-step.active {
+  color: var(--secondary-300);
+  font-weight: 700;
+}
+.order-track-circle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--neutral-800);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.order-track-step.done .order-track-circle {
+  background: var(--success);
+  color: #ffffff;
+  border-color: transparent;
+}
+.order-track-step.active .order-track-circle {
+  background: var(--primary-500);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+}
+
+@media (max-width: 680px) {
+  .order-tracking-bar {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+[data-theme="light"] .order-tab-btn.active,
+body.light-theme .order-tab-btn.active {
+  color: #7c3aed;
+  border-bottom-color: #7c3aed;
+}
+[data-theme="light"] .order-tracking-bar,
+body.light-theme .order-tracking-bar {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+[data-theme="light"] .order-track-circle,
+body.light-theme .order-track-circle {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+  color: #64748b;
+}
