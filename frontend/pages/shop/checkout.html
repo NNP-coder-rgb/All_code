@@ -999,7 +999,7 @@
           <a class="btn btn-secondary flex-1" href="catalog.html">
             Tiếp Tục Mua Sắm
           </a>
-          <a class="btn btn-primary flex-1" href="../buyer/orders.html">
+          <a class="btn btn-primary flex-1" id="modalBtnTrackOrder" href="../buyer/orders.html">
             <span class="material-symbols-outlined icon-sm">receipt_long</span> Theo Dõi Đơn Hàng
           </a>
         </div>
@@ -1685,6 +1685,11 @@
           dom.modalAddress.textContent = order.shippingAddress.fullAddress;
           dom.modalDeliveryTime.textContent = order.estimatedDelivery;
           dom.modalTotalAmount.textContent = formatCurr(order.total);
+
+          const btnTrack = document.getElementById("modalBtnTrackOrder");
+          if (btnTrack) {
+            btnTrack.href = `../buyer/order_detail.html?id=${encodeURIComponent(order.orderCode)}`;
+          }
 
           // Nội dung lời nhắc phù hợp với phương thức
           if (order.paymentMethod === "COD") {

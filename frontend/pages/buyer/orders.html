@@ -1473,7 +1473,7 @@
                 <div class="order-card-header">
                   <div class="flex items-center gap-3 flex-wrap">
                     <div class="flex items-center gap-1.5">
-                      <span class="mono text-secondary fw-700">Mã Đơn: ${orderId}</span>
+                      <a href="order_detail.html?id=${encodeURIComponent(orderId)}" class="mono text-secondary fw-700 text-hover-primary" title="Xem chi tiết đơn hàng #${orderId}">Mã Đơn: ${orderId}</a>
                       <button class="btn-copy-code btn-copy-order-code" type="button" data-code="${orderId}" title="Sao chép mã đơn">
                         <span class="material-symbols-outlined icon-xs">content_copy</span>
                       </button>
@@ -1555,8 +1555,11 @@
                 <!-- CỤM NÚT THAO TÁC CỦA NGƯỜI MUA CHUẨN E-COMMERCE -->
                 <div class="order-card-actions">
                   <div class="flex items-center gap-2.5 flex-wrap">
-                    <button class="btn btn-secondary btn-sm btn-view-order-detail" type="button" data-order-id="${orderId}">
+                    <a class="btn btn-secondary btn-sm" href="order_detail.html?id=${encodeURIComponent(orderId)}">
                       <span class="material-symbols-outlined icon-xs text-secondary">visibility</span> Chi Tiết Đơn Hàng
+                    </a>
+                    <button class="btn btn-ghost btn-sm btn-quick-view-detail" type="button" data-order-id="${orderId}" title="Xem nhanh hồ sơ kiểm định 15 bước">
+                      <span class="material-symbols-outlined icon-xs">preview</span> Xem Nhanh
                     </button>
                     <button class="btn btn-secondary btn-sm btn-view-track" type="button" data-order-id="${orderId}">
                       <span class="material-symbols-outlined icon-xs text-primary">route</span> Theo Dõi Hành Trình
@@ -1614,8 +1617,8 @@
 
         // 4. Gắn các sự kiện tương tác
         function bindOrderEvents() {
-          // Nút Xem Chi Tiết Đơn Hàng
-          document.querySelectorAll(".btn-view-order-detail").forEach((btn) => {
+          // Nút Xem nhanh Chi Tiết Đơn Hàng (Modal preview)
+          document.querySelectorAll(".btn-quick-view-detail").forEach((btn) => {
             btn.addEventListener("click", () => {
               const orderId = btn.dataset.orderId;
               openOrderDetailModal(orderId);
