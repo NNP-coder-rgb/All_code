@@ -295,6 +295,34 @@
               </div>
             </div>
 
+            <!-- KHỐI ẢNH CHỤP 2 MẶT CCCD ĐÃ LƯU TRÊN HỆ THỐNG -->
+            <div class="mb-4" id="cccdSavedPhotosSection" style="display: none;">
+              <div class="text-xs fw-700 text-muted mb-2 flex items-center justify-between">
+                <span class="flex items-center gap-1">
+                  <span class="material-symbols-outlined icon-xs text-secondary">photo_library</span>
+                  ẢNH CHỤP THẺ CCCD GẮN CHIP (2 MẶT ĐỐI SOÁT C06)
+                </span>
+                <span class="text-xs text-success" id="cccdPhotosStatusTag">✓ Đầy đủ 2 mặt hợp lệ</span>
+              </div>
+              <div class="grid grid-2 gap-3" id="cccdSavedPhotosGrid">
+                <!-- Mặt trước preview -->
+                <div class="panel p-2 text-center" style="background: var(--neutral-850); border: 1px solid var(--border); border-radius: var(--radius-lg);">
+                  <div class="text-xs text-muted mb-1 fw-600 flex items-center justify-center gap-1">
+                    <span class="material-symbols-outlined icon-xs text-primary">badge</span>
+                    Mặt Trước (Ảnh, Quốc Huy &amp; Số Thẻ)
+                  </div>
+                  <img id="mainCccdFrontImg" src="" alt="Mặt trước CCCD" style="width: 100%; height: 120px; object-fit: contain; border-radius: var(--radius-md); cursor: pointer; display: block; background: #000;" title="Nhấn để phóng to ảnh" />
+                </div>
+                <!-- Mặt sau preview -->
+                <div class="panel p-2 text-center" style="background: var(--neutral-850); border: 1px solid var(--border); border-radius: var(--radius-lg);">
+                  <div class="text-xs text-muted mb-1 fw-600 flex items-center justify-center gap-1">
+                    <span class="material-symbols-outlined icon-xs text-secondary">contactless</span>
+                    Mặt Sau (Chip NFC &amp; Dải MRZ ICAO)
+                  </div>
+                  <img id="mainCccdBackImg" src="" alt="Mặt sau CCCD" style="width: 100%; height: 120px; object-fit: contain; border-radius: var(--radius-md); cursor: pointer; display: block; background: #000;" title="Nhấn để phóng to ảnh" />
+                </div>
+              </div>
+            </div>
             <!-- CHỨNG CHỈ ĐIỆN TỬ & NÚT HÀNH ĐỘNG -->
             <div class="flex items-center justify-between flex-wrap gap-3 pt-3 border-top">
               <div class="flex items-center gap-2 text-xs text-muted mono">
@@ -392,16 +420,7 @@
     </main>
 
     <!-- ===== FOOTER ===== -->
-    <footer class="site-footer mt-8">
-      <div class="container footer-bar" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-        <span class="text-xs text-faint">© 2026 HYBRID.STORE — Quản Trị Danh Tính &amp; Hồ Sơ Khách Hàng.</span>
-        <div class="flex gap-4 text-xs">
-          <a href="../../terms_of_service.html">Điều Khoản Dịch Vụ</a>
-          <a href="../../warranty_policy.html">Chính Sách Bảo Hành</a>
-          <a href="../../return_policy.html">Chính Sách Đổi Trả</a>
-        </div>
-      </div>
-    </footer>
+    <footer class="site-footer mt-8" data-component="footer"></footer>
 
     <!-- ===== MODAL 1: NỘP HỒ SƠ XÁC THỰC CCCD GẮN CHIP ===== -->
     <div class="modal-backdrop" id="kycModal" role="dialog" aria-modal="true" onclick="if(event.target===this)Utils.closeModal('kycModal')">
@@ -457,20 +476,63 @@
               <input class="input" id="inputAddress" type="text" placeholder="Căn hộ Landmark 81, Vinhomes Central Park, TP.HCM" required />
             </div>
 
-            <div class="form-group mb-2">
-              <label class="form-label">Tải lên ảnh chụp CCCD gắn chip (Mặt trước &amp; Mặt sau)</label>
-              <div class="grid grid-2 gap-3">
-                <div class="panel p-3 text-center" style="border: 1px dashed var(--border); background: var(--neutral-850); cursor: pointer;" id="btnUploadFront">
-                  <span class="material-symbols-outlined text-secondary" style="font-size: 28px;">add_a_photo</span>
-                  <div class="text-xs fw-600 mt-1">Ảnh Mặt Trước CCCD</div>
-                  <div class="text-xs text-success mt-1" id="frontUploadStatus">✓ Đã có ảnh chuẩn C06</div>
+                        <div class="form-group mb-3">
+              <div class="flex items-center justify-between mb-1">
+                <label class="form-label mb-0">
+                  Ảnh chụp CCCD gắn chip (Bắt buộc cả 2 mặt) <strong class="text-danger">(*)</strong>
+                </label>
+                <span class="text-xs text-muted">Hỗ trợ JPG, PNG, WEBP</span>
+              </div>
+              <p class="text-xs text-muted mb-2" style="line-height: 1.5;">
+                Yêu cầu ảnh chụp rõ nét, đủ 4 góc, không lóa mờ hay mất góc. Bắt buộc tải lên đủ cả Mặt Trước và Mặt Sau để Admin đối soát thông tin.
+              </p>
+
+              <!-- Hai input file ẩn thật sự -->
+              <input type="file" id="fileCccdFront" accept="image/*" style="display: none;" />
+              <input type="file" id="fileCccdBack" accept="image/*" style="display: none;" />
+
+              <div class="grid grid-2 gap-3" id="cccdUploadBoxes">
+                <!-- Upload Box Mặt Trước -->
+                <div class="cccd-upload-box" id="btnUploadFront" tabindex="0" role="button" aria-label="Tải lên ảnh mặt trước CCCD">
+                  <div class="upload-placeholder" id="placeholderFront">
+                    <span class="material-symbols-outlined text-secondary" style="font-size: 32px;">add_a_photo</span>
+                    <div class="text-xs fw-700 mt-1">Ảnh Mặt Trước CCCD (*)</div>
+                    <div class="text-xs text-muted mt-1" id="frontUploadStatus">Nhấn để chọn ảnh từ máy</div>
+                    <div class="text-xs text-faint mt-1" style="font-size: 11px;">Rõ số, quốc huy &amp; khuôn mặt</div>
+                  </div>
+                  <div class="upload-preview" id="previewFrontContainer" style="display: none; width: 100%; position: relative;">
+                    <img id="imgPreviewFront" src="" alt="Mặt trước CCCD" class="cccd-img-preview" />
+                    <div class="preview-overlay">
+                      <span class="badge badge-success badge-sm"><span class="material-symbols-outlined icon-xs">check</span> Mặt trước OK</span>
+                      <button type="button" class="btn-remove-photo" id="btnRemoveFront" title="Xóa và chọn ảnh khác">&times;</button>
+                    </div>
+                  </div>
                 </div>
-                <div class="panel p-3 text-center" style="border: 1px dashed var(--border); background: var(--neutral-850); cursor: pointer;" id="btnUploadBack">
-                  <span class="material-symbols-outlined text-secondary" style="font-size: 28px;">add_a_photo</span>
-                  <div class="text-xs fw-600 mt-1">Ảnh Mặt Sau (Chip NFC)</div>
-                  <div class="text-xs text-success mt-1" id="backUploadStatus">✓ Đã quét vân tay &amp; chip</div>
+
+                <!-- Upload Box Mặt Sau -->
+                <div class="cccd-upload-box" id="btnUploadBack" tabindex="0" role="button" aria-label="Tải lên ảnh mặt sau CCCD">
+                  <div class="upload-placeholder" id="placeholderBack">
+                    <span class="material-symbols-outlined text-secondary" style="font-size: 32px;">contactless</span>
+                    <div class="text-xs fw-700 mt-1">Ảnh Mặt Sau (Chip NFC) (*)</div>
+                    <div class="text-xs text-muted mt-1" id="backUploadStatus">Nhấn để chọn ảnh từ máy</div>
+                    <div class="text-xs text-faint mt-1" style="font-size: 11px;">Rõ chip vi mạch &amp; mã MRZ</div>
+                  </div>
+                  <div class="upload-preview" id="previewBackContainer" style="display: none; width: 100%; position: relative;">
+                    <img id="imgPreviewBack" src="" alt="Mặt sau CCCD" class="cccd-img-preview" />
+                    <div class="preview-overlay">
+                      <span class="badge badge-success badge-sm"><span class="material-symbols-outlined icon-xs">check</span> Mặt sau OK</span>
+                      <button type="button" class="btn-remove-photo" id="btnRemoveBack" title="Xóa và chọn ảnh khác">&times;</button>
+                    </div>
+                  </div>
                 </div>
               </div>
+
+              <!-- Thông báo lỗi khi thiếu 1 hoặc cả 2 mặt -->
+              <div class="text-xs text-danger mt-2" id="cccdUploadError" style="display: none; padding: 8px 12px; background: rgba(239, 68, 68, 0.1); border-radius: var(--radius-md); border: 1px solid rgba(239, 68, 68, 0.3);">
+                <span class="material-symbols-outlined icon-xs" style="vertical-align: -2px;">error</span>
+                <span id="cccdUploadErrorText">Bắt buộc phải tải lên đầy đủ ảnh chụp cả 2 mặt (Mặt trước và Mặt sau) của thẻ CCCD gắn chip!</span>
+              </div>
+            </div>
             </div>
           </div>
           <div class="modal-foot">
@@ -858,6 +920,32 @@
           if (kycData.faceMatch) {
             document.getElementById("cccdFaceMatch").textContent = kycData.faceMatch + "% ANTI-DEEPFAKE AI";
           }
+          // Hiển thị ảnh CCCD đã lưu
+          const savedSection = document.getElementById("cccdSavedPhotosSection");
+          const frontImg = document.getElementById("mainCccdFrontImg");
+          const backImg = document.getElementById("mainCccdBackImg");
+          const statusTag = document.getElementById("cccdPhotosStatusTag");
+
+          if (kycData.frontImage || kycData.backImage) {
+            if (savedSection) savedSection.style.display = "block";
+            if (frontImg) {
+              frontImg.src = kycData.frontImage || Auth.createSampleCccdSvg("front", kycData.cardFullName || fullName, kycData.idCardNumber);
+            }
+            if (backImg) {
+              backImg.src = kycData.backImage || Auth.createSampleCccdSvg("back", kycData.cardFullName || fullName, kycData.idCardNumber);
+            }
+            if (statusTag) {
+              statusTag.textContent = kycStatus === "VERIFIED" ? "✓ Đã đối soát 2 mặt C06" : "⏳ Đang chờ Admin duyệt 2 mặt";
+              statusTag.className = kycStatus === "VERIFIED" ? "text-xs text-success" : "text-xs text-warning";
+            }
+          } else if (kycStatus === "VERIFIED") {
+            if (savedSection) savedSection.style.display = "block";
+            if (frontImg) frontImg.src = Auth.createSampleCccdSvg("front", fullName, kycData.idCardNumber || "001202008849");
+            if (backImg) backImg.src = Auth.createSampleCccdSvg("back", fullName, kycData.idCardNumber || "001202008849");
+          } else {
+            if (savedSection) savedSection.style.display = "none";
+          }
+
 
           // Cập nhật trạng thái hiển thị
           if (kycStatus === "VERIFIED") {
@@ -1180,7 +1268,200 @@
           }
         });
 
-        // 4. Xử lý mở Modal nộp hồ sơ CCCD
+                // 4. Xử lý mở Modal nộp hồ sơ CCCD & Tải ảnh 2 mặt
+        let cccdFrontImage = null;
+        let cccdBackImage = null;
+
+        function processCccdImage(file, side, callback) {
+          if (!file) return;
+          if (!file.type || !file.type.startsWith("image/")) {
+            Utils.toast("Vui lòng chọn tệp hình ảnh hợp lệ (JPG, PNG, WEBP).", "warning");
+            return;
+          }
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+              const canvas = document.createElement("canvas");
+              const maxW = 900;
+              let w = img.width;
+              let h = img.height;
+              if (w > maxW) {
+                h = Math.round((h * maxW) / w);
+                w = maxW;
+              }
+              canvas.width = w;
+              canvas.height = h;
+              const ctx = canvas.getContext("2d");
+              ctx.drawImage(img, 0, 0, w, h);
+              const base64 = canvas.toDataURL("image/jpeg", 0.85);
+              callback(base64);
+            };
+            img.onerror = () => {
+              Utils.toast("Không thể đọc tệp ảnh đã chọn.", "error");
+            };
+            img.src = e.target.result;
+          };
+          reader.readAsDataURL(file);
+        }
+
+        function setFrontPreview(base64) {
+          cccdFrontImage = base64;
+          const box = document.getElementById("btnUploadFront");
+          const placeholder = document.getElementById("placeholderFront");
+          const container = document.getElementById("previewFrontContainer");
+          const img = document.getElementById("imgPreviewFront");
+          if (base64) {
+            img.src = base64;
+            placeholder.style.display = "none";
+            container.style.display = "block";
+            box.classList.add("has-file");
+            box.classList.remove("has-error");
+          } else {
+            img.src = "";
+            placeholder.style.display = "block";
+            container.style.display = "none";
+            box.classList.remove("has-file");
+          }
+          checkUploadErrors();
+        }
+
+        function setBackPreview(base64) {
+          cccdBackImage = base64;
+          const box = document.getElementById("btnUploadBack");
+          const placeholder = document.getElementById("placeholderBack");
+          const container = document.getElementById("previewBackContainer");
+          const img = document.getElementById("imgPreviewBack");
+          if (base64) {
+            img.src = base64;
+            placeholder.style.display = "none";
+            container.style.display = "block";
+            box.classList.add("has-file");
+            box.classList.remove("has-error");
+          } else {
+            img.src = "";
+            placeholder.style.display = "block";
+            container.style.display = "none";
+            box.classList.remove("has-file");
+          }
+          checkUploadErrors();
+        }
+
+        function checkUploadErrors() {
+          const errBox = document.getElementById("cccdUploadError");
+          if (!errBox) return;
+          if (cccdFrontImage && cccdBackImage) {
+            errBox.style.display = "none";
+            document.getElementById("btnUploadFront").classList.remove("has-error");
+            document.getElementById("btnUploadBack").classList.remove("has-error");
+          }
+        }
+
+        // Kích hoạt input file
+        const fileFront = document.getElementById("fileCccdFront");
+        const fileBack = document.getElementById("fileCccdBack");
+        const boxFront = document.getElementById("btnUploadFront");
+        const boxBack = document.getElementById("btnUploadBack");
+
+        if (boxFront && fileFront) {
+          boxFront.addEventListener("click", (e) => {
+            if (e.target.closest("#btnRemoveFront")) return;
+            fileFront.click();
+          });
+          fileFront.addEventListener("change", (e) => {
+            const f = e.target.files && e.target.files[0];
+            if (f) {
+              processCccdImage(f, "front", (b64) => {
+                setFrontPreview(b64);
+                Utils.toast("Đã tải lên ảnh Mặt Trước CCCD thành công!", "success");
+              });
+            }
+            fileFront.value = "";
+          });
+
+          // Drag and drop
+          ["dragover", "dragenter"].forEach((evt) => {
+            boxFront.addEventListener(evt, (e) => { e.preventDefault(); boxFront.classList.add("dragover"); });
+          });
+          ["dragleave", "drop"].forEach((evt) => {
+            boxFront.addEventListener(evt, (e) => { e.preventDefault(); boxFront.classList.remove("dragover"); });
+          });
+          boxFront.addEventListener("drop", (e) => {
+            const f = e.dataTransfer.files && e.dataTransfer.files[0];
+            if (f) {
+              processCccdImage(f, "front", (b64) => {
+                setFrontPreview(b64);
+                Utils.toast("Đã tải lên ảnh Mặt Trước CCCD thành công!", "success");
+              });
+            }
+          });
+        }
+
+        if (boxBack && fileBack) {
+          boxBack.addEventListener("click", (e) => {
+            if (e.target.closest("#btnRemoveBack")) return;
+            fileBack.click();
+          });
+          fileBack.addEventListener("change", (e) => {
+            const f = e.target.files && e.target.files[0];
+            if (f) {
+              processCccdImage(f, "back", (b64) => {
+                setBackPreview(b64);
+                Utils.toast("Đã tải lên ảnh Mặt Sau CCCD thành công!", "success");
+              });
+            }
+            fileBack.value = "";
+          });
+
+          // Drag and drop
+          ["dragover", "dragenter"].forEach((evt) => {
+            boxBack.addEventListener(evt, (e) => { e.preventDefault(); boxBack.classList.add("dragover"); });
+          });
+          ["dragleave", "drop"].forEach((evt) => {
+            boxBack.addEventListener(evt, (e) => { e.preventDefault(); boxBack.classList.remove("dragover"); });
+          });
+          boxBack.addEventListener("drop", (e) => {
+            const f = e.dataTransfer.files && e.dataTransfer.files[0];
+            if (f) {
+              processCccdImage(f, "back", (b64) => {
+                setBackPreview(b64);
+                Utils.toast("Đã tải lên ảnh Mặt Sau CCCD thành công!", "success");
+              });
+            }
+          });
+        }
+
+        // Nút xóa ảnh đã chọn
+        document.getElementById("btnRemoveFront").addEventListener("click", (e) => {
+          e.stopPropagation();
+          setFrontPreview(null);
+          Utils.toast("Đã hủy ảnh mặt trước, vui lòng chọn lại.", "info");
+        });
+        document.getElementById("btnRemoveBack").addEventListener("click", (e) => {
+          e.stopPropagation();
+          setBackPreview(null);
+          Utils.toast("Đã hủy ảnh mặt sau, vui lòng chọn lại.", "info");
+        });
+
+        // Xem ảnh phóng to (Lightbox)
+        function openCccdLightbox(imgSrc, title) {
+          if (!imgSrc) return;
+          const largeImg = document.getElementById("cccdViewerLargeImg");
+          const viewerTitle = document.getElementById("cccdViewerTitle");
+          if (largeImg) largeImg.src = imgSrc;
+          if (viewerTitle) viewerTitle.textContent = title || "Chi Tiết Ảnh Thẻ CCCD Gắn Chip";
+          Utils.openModal("cccdImageViewerModal");
+        }
+        const savedFront = document.getElementById("mainCccdFrontImg");
+        const savedBack = document.getElementById("mainCccdBackImg");
+        if (savedFront) {
+          savedFront.addEventListener("click", () => openCccdLightbox(savedFront.src, "Mặt Trước CCCD Gắn Chip (Ảnh, Quốc Huy & Số Thẻ)"));
+        }
+        if (savedBack) {
+          savedBack.addEventListener("click", () => openCccdLightbox(savedBack.src, "Mặt Sau CCCD Gắn Chip (Chip NFC & Mã Đọc Máy MRZ)"));
+        }
+
+        // Mở Modal nộp hồ sơ CCCD
         document.getElementById("btnOpenKycModal").addEventListener("click", () => {
           const u = Auth.current();
           if (u) {
@@ -1188,19 +1469,33 @@
             if (u.kycData?.idCardNumber) {
               document.getElementById("inputIdCardNumber").value = u.kycData.idCardNumber;
             }
+            if (u.kycData?.dob) {
+              document.getElementById("inputDob").value = u.kycData.dob;
+            }
+            if (u.kycData?.issueDate) {
+              document.getElementById("inputIssueDate").value = u.kycData.issueDate;
+            }
+            if (u.kycData?.address || u.address) {
+              document.getElementById("inputAddress").value = u.kycData?.address || u.address;
+            }
+            // Khôi phục ảnh đã có (nếu có)
+            if (u.kycData?.frontImage) {
+              setFrontPreview(u.kycData.frontImage);
+            } else {
+              setFrontPreview(null);
+            }
+            if (u.kycData?.backImage) {
+              setBackPreview(u.kycData.backImage);
+            } else {
+              setBackPreview(null);
+            }
           }
+          const errBox = document.getElementById("cccdUploadError");
+          if (errBox) errBox.style.display = "none";
           Utils.openModal("kycModal");
         });
 
-        // Nút upload ảnh mô phỏng
-        document.getElementById("btnUploadFront").addEventListener("click", () => {
-          Utils.toast("Đã tải ảnh mặt trước CCCD gắn chip!", "success");
-        });
-        document.getElementById("btnUploadBack").addEventListener("click", () => {
-          Utils.toast("Đã quét chip NFC mặt sau CCCD thành công!", "success");
-        });
-
-        // Gửi form nộp hồ sơ CCCD cho Admin duyệt
+        // Gửi form nộp hồ sơ CCCD cho Admin duyệt (Bắt buộc cả 2 mặt)
         document.getElementById("kycSubmitForm").addEventListener("submit", (e) => {
           e.preventDefault();
           const cardFullName = document.getElementById("inputCardFullName").value.trim();
@@ -1220,6 +1515,29 @@
             return;
           }
 
+          // KIỂM TRA BẮT BUỘC ĐỦ CẢ 2 MẶT ẢNH TRƯỚC VÀ SAU
+          let missingSides = [];
+          if (!cccdFrontImage) {
+            boxFront.classList.add("has-error");
+            missingSides.push("Mặt Trước");
+          }
+          if (!cccdBackImage) {
+            boxBack.classList.add("has-error");
+            missingSides.push("Mặt Sau");
+          }
+
+          if (missingSides.length > 0) {
+            const errBox = document.getElementById("cccdUploadError");
+            const errText = document.getElementById("cccdUploadErrorText");
+            const sideMsg = missingSides.join(" và ");
+            if (errText) {
+              errText.textContent = `Yêu cầu bắt buộc: Bạn chưa tải lên ảnh [${sideMsg}] của thẻ CCCD gắn chip! Vui lòng tải đủ 2 mặt.`;
+            }
+            if (errBox) errBox.style.display = "block";
+            Utils.toast(`Bắt buộc phải tải lên ảnh [${sideMsg}] của CCCD gắn chip (*)! `, "error");
+            return;
+          }
+
           const res = Auth.submitKyc({
             cardFullName,
             idCardNumber,
@@ -1228,6 +1546,8 @@
             gender,
             address,
             faceMatch: 99.6,
+            frontImage: cccdFrontImage,
+            backImage: cccdBackImage,
           });
 
           Utils.closeModal("kycModal");
@@ -1236,8 +1556,8 @@
             renderProfile();
             Utils.confirm(
               {
-                title: "Gửi Hồ Sơ Thành Công!",
-                message: "Yêu cầu xác thực CCCD của bạn đã được chuyển tới Ban Quản Trị. Vui lòng chờ Admin xét duyệt để kích hoạt đầy đủ quyền mua sắm và đăng bán.",
+                title: "Gửi Hồ Sơ Xác Thực Thành Công!",
+                message: "Hồ sơ CCCD gắn chip (đầy đủ 2 mặt) của bạn đã được chuyển tới Ban Quản Trị. Vui lòng chờ Admin xét duyệt để kích hoạt đầy đủ quyền mua sắm và đăng bán.",
                 confirmText: "Đã Hiểu",
                 cancelText: "",
               },
@@ -1562,5 +1882,20 @@
         });
       })();
     </script>
+
+    <script src="../../js/components.js"></script>
+    <!-- ===== MODAL 4: PHÓNG TO ẢNH CCCD ===== -->
+    <div class="modal-backdrop" id="cccdImageViewerModal" role="dialog" aria-modal="true" onclick="if(event.target===this)Utils.closeModal('cccdImageViewerModal')">
+      <div class="modal" style="max-width: 650px;">
+        <div class="modal-head">
+          <h4 class="modal-title" id="cccdViewerTitle">Chi Tiết Ảnh Thẻ CCCD Gắn Chip</h4>
+          <button class="modal-close" type="button" onclick="Utils.closeModal('cccdImageViewerModal')" aria-label="Đóng"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <div class="modal-body text-center p-3">
+          <img id="cccdViewerLargeImg" src="" alt="Ảnh CCCD" style="max-width: 100%; max-height: 480px; object-fit: contain; border-radius: var(--radius-lg); border: 1px solid var(--border); background: #000;" />
+        </div>
+      </div>
+    </div>
+
   </body>
 </html>

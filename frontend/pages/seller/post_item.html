@@ -51,6 +51,19 @@
       </div>
     </header>
 
+    <!-- ===== BREADCRUMB ===== -->
+    <div class="subnav">
+      <div class="container">
+        <nav>
+          <a href="../../index.html">Trang Chủ</a>
+          <span class="text-faint">/</span>
+          <a href="dashboard.html">Kênh Người Bán</a>
+          <span class="text-faint">/</span>
+          <span class="active">Đăng Bán Đồ Cũ AI</span>
+        </nav>
+      </div>
+    </div>
+
     <main class="container py-6" style="max-width: 820px;">
       <div class="mb-5">
         <h1 class="page-title flex items-center gap-2">
@@ -143,9 +156,14 @@
 
     <div class="toast-stack" id="toastStack"></div>
 
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer" data-component="footer"></footer>
+
     <script src="../../js/popup.js"></script>
     <script src="../../js/auth.js"></script>
+    <script src="../../js/mock_data.js"></script>
     <script src="../../js/utils.js"></script>
+    <script src="../../js/components.js"></script>
     <script>
       (function () {
         if (!Auth.requireLogin({ requireKyc: true, message: "Vui lòng đăng nhập và xác thực CCCD để đăng bán đồ cũ." })) return;

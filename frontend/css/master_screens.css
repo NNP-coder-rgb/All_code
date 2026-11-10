@@ -1310,3 +1310,266 @@ body.light-theme .order-track-circle {
   border-color: #cbd5e1;
   color: #64748b;
 }
+
+/* =====================================================================
+   SENIOR UI/UX DESIGN SYSTEM REFINEMENTS & RESPONSIVE FOUNDATION
+   ===================================================================== */
+
+/* 1. Global Box-Sizing & Horizontal Overflow Guard */
+html {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
+}
+img, video, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 2. Micro-interactions & Focus State */
+:focus-visible {
+  outline: 2px solid var(--primary-400);
+  outline-offset: 2px;
+}
+.btn, .icon-btn, .chip, .badge, .side-link, .nav-link, .tab-btn {
+  transition: all var(--t-fast) cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+.btn:active:not(:disabled) {
+  transform: translateY(1px) scale(0.99);
+}
+
+/* 3. Text Truncation & Line Clamping */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 4. Responsive Table Wrapper */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--sp-4);
+}
+.table-responsive table {
+  width: 100%;
+  min-width: 600px;
+  border-collapse: collapse;
+}
+
+/* 5. Responsive Detail Grid for Product Pages */
+.product-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 480px) minmax(0, 1fr);
+  gap: var(--sp-6);
+  align-items: start;
+}
+@media (max-width: 992px) {
+  .product-detail-grid {
+    grid-template-columns: 1fr;
+    gap: var(--sp-5);
+  }
+}
+
+/* 6. Responsive Dispute & Chat Grid */
+.dispute-grid {
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  gap: var(--sp-5);
+  align-items: start;
+}
+@media (max-width: 992px) {
+  .dispute-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 7. Responsive Admin Metrics Grid */
+.admin-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-6);
+}
+@media (max-width: 1100px) {
+  .admin-metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  .admin-metric-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.admin-content-grid {
+  display: grid;
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap: var(--sp-6);
+  align-items: start;
+}
+@media (max-width: 992px) {
+  .admin-content-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 8. Responsive Dashboard Layout */
+@media (max-width: 860px) {
+  .dash-layout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-4);
+  }
+  .dash-sidebar {
+    width: 100%;
+    margin-bottom: var(--sp-4);
+  }
+  .side-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .side-link {
+    flex: 1 1 calc(50% - 8px);
+    justify-content: center;
+  }
+}
+
+/* 9. Card Lift Hover Effect */
+.product-card, .card, .panel-card, .stat-card {
+  transition: transform var(--t-fast) ease, box-shadow var(--t-fast) ease, border-color var(--t-fast) ease;
+}
+.product-card:hover, .card:hover {
+  border-color: rgba(139, 92, 246, 0.35);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+}
+[data-theme="light"] .product-card:hover,
+[data-theme="light"] .card:hover,
+body.light-theme .product-card:hover,
+body.light-theme .card:hover {
+  border-color: #a78bfa;
+  box-shadow: 0 10px 28px rgba(109, 40, 217, 0.12);
+}
+
+/* 10. CCCD / eKYC Dual-Sided Upload Components */
+.cccd-upload-box {
+  border: 1.5px dashed var(--border);
+  background: var(--neutral-850);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-3);
+  cursor: pointer;
+  transition: all var(--t-fast) ease;
+  position: relative;
+  min-height: 145px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+}
+.cccd-upload-box:hover {
+  border-color: var(--primary-500);
+  background: rgba(139, 92, 246, 0.05);
+}
+.cccd-upload-box.dragover {
+  border-color: var(--secondary-400);
+  background: rgba(34, 211, 238, 0.1);
+  transform: scale(1.02);
+}
+.cccd-upload-box.has-error {
+  border-color: var(--danger-500) !important;
+  background: rgba(239, 68, 68, 0.08) !important;
+}
+.cccd-upload-box.has-file {
+  border-style: solid;
+  border-color: var(--success-500);
+  padding: 6px;
+  background: rgba(16, 185, 129, 0.04);
+}
+.cccd-img-preview {
+  width: 100%;
+  height: 125px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  display: block;
+}
+.preview-overlay {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+}
+.preview-overlay .badge {
+  pointer-events: auto;
+}
+.btn-remove-photo {
+  pointer-events: auto;
+  background: rgba(15, 23, 42, 0.85);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all var(--t-fast) ease;
+}
+.btn-remove-photo:hover {
+  background: var(--danger-500);
+  border-color: var(--danger-500);
+  transform: scale(1.1);
+}
+[data-theme="light"] .cccd-upload-box,
+body.light-theme .cccd-upload-box {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+[data-theme="light"] .cccd-upload-box:hover,
+body.light-theme .cccd-upload-box:hover {
+  background: #f1f5f9;
+  border-color: #6d28d9;
+}
+
+

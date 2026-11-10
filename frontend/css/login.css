@@ -593,3 +593,31 @@
     padding: var(--sp-5);
   }
 }
+
+/* Chế độ Sáng / Light Theme */
+[data-theme="light"] .login-method-nav,
+body.light-theme .login-method-nav {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+[data-theme="light"] .login-method-btn.active,
+body.light-theme .login-method-btn.active {
+  background: #ffffff;
+  color: #7c3aed;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+[data-theme="light"] .google-account-item,
+body.light-theme .google-account-item {
+  background: #ffffff;
+  border-color: #e2e8f0;
+}
+[data-theme="light"] .google-account-item:hover,
+body.light-theme .google-account-item:hover {
+  background: #f0f7ff;
+  border-color: #93c5fd;
+}
+[data-theme="light"] .google-current-card,
+body.light-theme .google-current-card {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}

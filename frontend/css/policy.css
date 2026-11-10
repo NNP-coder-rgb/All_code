@@ -86,9 +86,11 @@
 /* Biến thể viền trên tạo điểm nhấn nhận diện */
 .policy-card-primary {
   border-top: 3px solid var(--primary-500, #8b5cf6);
+  background: linear-gradient(180deg, rgba(139, 92, 246, 0.05) 0%, #131722 100%);
 }
 .policy-card-secondary {
   border-top: 3px solid var(--secondary-400, #22d3ee);
+  background: linear-gradient(180deg, rgba(6, 182, 212, 0.05) 0%, #131722 100%);
 }
 .policy-card-success {
   border-top: 3px solid #10b981;
@@ -107,6 +109,10 @@
   padding-bottom: 14px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
+.policy-card-head .badge {
+  white-space: nowrap !important;
+  flex-shrink: 0;
+}
 .policy-card-title {
   font-size: 1.15rem;
   font-weight: 700;
@@ -120,6 +126,71 @@
 .policy-card-title .material-symbols-outlined {
   font-size: 1.35rem;
   flex-shrink: 0;
+}
+
+/* Khối so sánh 2 gói: Hàng Mới Mall & Đồ Cũ C2C */
+.policy-card-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.policy-type-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+.policy-type-pill.mall {
+  background: rgba(139, 92, 246, 0.16);
+  color: var(--primary-300, #c4b5fd);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+}
+.policy-type-pill.c2c {
+  background: rgba(6, 182, 212, 0.14);
+  color: var(--secondary-300, #67e8f9);
+  border: 1px solid rgba(6, 182, 212, 0.35);
+}
+.policy-benefit-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
+.policy-benefit-badge.mall {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.35);
+  border: 1px solid rgba(139, 92, 246, 0.5);
+}
+.policy-benefit-badge.c2c {
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(6, 182, 212, 0.35);
+  border: 1px solid rgba(6, 182, 212, 0.5);
+}
+.policy-main-headline {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 16px 0;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* Các tiểu mục (Items / Clauses) bên trong Card để nội dung không bị dồn cục */
@@ -261,4 +332,117 @@
     flex-direction: column;
     align-items: stretch;
   }
+}
+
+/* Chế độ Sáng / Light Theme */
+[data-theme="light"] .policy-hero h1,
+body.light-theme .policy-hero h1 {
+  color: #0f172a;
+}
+[data-theme="light"] .policy-hero p,
+body.light-theme .policy-hero p {
+  color: #475569;
+}
+[data-theme="light"] .policy-intro-box,
+body.light-theme .policy-intro-box {
+  background: #faf5ff;
+  border-color: #d8b4fe;
+}
+[data-theme="light"] .policy-intro-title,
+body.light-theme .policy-intro-title {
+  color: #6d28d9;
+}
+[data-theme="light"] .policy-intro-desc,
+body.light-theme .policy-intro-desc {
+  color: #334155;
+}
+[data-theme="light"] .policy-card,
+body.light-theme .policy-card {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+[data-theme="light"] .policy-card:hover,
+body.light-theme .policy-card:hover {
+  border-color: #cbd5e1;
+}
+[data-theme="light"] .policy-card-title,
+body.light-theme .policy-card-title {
+  color: #0f172a;
+}
+[data-theme="light"] .policy-item-title,
+body.light-theme .policy-item-title {
+  color: #1e293b;
+}
+[data-theme="light"] .policy-item-desc,
+body.light-theme .policy-item-desc {
+  color: #475569;
+}
+[data-theme="light"] .policy-check-item,
+body.light-theme .policy-check-item {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+  color: #334155;
+}
+[data-theme="light"] .policy-check-item strong,
+body.light-theme .policy-check-item strong {
+  color: #0f172a;
+}
+[data-theme="light"] .policy-step-card,
+body.light-theme .policy-step-card {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+[data-theme="light"] .policy-step-title,
+body.light-theme .policy-step-title {
+  color: #0f172a;
+}
+[data-theme="light"] .policy-step-text,
+body.light-theme .policy-step-text {
+  color: #475569;
+}
+[data-theme="light"] .policy-bottom-nav,
+body.light-theme .policy-bottom-nav {
+  border-color: #e2e8f0;
+}
+[data-theme="light"] .policy-type-pill.mall,
+body.light-theme .policy-type-pill.mall {
+  background: #f3e8ff;
+  color: #6d28d9;
+  border-color: #d8b4fe;
+}
+[data-theme="light"] .policy-type-pill.c2c,
+body.light-theme .policy-type-pill.c2c {
+  background: #e0f2fe;
+  color: #0369a1;
+  border-color: #bae6fd;
+}
+[data-theme="light"] .policy-benefit-badge.mall,
+body.light-theme .policy-benefit-badge.mall {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  color: #ffffff;
+  border-color: #7c3aed;
+  box-shadow: 0 2px 8px rgba(109, 40, 217, 0.25);
+}
+[data-theme="light"] .policy-benefit-badge.c2c,
+body.light-theme .policy-benefit-badge.c2c {
+  background: linear-gradient(135deg, #0891b2, #0e7490);
+  color: #ffffff;
+  border-color: #0891b2;
+  box-shadow: 0 2px 8px rgba(8, 145, 178, 0.25);
+}
+[data-theme="light"] .policy-card-primary,
+body.light-theme .policy-card-primary {
+  background: linear-gradient(180deg, #faf5ff 0%, #ffffff 100%);
+  border-top: 3px solid #8b5cf6;
+}
+[data-theme="light"] .policy-card-secondary,
+body.light-theme .policy-card-secondary {
+  background: linear-gradient(180deg, #f0fdfa 0%, #ffffff 100%);
+  border-top: 3px solid #06b6d4;
+}
+[data-theme="light"] .policy-main-headline,
+body.light-theme .policy-main-headline {
+  color: #0f172a;
+  border-bottom-color: #e2e8f0;
 }

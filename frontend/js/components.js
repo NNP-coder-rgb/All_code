@@ -608,6 +608,9 @@
           '<span class="badge badge-solid">' + escapeHtml(p.badge || "CHÍNH HÃNG MALL") + "</span>" +
           (p.off ? '<span class="badge badge-success">-' + p.off + "%</span>" : "") +
           "</div>" +
+          '<button class="product-wishlist-btn" type="button" data-action="wishlist" data-id="' + escapeHtml(p.id) + '" aria-label="Yêu thích" title="Lưu vào danh sách yêu thích">' +
+          '<span class="material-symbols-outlined">favorite_border</span>' +
+          "</button>" +
           (p.tag ? '<span class="media-tag">' + escapeHtml(p.tag) + "</span>" : "") +
           "</div>" +
           '<div class="product-body">' +

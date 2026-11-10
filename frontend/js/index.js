@@ -475,7 +475,7 @@
 
   /* ---------------- Các khối ngành hàng ---------------- */
   $("#categorySections").innerHTML = CATEGORIES.map((c) => {
-    const items = PRODUCTS.filter((p) => p.category === c.id && !p.flashOnly);
+    const items = PRODUCTS.filter((p) => p.category === c.id && !p.flashOnly && !p.catalogOnly).slice(0, 12);
     if (!items || items.length === 0) return "";
     return (
       '<section class="container section tone-' +

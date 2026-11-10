@@ -45,6 +45,14 @@
     grid: $("#catalogGrid"),
     countText: $("#catalogCountText"),
     activeFilters: $("#activeFilters"),
+    clearAllBtn: $("#clearAllFiltersBtn"),
+    mobileToggleBtn: $("#mobileFilterToggleBtn"),
+    mobileFilterCount: $("#mobileFilterCount"),
+    mobileFilterBtnText: $("#mobileFilterBtnText"),
+    mobileToolbarCount: $("#mobileToolbarCountText"),
+    viewModeGrid: $("#viewModeGrid"),
+    viewModeCompact: $("#viewModeCompact"),
+    subnavLinks: $$("#catalogSubnav a"),
     paginationBar: $("#paginationBar"),
     sortSelect: $("#sortSelect"),
     pageSizeSelect: $("#pageSizeSelect"),
@@ -378,10 +386,17 @@
       )
       .join("");
 
-    $$("button[data-chip-idx]", dom.activeFilters).forEach((btn) => {
+    $$("#activeFilters button[data-chip-idx]").forEach((btn) => {
       const idx = Number(btn.dataset.chipIdx);
       btn.addEventListener("click", () => chips[idx].clear());
     });
+
+    if (dom.clearAllBtn) {
+      dom.clearAllBtn.classList.toggle("hidden", chips.length === 0);
+    }
+    if (dom.mobileFilterCount) {
+      dom.mobileFilterCount.textContent = chips.length;
+    }
   }
 
   /* ---------------- RENDER THANH PHÂN TRANG ---------------- */
@@ -468,7 +483,8 @@
 
   /* ---------------- HÀM RENDER CHÍNH (LỌC, SẮP XẾP, PHÂN TRANG) ---------------- */
   function render() {
-    // BƯỚC 1: LỌC ĐA ĐIỀU KIỆN bằng filterProducts
+    try {
+      // BƯỚC 1: LỌC ĐA ĐIỀU KIỆN bằng filterProducts
     const filtered = Utils.filterProducts(PRODUCTS, state.filters);
 
     // BƯỚC 2: SẮP XẾP bằng sortProducts
@@ -507,10 +523,25 @@
           ? " (Trang " + paginated.page + "/" + paginated.totalPages + ")"
           : "");
     }
+    if (dom.mobileToolbarCount) {
+      dom.mobileToolbarCount.textContent = paginated.total + " sản phẩm";
+    }
+    // Cập nhật trạng thái active trên subnav
+    if (dom.subnavLinks && dom.subnavLinks.length) {
+      dom.subnavLinks.forEach((link) => {
+        link.classList.toggle("active", link.dataset.cat === state.filters.category);
+      });
+    }
 
     // BƯỚC 6: RENDER CHIPS VÀ THANH PHÂN TRANG
     renderActiveFilterChips();
     renderPagination(paginated);
+    } catch (err) {
+      console.error("[CATALOG RENDER ERROR]", err);
+      if (dom.countText) {
+        dom.countText.textContent = "Có lỗi xảy ra khi tải sản phẩm.";
+      }
+    }
   }
 
   /* ---------------- ĐỒNG BỘ INPUT VỚI STATE ---------------- */
@@ -595,8 +626,53 @@
           state.filters.category = e.target.value;
           state.page = 1;
           render();
+          try {
+            const url = new URL(window.location.href);
+            if (state.filters.category === "all") {
+              url.searchParams.delete("cat");
+            } else {
+              url.searchParams.set("cat", state.filters.category);
+            }
+            window.history.pushState({ cat: state.filters.category }, "", url.toString());
+          } catch (err) {}
         }
       });
+    });
+
+    // 2b. Điều hướng subnav ngành hàng (Chuyển mượt mà không load lại trang)
+    if (dom.subnavLinks && dom.subnavLinks.length) {
+      dom.subnavLinks.forEach((link) => {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          const cat = link.dataset.cat || "all";
+          state.filters.category = cat;
+          state.page = 1;
+          syncFilterInputs();
+          render();
+          try {
+            const url = new URL(window.location.href);
+            if (cat === "all") {
+              url.searchParams.delete("cat");
+            } else {
+              url.searchParams.set("cat", cat);
+            }
+            window.history.pushState({ cat }, "", url.toString());
+          } catch (err) {}
+        });
+      });
+    }
+
+    // Lắng nghe nút Back / Forward trên trình duyệt
+    window.addEventListener("popstate", () => {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        state.filters.category = params.get("cat") || "all";
+        state.filters.type = params.get("type") || "all";
+        state.filters.keyword = params.get("q") || "";
+        state.page = 1;
+        syncFilterInputs();
+        render();
+      } catch (err) {}
     });
 
     // 3. Loại hàng (Type: Mall / C2C)
@@ -866,11 +942,118 @@
   }
 
   /* ---------------- KHỞI CHẠY ---------------- */
+  /* ---------------- TÍNH TOÁN DỮ LIỆU ĐẾM SỐ LƯỢNG CHO SIDEBAR ---------------- */
+  function updateSidebarCounts() {
+    const counts = {
+      'cat-all': PRODUCTS.length,
+      'cat-fashion': PRODUCTS.filter((p) => p.category === 'fashion').length,
+      'cat-sneakers': PRODUCTS.filter((p) => p.category === 'sneakers').length,
+      'cat-tech': PRODUCTS.filter((p) => p.category === 'tech').length,
+      'cat-appliances': PRODUCTS.filter((p) => p.category === 'appliances').length,
+      'cat-audio': PRODUCTS.filter((p) => p.category === 'audio').length,
+      'cat-gaming': PRODUCTS.filter((p) => p.category === 'gaming').length,
+      'cat-watches': PRODUCTS.filter((p) => p.category === 'watches').length,
+      'cat-camera': PRODUCTS.filter((p) => p.category === 'camera').length,
+      'type-all': PRODUCTS.length,
+      'type-mall': PRODUCTS.filter((p) => p.type === 'mall').length,
+      'type-c2c': PRODUCTS.filter((p) => p.type === 'c2c').length,
+      'cond-all': PRODUCTS.filter((p) => p.type === 'c2c').length,
+      'cond-98': PRODUCTS.filter((p) => p.type === 'c2c' && (p.cond || 0) >= 98).length,
+      'cond-95': PRODUCTS.filter((p) => p.type === 'c2c' && (p.cond || 0) >= 95).length,
+      'cond-90': PRODUCTS.filter((p) => p.type === 'c2c' && (p.cond || 0) >= 90).length,
+    };
+
+    $$('[data-count-key]').forEach((el) => {
+      const key = el.dataset.countKey;
+      if (counts[key] !== undefined) {
+        el.textContent = counts[key];
+      }
+    });
+  }
+
+  /* ---------------- XỬ LÝ DRAWER BỘ LỌC CHO MOBILE ---------------- */
+  function setupMobileFilter() {
+    if (!dom.mobileToggleBtn) return;
+    const sidebar = $('.filter-sidebar');
+    dom.mobileToggleBtn.addEventListener('click', () => {
+      if (!sidebar) return;
+      const isOpen = sidebar.classList.toggle('is-open');
+      dom.mobileToggleBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      if (dom.mobileFilterBtnText) {
+        dom.mobileFilterBtnText.textContent = isOpen ? 'Đóng Bộ Lọc' : 'Mở Bộ Lọc Tìm Kiếm';
+      }
+    });
+  }
+
+  /* ---------------- XỬ LÝ CHUYỂN ĐỔI CHẾ ĐỘ XEM (LƯỚI / TINH GỌN) ---------------- */
+  function setupViewMode() {
+    const grid = dom.grid;
+    if (!grid) return;
+    const saved = localStorage.getItem('hybrid_catalog_view') || 'grid';
+
+    function setMode(mode) {
+      if (mode === 'compact') {
+        grid.classList.add('compact-view');
+        if (dom.viewModeGrid) dom.viewModeGrid.classList.remove('active');
+        if (dom.viewModeCompact) dom.viewModeCompact.classList.add('active');
+        try { localStorage.setItem('hybrid_catalog_view', 'compact'); } catch (e) {}
+      } else {
+        grid.classList.remove('compact-view');
+        if (dom.viewModeGrid) dom.viewModeGrid.classList.add('active');
+        if (dom.viewModeCompact) dom.viewModeCompact.classList.remove('active');
+        try { localStorage.setItem('hybrid_catalog_view', 'grid'); } catch (e) {}
+      }
+    }
+
+    if (saved === 'compact') setMode('compact');
+    if (dom.viewModeGrid) dom.viewModeGrid.addEventListener('click', () => setMode('grid'));
+    if (dom.viewModeCompact) dom.viewModeCompact.addEventListener('click', () => setMode('compact'));
+  }
+
+  /* ---------------- XỬ LÝ NÚT YÊU THÍCH (WISHLIST) & XÓA TẤT CẢ LỌC ---------------- */
+  function setupCatalogExtras() {
+    if (dom.clearAllBtn) {
+      dom.clearAllBtn.addEventListener('click', resetAllFilters);
+    }
+
+    // Toggle wishlist
+    document.addEventListener('click', (e) => {
+      const heartBtn = e.target.closest('[data-action="wishlist"]');
+      if (!heartBtn) return;
+      e.preventDefault();
+      e.stopPropagation();
+
+      const id = heartBtn.dataset.id;
+      let wishlist = [];
+      try {
+        wishlist = JSON.parse(localStorage.getItem('hybrid_wishlist') || '[]');
+      } catch (err) { wishlist = []; }
+
+      const idx = wishlist.indexOf(id);
+      if (idx >= 0) {
+        wishlist.splice(idx, 1);
+        heartBtn.classList.remove('active');
+        Utils.toast('Đã bỏ sản phẩm khỏi danh sách yêu thích', 'info');
+      } else {
+        wishlist.push(id);
+        heartBtn.classList.add('active');
+        Utils.toast('Đã lưu sản phẩm vào danh sách yêu thích!', 'success');
+      }
+      try {
+        localStorage.setItem('hybrid_wishlist', JSON.stringify(wishlist));
+      } catch (err) {}
+    });
+  }
+
   setupAvatar();
   syncFilterInputs();
   setupFilterEvents();
   setupProductCardEvents();
   setupCountdown();
+  updateSidebarCounts();
+  setupMobileFilter();
+  setupViewMode();
+  setupCatalogExtras();
   render();
   enableHorizontalDrag($(".subnav .container"));
   if (typeof Utils !== "undefined" && Utils.Cart) {

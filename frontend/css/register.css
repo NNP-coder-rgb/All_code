@@ -277,3 +277,19 @@
     padding: var(--sp-5);
   }
 }
+
+/* Chế độ Sáng / Light Theme */
+[data-theme="light"] .role-card,
+body.light-theme .role-card {
+  background: #ffffff;
+  border-color: #e2e8f0;
+}
+[data-theme="light"] .cat-chip,
+body.light-theme .cat-chip {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+[data-theme="light"] .cat-chip:hover,
+body.light-theme .cat-chip:hover {
+  border-color: #cbd5e1;
+}

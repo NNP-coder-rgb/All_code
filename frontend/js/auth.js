@@ -5,6 +5,83 @@
   const KYC_REQUESTS_KEY = "hv_kyc_requests";
 
   // Tài khoản mẫu hệ thống
+  // Mẫu ảnh mô phỏng thẻ CCCD gắn chip chuẩn C06 ICAO 9303 (Mặt trước & Mặt sau)
+  function createSampleCccdSvg(side, fullName, idCard) {
+    const isFront = side === "front";
+    const name = (fullName || "NGUYỄN VĂN A").toUpperCase();
+    const num = String(idCard || "001202008849");
+    if (isFront) {
+      return (
+        "data:image/svg+xml;utf8," +
+        encodeURIComponent(
+          `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="250" viewBox="0 0 400 250">
+            <defs>
+              <linearGradient id="bgF_${num}" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#0f172a"/>
+                <stop offset="100%" stop-color="#1e293b"/>
+              </linearGradient>
+              <linearGradient id="gold_${num}" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#fbbf24"/>
+                <stop offset="100%" stop-color="#d97706"/>
+              </linearGradient>
+            </defs>
+            <rect width="400" height="250" rx="14" fill="url(#bgF_${num})" stroke="url(#gold_${num})" stroke-width="2"/>
+            <circle cx="200" cy="38" r="18" fill="#dc2626"/>
+            <polygon points="200,26 204,36 215,36 206,42 210,52 200,46 190,52 194,42 185,36 196,36" fill="#fef08a"/>
+            <text x="200" y="68" fill="#f8fafc" font-size="9" font-weight="bold" font-family="Arial, sans-serif" text-anchor="middle">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</text>
+            <text x="200" y="79" fill="#94a3b8" font-size="7" font-family="Arial, sans-serif" text-anchor="middle">Độc lập - Tự do - Hạnh phúc</text>
+            <text x="200" y="98" fill="#38bdf8" font-size="12" font-weight="900" font-family="Arial, sans-serif" text-anchor="middle">CĂN CƯỚC CÔNG DÂN</text>
+            <rect x="25" y="110" width="85" height="115" rx="6" fill="#334155" stroke="#475569" stroke-width="1.5"/>
+            <circle cx="67" cy="150" r="22" fill="#64748b"/>
+            <path d="M 40 215 Q 67 185 94 215 Z" fill="#64748b"/>
+            <text x="67" y="222" fill="#38bdf8" font-size="6" font-weight="bold" font-family="Arial, sans-serif" text-anchor="middle">ICAO 9303</text>
+            <text x="125" y="125" fill="#94a3b8" font-size="8" font-family="Arial, sans-serif">Số / No.:</text>
+            <text x="175" y="126" fill="#f87171" font-size="12" font-weight="bold" font-family="monospace">${num}</text>
+            <text x="125" y="148" fill="#94a3b8" font-size="8" font-family="Arial, sans-serif">Họ và tên / Full name:</text>
+            <text x="125" y="164" fill="#f8fafc" font-size="11" font-weight="bold" font-family="Arial, sans-serif">${name}</text>
+            <text x="125" y="185" fill="#94a3b8" font-size="8" font-family="Arial, sans-serif">Ngày sinh / Date of birth: <tspan fill="#f8fafc" font-weight="bold">18/09/1994</tspan></text>
+            <text x="125" y="202" fill="#94a3b8" font-size="8" font-family="Arial, sans-serif">Quốc tịch / Nationality: <tspan fill="#f8fafc" font-weight="bold">Việt Nam</tspan></text>
+            <text x="125" y="219" fill="#94a3b8" font-size="8" font-family="Arial, sans-serif">Quê quán: <tspan fill="#f8fafc" font-weight="bold">Hà Nội</tspan></text>
+          </svg>`
+        )
+      );
+    } else {
+      return (
+        "data:image/svg+xml;utf8," +
+        encodeURIComponent(
+          `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="250" viewBox="0 0 400 250">
+            <defs>
+              <linearGradient id="bgB_${num}" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#0f172a"/>
+                <stop offset="100%" stop-color="#1e293b"/>
+              </linearGradient>
+              <linearGradient id="chipGrad_${num}" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#fef08a"/>
+                <stop offset="100%" stop-color="#ca8a04"/>
+              </linearGradient>
+            </defs>
+            <rect width="400" height="250" rx="14" fill="url(#bgB_${num})" stroke="#38bdf8" stroke-width="1.5"/>
+            <rect x="30" y="30" width="55" height="42" rx="6" fill="url(#chipGrad_${num})" stroke="#a16207" stroke-width="1"/>
+            <line x1="30" y1="51" x2="85" y2="51" stroke="#a16207" stroke-width="1"/>
+            <line x1="57" y1="30" x2="57" y2="72" stroke="#a16207" stroke-width="1"/>
+            <circle cx="57" cy="51" r="8" fill="none" stroke="#a16207" stroke-width="1"/>
+            <rect x="30" y="90" width="55" height="65" rx="4" fill="#334155" stroke="#475569" stroke-width="1"/>
+            <path d="M 40 120 Q 57 100 75 120 Q 57 145 40 120" fill="none" stroke="#22d3ee" stroke-width="1.5"/>
+            <text x="57" y="150" fill="#94a3b8" font-size="6" font-family="Arial, sans-serif" text-anchor="middle">VÂN TAY</text>
+            <text x="105" y="42" fill="#94a3b8" font-size="8" font-family="Arial, sans-serif">Đặc điểm nhận dạng: <tspan fill="#f8fafc">Nốt ruồi c.2cm dưới mép phải</tspan></text>
+            <text x="105" y="60" fill="#94a3b8" font-size="8" font-family="Arial, sans-serif">Ngày cấp: <tspan fill="#f8fafc" font-weight="bold">24/02/2023</tspan></text>
+            <text x="105" y="78" fill="#94a3b8" font-size="8" font-family="Arial, sans-serif">CỤC TRƯỞNG CỤC CẢNH SÁT QUẢN LÝ HÀNH CHÍNH</text>
+            <text x="105" y="94" fill="#94a3b8" font-size="8" font-family="Arial, sans-serif">VỀ TRẬT TỰ XÃ HỘI (C06 - BỘ CÔNG AN)</text>
+            <rect x="15" y="180" width="370" height="55" rx="4" fill="#020617" stroke="#334155" stroke-width="1"/>
+            <text x="25" y="200" fill="#38bdf8" font-size="11" font-weight="bold" font-family="monospace">IDVNM0012020088495&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</text>
+            <text x="25" y="215" fill="#38bdf8" font-size="11" font-weight="bold" font-family="monospace">9409185F2802246VNM&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;8</text>
+            <text x="25" y="230" fill="#38bdf8" font-size="11" font-weight="bold" font-family="monospace">${name.replace(/ /g, "&lt;")}&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</text>
+          </svg>`
+        )
+      );
+    }
+  }
+
   const DEFAULT_USERS = [
     {
       id: "u-buyer-01",
@@ -26,6 +103,8 @@
         faceMatch: 99.6,
         submittedAt: "2026-11-01T10:00:00.000Z",
         verifiedAt: "2026-11-01T10:30:00.000Z",
+        frontImage: createSampleCccdSvg("front", "NGUYỄN NGỌC PHÚC", "001202008849"),
+        backImage: createSampleCccdSvg("back", "NGUYỄN NGỌC PHÚC", "001202008849"),
       },
     },
     {
@@ -101,6 +180,8 @@
       faceMatch: 99.4,
       status: "PENDING",
       submittedAt: "2026-11-08T14:30:00.000Z",
+      frontImage: createSampleCccdSvg("front", "Lê Minh Tuấn", "025096001234"),
+      backImage: createSampleCccdSvg("back", "Lê Minh Tuấn", "025096001234"),
     },
     {
       id: "KYC-9902",
@@ -117,6 +198,8 @@
       faceMatch: 98.9,
       status: "PENDING",
       submittedAt: "2026-11-08T16:15:00.000Z",
+      frontImage: createSampleCccdSvg("front", "Trần Thu Hà", "031198005678"),
+      backImage: createSampleCccdSvg("back", "Trần Thu Hà", "031198005678"),
     },
   ];
 
@@ -517,6 +600,7 @@
     },
 
     // Người dùng gửi hồ sơ CCCD để yêu cầu Admin duyệt
+    createSampleCccdSvg,
     submitKyc(data) {
       const currentUser = this.current();
       if (!currentUser) {
@@ -539,6 +623,8 @@
         gender: data.gender || "Nam",
         address: data.address || "Hà Nội",
         faceMatch: data.faceMatch || 99.6,
+        frontImage: data.frontImage || null,
+        backImage: data.backImage || null,
         status: "PENDING",
         submittedAt: new Date().toISOString(),
       };

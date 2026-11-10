@@ -120,8 +120,8 @@
             </a>
           </div>
 
-          <div style="overflow-x: auto;">
-            <table class="condition-table">
+          <div class="table-responsive">
+            <table class="table">
               <thead>
                 <tr>
                   <th>Sản phẩm</th>
@@ -197,9 +197,14 @@
 
     <div class="toast-stack" id="toastStack"></div>
 
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer" data-component="footer"></footer>
+
     <script src="../../js/popup.js"></script>
     <script src="../../js/auth.js"></script>
+    <script src="../../js/mock_data.js"></script>
     <script src="../../js/utils.js"></script>
+    <script src="../../js/components.js"></script>
     <script>
       (function () {
         if (!Auth.requireLogin({ message: "Vui lòng đăng nhập tài khoản người bán." })) return;

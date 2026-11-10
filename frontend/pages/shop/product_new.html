@@ -107,7 +107,7 @@
     </div>
 
     <main class="container py-6">
-      <div class="grid grid-2 gap-6" style="grid-template-columns: 500px 1fr; align-items: start;">
+      <div class="product-detail-grid">
         <!-- Cột trái: Gallery ảnh nguyên seal -->
         <div>
           <div class="panel p-3" style="position: relative; border-radius: var(--radius-xl); overflow: hidden;">
@@ -202,16 +202,7 @@
     </main>
 
     <!-- ===== FOOTER ===== -->
-    <footer class="site-footer mt-8">
-      <div class="container footer-bar" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding: 20px 0;">
-        <span class="text-xs text-faint">© 2026 HYBRID.STORE — Hàng Mới Brand Mall 100% Chính Hãng.</span>
-        <div class="flex gap-4 text-xs">
-          <a href="../../terms_of_service.html">Điều Khoản Dịch Vụ</a>
-          <a href="../../warranty_policy.html">Chính Sách Bảo Hành</a>
-          <a href="../../return_policy.html">Chính Sách Đổi Trả</a>
-        </div>
-      </div>
-    </footer>
+    <footer class="site-footer" data-component="footer"></footer>
 
     <div class="toast-stack" id="toastStack"></div>
 
@@ -219,32 +210,61 @@
     <script src="../../js/auth.js"></script>
     <script src="../../js/mock_data.js"></script>
     <script src="../../js/utils.js"></script>
+    <script src="../../js/components.js"></script>
     <script>
       (function () {
         Utils.Cart.syncBadge();
         const product = PRODUCTS.find((p) => p.type === "mall") || PRODUCTS[0];
         const title = product.short || product.name;
 
+        // Xử lý chuyển đổi ảnh thumbnail
+        var thumbs = document.querySelectorAll(".thumb-item");
+        var mainImg = document.getElementById("mainNewImg");
+        thumbs.forEach(function (t) {
+          t.addEventListener("click", function () {
+            thumbs.forEach(function (item) { item.style.opacity = "0.6"; item.style.border = "2px solid transparent"; });
+            this.style.opacity = "1";
+            this.style.border = "2px solid var(--primary-500)";
+            if (mainImg) mainImg.src = this.src;
+          });
+        });
+
+        // Xử lý tăng giảm số lượng
+        var qtyInput = document.querySelector(".qty-input");
+        var qtyBtns = document.querySelectorAll(".qty-btn");
+        if (qtyBtns.length === 2 && qtyInput) {
+          qtyBtns[0].addEventListener("click", function () {
+            var val = parseInt(qtyInput.value, 10) || 1;
+            if (val > 1) qtyInput.value = val - 1;
+          });
+          qtyBtns[1].addEventListener("click", function () {
+            var val = parseInt(qtyInput.value, 10) || 1;
+            qtyInput.value = val + 1;
+          });
+        }
+
         document.getElementById("btnMallAddCart").addEventListener("click", () => {
+          var qty = qtyInput ? (parseInt(qtyInput.value, 10) || 1) : 1;
           if (!Auth.ensureLogin(() => {
-            Utils.Cart.addItem(product, 1);
+            Utils.Cart.addItem(product, qty);
           }, {
             title: "Đăng Nhập Mua Hàng",
             message: 'Vui lòng đăng nhập tài khoản để thêm "' + title + '" vào giỏ hàng.',
           })) return;
-          Utils.Cart.addItem(product, 1);
+          Utils.Cart.addItem(product, qty);
         });
 
         document.getElementById("btnMallBuyNow").addEventListener("click", () => {
+          var qty = qtyInput ? (parseInt(qtyInput.value, 10) || 1) : 1;
           if (!Auth.ensureLogin(() => {
-            Utils.Cart.addItem(product, 1);
+            Utils.Cart.addItem(product, qty);
             window.location.href = "cart.html";
           }, {
             title: "Đăng Nhập Mua Hàng",
             message: 'Vui lòng đăng nhập tài khoản để mua ngay "' + title + '".',
             returnUrl: "cart.html"
           })) return;
-          Utils.Cart.addItem(product, 1);
+          Utils.Cart.addItem(product, qty);
           window.location.href = "cart.html";
         });
       })();

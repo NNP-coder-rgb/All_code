@@ -99,7 +99,7 @@
     </div>
 
     <main class="container py-6">
-      <div class="grid grid-2 gap-6" style="grid-template-columns: 500px 1fr; align-items: start;">
+      <div class="product-detail-grid">
         <!-- Cột trái: Ảnh 4 góc thực tế -->
         <div>
           <div class="panel p-3" style="position: relative; border-radius: var(--radius-xl); overflow: hidden;">
@@ -529,6 +529,18 @@
           }
         });
 
+        // Xử lý chuyển đổi ảnh thumbnail 4 góc
+        var thumbs = document.querySelectorAll(".thumb-item");
+        var mainImg = document.getElementById("mainUsedImg");
+        thumbs.forEach(function (t) {
+          t.addEventListener("click", function () {
+            thumbs.forEach(function (item) { item.style.opacity = "0.6"; item.style.border = "2px solid transparent"; });
+            this.style.opacity = "1";
+            this.style.border = "2px solid var(--secondary-400)";
+            if (mainImg) mainImg.src = this.src;
+          });
+        });
+
         // Nút thêm vào giỏ hàng
         if (btnUsedAddCart) {
           btnUsedAddCart.addEventListener("click", () => {
@@ -558,5 +570,10 @@
         });
       })();
     </script>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer" data-component="footer"></footer>
+
+    <script src="../../js/components.js"></script>
   </body>
 </html>

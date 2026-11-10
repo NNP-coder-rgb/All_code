@@ -58,7 +58,7 @@
             <span class="material-symbols-outlined text-primary">admin_panel_settings</span>
             Trung Tâm Chỉ Huy &amp; Điều Hành Toàn Sàn
           </h1>
-          <p class="text-sm text-muted">Giám sát doanh số GMV, phân bổ 4 ngành hàng, phê duyệt hòa giải khẩn cấp và tải trọng 3 trạm Lab.</p>
+          <p class="text-sm text-muted">Giám sát doanh số GMV, phân bổ 4 ngành hàng, phê duyệt hòa giải khẩn cấp và công suất 3 trung tâm thẩm định kỹ thuật.</p>
         </div>
         <button class="btn btn-primary btn-sm" id="btnSyncTelemetry">
           <span class="material-symbols-outlined icon-xs">sync</span> Làm Mới Dữ Liệu
@@ -83,14 +83,14 @@
           <div class="stat-sub text-warning">Thời gian phản hồi &lt; 15 phút</div>
         </div>
         <div class="admin-stat-card tone-green">
-          <div class="stat-label">Tải Trọng 3 Trạm Lab ISO</div>
+          <div class="stat-label">Tải Trọng 3 TT Kiểm Định</div>
           <div class="stat-val mono text-success" style="font-size: 1.8rem;">78% Công Suất</div>
-          <div class="stat-sub text-success">384 máy kiểm định / ngày</div>
+          <div class="stat-sub text-success">384 máy kiểm tra / ngày</div>
         </div>
       </div>
 
       <!-- PHÂN BỔ 4 NGÀNH & BẢNG KHIẾU NẠI KHẨN CẤP -->
-      <div class="grid grid-2 gap-6 mb-6" style="grid-template-columns: 380px 1fr; align-items: start;">
+      <div class="admin-content-grid mb-6">
         <!-- Phân bổ 4 ngành hàng -->
         <div class="panel p-5">
           <h3 class="panel-title mb-4">Phân Bổ GMV 4 Ngành Hàng</h3>
@@ -306,6 +306,9 @@
                 <td>
                   <span class="mono fw-600 text-primary">${r.idCardNumber}</span>
                   <div class="text-xs text-muted">Chuẩn C06 ICAO 9303</div>
+                  <button class="btn btn-outlined btn-xs btn-view-cccd-photos mt-1 flex items-center gap-1" data-id="${r.id}" type="button" style="padding: 2px 8px; font-size: 11px;">
+                    <span class="material-symbols-outlined icon-xs">image</span> Xem Ảnh 2 Mặt CCCD
+                  </button>
                 </td>
                 <td>
                   <span class="text-xs text-success fw-600">Khớp ${r.faceMatch || 99.6}%</span>
@@ -342,6 +345,44 @@
 
         // Xử lý click phê duyệt / từ chối CCCD
         document.addEventListener("click", (e) => {
+          const btnViewPhotos = e.target.closest(".btn-view-cccd-photos");
+          if (btnViewPhotos) {
+            const id = btnViewPhotos.dataset.id;
+            const reqs = Auth.getKycRequests();
+            const r = reqs.find((item) => item.id === id);
+            if (r) {
+              document.getElementById("modalAdminKycId").textContent = r.id;
+              document.getElementById("modalAdminName").textContent = r.fullName;
+              document.getElementById("modalAdminCardNum").textContent = r.idCardNumber;
+              document.getElementById("modalAdminDob").textContent = r.dob || "18/09/1994";
+              document.getElementById("modalAdminAddress").textContent = r.address || "Hà Nội";
+
+              const front = r.frontImage || Auth.createSampleCccdSvg("front", r.fullName, r.idCardNumber);
+              const back = r.backImage || Auth.createSampleCccdSvg("back", r.fullName, r.idCardNumber);
+              document.getElementById("modalAdminFrontImg").src = front;
+              document.getElementById("modalAdminBackImg").src = back;
+
+              const actionContainer = document.getElementById("modalAdminActionBtns");
+              if (actionContainer) {
+                if (r.status === "PENDING") {
+                  actionContainer.innerHTML = `
+                    <button class="btn btn-ghost btn-sm text-danger" type="button" onclick="Utils.closeModal('adminCccdPhotoModal'); document.querySelector('.btn-reject-kyc[data-id=\\\'${r.id}\\\']')?.click();">Từ Chối</button>
+                    <button class="btn btn-primary btn-sm" type="button" onclick="Utils.closeModal('adminCccdPhotoModal'); document.querySelector('.btn-approve-kyc[data-id=\\\'${r.id}\\\']')?.click();">
+                      <span class="material-symbols-outlined icon-xs">check</span> Phê Duyệt CCCD Ngay
+                    </button>
+                  `;
+                } else if (r.status === "VERIFIED") {
+                  actionContainer.innerHTML = `<span class="badge badge-success">✓ Hồ Sơ Đã Được Phê Duyệt</span>`;
+                } else {
+                  actionContainer.innerHTML = `<span class="badge badge-danger">Đã Từ Chối Hồ Sơ</span>`;
+                }
+              }
+
+              Utils.openModal("adminCccdPhotoModal");
+            }
+            return;
+          }
+
           const btnApprove = e.target.closest(".btn-approve-kyc");
           if (btnApprove) {
             const id = btnApprove.dataset.id;
@@ -399,5 +440,61 @@
         });
       })();
     </script>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer" data-component="footer"></footer>
+
+    <script src="../../js/components.js"></script>
+    <!-- Modal Xem Ảnh 2 Mặt CCCD của Admin -->
+    <div class="modal-backdrop" id="adminCccdPhotoModal" role="dialog" aria-modal="true" onclick="if(event.target===this)Utils.closeModal('adminCccdPhotoModal')">
+      <div class="modal" style="max-width: 720px;">
+        <div class="modal-head">
+          <h4 class="modal-title flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">badge</span>
+            <span>Đối Soát Ảnh 2 Mặt CCCD — <span class="mono text-secondary" id="modalAdminKycId"></span></span>
+          </h4>
+          <button class="modal-close" type="button" onclick="Utils.closeModal('adminCccdPhotoModal')" aria-label="Đóng"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <div class="modal-body p-4">
+          <div class="panel p-3 mb-3" style="background: rgba(139, 92, 246, 0.06); border-color: rgba(139, 92, 246, 0.2);">
+            <div class="grid grid-2 gap-2 text-xs">
+              <div><strong>Họ và tên:</strong> <span id="modalAdminName" class="mono text-text"></span></div>
+              <div><strong>Số CCCD (12 số):</strong> <span id="modalAdminCardNum" class="mono text-secondary"></span></div>
+              <div><strong>Ngày sinh:</strong> <span id="modalAdminDob"></span></div>
+              <div><strong>Địa chỉ:</strong> <span id="modalAdminAddress"></span></div>
+            </div>
+          </div>
+
+          <div class="grid grid-2 gap-3 mb-3">
+            <div class="panel p-2 text-center" style="background: var(--neutral-850); border: 1px solid var(--border); border-radius: var(--radius-lg);">
+              <div class="text-xs fw-700 text-muted mb-2 flex items-center justify-center gap-1">
+                <span class="material-symbols-outlined icon-xs text-primary">badge</span>
+                MẶT TRƯỚC CCCD GẮN CHIP
+              </div>
+              <img id="modalAdminFrontImg" src="" alt="Mặt trước CCCD" style="width: 100%; height: 180px; object-fit: contain; border-radius: var(--radius-md); background: #000;" />
+            </div>
+            <div class="panel p-2 text-center" style="background: var(--neutral-850); border: 1px solid var(--border); border-radius: var(--radius-lg);">
+              <div class="text-xs fw-700 text-muted mb-2 flex items-center justify-center gap-1">
+                <span class="material-symbols-outlined icon-xs text-secondary">contactless</span>
+                MẶT SAU (CHIP NFC &amp; MRZ)
+              </div>
+              <img id="modalAdminBackImg" src="" alt="Mặt sau CCCD" style="width: 100%; height: 180px; object-fit: contain; border-radius: var(--radius-md); background: #000;" />
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between text-xs text-muted pt-2 border-top">
+            <span class="text-success flex items-center gap-1">
+              <span class="material-symbols-outlined icon-xs">verified</span> Đối soát OCR: Đủ 2 mặt &amp; nguyên vẹn 4 góc
+            </span>
+            <span class="text-secondary mono">ICAO 9303 Compliant</span>
+          </div>
+        </div>
+        <div class="modal-foot flex items-center justify-between" id="modalAdminFootActions">
+          <button class="btn btn-secondary btn-sm" type="button" onclick="Utils.closeModal('adminCccdPhotoModal')">Đóng</button>
+          <div class="flex items-center gap-2" id="modalAdminActionBtns"></div>
+        </div>
+      </div>
+    </div>
+
   </body>
 </html>
