@@ -91,35 +91,54 @@
       </div>
     </div>
 
-    <!-- ===== TIẾN TRÌNH THANH TOÁN (STEPPER 3 BƯỚC) ===== -->
+    <!-- ===== TIẾN TRÌNH THANH TOÁN (STEPPER 3 BƯỚC TRONG KHUNG) ===== -->
     <div class="container mt-4 mb-2">
-      <div class="stepper" style="max-width: 680px; margin: 0 auto;">
-        <div class="step-item active">
-          <div class="step-circle"><span class="material-symbols-outlined icon-sm">shopping_cart</span></div>
-          <div class="step-label"><strong>1. Giỏ Hàng</strong><small>Kiểm tra kiện hàng</small></div>
+      <div class="cart-stepper-frame">
+        <div class="cart-step active">
+          <div class="cart-step-icon">
+            <span class="material-symbols-outlined">shopping_cart</span>
+          </div>
+          <div class="cart-step-text">
+            <strong>1. Giỏ Hàng</strong>
+            <small>Kiểm tra kiện hàng</small>
+          </div>
         </div>
-        <div class="step-line"></div>
-        <div class="step-item">
-          <div class="step-circle"><span class="material-symbols-outlined icon-sm">local_shipping</span></div>
-          <div class="step-label"><strong>2. Giao Hàng</strong><small>Địa chỉ nhận máy</small></div>
+
+        <span class="material-symbols-outlined cart-step-arrow hide-sm">chevron_right</span>
+
+        <div class="cart-step">
+          <div class="cart-step-icon">
+            <span class="material-symbols-outlined">local_shipping</span>
+          </div>
+          <div class="cart-step-text">
+            <strong>2. Giao Hàng</strong>
+            <small>Địa chỉ nhận máy</small>
+          </div>
         </div>
-        <div class="step-line"></div>
-        <div class="step-item">
-          <div class="step-circle"><span class="material-symbols-outlined icon-sm">verified</span></div>
-          <div class="step-label"><strong>3. Hoàn Tất</strong><small>Đồng kiểm &amp; thanh toán</small></div>
+
+        <span class="material-symbols-outlined cart-step-arrow hide-sm">chevron_right</span>
+
+        <div class="cart-step">
+          <div class="cart-step-icon">
+            <span class="material-symbols-outlined">verified</span>
+          </div>
+          <div class="cart-step-text">
+            <strong>3. Hoàn Tất</strong>
+            <small>Đồng kiểm &amp; thanh toán</small>
+          </div>
         </div>
       </div>
     </div>
 
-    <main class="container py-6">
-      <!-- TIÊU ĐỀ TRANG & NÚT XÓA GIỎ -->
-      <div class="mb-5 flex items-center justify-between flex-wrap gap-3">
+    <main class="container py-4">
+      <!-- TIÊU ĐỀ TRANG VỪA PHẢI & NÚT XÓA GIỎ -->
+      <div class="cart-header-bar mb-5 flex items-center justify-between flex-wrap gap-3">
         <div>
-          <h1 class="page-title flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary">shopping_cart</span>
+          <h1 class="cart-header-title">
+            <span class="material-symbols-outlined cart-title-icon">shopping_cart</span>
             Giỏ Hàng Của Bạn
           </h1>
-          <p class="text-sm text-muted">
+          <p class="cart-header-desc">
             Tự động phân nhóm kiện hàng theo nguồn gốc: Brand Mall Chính Hãng &amp; Người Bán C2C Tuyển Chọn.
           </p>
         </div>
