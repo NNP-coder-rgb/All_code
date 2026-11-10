@@ -105,9 +105,10 @@
     }
 
     // Ảnh chính & Thumbnails
+    const resolvedProductImg = typeof window !== "undefined" && window.resolveAssetUrl ? window.resolveAssetUrl(product.img) : product.img;
     const images = [
-      product.img,
-      product.img,
+      resolvedProductImg,
+      resolvedProductImg,
       "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600",
       "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600",
     ].filter(Boolean);
@@ -257,7 +258,7 @@
         return `
           <div class="card-product">
             <div class="card-product-thumb">
-              <img src="${p.img}" alt="${p.name}" />
+              <img src="${typeof window !== 'undefined' && window.resolveAssetUrl ? window.resolveAssetUrl(p.img) : p.img}" alt="${p.name}" />
               <div class="card-badge-top">
                 ${
                   isUsed

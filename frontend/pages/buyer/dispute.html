@@ -877,8 +877,9 @@
           const partyBuyerName = document.getElementById("partyBuyerName");
 
           const firstItem = (selectedOrder.items && selectedOrder.items[0]) || {};
-          if (productImg && (firstItem.img || firstItem.image)) {
-            productImg.src = firstItem.img || firstItem.image;
+          const rawImg = firstItem.img || firstItem.image;
+          if (productImg && rawImg) {
+            productImg.src = typeof window !== "undefined" && window.resolveAssetUrl ? window.resolveAssetUrl(rawImg) : rawImg;
           }
           if (productName) {
             productName.textContent = firstItem.name || "Thiết bị trong đơn hàng";

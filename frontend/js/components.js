@@ -587,7 +587,7 @@
       var detailUrl = isMall
         ? resolveUrl("pages/shop/product_new.html?id=" + encodeURIComponent(p.id), bp)
         : resolveUrl("pages/shop/product_used.html?id=" + encodeURIComponent(p.id), bp);
-      var imgUrl = p.img || "";
+      var imgUrl = resolveUrl(p.img || "", bp);
 
       var formattedPrice = formatMoney(p.price);
       var formattedOldPrice = p.oldPrice ? formatMoney(p.oldPrice) : "";

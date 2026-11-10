@@ -512,7 +512,8 @@
 
         const itemsHtml = (currentOrder.items || []).map((item) => {
           const isUsed = item.type === "c2c";
-          const imgSrc = item.img || item.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200";
+          const rawImg = item.img || item.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200";
+          const imgSrc = typeof window !== "undefined" && window.resolveAssetUrl ? window.resolveAssetUrl(rawImg) : rawImg;
           const qty = item.qty || item.quantity || 1;
           const sub = item.price * qty;
           const detailUrl = isUsed ? `../shop/product_used.html?id=${item.id}` : `../shop/product_new.html?id=${item.id}`;

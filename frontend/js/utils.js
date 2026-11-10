@@ -70,6 +70,48 @@
       .replace(/ss/g, seconds);
   }
 
+  /**
+   * Tự động chuẩn hóa đường dẫn tương đối của tài nguyên tĩnh (hình ảnh, tài liệu)
+   * Giúp tệp hiển thị đúng trên cả trang chủ (root) lẫn các trang con (pages/shop/, pages/buyer/, ...)
+   * @param {string} url - Đường dẫn tài nguyên (vd: 'assets/images/products/foo.png')
+   * @param {string} [customBasePath] - Tùy chọn đường dẫn cơ sở
+   * @returns {string} Đường dẫn tương đối đã điều chỉnh phù hợp ngữ cảnh trang
+   */
+  function resolveAssetUrl(url, customBasePath) {
+    if (!url) return "";
+    if (
+      url.indexOf("http://") === 0 ||
+      url.indexOf("https://") === 0 ||
+      url.indexOf("data:") === 0 ||
+      url.indexOf("/") === 0 ||
+      url.indexOf("#") === 0
+    ) {
+      return url;
+    }
+    if (customBasePath !== undefined && customBasePath !== null) {
+      return customBasePath + url;
+    }
+    if (typeof window !== "undefined" && window.location && window.location.pathname) {
+      var pathname = window.location.pathname.replace(/\\/g, "/");
+      if (
+        pathname.indexOf("/pages/shop/") !== -1 ||
+        pathname.indexOf("/pages/account/") !== -1 ||
+        pathname.indexOf("/pages/seller/") !== -1 ||
+        pathname.indexOf("/pages/admin/") !== -1 ||
+        pathname.indexOf("/pages/buyer/") !== -1 ||
+        pathname.indexOf("/test/") !== -1
+      ) {
+        if (url.indexOf("../../") === 0) return url;
+        return "../../" + url;
+      }
+      if (pathname.indexOf("/pages/") !== -1) {
+        if (url.indexOf("../") === 0) return url;
+        return "../" + url;
+      }
+    }
+    return url;
+  }
+
   /* =========================================================================
      2. THÔNG BÁO & MODAL (toast, openModal, closeModal, confirm)
      ========================================================================= */
@@ -1311,6 +1353,7 @@
     escapeHtml,
     formatCurrency,
     formatDate,
+    resolveAssetUrl,
     toast,
     openModal,
     closeModal,
@@ -1340,6 +1383,7 @@
     // Gắn trực tiếp lên window để gọi tự nhiên: formatCurrency(...), toast(...), ...
     window.formatCurrency = formatCurrency;
     window.formatDate = formatDate;
+    window.resolveAssetUrl = resolveAssetUrl;
     window.toast = toast;
     window.openModal = openModal;
     window.closeModal = closeModal;

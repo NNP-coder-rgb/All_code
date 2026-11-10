@@ -1,53 +1,131 @@
 // mock-data.js — dữ liệu giả cho trang chủ: danh mục, sản phẩm, flash sale, dòng chạy giao dịch
 // (khớp task T09: sản phẩm, danh mục, flash sale). Thêm/sửa sản phẩm chỉ cần sửa file này.
 
-const IMG_BASE = "https://lh3.googleusercontent.com/aida-public/";
+const IMG_BASE = "assets/images/products/";
 const IMG = {
-  hero:
-    IMG_BASE +
-    "AB6AXuA6XAHS_I6Vlh11BBtFWgwGL97e8EZzJBAEl1qRnE__jRTmv4eJKzuatGkleWfQ1Pc4vzk4b9zjx34UujgO5LkqH2uupTkc5uW_iesg2qwjhKZ75ivy720IvVjl7i1YLjL_gTIoG7AmUHkNnancF4M7W2TteW4Qg2PHB65qe_H2iLwvJ2QRXDcwnC6mB3GTVf0ps8MBfwWd5icannGlNa1oHJZcSnI9t70MfFMHpmzK",
-  bomber:
-    IMG_BASE +
-    "AB6AXuAbWEAQx7Hj131lO98PhPp4S7WjeLofUOhagppQPCL7dbYWr_5cka1s82VjnpPPidiXA7Ggi6ORCazQAAnMUb74AdqaFGhN3arsNcuan7R8zJz7fDwG4O-bF-pF3z-RqGT4oVZtdfwWweIQXBjHoWbaW6GHcMPBzB8S7_Q4RNbwfbYRR9N5XAJ7jiB---b5Si4ymQ-fljZFkjho91H2Z9Wls8PXG-os_wcdnOSfldUl",
-  iphone:
-    IMG_BASE +
-    "AB6AXuCBYaVfu2iMncD0Cz20wKiUi6lVPo57oLJiuWXer-sAEKaEwgx4ZLvbZUwmFrMGxsBy651W2Rv4S9Rvp4XW5QjBGK6CaIpXEoCGgLCY-_awVbJqlkwcxydUofncKlf97S5-ikua3TP2xzXoalSzcrY552F2xWslCxph8mE1eiLiOvx3lFKNZ0hlfC1Ime3NfXivC-KqkV2UKyyfzEIOqqDAssldLBj3plxHjLqan2FK",
-  keyboard:
-    IMG_BASE +
-    "AB6AXuBnpvs38yJaACcLx9p9-GAVm8KY9u_JFO3tqQlrLmdHieZXYwfgOOu7iZwOYdQvBJE_bwic_qszV8EuHkBcCVdNUwB_Kb3XU4WZv3SwY09LWaK0MGxmcczHfqyL-HQP5ZY6bnXK9BOSmqOKzKCJ_LcMSjBWBGIDUIdvb5l6iTrQ3F-SuPq_BKEMGpAs2LBlU_UILFWd7XPjuOEJsHbefQS-1CTll4qAgTJedVjbgx9q",
-  camera:
-    IMG_BASE +
-    "AB6AXuBvue7vGIWXPh4nWUIgFbAIS1mfrjdttx9AYA6KfZnXw9_kS90LBvxyJ1cbC5XSH_cGJ9POAg85jXPCSAqRDavgM5JVPytcA-crLtU4u2nu5nXmcpa70k6Y_Dfbk2Uxy5gqQxu9vFKRLGNsUNolQHnUEDdua-BK8aw_GP1lIDBI5orRYDK1kQkqsnjpQ0B6WxGjhYUX2KLipeE9Ho4VtaF2Xvx-Kfe--3DEt1LEXlUq",
-  puffer:
-    IMG_BASE +
-    "AB6AXuDcZzsZ2JoZC2j0Vs6_pmq4b0Qcj0Cm78hDuq5kjDavP-2tjjRPKYyAeDRZss3RZhm-lBCZcOsBsqpYNJf-r6TNzeSfYdR8vbsuXthywcHXPyELOVXYMoBbpb181J1gMvnEt1gkRxp3UodZMgodKmqUt4Dk0sbolmQeBTrJLhAJLd8P08NLIEvvJf6UGM75EmQxtUnKpp5eI5qd6_sADn4_orZmfkjDWOz2HgEHE0DB",
-  ghost:
-    IMG_BASE +
-    "AB6AXuA12AfbELSY82ay5VqA77xTtFH42cGpJAiYs_VKKKjGaSoivHSm5z0Vzq0-diuxckUtY1lfv_jLdBp2cEOvX7JZwVe1TAb6toM_XIE00ktpbhhTEEsgfqT0OA8-gsMvUEWDVMAs5FK6ttVN_KBLT4pqnPLjOEyZYOphM_A2WPYbqLcRkJe2UsTx0h5Y4mtb77bisy8tc9O8TWsxVgVyF1Ew8O5GEz0xL8K_YcTamAmO",
-  jordan:
-    IMG_BASE +
-    "AB6AXuCv56RE3KnmODq-MwiBzV0wEjBeq3ussuBGyNAI7kZ1Q6cfUYf47O8mycmyqmqLDPHEEYDz_vWIIMwmLBrv-H1BzW8N9peqeQiO615ElLh8ZBUcdHTx5QKg5bZxo8DhoqQXTCtDrX6CLS3cWB1PZdxeQyD4ErwWXrbNv2rFjhTxFYw2iTWowTrwn4iFz5q2LKYDnEbznJtru_ub0mG5xa-WCc_RCy0JmoubMH-Xlm4w",
-  yeezy:
-    IMG_BASE +
-    "AB6AXuBK1WgutbXjceCujWin9ryXzZqjCZzTAJeQk4s5jtIT8PynX5wiUcljUzN2lglsbwp1t5WR-5Jl_fRmqz5aa-GrzZyr5-GGQ84rJp7ih7loH45YHNr1MX-9ib7gMM6hiDE316feP36w6I4F0n5FzSin2GATIMEiIxf_gMPiGgcH1_0LogJ9W_ADmefLf9fi5WBQdC9WkDTDCVYwd3sSrORNxK1d_N_oEPWtDQBV3IYH",
-  nb:
-    IMG_BASE +
-    "AB6AXuBc1VSU-adnGbyesFnyIiaSIpBBeNT3NstBrmLxDrqgMHuoaU0abMwi3Iyj-bdfDOUhMOa5LgWJ_IuPk9-zmGEHaa4ILSil_yldIRvGStJVti10daF648g5qsHkLyb4afzdpDlC8OHDiLMqLWrVFugW7EHaagpuk5hRUHdglRJUp3vYS2-D1x3OebVRydgGMwi5-meHZwhIXSEcFO00bW34IDeQyJGAlhMl4Ie5arLs",
-  macbook:
-    IMG_BASE +
-    "AB6AXuDkCjoPO95_FvwNzJQzQOQaVvfSOw9thGOkDPaf2syGSbxuiZ4vHO1Cw1D4b9oh4LAfjqwqBon16hzeHTxTAdY-cBifygA3Jt2bqjHvL0TuERR4Ff9HEvAkuxDCjffP8qbLuyJaMco8_X5DNvGP8AOiln-xlKyNggkyxk-LIvXohYUtyiyEi3yq7LEUofFIguX4lFRJaMS2KhQZ55ECMhrg6seIj695Nq-yQKQhxFqX",
-  xm5:
-    IMG_BASE +
-    "AB6AXuBFcIfFUxq6yVIMKehopv3i4cCrX2libDhQyKl1kPILWZtNv0sxL3e7FeSTlYzztErd8rqFkGjrQ5V2b24uSejEXn9J5bnj1bVzZFjAjoNz5xNQBPmwEdJUs1JckLt_cIGmvZq6qO7XOror1ALmiFvMPTtkNbkKNqvqPpAi9OLHS3ulcgzHvJQfhWEqh1e4FeOkGiJSUr4JlUd04uyktXzVyPghTEvUVyP4VSnBS_ri",
-  dyson:
-    IMG_BASE +
-    "AB6AXuAHkvK1KiZMRUS_9xMMqMrF_9zD87IAsTsS1EyQJYsxHNLPIikWWIMk8-88lL-Tsll1rS4ZOXyas14EOX75EfVd5zMoSo3op_h3EbKBLZbt9UhbRMab1L-jRrj1aR7wdIqS3bo7IRSMCJD5JjNr8Ve_SLZ2LOZxYTP6dHmov1pkkUtNh1_xTEnK3qw3Sc6PeHUPejd7OE1h4ogskjHScXZFXshKd6nj9giRUYHs0W_y",
-  delonghi:
-    IMG_BASE +
-    "AB6AXuC2z8VYv16oSS_ExIhqI5FqqqoLjnoZAsEss5ki8JDJryBl7YCwc9nrQ8g5qpFf6rY0u6fwEyOLpHQ_1hNXlQhqQKZ29RV-wgy_prQ8DtIY1_0o0bJWyN2iloHm7wTWCQWfXDRkJNaVusIZ-z5pZVQRK7tYMmDCuH8n4hkeUVcQtt0d-D5oaJlPd0q-NMaGTScUudMJWdVyYv2UNnQu42yMeTuhauxhkjFY9CVxH2Ac",
-  philips:
-    IMG_BASE +
-    "AB6AXuCopfbgXctraspw6XeDWuvONgVliL7r7iLu9J51-_ak9bCHVVn6LYdMR2mauAwZWbAFlxA-DxbNACw2UFALUwdjPhFzxIaCc97iLEzVhpYWmQVv6YR3h0UeGvyaHTgPu5d8X_UvxQ0WVnsMVzlzWj-8Ivx5HnU9q4emjTrqfNtl9Tq50u3H3RaswqanlfiJyXAqS0GArTb0-iupXYDXe55thxO0-xCBPZUx_le1n0sI",
+  // Aliases tương thích ngược
+  hero: "assets/images/products/set-nam-techwear-all-black.png",
+  bomber: "assets/images/products/ao-sweatshirt-streetwear-oversize.png",
+  iphone: "assets/images/products/dien-thoai-smartphone-flagship.png",
+  keyboard: "assets/images/products/ban-phim-co-aula-f75-rgb.png",
+  camera: "assets/images/products/may-anh-ky-thuat-so-mirrorless.png",
+  puffer: "assets/images/products/set-nam-techwear-all-black.png",
+  ghost: "assets/images/products/giay-the-thao-nam-fashion-3-mau.png",
+  jordan: "assets/images/products/giay-the-thao-nam-sneaker-de-day.png",
+  yeezy: "assets/images/products/giay-sneaker-bhitnz-sport.png",
+  nb: "assets/images/products/giay-sneaker-nam-nu-tls201.png",
+  macbook: "assets/images/products/may-tinh-laptop-mong-nhe.png",
+  xm5: "assets/images/products/tai-nghe-sony-wh-ch520.png",
+  dyson: "assets/images/products/may-hut-bui-cam-tay.png",
+  delonghi: "assets/images/products/may-xay-sinh-to.png",
+  philips: "assets/images/products/noi-chien-khong-dau.png",
+
+  // Danh mục Thời Trang & Streetwear (19 ảnh PNG)
+  fashion_techwear: "assets/images/products/set-nam-techwear-all-black.png",
+  fashion_blazer: "assets/images/products/ao-jacket-blazer-runway-nam.png",
+  fashion_denim: "assets/images/products/ao-khoac-denim-nam-vintage.png",
+  fashion_hoodie: "assets/images/products/ao-hoodie-philipp-plein-dinh-da.png",
+  fashion_loewe_suit: "assets/images/products/set-jacket-quan-ke-soc-loewe.png",
+  fashion_tracksuit: "assets/images/products/bo-quan-ao-ni-nam-thu-dong.png",
+  fashion_harley: "assets/images/products/ao-thun-harley-quan-cargo.png",
+  fashion_dsquared2: "assets/images/products/ao-thun-dsquared2-icon.png",
+  fashion_sweatshirt: "assets/images/products/ao-sweatshirt-streetwear-oversize.png",
+  fashion_streetwear_set: "assets/images/products/set-do-streetwear-nam-dsquared2.png",
+  fashion_cat_shirt: "assets/images/products/set-so-mi-trang-quan-au-someone.png",
+  fashion_plaid_shirt: "assets/images/products/ao-so-mi-nam-ke-caro.png",
+  fashion_hiphop_shirt: "assets/images/products/ao-so-mi-coc-tay-hiphop.png",
+  fashion_mcqueen: "assets/images/products/ao-thun-alexander-mcqueen-graffiti.png",
+  fashion_cotton_tee: "assets/images/products/ao-thun-cotton-unisex.png",
+  fashion_office_skirt: "assets/images/products/set-cong-so-nu-so-mi-chan-vay.png",
+  fashion_tweed_dress: "assets/images/products/dam-da-tweed-nu-kem-ao-choang.png",
+  fashion_floral_blouse: "assets/images/products/ao-so-mi-nu-theu-hoa.png",
+  fashion_cap: "assets/images/products/mu-luoi-trai-the-thao.png",
+
+  // Danh mục Sneakers & Giày Dép (21 ảnh PNG)
+  shoe_fashion_3col: "assets/images/products/giay-the-thao-nam-fashion-3-mau.png",
+  shoe_sneaker_chunky: "assets/images/products/giay-the-thao-nam-sneaker-de-day.png",
+  shoe_sneaker_bhitnz: "assets/images/products/giay-sneaker-bhitnz-sport.png",
+  shoe_sneaker_tls201: "assets/images/products/giay-sneaker-nam-nu-tls201.png",
+  shoe_sneaker_nam: "assets/images/products/giay-sneaker-the-thao-nam.png",
+  shoe_chelsea_boot: "assets/images/products/giay-da-chelsea-boots-inichi.png",
+  shoe_martin_gn271: "assets/images/products/giay-boot-nam-martin-gn271.png",
+  shoe_cowboy_boot: "assets/images/products/boot-nam-martin-cao-boi-2seven.png",
+  shoe_avi_d03: "assets/images/products/giay-bot-cao-co-nam-avi-d03.png",
+  shoe_amoran_nu: "assets/images/products/boot-cao-co-amoran-nu.png",
+  shoe_mary_jane: "assets/images/products/giay-mary-jane-de-banh-mi-nu.png",
+  shoe_heels_strap: "assets/images/products/giay-cao-got-quai-ngang-nu.png",
+  shoe_sandal_7cm: "assets/images/products/sandal-cao-got-nu-7cm.png",
+  shoe_tt10_clog: "assets/images/products/giay-suc-the-thao-nam-tt10.png",
+  shoe_tipono_clog: "assets/images/products/dep-suc-eva-unisex-tipono.png",
+  shoe_shark_slide: "assets/images/products/dep-ca-map-unisex.png",
+  shoe_kb07_sandal: "assets/images/products/dep-kep-kb07-de-cao-5cm.png",
+  shoe_honeycomb: "assets/images/products/dep-to-ong-nhieu-mau.png",
+  shoe_thong_sandal: "assets/images/products/dep-xo-ngon-cao-su-deo.png",
+  shoe_massage_slide: "assets/images/products/dep-di-trong-nha-massage.png",
+  shoe_smiley_slide: "assets/images/products/dep-mat-cuoi-di-trong-nha.png",
+
+  // Danh mục Đồ Gia Dụng Thông Minh (20 ảnh PNG)
+  appliance_air_fryer: "assets/images/products/noi-chien-khong-dau.png",
+  appliance_rice_cooker: "assets/images/products/noi-com-dien-cao-tan.png",
+  appliance_kettle: "assets/images/products/am-sieu-toc-inox.png",
+  appliance_blender: "assets/images/products/may-xay-sinh-to.png",
+  appliance_nut_milk: "assets/images/products/may-lam-sua-hat.png",
+  appliance_slow_juicer: "assets/images/products/may-ep-cham.png",
+  appliance_robot_vacuum: "assets/images/products/robot-hut-bui.png",
+  appliance_cordless_vacuum: "assets/images/products/may-hut-bui-cam-tay.png",
+  appliance_induction_cooktop: "assets/images/products/bep-tu-don.png",
+  appliance_pressure_cooker: "assets/images/products/noi-ap-suat-dien.png",
+  appliance_granite_pan: "assets/images/products/chao-chong-dinh.png",
+  appliance_oven: "assets/images/products/lo-nuong-dien.png",
+  appliance_steamer: "assets/images/products/ban-la-hoi-nuoc.png",
+  appliance_air_purifier: "assets/images/products/may-loc-khong-khi.png",
+  appliance_fan: "assets/images/products/quat-cay-dung.png",
+  appliance_hair_dryer: "assets/images/products/may-say-toc-ion.png",
+  appliance_thermos: "assets/images/products/binh-giu-nhiet.png",
+  appliance_hotpot: "assets/images/products/noi-lau-dien-da-nang.png",
+  appliance_kitchen_scale: "assets/images/products/can-dien-tu-nha-bep.png",
+  appliance_kitchen_utensils: "assets/images/products/bo-do-gia-dung-da-nang.png",
+
+  // Danh mục Đồ Điện Tử & Hi-Tech
+  tech_laptop: "assets/images/products/may-tinh-laptop-mong-nhe.png",
+  tech_smartphone: "assets/images/products/dien-thoai-smartphone-flagship.png",
+
+  // Danh mục Âm Thanh & Tai Nghe
+  audio_sony_wh: "assets/images/products/tai-nghe-sony-wh-ch520.png",
+  audio_kz_iem: "assets/images/products/tai-nghe-kz-edx-lite-iem.png",
+  audio_kz_pair: "assets/images/products/tai-nghe-kz-edx-lite-iem-pair.png",
+  audio_anker_tws: "assets/images/products/tai-nghe-anker-soundcore-tws.png",
+  audio_bluetooth_headphone: "assets/images/products/tai-nghe-khong-day-bluetooth.png",
+  audio_bluetooth_speaker: "assets/images/products/loa-bluetooth-bass-tram.png",
+
+  // Danh mục Gaming Gear & Bàn Phím Chuột
+  gaming_razer_gold: "assets/images/products/tai-nghe-razer-blackshark-v2-gold.png",
+  gaming_dareu_rgb_headset: "assets/images/products/tai-nghe-gaming-dareu-rgb-7-1.png",
+  gaming_aula_f75: "assets/images/products/ban-phim-co-aula-f75-rgb.png",
+  gaming_twolf_mini: "assets/images/products/ban-phim-co-twolf-mini-rgb.png",
+  gaming_art_keycap: "assets/images/products/ban-phim-co-custom-art-keycap.png",
+  gaming_retro_knob: "assets/images/products/ban-phim-co-custom-retro-knob.png",
+  gaming_keyboard_led: "assets/images/products/ban-phim-co-gaming-led.png",
+  gaming_razer_mouse_white: "assets/images/products/chuot-razer-deathadder-v3-pro-white.png",
+  gaming_logitech_pink: "assets/images/products/chuot-logitech-g-pro-x-superlight-pink.png",
+  gaming_razer_faker_red: "assets/images/products/chuot-razer-deathadder-v3-faker-red.png",
+  gaming_dareu_em908: "assets/images/products/chuot-gaming-dareu-em908-rgb.png",
+  gaming_hamster_mouse: "assets/images/products/chuot-khong-day-hinh-thu-pink.png",
+  gaming_office_mouse: "assets/images/products/chuot-quang-khong-day-ergonomic.png",
+
+  // Danh mục Đồng Hồ & Phụ Kiện & Đời Sống
+  watch_smartwatch: "assets/images/products/dong-ho-thong-minh-smartwatch.png",
+  accessory_sunglasses: "assets/images/products/kinh-mat-thoi-trang-unisex.png",
+  accessory_perfume: "assets/images/products/nuoc-hoa-cao-cap-luxury.png",
+  accessory_backpack: "assets/images/products/balo-thoi-trang-chong-nuoc.png",
+  accessory_handbag: "assets/images/products/tui-xach-da-nu-cao-cap.png",
+  lifestyle_skincare: "assets/images/products/kem-duong-da-skincare-serum.png",
+  lifestyle_lipstick: "assets/images/products/son-moi-cao-cap-matte.png",
+  lifestyle_ceramic_mug: "assets/images/products/ly-gom-su-cao-cap-vintage.png",
+  lifestyle_candle: "assets/images/products/nen-thom-phong-thu-gian.png",
+
+  // Danh mục Máy Ảnh & Quay Chụp
+  camera_mirrorless: "assets/images/products/may-anh-ky-thuat-so-mirrorless.png",
 };
 
 // tone: primary | secondary | tertiary | success  (màu chủ đạo của từng ngành hàng)
@@ -196,7 +274,7 @@ const PRODUCTS = [
     price: 2850000,
     oldPrice: 5200000,
     buy: "Mua Ngay",
-    img: IMG.puffer,
+    img: IMG.fashion_techwear,
   },
   {
     id: "f2",
@@ -212,7 +290,7 @@ const PRODUCTS = [
     price: 4690000,
     off: 15,
     buy: "Mua Ngay (New Seal)",
-    img: IMG.bomber,
+    img: IMG.fashion_blazer,
   },
   {
     id: "f3",
@@ -231,7 +309,7 @@ const PRODUCTS = [
     price: 1450000,
     oldPrice: 2800000,
     buy: "Mua Ngay",
-    img: IMG.keyboard,
+    img: IMG.fashion_denim,
   },
   {
     id: "f4",
@@ -247,7 +325,7 @@ const PRODUCTS = [
     price: 1290000,
     off: 20,
     buy: "Mua Ngay",
-    img: IMG.camera,
+    img: IMG.fashion_hoodie,
   },
   {
     id: "f5",
@@ -263,7 +341,7 @@ const PRODUCTS = [
     price: 18500000,
     off: 10,
     buy: "Mua Ngay (New Seal)",
-    img: IMG.puffer,
+    img: IMG.fashion_loewe_suit,
   },
   {
     id: "f6",
@@ -282,7 +360,7 @@ const PRODUCTS = [
     price: 3200000,
     oldPrice: 6900000,
     buy: "Mua Ngay",
-    img: IMG.bomber,
+    img: IMG.fashion_tracksuit,
   },
   {
     id: "f7",
@@ -301,7 +379,7 @@ const PRODUCTS = [
     price: 2100000,
     oldPrice: 4500000,
     buy: "Mua Ngay",
-    img: IMG.keyboard,
+    img: IMG.fashion_harley,
   },
   {
     id: "f8",
@@ -317,7 +395,7 @@ const PRODUCTS = [
     price: 1150000,
     off: 15,
     buy: "Mua Ngay",
-    img: IMG.bomber,
+    img: IMG.fashion_dsquared2,
   },
 
   {
@@ -334,7 +412,7 @@ const PRODUCTS = [
     price: 2350000,
     off: 15,
     buy: "Mua Ngay",
-    img: IMG.bomber,
+    img: IMG.fashion_sweatshirt,
   },
   {
     id: "f10",
@@ -353,7 +431,7 @@ const PRODUCTS = [
     price: 3450000,
     oldPrice: 7800000,
     buy: "Mua Ngay",
-    img: IMG.puffer,
+    img: IMG.fashion_streetwear_set,
   },
   {
     id: "f11",
@@ -369,7 +447,7 @@ const PRODUCTS = [
     price: 1890000,
     off: 10,
     buy: "Mua Ngay",
-    img: IMG.keyboard,
+    img: IMG.fashion_cat_shirt,
   },
   {
     id: "f12",
@@ -388,7 +466,7 @@ const PRODUCTS = [
     price: 4200000,
     oldPrice: 9500000,
     buy: "Mua Ngay",
-    img: IMG.bomber,
+    img: IMG.fashion_plaid_shirt,
   },
 
   // ---- Sneakers ----
@@ -411,7 +489,7 @@ const PRODUCTS = [
     price: 8900000,
     oldPrice: 12500000,
     buy: "Mua Ngay",
-    img: IMG.ghost,
+    img: IMG.shoe_fashion_3col,
   },
   {
     id: "s2",
@@ -427,7 +505,7 @@ const PRODUCTS = [
     price: 11200000,
     off: 8,
     buy: "Mua Ngay",
-    img: IMG.jordan,
+    img: IMG.shoe_sneaker_chunky,
   },
   {
     id: "s3",
@@ -446,7 +524,7 @@ const PRODUCTS = [
     price: 4200000,
     oldPrice: 7800000,
     buy: "Mua Ngay",
-    img: IMG.yeezy,
+    img: IMG.shoe_sneaker_bhitnz,
   },
   {
     id: "s4",
@@ -462,7 +540,7 @@ const PRODUCTS = [
     price: 6850000,
     off: 12,
     buy: "Mua Ngay",
-    img: IMG.nb,
+    img: IMG.shoe_sneaker_tls201,
   },
   {
     id: "s5",
@@ -483,7 +561,7 @@ const PRODUCTS = [
     price: 24500000,
     oldPrice: 36000000,
     buy: "Mua Ngay",
-    img: IMG.jordan,
+    img: IMG.shoe_sneaker_nam,
   },
   {
     id: "s6",
@@ -499,7 +577,7 @@ const PRODUCTS = [
     price: 4290000,
     off: 5,
     buy: "Mua Ngay (New Seal)",
-    img: IMG.nb,
+    img: IMG.shoe_chelsea_boot,
   },
   {
     id: "s7",
@@ -515,7 +593,7 @@ const PRODUCTS = [
     price: 2890000,
     off: 10,
     buy: "Mua Ngay",
-    img: IMG.ghost,
+    img: IMG.shoe_martin_gn271,
   },
   {
     id: "s8",
@@ -534,7 +612,7 @@ const PRODUCTS = [
     price: 4600000,
     oldPrice: 6200000,
     buy: "Mua Ngay",
-    img: IMG.ghost,
+    img: IMG.shoe_cowboy_boot,
   },
 
   {
@@ -551,7 +629,7 @@ const PRODUCTS = [
     price: 5490000,
     off: 12,
     buy: "Mua Ngay",
-    img: IMG.ghost,
+    img: IMG.shoe_avi_d03,
   },
   {
     id: "s10",
@@ -570,7 +648,7 @@ const PRODUCTS = [
     price: 3200000,
     oldPrice: 4800000,
     buy: "Mua Ngay",
-    img: IMG.nb,
+    img: IMG.shoe_amoran_nu,
   },
   {
     id: "s11",
@@ -590,7 +668,7 @@ const PRODUCTS = [
     price: 7900000,
     oldPrice: 24000000,
     buy: "Mua Ngay",
-    img: IMG.jordan,
+    img: IMG.shoe_mary_jane,
   },
   {
     id: "s12",
@@ -606,7 +684,7 @@ const PRODUCTS = [
     price: 3890000,
     off: 10,
     buy: "Mua Ngay",
-    img: IMG.yeezy,
+    img: IMG.shoe_heels_strap,
   },
 
   // ---- Điện tử ----
@@ -624,7 +702,7 @@ const PRODUCTS = [
     price: 78990000,
     off: 5,
     buy: "Mua Ngay",
-    img: IMG.macbook,
+    img: IMG.tech_laptop,
   },
   {
     id: "t2",
@@ -644,7 +722,7 @@ const PRODUCTS = [
     price: 21800000,
     oldPrice: 29990000,
     buy: "Mua Ngay",
-    img: IMG.iphone,
+    img: IMG.tech_smartphone,
   },
   {
     id: "t3",
@@ -663,7 +741,7 @@ const PRODUCTS = [
     price: 43000000,
     oldPrice: 54990000,
     buy: "Mua Ngay",
-    img: IMG.camera,
+    img: IMG.camera_mirrorless,
   },
   {
     id: "t4",
@@ -681,7 +759,7 @@ const PRODUCTS = [
     oldPrice: 9500000,
     off: 32,
     buy: "Mua Ngay",
-    img: IMG.xm5,
+    img: IMG.audio_sony_wh,
   },
   {
     id: "t5",
@@ -696,7 +774,7 @@ const PRODUCTS = [
     price: 3650000,
     oldPrice: 4900000,
     off: 25,
-    img: IMG.keyboard,
+    img: IMG.gaming_aula_f75,
   },
   {
     id: "t6",
@@ -716,7 +794,7 @@ const PRODUCTS = [
     desc: "Màu bạc vintage, ống kính trong veo không mốc rễ",
     price: 17200000,
     oldPrice: 24500000,
-    img: IMG.camera,
+    img: IMG.camera_mirrorless,
   },
   {
     id: "t7",
@@ -732,7 +810,7 @@ const PRODUCTS = [
     price: 26990000,
     off: 8,
     buy: "Mua Ngay (New Seal)",
-    img: IMG.iphone,
+    img: IMG.tech_laptop,
   },
   {
     id: "t8",
@@ -748,7 +826,7 @@ const PRODUCTS = [
     price: 4990000,
     off: 15,
     buy: "Mua Ngay",
-    img: IMG.xm5,
+    img: IMG.gaming_retro_knob,
   },
   {
     id: "t9",
@@ -767,7 +845,7 @@ const PRODUCTS = [
     price: 11200000,
     oldPrice: 17990000,
     buy: "Mua Ngay",
-    img: IMG.keyboard,
+    img: IMG.gaming_twolf_mini,
   },
   {
     id: "t10",
@@ -786,7 +864,7 @@ const PRODUCTS = [
     price: 3850000,
     oldPrice: 5890000,
     buy: "Mua Ngay",
-    img: IMG.xm5,
+    img: IMG.audio_anker_tws,
   },
 
   {
@@ -803,7 +881,7 @@ const PRODUCTS = [
     price: 28990000,
     off: 5,
     buy: "Mua Ngay",
-    img: IMG.macbook,
+    img: IMG.tech_laptop,
   },
   {
     id: "t12",
@@ -822,7 +900,7 @@ const PRODUCTS = [
     price: 1650000,
     oldPrice: 2490000,
     buy: "Mua Ngay",
-    img: IMG.keyboard,
+    img: IMG.gaming_razer_mouse_white,
   },
   {
     id: "t13",
@@ -838,7 +916,7 @@ const PRODUCTS = [
     price: 3950000,
     off: 15,
     buy: "Mua Ngay",
-    img: IMG.xm5,
+    img: IMG.audio_bluetooth_speaker,
   },
   {
     id: "t14",
@@ -857,7 +935,7 @@ const PRODUCTS = [
     price: 4100000,
     oldPrice: 6500000,
     buy: "Mua Ngay",
-    img: IMG.macbook,
+    img: IMG.tech_laptop,
   },
 
   // ---- Gia dụng ----
@@ -875,7 +953,7 @@ const PRODUCTS = [
     price: 16490000,
     off: 18,
     buy: "Mua Ngay",
-    img: IMG.dyson,
+    img: IMG.appliance_cordless_vacuum,
   },
   {
     id: "a2",
@@ -894,7 +972,7 @@ const PRODUCTS = [
     price: 3900000,
     oldPrice: 6500000,
     buy: "Mua Ngay",
-    img: IMG.delonghi,
+    img: IMG.appliance_blender,
   },
   {
     id: "a3",
@@ -910,7 +988,7 @@ const PRODUCTS = [
     price: 4890000,
     off: 25,
     buy: "Mua Ngay",
-    img: IMG.philips,
+    img: IMG.appliance_air_fryer,
   },
   {
     id: "a4",
@@ -929,7 +1007,7 @@ const PRODUCTS = [
     price: 15500000,
     oldPrice: 24900000,
     buy: "Mua Ngay",
-    img: IMG.jordan,
+    img: IMG.appliance_robot_vacuum,
   },
   {
     id: "a5",
@@ -945,7 +1023,7 @@ const PRODUCTS = [
     price: 14800000,
     off: 12,
     buy: "Mua Ngay (New Seal)",
-    img: IMG.dyson,
+    img: IMG.appliance_fan,
   },
   {
     id: "a6",
@@ -961,7 +1039,7 @@ const PRODUCTS = [
     price: 3490000,
     off: 15,
     buy: "Mua Ngay",
-    img: IMG.philips,
+    img: IMG.appliance_kettle,
   },
   {
     id: "a7",
@@ -980,7 +1058,7 @@ const PRODUCTS = [
     price: 4800000,
     oldPrice: 7900000,
     buy: "Mua Ngay",
-    img: IMG.delonghi,
+    img: IMG.appliance_nut_milk,
   },
   {
     id: "a8",
@@ -999,7 +1077,7 @@ const PRODUCTS = [
     price: 5200000,
     oldPrice: 9800000,
     buy: "Mua Ngay",
-    img: IMG.delonghi,
+    img: IMG.appliance_rice_cooker,
   },
   {
     id: "a9",
@@ -1015,7 +1093,7 @@ const PRODUCTS = [
     price: 13990000,
     off: 20,
     buy: "Mua Ngay",
-    img: IMG.dyson,
+    img: IMG.appliance_robot_vacuum,
   },
   {
     id: "a10",
@@ -1034,7 +1112,7 @@ const PRODUCTS = [
     price: 1450000,
     oldPrice: 2890000,
     buy: "Mua Ngay",
-    img: IMG.delonghi,
+    img: IMG.appliance_air_fryer,
   },
   {
     id: "a11",
@@ -1050,7 +1128,7 @@ const PRODUCTS = [
     price: 4290000,
     off: 18,
     buy: "Mua Ngay",
-    img: IMG.philips,
+    img: IMG.appliance_air_purifier,
   },
   {
     id: "a12",
@@ -1069,7 +1147,7 @@ const PRODUCTS = [
     price: 890000,
     oldPrice: 1490000,
     buy: "Mua Ngay",
-    img: IMG.philips,
+    img: IMG.appliance_steamer,
   },
   // ---- Âm thanh ----
   {
@@ -1086,7 +1164,7 @@ const PRODUCTS = [
     price: 7990000,
     off: 15,
     buy: "Mua Ngay",
-    img: IMG.xm5,
+    img: IMG.audio_sony_wh,
   },
   {
     id: "au2",
@@ -1105,7 +1183,7 @@ const PRODUCTS = [
     price: 6500000,
     oldPrice: 9490000,
     buy: "Mua Ngay",
-    img: IMG.xm5,
+    img: IMG.audio_bluetooth_speaker,
   },
   {
     id: "au3",
@@ -1121,7 +1199,7 @@ const PRODUCTS = [
     price: 9690000,
     off: 10,
     buy: "Mua Ngay",
-    img: IMG.xm5,
+    img: IMG.audio_sony_wh,
   },
   {
     id: "au4",
@@ -1140,7 +1218,7 @@ const PRODUCTS = [
     price: 4100000,
     oldPrice: 5990000,
     buy: "Mua Ngay",
-    img: IMG.xm5,
+    img: IMG.audio_anker_tws,
   },
   {
     id: "au5",
@@ -1156,7 +1234,7 @@ const PRODUCTS = [
     price: 3490000,
     off: 15,
     buy: "Mua Ngay",
-    img: IMG.xm5,
+    img: IMG.audio_bluetooth_speaker,
   },
   {
     id: "au6",
@@ -1175,7 +1253,7 @@ const PRODUCTS = [
     price: 2950000,
     oldPrice: 4290000,
     buy: "Mua Ngay",
-    img: IMG.xm5,
+    img: IMG.audio_bluetooth_speaker,
   },
   {
     id: "au7",
@@ -1191,7 +1269,7 @@ const PRODUCTS = [
     price: 5990000,
     off: 14,
     buy: "Mua Ngay",
-    img: IMG.xm5,
+    img: IMG.audio_anker_tws,
   },
   {
     id: "au8",
@@ -1210,7 +1288,7 @@ const PRODUCTS = [
     price: 8200000,
     oldPrice: 15900000,
     buy: "Mua Ngay",
-    img: IMG.xm5,
+    img: IMG.audio_bluetooth_headphone,
   },
 
   // ---- Gaming & Bàn phím ----
@@ -1228,7 +1306,7 @@ const PRODUCTS = [
     price: 2450000,
     off: 10,
     buy: "Mua Ngay",
-    img: IMG.keyboard,
+    img: IMG.gaming_aula_f75,
   },
   {
     id: "gm2",
@@ -1248,7 +1326,7 @@ const PRODUCTS = [
     price: 2750000,
     oldPrice: 4290000,
     buy: "Mua Ngay",
-    img: IMG.keyboard,
+    img: IMG.gaming_razer_mouse_white,
   },
   {
     id: "gm3",
@@ -1264,7 +1342,7 @@ const PRODUCTS = [
     price: 3490000,
     off: 12,
     buy: "Mua Ngay",
-    img: IMG.keyboard,
+    img: IMG.gaming_logitech_pink,
   },
   {
     id: "gm4",
@@ -1283,7 +1361,7 @@ const PRODUCTS = [
     price: 2350000,
     oldPrice: 3390000,
     buy: "Mua Ngay",
-    img: IMG.keyboard,
+    img: IMG.gaming_twolf_mini,
   },
   {
     id: "gm5",
@@ -1299,7 +1377,7 @@ const PRODUCTS = [
     price: 5490000,
     off: 10,
     buy: "Mua Ngay",
-    img: IMG.keyboard,
+    img: IMG.gaming_art_keycap,
   },
   {
     id: "gm6",
@@ -1318,7 +1396,7 @@ const PRODUCTS = [
     price: 2850000,
     oldPrice: 4890000,
     buy: "Mua Ngay",
-    img: IMG.keyboard,
+    img: IMG.gaming_retro_knob,
   },
   {
     id: "gm7",
@@ -1334,7 +1412,7 @@ const PRODUCTS = [
     price: 6290000,
     off: 15,
     buy: "Mua Ngay",
-    img: IMG.keyboard,
+    img: IMG.gaming_keyboard_led,
   },
   {
     id: "gm8",
@@ -1353,7 +1431,7 @@ const PRODUCTS = [
     price: 3200000,
     oldPrice: 4950000,
     buy: "Mua Ngay",
-    img: IMG.keyboard,
+    img: IMG.gaming_razer_gold,
   },
 
   // ---- Đồng hồ & Phụ kiện ----
@@ -1371,7 +1449,7 @@ const PRODUCTS = [
     price: 8890000,
     off: 12,
     buy: "Mua Ngay",
-    img: IMG.delonghi,
+    img: IMG.watch_smartwatch,
   },
   {
     id: "w2",
@@ -1390,7 +1468,7 @@ const PRODUCTS = [
     price: 13500000,
     oldPrice: 19800000,
     buy: "Mua Ngay",
-    img: IMG.delonghi,
+    img: IMG.accessory_handbag,
   },
   {
     id: "w3",
@@ -1406,7 +1484,7 @@ const PRODUCTS = [
     price: 6250000,
     off: 15,
     buy: "Mua Ngay",
-    img: IMG.delonghi,
+    img: IMG.accessory_sunglasses,
   },
   {
     id: "w4",
@@ -1425,7 +1503,7 @@ const PRODUCTS = [
     price: 9500000,
     oldPrice: 17500000,
     buy: "Mua Ngay",
-    img: IMG.delonghi,
+    img: IMG.accessory_perfume,
   },
   {
     id: "w5",
@@ -1441,7 +1519,7 @@ const PRODUCTS = [
     price: 12900000,
     off: 8,
     buy: "Mua Ngay",
-    img: IMG.delonghi,
+    img: IMG.accessory_backpack,
   },
   {
     id: "w6",
@@ -1460,7 +1538,7 @@ const PRODUCTS = [
     price: 18500000,
     oldPrice: 32000000,
     buy: "Mua Ngay",
-    img: IMG.delonghi,
+    img: IMG.lifestyle_skincare,
   },
   {
     id: "w7",
@@ -1476,7 +1554,7 @@ const PRODUCTS = [
     price: 9800000,
     off: 10,
     buy: "Mua Ngay",
-    img: IMG.delonghi,
+    img: IMG.lifestyle_lipstick,
   },
   {
     id: "w8",
@@ -1495,7 +1573,7 @@ const PRODUCTS = [
     price: 2150000,
     oldPrice: 3800000,
     buy: "Mua Ngay",
-    img: IMG.puffer,
+    img: IMG.lifestyle_ceramic_mug,
   },
 
   // ---- Máy ảnh & Quay chụp ----
@@ -1513,7 +1591,7 @@ const PRODUCTS = [
     price: 38990000,
     off: 5,
     buy: "Mua Ngay",
-    img: IMG.macbook,
+    img: IMG.camera_mirrorless,
   },
   {
     id: "cm2",
@@ -1532,7 +1610,7 @@ const PRODUCTS = [
     price: 39500000,
     oldPrice: 49990000,
     buy: "Mua Ngay",
-    img: IMG.macbook,
+    img: IMG.camera_mirrorless,
   },
   {
     id: "cm3",
@@ -1548,7 +1626,7 @@ const PRODUCTS = [
     price: 54990000,
     off: 6,
     buy: "Mua Ngay",
-    img: IMG.camera,
+    img: IMG.camera_mirrorless,
   },
   {
     id: "cm4",
@@ -1567,7 +1645,7 @@ const PRODUCTS = [
     price: 34500000,
     oldPrice: 42000000,
     buy: "Mua Ngay",
-    img: IMG.camera,
+    img: IMG.camera_mirrorless,
   },
   {
     id: "cm5",
@@ -1583,7 +1661,7 @@ const PRODUCTS = [
     price: 15890000,
     off: 5,
     buy: "Mua Ngay",
-    img: IMG.camera,
+    img: IMG.camera_mirrorless,
   },
   {
     id: "cm6",
@@ -1602,7 +1680,7 @@ const PRODUCTS = [
     price: 18900000,
     oldPrice: 26500000,
     buy: "Mua Ngay",
-    img: IMG.camera,
+    img: IMG.camera_mirrorless,
   },
   {
     id: "cm7",
@@ -1618,7 +1696,7 @@ const PRODUCTS = [
     price: 68900000,
     off: 7,
     buy: "Mua Ngay",
-    img: IMG.camera,
+    img: IMG.camera_mirrorless,
   },
   {
     id: "cm8",
@@ -1637,7 +1715,7 @@ const PRODUCTS = [
     price: 14500000,
     oldPrice: 22900000,
     buy: "Mua Ngay",
-    img: IMG.camera,
+    img: IMG.camera_mirrorless,
   },
   {
     id: "f13",
@@ -1654,7 +1732,7 @@ const PRODUCTS = [
     price: 11500000,
     off: 10,
     buy: "Mua Ngay",
-    img: IMG.bomber,
+    img: IMG.fashion_hiphop_shirt,
   },
   {
     id: "f14",
@@ -1674,7 +1752,7 @@ const PRODUCTS = [
     price: 1950000,
     oldPrice: 3200000,
     buy: "Mua Ngay",
-    img: IMG.ghost,
+    img: IMG.fashion_mcqueen,
   },
   {
     id: "f15",
@@ -1691,7 +1769,7 @@ const PRODUCTS = [
     price: 13900000,
     off: 5,
     buy: "Mua Ngay",
-    img: IMG.puffer,
+    img: IMG.fashion_cotton_tee,
   },
   {
     id: "f16",
@@ -1711,7 +1789,7 @@ const PRODUCTS = [
     price: 2450000,
     oldPrice: 4200000,
     buy: "Mua Ngay",
-    img: IMG.bomber,
+    img: IMG.fashion_office_skirt,
   },
   {
     id: "f17",
@@ -1728,7 +1806,7 @@ const PRODUCTS = [
     price: 1450000,
     off: 12,
     buy: "Mua Ngay",
-    img: IMG.ghost,
+    img: IMG.fashion_tweed_dress,
   },
   {
     id: "f18",
@@ -1748,7 +1826,7 @@ const PRODUCTS = [
     price: 5800000,
     oldPrice: 10500000,
     buy: "Mua Ngay",
-    img: IMG.puffer,
+    img: IMG.fashion_floral_blouse,
   },
   {
     id: "s13",
@@ -1765,7 +1843,7 @@ const PRODUCTS = [
     price: 2990000,
     off: 8,
     buy: "Mua Ngay",
-    img: IMG.jordan,
+    img: IMG.shoe_sandal_7cm,
   },
   {
     id: "s14",
@@ -1785,7 +1863,7 @@ const PRODUCTS = [
     price: 24500000,
     oldPrice: 38000000,
     buy: "Mua Ngay",
-    img: IMG.jordan,
+    img: IMG.shoe_tt10_clog,
   },
   {
     id: "s15",
@@ -1802,7 +1880,7 @@ const PRODUCTS = [
     price: 2700000,
     off: 10,
     buy: "Mua Ngay",
-    img: IMG.yeezy,
+    img: IMG.shoe_tipono_clog,
   },
   {
     id: "s16",
@@ -1822,7 +1900,7 @@ const PRODUCTS = [
     price: 3650000,
     oldPrice: 5200000,
     buy: "Mua Ngay",
-    img: IMG.nb,
+    img: IMG.shoe_shark_slide,
   },
   {
     id: "s17",
@@ -1839,7 +1917,7 @@ const PRODUCTS = [
     price: 3250000,
     off: 15,
     buy: "Mua Ngay",
-    img: IMG.nb,
+    img: IMG.shoe_kb07_sandal,
   },
   {
     id: "s18",
@@ -1859,7 +1937,7 @@ const PRODUCTS = [
     price: 1850000,
     oldPrice: 3300000,
     buy: "Mua Ngay",
-    img: IMG.yeezy,
+    img: IMG.shoe_honeycomb,
   },
   {
     id: "t15",
@@ -1876,7 +1954,7 @@ const PRODUCTS = [
     price: 34990000,
     off: 6,
     buy: "Mua Ngay",
-    img: IMG.iphone,
+    img: IMG.tech_smartphone,
   },
   {
     id: "t16",
@@ -1896,7 +1974,7 @@ const PRODUCTS = [
     price: 23800000,
     oldPrice: 37490000,
     buy: "Mua Ngay",
-    img: IMG.iphone,
+    img: IMG.tech_smartphone,
   },
   {
     id: "t17",
@@ -1913,7 +1991,7 @@ const PRODUCTS = [
     price: 37490000,
     off: 5,
     buy: "Mua Ngay",
-    img: IMG.macbook,
+    img: IMG.tech_laptop,
   },
   {
     id: "t18",
@@ -1933,7 +2011,7 @@ const PRODUCTS = [
     price: 31200000,
     oldPrice: 42990000,
     buy: "Mua Ngay",
-    img: IMG.macbook,
+    img: IMG.tech_laptop,
   },
   {
     id: "t19",
@@ -1950,7 +2028,7 @@ const PRODUCTS = [
     price: 52900000,
     off: 8,
     buy: "Mua Ngay",
-    img: IMG.macbook,
+    img: IMG.tech_laptop,
   },
   {
     id: "t20",
@@ -1970,7 +2048,7 @@ const PRODUCTS = [
     price: 22500000,
     oldPrice: 29900000,
     buy: "Mua Ngay",
-    img: IMG.iphone,
+    img: IMG.tech_smartphone,
   },
   {
     id: "a13",
@@ -1987,7 +2065,7 @@ const PRODUCTS = [
     price: 27900000,
     off: 12,
     buy: "Mua Ngay",
-    img: IMG.dyson,
+    img: IMG.appliance_robot_vacuum,
   },
   {
     id: "a14",
@@ -2007,7 +2085,7 @@ const PRODUCTS = [
     price: 13500000,
     oldPrice: 21990000,
     buy: "Mua Ngay",
-    img: IMG.dyson,
+    img: IMG.appliance_cordless_vacuum,
   },
   {
     id: "a15",
@@ -2024,7 +2102,7 @@ const PRODUCTS = [
     price: 6890000,
     off: 18,
     buy: "Mua Ngay",
-    img: IMG.philips,
+    img: IMG.appliance_air_fryer,
   },
   {
     id: "a16",
@@ -2044,7 +2122,7 @@ const PRODUCTS = [
     price: 4200000,
     oldPrice: 7900000,
     buy: "Mua Ngay",
-    img: IMG.delonghi,
+    img: IMG.appliance_pressure_cooker,
   },
   {
     id: "a17",
@@ -2061,7 +2139,7 @@ const PRODUCTS = [
     price: 25490000,
     off: 7,
     buy: "Mua Ngay",
-    img: IMG.dyson,
+    img: IMG.appliance_oven,
   },
   {
     id: "a18",
@@ -2081,7 +2159,7 @@ const PRODUCTS = [
     price: 7900000,
     oldPrice: 13500000,
     buy: "Mua Ngay",
-    img: IMG.delonghi,
+    img: IMG.appliance_slow_juicer,
   },
   {
     id: "au9",
@@ -2097,7 +2175,7 @@ const PRODUCTS = [
     price: 13990000,
     off: 5,
     buy: "Mua Ngay",
-    img: IMG.xm5,
+    img: IMG.audio_sony_wh,
   },
   {
     id: "au10",
@@ -2116,7 +2194,7 @@ const PRODUCTS = [
     price: 7800000,
     oldPrice: 11990000,
     buy: "Mua Ngay",
-    img: IMG.xm5,
+    img: IMG.audio_bluetooth_headphone,
   },
   {
     id: "au11",
@@ -2132,7 +2210,7 @@ const PRODUCTS = [
     price: 9490000,
     off: 10,
     buy: "Mua Ngay",
-    img: IMG.keyboard,
+    img: IMG.audio_bluetooth_speaker,
   },
   {
     id: "au12",
@@ -2151,7 +2229,7 @@ const PRODUCTS = [
     price: 9900000,
     oldPrice: 16500000,
     buy: "Mua Ngay",
-    img: IMG.keyboard,
+    img: IMG.audio_bluetooth_speaker,
   },
   {
     id: "au13",
@@ -2168,7 +2246,7 @@ const PRODUCTS = [
     price: 7990000,
     off: 12,
     buy: "Mua Ngay",
-    img: IMG.xm5,
+    img: IMG.audio_kz_iem,
   },
   {
     id: "au14",
@@ -2188,7 +2266,7 @@ const PRODUCTS = [
     price: 21500000,
     oldPrice: 34500000,
     buy: "Mua Ngay",
-    img: IMG.keyboard,
+    img: IMG.audio_kz_pair,
   },
   {
     id: "g9",
@@ -2204,7 +2282,7 @@ const PRODUCTS = [
     price: 24490000,
     off: 6,
     buy: "Mua Ngay",
-    img: IMG.keyboard,
+    img: IMG.gaming_dareu_rgb_headset,
   },
   {
     id: "g10",
@@ -2223,7 +2301,7 @@ const PRODUCTS = [
     price: 11200000,
     oldPrice: 15490000,
     buy: "Mua Ngay",
-    img: IMG.keyboard,
+    img: IMG.gaming_razer_faker_red,
   },
   {
     id: "g11",
@@ -2239,7 +2317,7 @@ const PRODUCTS = [
     price: 7890000,
     off: 10,
     buy: "Mua Ngay",
-    img: IMG.keyboard,
+    img: IMG.gaming_dareu_em908,
   },
   {
     id: "g12",
@@ -2258,7 +2336,7 @@ const PRODUCTS = [
     price: 13900000,
     oldPrice: 19500000,
     buy: "Mua Ngay",
-    img: IMG.keyboard,
+    img: IMG.gaming_hamster_mouse,
   },
   {
     id: "g13",
@@ -2275,7 +2353,7 @@ const PRODUCTS = [
     price: 3390000,
     off: 15,
     buy: "Mua Ngay",
-    img: IMG.keyboard,
+    img: IMG.gaming_logitech_pink,
   },
   {
     id: "g14",
@@ -2295,7 +2373,7 @@ const PRODUCTS = [
     price: 2350000,
     oldPrice: 3500000,
     buy: "Mua Ngay",
-    img: IMG.keyboard,
+    img: IMG.gaming_aula_f75,
   },
   {
     id: "w9",
@@ -2311,7 +2389,7 @@ const PRODUCTS = [
     price: 20990000,
     off: 7,
     buy: "Mua Ngay",
-    img: IMG.camera,
+    img: IMG.watch_smartwatch,
   },
   {
     id: "w10",
@@ -2330,7 +2408,7 @@ const PRODUCTS = [
     price: 13800000,
     oldPrice: 20500000,
     buy: "Mua Ngay",
-    img: IMG.camera,
+    img: IMG.lifestyle_candle,
   },
   {
     id: "w11",
@@ -2346,7 +2424,7 @@ const PRODUCTS = [
     price: 15990000,
     off: 8,
     buy: "Mua Ngay",
-    img: IMG.camera,
+    img: IMG.watch_smartwatch,
   },
   {
     id: "w12",
@@ -2365,7 +2443,7 @@ const PRODUCTS = [
     price: 8900000,
     oldPrice: 15200000,
     buy: "Mua Ngay",
-    img: IMG.camera,
+    img: IMG.fashion_cap,
   },
   {
     id: "w13",
@@ -2382,7 +2460,7 @@ const PRODUCTS = [
     price: 2950000,
     off: 12,
     buy: "Mua Ngay",
-    img: IMG.camera,
+    img: IMG.watch_smartwatch,
   },
   {
     id: "w14",
@@ -2402,7 +2480,7 @@ const PRODUCTS = [
     price: 3450000,
     oldPrice: 5800000,
     buy: "Mua Ngay",
-    img: IMG.camera,
+    img: IMG.lifestyle_skincare,
   },
   {
     id: "cm9",
@@ -2418,7 +2496,7 @@ const PRODUCTS = [
     price: 47990000,
     off: 6,
     buy: "Mua Ngay",
-    img: IMG.camera,
+    img: IMG.camera_mirrorless,
   },
   {
     id: "cm10",
@@ -2437,7 +2515,7 @@ const PRODUCTS = [
     price: 42500000,
     oldPrice: 52000000,
     buy: "Mua Ngay",
-    img: IMG.camera,
+    img: IMG.camera_mirrorless,
   },
   {
     id: "cm11",
@@ -2453,7 +2531,7 @@ const PRODUCTS = [
     price: 15890000,
     off: 5,
     buy: "Mua Ngay",
-    img: IMG.camera,
+    img: IMG.camera_mirrorless,
   },
   {
     id: "cm12",
@@ -2472,7 +2550,7 @@ const PRODUCTS = [
     price: 46800000,
     oldPrice: 62000000,
     buy: "Mua Ngay",
-    img: IMG.camera,
+    img: IMG.camera_mirrorless,
   },
   {
     id: "cm13",
@@ -2489,7 +2567,7 @@ const PRODUCTS = [
     price: 41990000,
     off: 7,
     buy: "Mua Ngay",
-    img: IMG.camera,
+    img: IMG.camera_mirrorless,
   },
   {
     id: "cm14",
@@ -2509,7 +2587,7 @@ const PRODUCTS = [
     price: 43500000,
     oldPrice: 56990000,
     buy: "Mua Ngay",
-    img: IMG.camera,
+    img: IMG.camera_mirrorless,
   },
 ];
 

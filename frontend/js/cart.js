@@ -116,7 +116,7 @@
     return `
       <div class="cart-item" data-id="${item.id}" data-variant="${item.variant || ""}">
         <a href="${detailUrl}">
-          <img class="cart-item-img" src="${item.img || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300"}" alt="${item.name}" />
+          <img class="cart-item-img" src="${(typeof window !== 'undefined' && window.resolveAssetUrl ? window.resolveAssetUrl(item.img) : item.img) || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300"}" alt="${item.name}" />
         </a>
         <div>
           <div class="flex items-center gap-2 mb-1 flex-wrap">

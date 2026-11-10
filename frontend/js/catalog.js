@@ -156,7 +156,7 @@
         '<div class="product-media">' +
         '<a href="product_new.html?id=' + p.id + '">' +
         '<img src="' +
-        p.img +
+        (window.resolveAssetUrl ? window.resolveAssetUrl(p.img) : p.img) +
         '" alt="' +
         title +
         '" loading="lazy">' +
@@ -213,7 +213,7 @@
       '<div class="product-media">' +
       '<a href="product_used.html?id=' + p.id + '">' +
       '<img src="' +
-      p.img +
+      (window.resolveAssetUrl ? window.resolveAssetUrl(p.img) : p.img) +
       '" alt="' +
       title +
       '" loading="lazy">' +
