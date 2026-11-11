@@ -380,6 +380,35 @@ function runAdditionalTests() {
     // Sau logout, mock storage bị dọn
   });
 
+  it("Phân lập sổ địa chỉ (Address Book) riêng biệt giữa các tài khoản người dùng", () => {
+    const userA = { id: "u-phuc-01", fullName: "Nguyễn Ngọc Phúc", phone: "0901234567", address: "Landmark 81, TP.HCM" };
+    const userB = { id: "u-binh-01", fullName: "Nguyễn Huy Bình", phone: "0987654321", address: "45 Lê Duẩn, TP.HCM" };
+
+    const addrsA = Utils.Auth.getAddresses(userA);
+    assert.strictEqual(Array.isArray(addrsA), true);
+    assert.strictEqual(addrsA.length >= 1, true);
+    assert.strictEqual(addrsA[0].name, "Nguyễn Ngọc Phúc");
+
+    // Lưu địa chỉ riêng cho user A
+    Utils.Auth.saveAddresses([
+      { id: "a1", name: "Nguyễn Ngọc Phúc", detail: "Phòng VIP, Landmark 81", isDefault: true }
+    ], userA);
+
+    // Lưu địa chỉ riêng cho user B
+    Utils.Auth.saveAddresses([
+      { id: "b1", name: "Nguyễn Huy Bình", detail: "Kho Hàng 45 Lê Duẩn", isDefault: true }
+    ], userB);
+
+    // Kiểm tra user A và user B không bị lẫn lộn địa chỉ
+    const updatedA = Utils.Auth.getAddresses(userA);
+    const updatedB = Utils.Auth.getAddresses(userB);
+
+    assert.strictEqual(updatedA[0].name, "Nguyễn Ngọc Phúc");
+    assert.strictEqual(updatedA[0].detail, "Phòng VIP, Landmark 81");
+    assert.strictEqual(updatedB[0].name, "Nguyễn Huy Bình");
+    assert.strictEqual(updatedB[0].detail, "Kho Hàng 45 Lê Duẩn");
+  });
+
   /* ---------------- 12. Offer - Trả giá & Thương lượng (T12) ---------------- */
   console.log("\n--- 12. Kiểm thử Offer Trả giá & Thương lượng C2C (T12) ---");
   it("Gửi đề nghị trả giá hợp lệ và tính phần trăm giảm", () => {

@@ -87,10 +87,20 @@
       id: "u-buyer-01",
       role: "buyer",
       fullName: "Nguyễn Ngọc Phúc",
+      username: "nguyenphuc2306",
       email: "phuc@hybrid.store",
       phone: "0901234567",
       password: "password123",
       avatar: "NP",
+      dob: "18/09/1994",
+      gender: "Nam",
+      address: "Căn hộ Landmark 81, Vinhomes Central Park, Phường 22, Quận Bình Thạnh, TP. Hồ Chí Minh",
+      membershipTitle: "VIP BUYER",
+      bio: "Đam mê sưu tầm Sneaker Hypebeast và thiết bị công nghệ âm thanh hi-tech.",
+      bankName: "Techcombank",
+      bankAccountNumber: "1903 6888 8888 8",
+      bankAccountName: "NGUYỄN NGỌC PHÚC",
+      interestCategory: "sneakers",
       kycStatus: "VERIFIED",
       kycData: {
         idCardNumber: "001202008849",
@@ -111,10 +121,20 @@
       id: "u-seller-01",
       role: "seller",
       fullName: "Nguyễn Huy Bình",
+      username: "huybinh_sneakers",
       email: "binh@sneakers.vn",
       phone: "0987654321",
       password: "password123",
       avatar: "HB",
+      dob: "12/05/1995",
+      gender: "Nam",
+      address: "Số 45 Lê Duẩn, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh",
+      membershipTitle: "TOP SELLER C2C",
+      bio: "Chuyên cung cấp giày chính hãng, kiểm định kỹ thuật 100% trước khi giao.",
+      bankName: "Vietcombank",
+      bankAccountNumber: "0071 0009 9999 9",
+      bankAccountName: "NGUYỄN HUY BÌNH",
+      interestCategory: "sneakers",
       kycStatus: "VERIFIED",
       kycData: {
         idCardNumber: "079095012345",
@@ -123,7 +143,7 @@
         issueDate: "15/03/2022",
         expiryDate: "12/05/2035",
         gender: "Nam",
-        address: "45 Lê Duẩn, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh",
+        address: "Số 45 Lê Duẩn, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh",
         faceMatch: 99.2,
         submittedAt: "2026-11-02T08:00:00.000Z",
         verifiedAt: "2026-11-02T09:15:00.000Z",
@@ -133,10 +153,20 @@
       id: "u-demo-pending-01",
       role: "buyer",
       fullName: "Lê Minh Tuấn",
+      username: "tuanle_audiolab",
       email: "tuan.le@gmail.com",
       phone: "0912345999",
       password: "password123",
       avatar: "LT",
+      dob: "20/11/1996",
+      gender: "Nam",
+      address: "32 Tràng Tiền, Phường Tràng Tiền, Quận Hoàn Kiếm, Hà Nội",
+      membershipTitle: "THÀNH VIÊN MỚI",
+      bio: "Đam mê thiết bị công nghệ âm thanh hi-tech.",
+      bankName: "MBBank",
+      bankAccountNumber: "0912 345 999 88",
+      bankAccountName: "LÊ MINH TUẤN",
+      interestCategory: "hitech",
       kycStatus: "PENDING",
       kycData: {
         idCardNumber: "025096001234",
@@ -145,7 +175,7 @@
         issueDate: "10/08/2023",
         expiryDate: "Không thời hạn",
         gender: "Nam",
-        address: "32 Tràng Tiền, Quận Hoàn Kiếm, Hà Nội",
+        address: "32 Tràng Tiền, Phường Tràng Tiền, Quận Hoàn Kiếm, Hà Nội",
         faceMatch: 99.4,
         submittedAt: "2026-11-08T14:30:00.000Z",
       },
@@ -154,10 +184,20 @@
       id: "u-demo-unverified-01",
       role: "buyer",
       fullName: "Hoàng Đức Anh",
+      username: "ducanh_hanoi",
       email: "ducanh@gmail.com",
       phone: "0933221100",
       password: "password123",
       avatar: "DA",
+      dob: "05/08/2000",
+      gender: "Nam",
+      address: "Số 18 Hoàng Diệu, Phường Điện Biên, Quận Ba Đình, Hà Nội",
+      membershipTitle: "THÀNH VIÊN MỚI",
+      bio: "Khách hàng mua sắm tự do.",
+      bankName: "ACB",
+      bankAccountNumber: "2345 6789 0123",
+      bankAccountName: "HOÀNG ĐỨC ANH",
+      interestCategory: "techwear",
       kycStatus: "UNVERIFIED",
       kycData: null,
     },
@@ -206,7 +246,39 @@
   function readUsers() {
     try {
       const list = JSON.parse(localStorage.getItem(USERS_KEY));
-      if (Array.isArray(list) && list.length > 0) return list;
+      if (Array.isArray(list) && list.length > 0) {
+        let changed = false;
+        list.forEach((u) => {
+          const def = DEFAULT_USERS.find(
+            (d) => d.id === u.id || (d.email && u.email && d.email.toLowerCase() === u.email.toLowerCase())
+          );
+          if (def) {
+            [
+              "dob",
+              "gender",
+              "address",
+              "username",
+              "bankName",
+              "bankAccountNumber",
+              "bankAccountName",
+              "bio",
+              "membershipTitle",
+              "interestCategory",
+            ].forEach((k) => {
+              if ((u[k] === undefined || u[k] === null || u[k] === "") && def[k] !== undefined) {
+                u[k] = def[k];
+                changed = true;
+              }
+            });
+            if (u.kycStatus === "VERIFIED" && !u.kycData && def.kycData) {
+              u.kycData = def.kycData;
+              changed = true;
+            }
+          }
+        });
+        if (changed) writeUsers(list);
+        return list;
+      }
       return DEFAULT_USERS;
     } catch (e) {
       return DEFAULT_USERS;
@@ -304,8 +376,19 @@
         id: user.id,
         role: user.role,
         fullName: user.fullName,
+        username: user.username,
         email: user.email,
         phone: user.phone,
+        dob: user.dob,
+        gender: user.gender,
+        address: user.address,
+        bio: user.bio,
+        avatar: user.avatar,
+        bankName: user.bankName,
+        bankAccountNumber: user.bankAccountNumber,
+        bankAccountName: user.bankAccountName,
+        membershipTitle: user.membershipTitle,
+        interestCategory: user.interestCategory,
         kycStatus: user.kycStatus || "UNVERIFIED",
         kycData: user.kycData || null,
       };
@@ -386,9 +469,19 @@
         id: user.id,
         role: user.role,
         fullName: user.fullName,
+        username: user.username || email.split("@")[0],
         email: user.email,
         phone: user.phone,
+        dob: user.dob || "18/09/1994",
+        gender: user.gender || "Nam",
+        address: user.address || (user.kycData && user.kycData.address) || "Căn hộ Landmark 81, Vinhomes Central Park, TP.HCM",
+        bio: user.bio || "Thành viên đăng nhập qua Google Account.",
         avatar: user.avatar,
+        bankName: user.bankName || "Techcombank",
+        bankAccountNumber: user.bankAccountNumber || "1903 6888 8888 8",
+        bankAccountName: user.bankAccountName || user.fullName.toUpperCase(),
+        membershipTitle: user.membershipTitle || "VIP BUYER",
+        interestCategory: user.interestCategory || "sneakers",
         kycStatus: user.kycStatus || "VERIFIED",
         kycData: user.kycData || null,
       };
@@ -451,9 +544,19 @@
         id: user.id,
         role: user.role,
         fullName: user.fullName,
+        username: user.username || ("user_" + phone.slice(-4)),
         email: user.email,
         phone: user.phone,
+        dob: user.dob || "Chưa cập nhật",
+        gender: user.gender || "Chưa cập nhật",
+        address: user.address || "",
+        bio: user.bio || "",
         avatar: user.avatar,
+        bankName: user.bankName || "Techcombank",
+        bankAccountNumber: user.bankAccountNumber || "",
+        bankAccountName: user.bankAccountName || user.fullName.toUpperCase(),
+        membershipTitle: user.membershipTitle || "THÀNH VIÊN OTP",
+        interestCategory: user.interestCategory || "sneakers",
         kycStatus: user.kycStatus || "UNVERIFIED",
         kycData: user.kycData || null,
       };
@@ -1007,7 +1110,187 @@
       }
       return true;
     },
+
+    // =========================================================================
+    // 7. QUẢN LÝ SỔ ĐỊA CHỈ TÁCH BIỆT THEO TỪNG TÀI KHOẢN (USER-ISOLATED ADDRESS BOOK)
+    // =========================================================================
+    getUserAddressKey(user) {
+      const u = user || this.current();
+      if (!u) return "hv_user_addresses_guest";
+      const uid = u.id || (u.email ? u.email.replace(/[@.]/g, "_") : "default");
+      return "hv_user_addresses_" + uid;
+    },
+
+    getAddresses(user) {
+      const u = user || this.current();
+      if (!u) return [];
+      const key = this.getUserAddressKey(u);
+      try {
+        const raw = localStorage.getItem(key);
+        if (raw) {
+          const list = JSON.parse(raw);
+          if (Array.isArray(list) && list.length > 0) return list;
+        }
+      } catch (e) {}
+
+      // Tự động khởi tạo địa chỉ mặc định khớp chính xác thông tin tài khoản hiện tại nếu chưa có
+      const fullName = u.fullName || "Khách Hàng";
+      const phone = u.phone || "0901234567";
+      const userAddr = u.address || (u.kycData && u.kycData.address) || "";
+
+      let seeded = [];
+      if (u.id === "u-buyer-01" || (u.email && u.email.includes("phuc"))) {
+        seeded = [
+          {
+            id: "addr_buyer_1",
+            name: fullName,
+            phone: phone,
+            city: "TP. Hồ Chí Minh — Quận Bình Thạnh",
+            detail: "Căn hộ Landmark 81, Vinhomes Central Park, Phường 22",
+            type: "home",
+            note: "Giao tận tay / Bấm chuông lên phòng",
+            isDefault: true,
+            express2h: true,
+          }
+        ];
+      } else if (u.id === "u-seller-01" || (u.email && u.email.includes("binh"))) {
+        seeded = [
+          {
+            id: "addr_seller_1",
+            name: fullName,
+            phone: phone,
+            city: "TP. Hồ Chí Minh — Quận 1",
+            detail: "Số 45 Lê Duẩn, Phường Bến Nghé",
+            type: "office",
+            note: "Kho hàng ký gửi / Giờ hành chính 8h - 18h",
+            isDefault: true,
+            express2h: true,
+          }
+        ];
+      } else if (u.id === "u-demo-pending-01" || (u.email && u.email.includes("tuan"))) {
+        seeded = [
+          {
+            id: "addr_tuan_1",
+            name: fullName,
+            phone: phone,
+            city: "Hà Nội — Quận Hoàn Kiếm",
+            detail: "32 Tràng Tiền, Phường Tràng Tiền",
+            type: "home",
+            note: "Giao trong giờ hành chính",
+            isDefault: true,
+            express2h: true,
+          }
+        ];
+      } else if (userAddr) {
+        let city = "TP. Hồ Chí Minh";
+        if (userAddr.includes("Hà Nội")) city = "Hà Nội";
+        else if (userAddr.includes("Đà Nẵng")) city = "Đà Nẵng";
+        seeded = [
+          {
+            id: "addr_" + (u.id || Date.now()) + "_1",
+            name: fullName,
+            phone: phone,
+            city: userAddr.includes("—") ? userAddr.split("—")[0].trim() : (city + " — Trung tâm"),
+            detail: userAddr,
+            type: u.role === "seller" ? "office" : "home",
+            note: u.role === "seller" ? "Kho hàng / Giờ hành chính" : "Giao giờ hành chính hoặc tối",
+            isDefault: true,
+            express2h: true,
+          }
+        ];
+      }
+
+      if (seeded.length > 0) {
+        try {
+          localStorage.setItem(key, JSON.stringify(seeded));
+        } catch (e) {}
+      }
+      return seeded;
+    },
+
+    saveAddresses(list, user) {
+      const u = user || this.current();
+      if (!u) return;
+      const key = this.getUserAddressKey(u);
+      try {
+        localStorage.setItem(key, JSON.stringify(list || []));
+      } catch (e) {}
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("auth:addresses-updated", { detail: { list, userId: u.id } }));
+      }
+    },
+
+    addAddress(addr, user) {
+      const u = user || this.current();
+      if (!u) return [];
+      let list = this.getAddresses(u);
+      const newAddr = {
+        id: "addr_" + Date.now(),
+        name: addr.name || u.fullName,
+        phone: addr.phone || u.phone,
+        city: addr.city || "TP. Hồ Chí Minh",
+        detail: addr.detail || "",
+        type: addr.type || "home",
+        note: addr.note || "",
+        isDefault: addr.isDefault || list.length === 0,
+        express2h: addr.express2h !== undefined ? addr.express2h : true,
+      };
+      if (newAddr.isDefault) {
+        list.forEach((a) => { a.isDefault = false; });
+      }
+      list.unshift(newAddr);
+      this.saveAddresses(list, u);
+      return list;
+    },
+
+    updateAddress(addrId, addrData, user) {
+      const u = user || this.current();
+      if (!u) return [];
+      let list = this.getAddresses(u);
+      const idx = list.findIndex((a) => a.id === addrId);
+      if (idx !== -1) {
+        if (addrData.isDefault) {
+          list.forEach((a) => { a.isDefault = false; });
+        }
+        list[idx] = {
+          ...list[idx],
+          ...addrData,
+        };
+        this.saveAddresses(list, u);
+      }
+      return list;
+    },
+
+    deleteAddress(addrId, user) {
+      const u = user || this.current();
+      if (!u) return [];
+      let list = this.getAddresses(u);
+      list = list.filter((a) => a.id !== addrId);
+      if (list.length > 0 && !list.some((a) => a.isDefault)) {
+        list[0].isDefault = true;
+      }
+      this.saveAddresses(list, u);
+      return list;
+    },
+
+    setDefaultAddress(addrId, user) {
+      const u = user || this.current();
+      if (!u) return [];
+      let list = this.getAddresses(u);
+      list.forEach((a) => {
+        a.isDefault = a.id === addrId;
+      });
+      this.saveAddresses(list, u);
+      return list;
+    },
   };
+
+  // Dọn dẹp key cũ không phân lập để tránh lẫn lộn giữa các tài khoản
+  try {
+    if (typeof localStorage !== "undefined") {
+      localStorage.removeItem("hv_user_addresses");
+    }
+  } catch (e) {}
 
   if (typeof window !== "undefined") {
     window.Auth = Auth;

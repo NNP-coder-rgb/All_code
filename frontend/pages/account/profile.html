@@ -112,24 +112,24 @@
             </div>
 
             <!-- Tên & Handle gọn gàng, cỡ chữ vừa phải -->
-            <h2 class="profile-card-name" id="userDisplayName">Nguyễn Ngọc Phúc</h2>
-            <div class="profile-card-handle" id="userHandle">@nguyenphuc230607</div>
+            <h2 class="profile-card-name" id="userDisplayName">Đang tải...</h2>
+            <div class="profile-card-handle" id="userHandle">@...</div>
 
             <!-- Huy hiệu vai trò & xác thực -->
             <div class="flex items-center justify-center gap-2 mt-2" id="userRoleBadges">
-              <span class="badge badge-primary" id="roleBadgeDisplay">VIP BUYER</span>
-              <span class="badge badge-success" id="verifiedStatusBadge">VERIFIED CITIZEN</span>
+              <span class="badge badge-primary" id="roleBadgeDisplay">---</span>
+              <span class="badge badge-success" id="verifiedStatusBadge">---</span>
             </div>
 
             <!-- Khung liên hệ SĐT & Email -->
             <div class="profile-contact-mini">
               <div class="flex items-center mb-1.5">
                 <span class="material-symbols-outlined">phone</span>
-                <span id="userPhoneDisplay">0384 416 977</span>
+                <span id="userPhoneDisplay">---</span>
               </div>
               <div class="flex items-center">
                 <span class="material-symbols-outlined">mail</span>
-                <span id="userEmailDisplay" class="text-truncate">nguyenphuc230607@gmail.com</span>
+                <span id="userEmailDisplay" class="text-truncate">---</span>
               </div>
             </div>
 
@@ -214,24 +214,31 @@
           <!-- KHỐI 4: MENU CÁC MỤC HỒ SƠ -->
           <div class="panel p-3">
             <nav class="profile-menu">
-              <button class="profile-menu-item active" type="button" onclick="document.getElementById('sectionCccd').scrollIntoView({behavior:'smooth'})">
+              <button class="profile-menu-item active" type="button" onclick="document.getElementById('sectionPersonalInfo').scrollIntoView({behavior:'smooth'})">
+                <span class="flex items-center gap-2">
+                  <span class="material-symbols-outlined icon-sm">person</span>
+                  1. Thông Tin Cá Nhân &amp; Tài Khoản
+                </span>
+                <span class="material-symbols-outlined icon-xs">chevron_right</span>
+              </button>
+              <button class="profile-menu-item" type="button" onclick="document.getElementById('sectionCccd').scrollIntoView({behavior:'smooth'})">
                 <span class="flex items-center gap-2">
                   <span class="material-symbols-outlined icon-sm">badge</span>
-                  1. Sinh Trắc Học &amp; CCCD Chip L2
+                  2. Sinh Trắc Học &amp; CCCD Chip L2
                 </span>
                 <span class="material-symbols-outlined icon-xs">chevron_right</span>
               </button>
               <button class="profile-menu-item" type="button" onclick="document.getElementById('sectionBank').scrollIntoView({behavior:'smooth'})">
                 <span class="flex items-center gap-2">
                   <span class="material-symbols-outlined icon-sm">account_balance</span>
-                  2. Tài Khoản Ngân Hàng Napas
+                  3. Tài Khoản Ngân Hàng Napas
                 </span>
                 <span class="material-symbols-outlined icon-xs">chevron_right</span>
               </button>
               <button class="profile-menu-item" type="button" onclick="document.getElementById('sectionAddress').scrollIntoView({behavior:'smooth'})">
                 <span class="flex items-center gap-2">
                   <span class="material-symbols-outlined icon-sm">local_shipping</span>
-                  3. Sổ Địa Chỉ Giao Nhận Hỏa Tốc
+                  4. Sổ Địa Chỉ Giao Nhận Hỏa Tốc
                 </span>
                 <span class="material-symbols-outlined icon-xs">chevron_right</span>
               </button>
@@ -244,15 +251,103 @@
           </div>
         </aside>
 
-        <!-- CỘT PHẢI: CHI TIẾT CÁC MỤC DANH TÍNH & CCCD -->
+        <!-- CỘT PHẢI: CHI TIẾT CÁC MỤC DANH TÍNH & HỒ SƠ CÁ NHÂN -->
         <div>
-          <!-- THẺ 1: ĐỊNH DANH CCCD GẮN CHIP (ICAO 9303) -->
+          <!-- THẺ 1: THÔNG TIN CÁ NHÂN & LIÊN HỆ -->
+          <section class="panel p-5 mb-5" id="sectionPersonalInfo">
+            <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary" style="font-size: 26px;">person_pin</span>
+                <div>
+                  <h3 class="panel-title">1. Thông Tin Cá Nhân &amp; Tài Khoản</h3>
+                  <div class="text-xs text-muted">HỌ TÊN, SỐ ĐIỆN THOẠI, EMAIL &amp; ĐỊA CHỈ THƯỜNG TRÚ CHÍNH CHỦ</div>
+                </div>
+              </div>
+              <button class="btn btn-secondary btn-sm" id="btnEditPersonalInfoTop" type="button">
+                <span class="material-symbols-outlined icon-xs">edit_note</span>
+                Chỉnh Sửa Thông Tin
+              </button>
+            </div>
+
+            <!-- LƯỚI THÔNG TIN CÁ NHÂN CHI TIẾT -->
+            <div class="identity-meta-grid mb-4">
+              <div>
+                <div class="text-xs text-muted">HỌ VÀ TÊN ĐẦY ĐỦ</div>
+                <div class="text-sm fw-700 text-text mono mt-1" id="infoFullName">---</div>
+                <div class="text-xs text-success mt-1 flex items-center gap-1">
+                  <span class="material-symbols-outlined icon-xs">verified</span> Tài khoản chính chủ
+                </div>
+              </div>
+
+              <div>
+                <div class="text-xs text-muted">TÊN NGƯỜI DÙNG / HANDLE</div>
+                <div class="text-sm fw-700 text-secondary mono mt-1" id="infoUsername">@---</div>
+                <div class="text-xs text-muted mt-1">Định danh nội bộ sàn HYBRID.STORE</div>
+              </div>
+
+              <div>
+                <div class="text-xs text-muted">SỐ ĐIỆN THOẠI LIÊN HỆ</div>
+                <div class="text-sm fw-700 text-text mono mt-1" id="infoPhone">---</div>
+                <div class="text-xs text-muted mt-1">Dùng để xác thực OTP &amp; Shipper liên hệ giao hàng</div>
+              </div>
+
+              <div>
+                <div class="text-xs text-muted">EMAIL ĐĂNG KÝ / LIÊN HỆ</div>
+                <div class="text-sm fw-700 text-text mono mt-1" id="infoEmail">---</div>
+                <div class="text-xs text-muted mt-1">Nhận hóa đơn điện tử &amp; biên lai nghiệm thu</div>
+              </div>
+
+              <div>
+                <div class="text-xs text-muted">NGÀY SINH &amp; GIỚI TÍNH</div>
+                <div class="text-sm fw-600 text-text mono mt-1" id="infoDobGender">---</div>
+                <div class="text-xs text-muted mt-1">Khớp dữ liệu định danh công dân</div>
+              </div>
+
+              <div>
+                <div class="text-xs text-muted">VAI TRÒ &amp; HẠNG THÀNH VIÊN</div>
+                <div class="text-sm fw-700 text-secondary mono mt-1" id="infoRoleBadge">---</div>
+                <div class="text-xs text-muted mt-1">Quyền hạn mua sắm &amp; đăng bán C2C</div>
+              </div>
+
+              <div style="grid-column: 1 / -1;">
+                <div class="text-xs text-muted">ĐỊA CHỈ THƯỜNG TRÚ / NƠI Ở HIỆN TẠI</div>
+                <div class="text-sm fw-600 text-text mt-1" id="infoAddress">---</div>
+                <div class="text-xs text-secondary mt-1 flex items-center gap-1">
+                  <span class="material-symbols-outlined icon-xs">location_on</span>
+                  Địa chỉ đăng ký cư trú chính thức của chủ tài khoản
+                </div>
+              </div>
+
+              <div style="grid-column: 1 / -1;" id="infoBioWrap">
+                <div class="text-xs text-muted">TIỂU SỬ / GIỚI THIỆU BẢN THÂN</div>
+                <div class="text-sm text-text mt-1 italic" id="infoBio">---</div>
+              </div>
+            </div>
+
+            <!-- THANH HÀNH ĐỘNG NHANH -->
+            <div class="flex items-center justify-between flex-wrap gap-3 pt-3 border-top">
+              <div class="flex items-center gap-2 text-xs text-muted">
+                <span class="material-symbols-outlined icon-sm text-secondary">verified_user</span>
+                <span>Thông tin cá nhân được bảo vệ theo tiêu chuẩn ISO/IEC 27701</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <button class="btn btn-secondary btn-sm" id="btnQuickChangePassword" type="button">
+                  <span class="material-symbols-outlined icon-xs">lock_reset</span> Đổi Mật Khẩu
+                </button>
+                <button class="btn btn-primary btn-sm" id="btnEditPersonalInfoBottom" type="button">
+                  <span class="material-symbols-outlined icon-xs">edit</span> Cập Nhật Thông Tin
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- THẺ 2: ĐỊNH DANH CCCD GẮN CHIP (ICAO 9303) -->
           <section class="panel p-5 mb-5" id="sectionCccd">
             <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
               <div class="flex items-center gap-2">
                 <span class="material-symbols-outlined text-secondary" style="font-size: 26px;">verified_user</span>
                 <div>
-                  <h3 class="panel-title">Định Danh CCCD Gắn Chip (ICAO 9303)</h3>
+                  <h3 class="panel-title">2. Định Danh CCCD Gắn Chip (ICAO 9303)</h3>
                   <div class="text-xs text-muted">XÁC THỰC CƠ SỞ DỮ LIỆU C06 BỘ CÔNG AN // HARDWARE NFC ENCRYPTED</div>
                 </div>
               </div>
@@ -270,7 +365,7 @@
             <div class="identity-meta-grid mb-4">
               <div>
                 <div class="text-xs text-muted">HỌ VÀ TÊN CHỦ SỞ HỮU</div>
-                <div class="text-sm fw-700 text-text mono mt-1" id="cccdFullName">NGUYỄN HƯƠNG MAI</div>
+                <div class="text-sm fw-700 text-text mono mt-1" id="cccdFullName">---</div>
                 <div class="text-xs text-success mt-1 flex items-center gap-1">
                   <span class="material-symbols-outlined icon-xs">verified</span> Khớp 100% cơ sở dữ liệu định danh
                 </div>
@@ -278,13 +373,13 @@
 
               <div>
                 <div class="text-xs text-muted">SỐ THẺ CCCD GẮN CHIP</div>
-                <div class="text-sm fw-700 text-secondary mono mt-1" id="cccdNumber">00120200****</div>
+                <div class="text-sm fw-700 text-secondary mono mt-1" id="cccdNumber">---</div>
                 <div class="text-xs text-muted mt-1">ICAO 9303 Standard Cryptographic</div>
               </div>
 
               <div>
                 <div class="text-xs text-muted">NGÀY SINH &amp; NGÀY CẤP</div>
-                <div class="text-sm fw-600 text-text mono mt-1" id="cccdDob">18/09/1994 — Cấp: 24/02/2023</div>
+                <div class="text-sm fw-600 text-text mono mt-1" id="cccdDob">---</div>
                 <div class="text-xs text-muted mt-1">Thời hạn: Có giá trị vô thời hạn</div>
               </div>
 
@@ -338,13 +433,13 @@
             </div>
           </section>
 
-          <!-- THẺ 2: TÀI KHOẢN NGÂN HÀNG LIÊN KẾT (NAPAS 24/7) -->
+          <!-- THẺ 3: TÀI KHOẢN NGÂN HÀNG LIÊN KẾT (NAPAS 24/7) -->
           <section class="panel p-5 mb-5" id="sectionBank">
             <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
               <div>
                 <h3 class="panel-title flex items-center gap-2">
                   <span class="material-symbols-outlined text-primary">account_balance</span>
-                  Tài Khoản Ngân Hàng Rút Tiền / Thanh Toán
+                  3. Tài Khoản Ngân Hàng Rút Tiền / Thanh Toán
                 </h3>
                 <div class="text-xs text-muted">LIÊN KẾT RÚT TỰ ĐỘNG NAPAS 24/7 // ĐỐI SOÁT NHANH TRONG 30 GIÂY</div>
               </div>
@@ -364,7 +459,7 @@
                     <span class="text-xs text-secondary">Napas 24/7 Siêu Tốc</span>
                   </div>
                   <div class="text-xs text-muted mono mt-1">
-                    Số TK: <strong class="text-text" id="primaryBankNumber">1903 6888 8888 8</strong> • Chủ TK: <span id="primaryBankHolder">NGUYỄN HƯƠNG MAI</span> (Khớp CCCD 100%)
+                    Số TK: <strong class="text-text" id="primaryBankNumber">---</strong> • Chủ TK: <span id="primaryBankHolder">---</span> (Khớp CCCD 100%)
                   </div>
                 </div>
               </div>
@@ -384,7 +479,7 @@
                     <span class="text-xs text-muted">Priority Digital Banking</span>
                   </div>
                   <div class="text-xs text-muted mono mt-1">
-                    Số TK: <strong class="text-text">0071 0009 9999 9</strong> • Chủ TK: <span id="secondaryBankHolder">NGUYỄN HƯƠNG MAI</span>
+                    Số TK: <strong class="text-text">0071 0009 9999 9</strong> • Chủ TK: <span id="secondaryBankHolder">---</span>
                   </div>
                 </div>
               </div>
@@ -394,15 +489,15 @@
             </div>
           </section>
 
-          <!-- THẺ 3: SỔ ĐỊA CHỈ GIAO NHẬN HỎA TỐC -->
+          <!-- THẺ 4: SỔ ĐỊA CHỈ GIAO NHẬN HỎA TỐC -->
           <section class="panel p-5 mb-5" id="sectionAddress">
             <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
               <div>
                 <h3 class="panel-title flex items-center gap-2">
                   <span class="material-symbols-outlined text-secondary">local_shipping</span>
-                  Sổ Địa Chỉ Giao Nhận Hỏa Tốc
+                  4. Sổ Địa Chỉ Giao Nhận Hỏa Tốc
                 </h3>
-                <div class="text-xs text-muted">HỖ TRỢ ĐỘI SHIPPER LAB 15 PHÚT &amp; HỎA TỐC 2H NỘI THÀNH</div>
+                <div class="text-xs text-muted">LƯU TRỮ &amp; QUẢN LÝ RIÊNG BIỆT CHO TỪNG TÀI KHOẢN // SHIPPER HỎA TỐC 2H</div>
               </div>
               <button class="btn btn-secondary btn-sm" id="btnAddAddress" type="button">
                 <span class="material-symbols-outlined icon-xs">add_location_alt</span>
@@ -879,6 +974,23 @@
           const roleBadgeEl = document.getElementById("roleBadgeDisplay");
           if (roleBadgeEl) roleBadgeEl.textContent = roleLabel;
 
+          // Cập nhật Mục 1: Thông tin cá nhân & tài khoản chi tiết
+          const phone = u.phone || "Chưa cập nhật";
+          const email = u.email || "Chưa cập nhật";
+          const dob = u.dob || (u.kycData && u.kycData.dob) || "Chưa cập nhật";
+          const gender = u.gender || (u.kycData && u.kycData.gender) || "Chưa cập nhật";
+          const address = u.address || (u.kycData && u.kycData.address) || "Chưa cập nhật";
+          const bio = u.bio || "Chưa có lời giới thiệu bản thân.";
+
+          if (document.getElementById("infoFullName")) document.getElementById("infoFullName").textContent = fullName;
+          if (document.getElementById("infoUsername")) document.getElementById("infoUsername").textContent = "@" + username;
+          if (document.getElementById("infoPhone")) document.getElementById("infoPhone").textContent = phone;
+          if (document.getElementById("infoEmail")) document.getElementById("infoEmail").textContent = email;
+          if (document.getElementById("infoDobGender")) document.getElementById("infoDobGender").textContent = `${dob} — Giới tính: ${gender}`;
+          if (document.getElementById("infoAddress")) document.getElementById("infoAddress").textContent = address;
+          if (document.getElementById("infoRoleBadge")) document.getElementById("infoRoleBadge").textContent = `${roleLabel} (${(u.role || "buyer").toUpperCase()})`;
+          if (document.getElementById("infoBio")) document.getElementById("infoBio").textContent = `"${bio}"`;
+
           // Cập nhật thông tin ngân hàng thụ hưởng hiển thị
           if (u.bankName) {
             const bNameEl = document.getElementById("primaryBankName");
@@ -1139,7 +1251,7 @@
         });
 
         // Xử lý mở Modal Chỉnh Sửa Hồ Sơ Cá Nhân toàn diện
-        document.getElementById("btnOpenEditProfile").addEventListener("click", () => {
+        function openEditProfileModal(initialTab = "tabProfileBasic") {
           const u = Auth.current();
           if (!u) return;
 
@@ -1163,7 +1275,7 @@
           document.getElementById("profileInputPhone").value = u.phone || "";
           document.getElementById("profileInputEmail").value = u.email || "";
           document.getElementById("profileInputDob").value = u.dob || u.kycData?.dob || "18/09/1994";
-          document.getElementById("profileSelectGender").value = u.gender || u.kycData?.gender || "Nữ";
+          document.getElementById("profileSelectGender").value = u.gender || u.kycData?.gender || "Nam";
           document.getElementById("profileInputAddress").value = u.address || u.kycData?.address || "";
           document.getElementById("profileInputBio").value = u.bio || "";
 
@@ -1180,24 +1292,32 @@
 
           // Tab 2: Vai trò & Ngành hàng
           document.getElementById("profileSelectRole").value = u.role || "buyer";
-          document.getElementById("profileInputMembershipTitle").value = u.membershipTitle || "VIP BUYER";
+          document.getElementById("profileInputMembershipTitle").value = u.membershipTitle || (u.role === "seller" ? "TOP SELLER C2C" : "VIP BUYER");
           document.getElementById("profileSelectCategory").value = u.interestCategory || "sneakers";
 
           // Tab 3: Ngân hàng Napas
-          document.getElementById("profileSelectBank").value = u.bankName || "Techcombank";
-          document.getElementById("profileInputBankNumber").value = u.bankAccountNumber || "1903 6888 8888 8";
+          document.getElementById("profileSelectBank").value = u.bankName || (u.role === "seller" ? "Vietcombank" : "Techcombank");
+          document.getElementById("profileInputBankNumber").value = u.bankAccountNumber || (u.role === "seller" ? "0071 0009 9999 9" : "1903 6888 8888 8");
           document.getElementById("profileInputBankHolder").value = (u.bankAccountName || u.fullName || "").toUpperCase();
 
           // Tab 4: Mật khẩu
           document.getElementById("profileInputNewPassword").value = "";
           document.getElementById("profileInputConfirmPassword").value = "";
 
-          // Reset về tab đầu tiên
-          const firstTabBtn = document.querySelector('.modal-tab-btn[data-tab="tabProfileBasic"]');
-          if (firstTabBtn) firstTabBtn.click();
+          // Reset về tab được chọn
+          const tabBtn = document.querySelector(`.modal-tab-btn[data-tab="${initialTab}"]`) || document.querySelector('.modal-tab-btn[data-tab="tabProfileBasic"]');
+          if (tabBtn) tabBtn.click();
 
           Utils.openModal("editProfileModal");
-        });
+        }
+
+        document.getElementById("btnOpenEditProfile").addEventListener("click", () => openEditProfileModal("tabProfileBasic"));
+        const btnEditTop = document.getElementById("btnEditPersonalInfoTop");
+        if (btnEditTop) btnEditTop.addEventListener("click", () => openEditProfileModal("tabProfileBasic"));
+        const btnEditBottom = document.getElementById("btnEditPersonalInfoBottom");
+        if (btnEditBottom) btnEditBottom.addEventListener("click", () => openEditProfileModal("tabProfileBasic"));
+        const btnQuickPwd = document.getElementById("btnQuickChangePassword");
+        if (btnQuickPwd) btnQuickPwd.addEventListener("click", () => openEditProfileModal("tabProfileSecurity"));
 
         // Submit form chỉnh sửa hồ sơ toàn diện
         document.getElementById("editProfileForm").addEventListener("submit", (e) => {
@@ -1569,44 +1689,13 @@
           }
         });
 
-        // 5. Quản Lý Sổ Địa Chỉ Giao Nhận Hàng (CRUD Dynamic)
-        const ADDR_KEY = "hv_user_addresses";
-
+        // 5. Quản Lý Sổ Địa Chỉ Giao Nhận Hàng (Phân lập riêng biệt theo từng tài khoản)
         function getAddresses() {
-          const stored = localStorage.getItem(ADDR_KEY);
-          if (stored) {
-            try { return JSON.parse(stored); } catch (e) {}
-          }
-          const defaults = [
-            {
-              id: "addr_1",
-              name: "Nguyễn Hương Mai",
-              phone: "0396 403 893",
-              city: "TP. Hồ Chí Minh — Quận Bình Thạnh",
-              detail: "Căn hộ Landmark 81, Vinhomes Central Park, Phường 22",
-              type: "home",
-              note: "Shipper bấm chuông lên phòng",
-              isDefault: true,
-              express2h: true,
-            },
-            {
-              id: "addr_2",
-              name: "Nguyễn Hương Mai",
-              phone: "0396 403 893",
-              city: "TP. Hồ Chí Minh — Quận 1",
-              detail: "Tòa nhà Tech Hub, Số 45 Lê Duẩn, Phường Bến Nghé",
-              type: "office",
-              note: "Giao giờ hành chính 8h - 18h",
-              isDefault: false,
-              express2h: true,
-            },
-          ];
-          localStorage.setItem(ADDR_KEY, JSON.stringify(defaults));
-          return defaults;
+          return Auth.getAddresses();
         }
 
         function saveAddresses(list) {
-          localStorage.setItem(ADDR_KEY, JSON.stringify(list));
+          Auth.saveAddresses(list);
           renderAddresses();
         }
 
@@ -1617,11 +1706,12 @@
 
           if (!list || list.length === 0) {
             container.innerHTML = `
-              <div class="panel p-5 text-center text-muted">
-                <span class="material-symbols-outlined" style="font-size: 36px;">location_off</span>
-                <p class="text-sm mt-2 mb-3">Bạn chưa lưu địa chỉ nhận hàng nào.</p>
-                <button class="btn btn-secondary btn-sm" id="btnEmptyAddAddr" type="button">
-                  + Thêm Địa Chỉ Đầu Tiên
+              <div class="panel p-5 text-center text-muted" style="background: var(--neutral-850); border: 1px dashed var(--border); border-radius: var(--radius-lg);">
+                <span class="material-symbols-outlined text-secondary" style="font-size: 40px;">location_off</span>
+                <p class="text-sm mt-2 mb-1 fw-600 text-text">Tài khoản này chưa có địa chỉ giao nhận nào</p>
+                <p class="text-xs text-muted mb-3">Thêm địa chỉ giao nhận để shipper hỏa tốc 2H giao hàng chính xác tới bạn.</p>
+                <button class="btn btn-primary btn-sm" id="btnEmptyAddAddr" type="button">
+                  <span class="material-symbols-outlined icon-xs">add_location_alt</span> + Thêm Địa Chỉ Nhận Hàng Đầu Tiên
                 </button>
               </div>
             `;
@@ -1692,7 +1782,7 @@
           document.getElementById("addrPhone").value = u.phone || "";
           document.getElementById("addrCity").value = "TP. Hồ Chí Minh — ";
           document.getElementById("addrDetail").value = "";
-          document.getElementById("addrType").value = "home";
+          document.getElementById("addrType").value = u.role === "seller" ? "office" : "home";
           document.getElementById("addrNote").value = "";
           document.getElementById("addrIsDefault").checked = getAddresses().length === 0;
           Utils.openModal("addressModal");
@@ -1722,28 +1812,27 @@
           Utils.confirm(
             {
               title: "Xóa Địa Chỉ",
-              message: "Bạn có chắc chắn muốn xóa địa chỉ giao nhận này?",
+              message: "Bạn có chắc chắn muốn xóa địa chỉ giao nhận này khỏi sổ địa chỉ của tài khoản?",
               confirmText: "Xóa",
               cancelText: "Hủy",
             },
             () => {
-              let list = getAddresses();
-              list = list.filter((a) => a.id !== id);
-              if (list.length > 0 && !list.some((a) => a.isDefault)) {
-                list[0].isDefault = true;
-              }
-              saveAddresses(list);
+              Auth.deleteAddress(id);
+              renderAddresses();
               Utils.toast("Đã xóa địa chỉ thành công.", "info");
             }
           );
         }
 
         function setDefaultAddress(id) {
-          const list = getAddresses();
-          list.forEach((a) => {
-            a.isDefault = a.id === id;
-          });
-          saveAddresses(list);
+          const updated = Auth.setDefaultAddress(id);
+          renderAddresses();
+          const def = updated.find((a) => a.id === id);
+          if (def && def.detail) {
+            const addrString = def.detail + (def.city ? ", " + def.city : "");
+            Auth.updateProfile({ address: addrString });
+            renderProfile();
+          }
           Utils.toast("Đã chuyển thành địa chỉ nhận hàng mặc định.", "success");
         }
 
@@ -1771,46 +1860,27 @@
             return;
           }
 
-          let list = getAddresses();
-
-          if (isDefault) {
-            list.forEach((a) => { a.isDefault = false; });
-          }
-
           if (editId) {
-            // Cập nhật
-            const idx = list.findIndex((a) => a.id === editId);
-            if (idx !== -1) {
-              list[idx] = {
-                ...list[idx],
-                name,
-                phone,
-                city,
-                detail,
-                type,
-                note,
-                isDefault: isDefault || list.length === 1,
-              };
-            }
+            Auth.updateAddress(editId, { name, phone, city, detail, type, note, isDefault });
           } else {
-            // Thêm mới
-            const newAddr = {
-              id: "addr_" + Date.now(),
-              name,
-              phone,
-              city,
-              detail,
-              type,
-              note,
-              isDefault: isDefault || list.length === 0,
-              express2h: true,
-            };
-            list.unshift(newAddr);
+            Auth.addAddress({ name, phone, city, detail, type, note, isDefault });
           }
 
-          saveAddresses(list);
+          // Tự động đồng bộ địa chỉ mặc định vào thông tin cư trú của tài khoản
+          if (isDefault || getAddresses().length === 1) {
+            const fullAddress = detail + ", " + city;
+            Auth.updateProfile({ address: fullAddress });
+            renderProfile();
+          }
+
+          renderAddresses();
           Utils.closeModal("addressModal");
-          Utils.toast(editId ? "Đã cập nhật địa chỉ giao nhận!" : "Đã thêm địa chỉ giao nhận mới!", "success");
+          Utils.toast(editId ? "Đã cập nhật địa chỉ giao nhận thành công!" : "Đã thêm địa chỉ giao nhận mới thành công!", "success");
+        });
+
+        // Lắng nghe cập nhật sổ địa chỉ từ các sự kiện khác
+        window.addEventListener("auth:addresses-updated", () => {
+          renderAddresses();
         });
 
         // Khởi tạo danh sách địa chỉ

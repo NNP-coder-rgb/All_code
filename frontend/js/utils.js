@@ -1050,6 +1050,60 @@
       }
       return user;
     },
+    getUserAddressKey(user) {
+      if (typeof window !== "undefined" && window.Auth && typeof window.Auth.getUserAddressKey === "function" && window.Auth !== Auth) {
+        return window.Auth.getUserAddressKey(user);
+      }
+      const u = user || Auth.current();
+      if (!u) return "hv_user_addresses_guest";
+      const uid = u.id || (u.email ? u.email.replace(/[@.]/g, "_") : "default");
+      return "hv_user_addresses_" + uid;
+    },
+    getAddresses(user) {
+      if (typeof window !== "undefined" && window.Auth && typeof window.Auth.getAddresses === "function" && window.Auth !== Auth) {
+        return window.Auth.getAddresses(user);
+      }
+      const u = user || Auth.current();
+      if (!u) return [];
+      const key = Auth.getUserAddressKey(u);
+      try {
+        const raw = localStorage.getItem(key);
+        if (raw) {
+          const list = JSON.parse(raw);
+          if (Array.isArray(list) && list.length > 0) return list;
+        }
+      } catch (e) {}
+      const userAddr = u.address || "Căn hộ Landmark 81, Vinhomes Central Park, Phường 22, Quận Bình Thạnh, TP. Hồ Chí Minh";
+      const seed = [
+        {
+          id: "addr_" + (u.id || "main") + "_1",
+          name: u.fullName || "Khách Hàng",
+          phone: u.phone || "0901234567",
+          city: "TP. Hồ Chí Minh — Quận Bình Thạnh",
+          detail: userAddr,
+          type: u.role === "seller" ? "office" : "home",
+          note: "Giao tận tay / Giờ hành chính",
+          isDefault: true,
+          express2h: true,
+        },
+      ];
+      try {
+        localStorage.setItem(key, JSON.stringify(seed));
+      } catch (e) {}
+      return seed;
+    },
+    saveAddresses(list, user) {
+      if (typeof window !== "undefined" && window.Auth && typeof window.Auth.saveAddresses === "function" && window.Auth !== Auth) {
+        return window.Auth.saveAddresses(list, user);
+      }
+      const u = user || Auth.current();
+      if (!u) return;
+      const key = Auth.getUserAddressKey(u);
+      try {
+        localStorage.setItem(key, JSON.stringify(list || []));
+      } catch (e) {}
+      return list;
+    },
     requireLogin(options = {}) {
       if (typeof window !== "undefined" && window.Auth && typeof window.Auth.requireLogin === "function" && window.Auth !== Auth) {
         return window.Auth.requireLogin(options);

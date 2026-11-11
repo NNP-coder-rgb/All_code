@@ -1321,6 +1321,60 @@
           // Khởi tạo ban đầu với Hà Nội
           populateDistricts(dom.selectProvince.value || "Hà Nội");
 
+          // Tự động nạp sổ địa chỉ phân lập của tài khoản người dùng đăng nhập
+          const userAddresses = (typeof Auth !== "undefined" && typeof Auth.getAddresses === "function") ? Auth.getAddresses() : [];
+          if (userAddresses.length > 0) {
+            const pillsContainer = document.getElementById("savedAddressPills");
+            if (pillsContainer) {
+              pillsContainer.innerHTML = userAddresses.map((a, idx) => {
+                const icon = a.type === "office" ? "apartment" : "home";
+                const isDef = a.isDefault || idx === 0;
+                return `
+                  <button type="button" class="address-pill-btn ${isDef ? "active" : ""}" data-addr-id="${a.id}">
+                    <span class="material-symbols-outlined icon-xs">${icon}</span>
+                    <span>${a.name}: ${a.city} ${isDef ? "(Mặc định)" : ""}</span>
+                  </button>
+                `;
+              }).join("") + `
+                <button type="button" class="address-pill-btn" data-addr-id="custom">
+                  <span class="material-symbols-outlined icon-xs">edit_location</span>
+                  <span>+ Nhập địa chỉ khác</span>
+                </button>
+              `;
+            }
+            userAddresses.forEach(a => {
+              let prov = "TP. Hồ Chí Minh";
+              if (a.city && a.city.includes("Hà Nội")) prov = "Hà Nội";
+              else if (a.city && a.city.includes("Đà Nẵng")) prov = "Đà Nẵng";
+              let dist = "Quận 1";
+              if (a.city && a.city.includes("Bình Thạnh")) dist = "Quận Bình Thạnh";
+              else if (a.city && a.city.includes("Nam Từ Liêm")) dist = "Quận Nam Từ Liêm";
+              else if (a.city && a.city.includes("Hoàn Kiếm")) dist = "Quận Hoàn Kiếm";
+
+              PRESET_ADDRESSES[a.id] = {
+                fullName: a.name,
+                phone: a.phone,
+                province: prov,
+                district: dist,
+                ward: "Phường Trung Tâm",
+                address: a.detail,
+                type: a.type || "home",
+              };
+            });
+            dom.savedAddrBtns = document.querySelectorAll(".address-pill-btn");
+            const defAddr = userAddresses.find(a => a.isDefault) || userAddresses[0];
+            if (defAddr && PRESET_ADDRESSES[defAddr.id]) {
+              const d = PRESET_ADDRESSES[defAddr.id];
+              dom.recipientName.value = d.fullName;
+              dom.recipientPhone.value = d.phone;
+              dom.selectProvince.value = d.province;
+              populateDistricts(d.province);
+              dom.selectDistrict.value = d.district;
+              populateWards(d.district);
+              dom.recipientAddress.value = d.address;
+            }
+          }
+
           // Xử lý chọn nhanh địa chỉ đã lưu
           dom.savedAddrBtns.forEach(btn => {
             btn.addEventListener("click", () => {
