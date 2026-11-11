@@ -213,43 +213,7 @@
   ).join("");
   $("#tickerInner").innerHTML = tickerHTML + tickerHTML; // nhân đôi để chạy vòng liền mạch
 
-  /* ---------------- Chip ngành hàng + ô chỉ mục ---------------- */
-  $("#chipBar").innerHTML =
-    '<a class="chip active" href="pages/shop/catalog.html"><span class="material-symbols-outlined">grid_view</span>Tất Cả Ngành Hàng</a>' +
-    CATEGORIES.map(
-      (c) =>
-        '<a class="chip tone-' +
-        c.tone +
-        '" href="#cat-' +
-        c.id +
-        '">' +
-        '<span class="material-symbols-outlined" style="color:var(--tone)">' +
-        c.chipIcon +
-        "</span>" +
-        c.chip +
-        '<span class="chip-count">' +
-        c.total +
-        "</span>" +
-        "</a>",
-    ).join("");
-
-  // Bắt sự kiện chuyển active và cuộn mượt cho các chip ngành hàng
-  const chipEls = $$("#chipBar .chip");
-  chipEls.forEach((chip) => {
-    chip.addEventListener("click", (e) => {
-      chipEls.forEach((c) => c.classList.remove("active"));
-      chip.classList.add("active");
-      const targetId = chip.getAttribute("href");
-      if (targetId && targetId.startsWith("#cat-")) {
-        const targetEl = $(targetId);
-        if (targetEl) {
-          e.preventDefault();
-          targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-      }
-    });
-  });
-
+  /* ---------------- Hỗ trợ kéo cuộn ngang ---------------- */
   // Hỗ trợ cuộn ngang tự nhiên bằng con lăn chuột (mouse wheel) và kéo chuột (drag)
   function enableHorizontalDrag(el) {
     if (!el) return;
@@ -297,23 +261,6 @@
 
   enableHorizontalDrag($("#chipBar"));
   enableHorizontalDrag($(".subnav .container"));
-
-  $("#catJump").innerHTML = CATEGORIES.map(
-    (c) =>
-      '<a class="cat-jump tone-' +
-      c.tone +
-      '" href="#cat-' +
-      c.id +
-      '">' +
-      '<span class="material-symbols-outlined">' +
-      c.icon +
-      "</span>" +
-      "<div><strong>" +
-      c.tile +
-      "</strong><small>" +
-      c.tileCount +
-      "</small></div></a>",
-  ).join("");
 
   /* ---------------- Thẻ sản phẩm ---------------- */
   function cardHTML(p, ctx) {
@@ -473,51 +420,113 @@
     }, 1000);
   }
 
-  /* ---------------- Các khối ngành hàng ---------------- */
-  $("#categorySections").innerHTML = CATEGORIES.map((c) => {
-    const items = PRODUCTS.filter((p) => p.category === c.id && !p.flashOnly && !p.catalogOnly).slice(0, 12);
-    if (!items || items.length === 0) return "";
-    return (
-      '<section class="container section tone-' +
-      c.tone +
-      '" id="cat-' +
-      c.id +
-      '">' +
-      '<div class="cat-head">' +
-      '<div class="cat-title">' +
-      '<span class="icon-box"><span class="material-symbols-outlined icon-lg">' +
-      c.icon +
-      "</span></span>" +
-      "<div>" +
-      '<div class="flex items-center gap-2 flex-wrap"><h2>' +
-      c.title +
-      '</h2><span class="badge badge-tone">' +
-      c.badge +
-      "</span></div>" +
-      '<p class="text-sm text-muted">' +
-      c.desc +
-      "</p>" +
-      "</div>" +
-      "</div>" +
-      '<div class="cat-links">' +
-      '<span class="note"><span class="material-symbols-outlined icon-sm">' +
-      c.noteIcon +
-      "</span>" +
-      c.note +
-      "</span>" +
-      '<a href="pages/shop/catalog.html?cat=' +
-      c.id +
-      '">Xem tất cả (' +
-      c.total +
-      ') <span class="material-symbols-outlined icon-sm">arrow_forward</span></a>' +
-      "</div>" +
-      "</div>" +
-      '<div class="product-grid">' +
-      items.map((p) => cardHTML(p)).join("") +
-      "</div>" +
-      "</section>"
-    );
-  }).join("");
+  /* ---------------- Các khối ngành hàng (Hỗ trợ phân chia Đồ Mới vs Đồ Cũ) ---------------- */
+  let currentHomeType = "all";
+
+  function renderHomeCategories(type) {
+    currentHomeType = type || "all";
+    const list = currentHomeType === "mall"
+      ? (typeof CATEGORIES_MALL !== "undefined" ? CATEGORIES_MALL : CATEGORIES)
+      : (currentHomeType === "c2c" ? (typeof CATEGORIES_C2C !== "undefined" ? CATEGORIES_C2C : CATEGORIES) : CATEGORIES);
+
+    // 1. Cập nhật thanh chip
+    const chipBaseUrl = currentHomeType === "all" ? "pages/shop/catalog.html" : "pages/shop/catalog.html?type=" + currentHomeType;
+    const allChipTitle = currentHomeType === "mall" ? "Tất Cả Hàng Mới" : (currentHomeType === "c2c" ? "Tất Cả Đồ Cũ" : "Tất Cả Ngành Hàng");
+
+    const chipBar = $("#chipBar");
+    if (chipBar) {
+      chipBar.innerHTML =
+        '<a class="chip active" href="' + chipBaseUrl + '"><span class="material-symbols-outlined">grid_view</span>' + allChipTitle + '</a>' +
+        list.map(
+          (c) =>
+            '<a class="chip tone-' + c.tone + '" href="#cat-' + c.id + '">' +
+            '<span class="material-symbols-outlined" style="color:var(--tone)">' + c.chipIcon + '</span>' +
+            (c.chip || c.tile || c.title) +
+            '<span class="chip-count">' + c.total + '</span>' +
+            '</a>',
+        ).join("");
+
+      // Gắn sự kiện cuộn mượt cho chip
+      const chipEls = $$("#chipBar .chip");
+      chipEls.forEach((chip) => {
+        chip.addEventListener("click", (e) => {
+          chipEls.forEach((c) => c.classList.remove("active"));
+          chip.classList.add("active");
+          const targetId = chip.getAttribute("href");
+          if (targetId && targetId.startsWith("#cat-")) {
+            const targetEl = $(targetId);
+            if (targetEl) {
+              e.preventDefault();
+              targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+          }
+        });
+      });
+    }
+
+    // 2. Cập nhật catJump (ô chỉ mục nhanh)
+    const catJump = $("#catJump");
+    if (catJump) {
+      catJump.innerHTML = list.map(
+        (c) =>
+          '<a class="cat-jump tone-' + c.tone + '" href="#cat-' + c.id + '">' +
+          '<span class="material-symbols-outlined">' + c.icon + '</span>' +
+          '<div><strong>' + (c.tile || c.title) + '</strong><small>' + (c.tileCount || c.total) + '</small></div></a>',
+      ).join("");
+    }
+
+    // 3. Cập nhật các khối ngành hàng
+    const catSections = $("#categorySections");
+    if (catSections) {
+      catSections.innerHTML = list.map((c) => {
+        const items = PRODUCTS.filter((p) => {
+          const matchCat = p.category === c.id;
+          const matchType = currentHomeType === "all" ? true : p.type === currentHomeType;
+          return matchCat && matchType && !p.flashOnly && !p.catalogOnly;
+        }).slice(0, 12);
+        if (!items || items.length === 0) return "";
+        const viewAllUrl = currentHomeType === "all"
+          ? 'pages/shop/catalog.html?cat=' + c.id
+          : 'pages/shop/catalog.html?type=' + currentHomeType + '&cat=' + c.id;
+        return (
+          '<section class="container section tone-' + c.tone + '" id="cat-' + c.id + '">' +
+          '<div class="cat-head">' +
+          '<div class="cat-title">' +
+          '<span class="icon-box"><span class="material-symbols-outlined icon-lg">' + c.icon + '</span></span>' +
+          '<div>' +
+          '<div class="flex items-center gap-2 flex-wrap"><h2>' + c.title + '</h2><span class="badge badge-tone">' + c.badge + '</span></div>' +
+          '<p class="text-sm text-muted">' + c.desc + '</p>' +
+          '</div>' +
+          '</div>' +
+          '<div class="cat-links">' +
+          '<span class="note"><span class="material-symbols-outlined icon-sm">' + c.noteIcon + '</span>' + c.note + '</span>' +
+          '<a href="' + viewAllUrl + '">Xem tất cả (' + c.total + ') <span class="material-symbols-outlined icon-sm">arrow_forward</span></a>' +
+          '</div>' +
+          '</div>' +
+          '<div class="product-grid">' +
+          items.map((p) => cardHTML(p)).join("") +
+          '</div>' +
+          '</section>'
+        );
+      }).join("");
+    }
+
+    // 4. Cập nhật active trên các tab chuyển đổi trang chủ
+    $$("#sectionTypeSelector .type-tab-btn").forEach((btn) => {
+      btn.classList.toggle("active", btn.dataset.type === currentHomeType);
+    });
+  }
+
+  // Khởi tạo các khối ngành hàng
+  renderHomeCategories("all");
+
+  // Gắn sự kiện cho các tab chuyển đổi Đồ Mới vs Đồ Cũ trên trang chủ
+  $$("#sectionTypeSelector .type-tab-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const type = btn.dataset.type || "all";
+      renderHomeCategories(type);
+    });
+  });
 
   /* ---------------- Giỏ hàng ---------------- */
   const CART_KEY = "hv_cart_count";

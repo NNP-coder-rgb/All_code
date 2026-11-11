@@ -236,6 +236,78 @@
         grid-column: 1 / -1 !important;
         width: 100% !important;
       }
+
+      /* =======================================================
+         BỘ CHUYỂN ĐỔI CHUYÊN MỤC ĐỒ MỚI VS ĐỒ CŨ TRANG CHỦ
+         ======================================================= */
+      .catalog-type-tabs {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: var(--sp-6) 0 var(--sp-4);
+        padding: 6px;
+        background: var(--bg-surface);
+        border: 1.5px solid var(--border-default);
+        border-radius: var(--radius-xl);
+        overflow-x: auto;
+      }
+      .type-tab-btn {
+        flex: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 18px;
+        font-size: var(--text-sm);
+        font-weight: 700;
+        color: var(--text-muted);
+        background: transparent;
+        border: 1px solid transparent;
+        border-radius: var(--radius-lg);
+        cursor: pointer;
+        transition: all var(--duration-fast) var(--ease-standard);
+        white-space: nowrap;
+      }
+      .type-tab-btn:hover {
+        color: var(--text-default);
+        background: rgba(255, 255, 255, 0.05);
+      }
+      .type-tab-btn.active {
+        color: #ffffff !important;
+        background: #8b5cf6 !important;
+        border-color: #8b5cf6 !important;
+        box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4);
+      }
+      .type-tab-btn[data-type="c2c"].active {
+        background: #0284c7 !important;
+        border-color: #0284c7 !important;
+        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+      }
+      [data-theme="light"] .catalog-type-tabs,
+      body.light-theme .catalog-type-tabs {
+        background: #f8fafc !important;
+        border-color: #cbd5e1 !important;
+      }
+      [data-theme="light"] .type-tab-btn,
+      body.light-theme .type-tab-btn {
+        color: #475569 !important;
+      }
+      [data-theme="light"] .type-tab-btn:hover,
+      body.light-theme .type-tab-btn:hover {
+        background: #e2e8f0 !important;
+        color: #0f172a !important;
+      }
+      [data-theme="light"] .type-tab-btn.active,
+      body.light-theme .type-tab-btn.active {
+        color: #ffffff !important;
+        background: #7c3aed !important;
+        border-color: #7c3aed !important;
+      }
+      [data-theme="light"] .type-tab-btn[data-type="c2c"].active,
+      body.light-theme .type-tab-btn[data-type="c2c"].active {
+        background: #0284c7 !important;
+        border-color: #0284c7 !important;
+      }
     </style>
   </head>
   <body>
@@ -373,13 +445,13 @@
               </div>
 
               <div class="btn-group">
-                <a class="btn btn-primary" href="pages/shop/catalog.html">
-                  <span>Khám Phá Sản Phẩm</span>
-                  <span class="material-symbols-outlined icon-sm">arrow_forward</span>
+                <a class="btn btn-primary" href="pages/shop/catalog.html?type=mall">
+                  <span class="material-symbols-outlined icon-sm">verified</span>
+                  <span>Sàn Đồ Mới Mall 100%</span>
                 </a>
                 <a class="btn btn-secondary" href="pages/shop/catalog.html?type=c2c">
                   <span class="material-symbols-outlined icon-sm">savings</span>
-                  <span>Săn Đồ Cũ Tiết Kiệm</span>
+                  <span>Chợ Đồ Cũ Like New</span>
                 </a>
               </div>
             </div>
@@ -499,7 +571,25 @@
         </div>
       </section>
 
-      <!-- ===== 4 NGÀNH HÀNG (sinh từ mock-data.js) ===== -->
+      <!-- ===== BỘ CHUYỂN ĐỔI CHUYÊN MỤC ĐỒ MỚI VS ĐỒ CŨ ===== -->
+      <section class="container section pb-0" id="sectionTypeSelector" style="padding-bottom: 0;">
+        <div class="catalog-type-tabs" style="margin-top: 0; margin-bottom: var(--sp-6);">
+          <button class="type-tab-btn active" id="homeTabAll" data-type="all" type="button" title="Xem tất cả ngành hàng song hành">
+            <span class="material-symbols-outlined">grid_view</span>
+            <span>✨ Tất Cả Ngành Hàng (Hybrid 130+)</span>
+          </button>
+          <button class="type-tab-btn" id="homeTabMall" data-type="mall" type="button" title="Chuyên mục 100% Brand Mall chính hãng">
+            <span class="material-symbols-outlined text-primary">verified</span>
+            <span>🛍️ Sàn Hàng Mới 100% (Brand Mall)</span>
+          </button>
+          <button class="type-tab-btn" id="homeTabC2c" data-type="c2c" type="button" title="Chuyên mục Đồ cũ Like New thẩm định Lab AI">
+            <span class="material-symbols-outlined text-secondary">eco</span>
+            <span>♻️ Chợ Đồ Cũ Tuyển Chọn (C2C Like New)</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ===== CÁC KHỐI NGÀNH HÀNG ===== -->
       <div id="categorySections"></div>
 
       <!-- ===== BANNER CAM KẾT MUA SẮM ===== -->

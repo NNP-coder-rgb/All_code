@@ -625,6 +625,195 @@
     Utils.toast("Đã đặt lại toàn bộ bộ lọc về mặc định", "info");
   }
 
+  /* ---------------- KHỞI TẠO VÀ CHUYỂN ĐỔI CHUYÊN TRANG ĐỒ MỚI VS ĐỒ CŨ ---------------- */
+  function initTypeTabCounts() {
+    const all = PRODUCTS.length;
+    const mall = PRODUCTS.filter((p) => p.type === "mall").length;
+    const c2c = PRODUCTS.filter((p) => p.type === "c2c").length;
+    const tabAll = $("#tabCountAll");
+    if (tabAll) tabAll.textContent = all;
+    const tabMall = $("#tabCountMall");
+    if (tabMall) tabMall.textContent = mall;
+    const tabC2c = $("#tabCountC2c");
+    if (tabC2c) tabC2c.textContent = c2c;
+  }
+
+  function renderSubnav(type) {
+    const subnav = $("#catalogSubnav");
+    if (!subnav) return;
+    const list = type === "mall"
+      ? (typeof CATEGORIES_MALL !== "undefined" ? CATEGORIES_MALL : CATEGORIES)
+      : (type === "c2c" ? (typeof CATEGORIES_C2C !== "undefined" ? CATEGORIES_C2C : CATEGORIES) : CATEGORIES);
+    const allLabel = type === "mall" ? "Tất Cả Hàng Mới" : (type === "c2c" ? "Tất Cả Đồ Cũ" : "Tất Cả Ngành Hàng");
+
+    subnav.innerHTML =
+      '<a href="catalog.html?type=' + type + '" class="' + (state.filters.category === "all" ? "active" : "") + '" data-cat="all">' +
+      '<span class="status-dot"></span>' + allLabel +
+      '</a>' +
+      list.map((c) =>
+        '<a href="catalog.html?type=' + type + '&cat=' + c.id + '" class="' + (state.filters.category === c.id ? "active" : "") + '" data-cat="' + c.id + '">' +
+        '<span class="material-symbols-outlined icon-sm text-' + c.tone + '">' + c.icon + '</span>' + (c.chip || c.tile || c.title) +
+        '</a>'
+      ).join("");
+
+    // Gắn sự kiện click cho các link subnav vừa tạo
+    $$("#catalogSubnav a").forEach((a) => {
+      a.addEventListener("click", (e) => {
+        e.preventDefault();
+        const cat = a.dataset.cat || "all";
+        state.filters.category = cat;
+        state.page = 1;
+        syncFilterInputs();
+        render();
+        $$("#catalogSubnav a").forEach((l) => l.classList.toggle("active", l === a));
+        try {
+          const url = new URL(window.location.href);
+          if (cat === "all") {
+            url.searchParams.delete("cat");
+          } else {
+            url.searchParams.set("cat", cat);
+          }
+          window.history.pushState({ cat }, "", url.toString());
+        } catch (err) {}
+      });
+    });
+  }
+
+  function renderSidebarCategories(type) {
+    const container = $("#filterCategoryOptions");
+    if (!container) return;
+    const list = type === "mall"
+      ? (typeof CATEGORIES_MALL !== "undefined" ? CATEGORIES_MALL : CATEGORIES)
+      : (type === "c2c" ? (typeof CATEGORIES_C2C !== "undefined" ? CATEGORIES_C2C : CATEGORIES) : CATEGORIES);
+
+    const totalCount = type === "mall"
+      ? PRODUCTS.filter((p) => p.type === "mall").length
+      : (type === "c2c" ? PRODUCTS.filter((p) => p.type === "c2c").length : PRODUCTS.length);
+
+    const labelEl = $("#filterCategoryLabel");
+    if (labelEl) {
+      labelEl.textContent = type === "mall"
+        ? "Ngành Hàng Đồ Mới (Brand Mall)"
+        : (type === "c2c" ? "Ngành Hàng Đồ Cũ (Like New)" : "Ngành Hàng");
+    }
+
+    container.innerHTML =
+      '<label class="filter-radio-item">' +
+      '<input type="radio" name="filterCategory" value="all" ' + (state.filters.category === "all" ? "checked" : "") + ' />' +
+      '<span>Tất Cả Ngành Hàng</span>' +
+      '<span class="filter-item-count">' + totalCount + '</span>' +
+      '</label>' +
+      list.map((c) => {
+        const count = PRODUCTS.filter((p) => {
+          const matchCat = p.category === c.id;
+          const matchType = type === "all" ? true : p.type === type;
+          return matchCat && matchType;
+        }).length;
+        return (
+          '<label class="filter-radio-item">' +
+          '<input type="radio" name="filterCategory" value="' + c.id + '" ' + (state.filters.category === c.id ? "checked" : "") + ' />' +
+          '<span>' + (c.chip || c.tile || c.title) + '</span>' +
+          '<span class="filter-item-count">' + count + '</span>' +
+          '</label>'
+        );
+      }).join("");
+
+    // Cập nhật lại dom.categoryRadios và sự kiện
+    dom.categoryRadios = $$("input[name='filterCategory']", container);
+    dom.categoryRadios.forEach((radio) => {
+      radio.addEventListener("change", (e) => {
+        if (e.target.checked) {
+          state.filters.category = e.target.value;
+          state.page = 1;
+          render();
+          $$("#catalogSubnav a").forEach((a) => {
+            a.classList.toggle("active", a.dataset.cat === state.filters.category);
+          });
+          try {
+            const url = new URL(window.location.href);
+            if (state.filters.category === "all") {
+              url.searchParams.delete("cat");
+            } else {
+              url.searchParams.set("cat", state.filters.category);
+            }
+            window.history.pushState({ cat: state.filters.category }, "", url.toString());
+          } catch (err) {}
+        }
+      });
+    });
+  }
+
+  function updateHeroSpotlight(type) {
+    const titleEl = $(".catalog-hero-title");
+    const descEl = $(".catalog-hero-desc");
+    if (!titleEl || !descEl) return;
+    if (type === "mall") {
+      titleEl.innerHTML = "Sàn Hàng Mới 100% Chính Hãng (Brand Mall)";
+      descEl.innerHTML = "Trung tâm phân phối chính thức từ các thương hiệu hàng đầu: <strong>100% nguyên seal nguyên hộp FPT/VNA</strong>, bảo hành chính hãng 12 - 24 tháng, đổi trả 7 ngày miễn phí và đồng kiểm mở hộp cùng shipper.";
+    } else if (type === "c2c") {
+      titleEl.innerHTML = "Chợ Đồ Cũ & Pass Đồ Like New Thẩm Định Kỹ Thuật";
+      descEl.innerHTML = "Thị trường đồ cũ tuyển chọn 95% - 99%: <strong>Đã kiểm định vi mạch, pin thực tế và chiếu đèn UV tem giày</strong>. Tiết kiệm từ 30% đến 50% so với mua mới, hỗ trợ trả giá trực tiếp với người bán đã eKYC.";
+    } else {
+      titleEl.innerHTML = "Siêu Thị Công Nghệ & Thời Trang Tuyển Chọn";
+      descEl.innerHTML = "Trải nghiệm mua sắm thông minh: <strong>100% Brand Mall chính hãng nguyên seal</strong> song hành cùng <strong>Chợ Đồ Cũ Like New kiểm định kỹ thuật 15 bước</strong>. Kiểm tra mở hộp cùng shipper trước khi trả tiền, hoàn tiền 100% tức thì qua Napas 24/7.";
+    }
+  }
+
+  function applyType(newType, updateUrl) {
+    state.filters.type = newType;
+    state.page = 1;
+
+    // 1. Cập nhật nút tabs
+    $$("#catalogTypeTabs .type-tab-btn").forEach((btn) => {
+      btn.classList.toggle("active", btn.dataset.type === newType);
+    });
+
+    // 2. Cập nhật radio sidebar
+    dom.typeRadios.forEach((r) => {
+      r.checked = r.value === newType;
+    });
+
+    // 3. Cập nhật subnav & sidebar categories tương ứng
+    renderSubnav(newType);
+    renderSidebarCategories(newType);
+
+    // 4. Ẩn/Hiện nhóm lọc độ mới (Mall không cần lọc độ mới)
+    const condGroup = $("#condFilterGroup");
+    if (condGroup) {
+      condGroup.style.display = newType === "mall" ? "none" : "";
+    }
+
+    // 5. Cập nhật Tiêu đề Spotlight Hero
+    updateHeroSpotlight(newType);
+
+    // 6. Cập nhật Breadcrumb
+    const breadcrumbCurrent = document.querySelector(".catalog-breadcrumb span:last-child");
+    if (breadcrumbCurrent) {
+      if (newType === "mall") {
+        breadcrumbCurrent.textContent = "Sàn Đồ Mới 100% (Brand Mall)";
+      } else if (newType === "c2c") {
+        breadcrumbCurrent.textContent = "Chợ Đồ Cũ & Pass Đồ Like New (C2C)";
+      } else {
+        breadcrumbCurrent.textContent = "Khám Phá Danh Mục Sản Phẩm";
+      }
+    }
+
+    // 7. Cập nhật URL
+    if (updateUrl) {
+      try {
+        const url = new URL(window.location.href);
+        if (newType === "all") {
+          url.searchParams.delete("type");
+        } else {
+          url.searchParams.set("type", newType);
+        }
+        window.history.replaceState({ type: newType }, "", url.toString());
+      } catch (err) {}
+    }
+
+    render();
+  }
+
   /* ---------------- GẮN CÁC SỰ KIỆN LỌC & SẮP XẾP ---------------- */
   function setupFilterEvents() {
     // 1. Tìm kiếm theo từ khóa
@@ -696,22 +885,26 @@
       try {
         const params = new URLSearchParams(window.location.search);
         state.filters.category = params.get("cat") || "all";
-        state.filters.type = params.get("type") || "all";
         state.filters.keyword = params.get("q") || "";
-        state.page = 1;
-        syncFilterInputs();
-        render();
+        const newType = params.get("type") || "all";
+        applyType(newType, false);
       } catch (err) {}
     });
 
-    // 3. Loại hàng (Type: Mall / C2C)
+    // 3. Loại hàng (Type: Mall / C2C / All)
     dom.typeRadios.forEach((radio) => {
       radio.addEventListener("change", (e) => {
         if (e.target.checked) {
-          state.filters.type = e.target.value;
-          state.page = 1;
-          render();
+          applyType(e.target.value, true);
         }
+      });
+    });
+
+    // 3b. Tab chuyển đổi Sàn Đồ Mới vs Chợ Đồ Cũ (Grand Type Tabs)
+    $$("#catalogTypeTabs .type-tab-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const type = btn.dataset.type || "all";
+        applyType(type, true);
       });
     });
 
@@ -1075,6 +1268,8 @@
   }
 
   setupAvatar();
+  initTypeTabCounts();
+  applyType(initialType, false);
   syncFilterInputs();
   setupFilterEvents();
   setupProductCardEvents();

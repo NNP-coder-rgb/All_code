@@ -211,6 +211,89 @@
         grid-column: 1 / -1 !important;
         width: 100% !important;
       }
+
+      /* =======================================================
+         BỘ CHUYỂN ĐỔI SÀN ĐỒ MỚI VS CHỢ ĐỒ CŨ (GRAND TYPE TABS)
+         ======================================================= */
+      .catalog-type-tabs {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: var(--sp-6) 0 var(--sp-4);
+        padding: 6px;
+        background: var(--bg-surface);
+        border: 1.5px solid var(--border-default);
+        border-radius: var(--radius-xl);
+        overflow-x: auto;
+      }
+      .type-tab-btn {
+        flex: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 18px;
+        font-size: var(--text-sm);
+        font-weight: 700;
+        color: var(--text-muted);
+        background: transparent;
+        border: 1px solid transparent;
+        border-radius: var(--radius-lg);
+        cursor: pointer;
+        transition: all var(--duration-fast) var(--ease-standard);
+        white-space: nowrap;
+      }
+      .type-tab-btn:hover {
+        color: var(--text-default);
+        background: rgba(255, 255, 255, 0.05);
+      }
+      .type-tab-btn.active {
+        color: #ffffff !important;
+        background: #8b5cf6 !important;
+        border-color: #8b5cf6 !important;
+        box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4);
+      }
+      .type-tab-btn[data-type="c2c"].active {
+        background: #0284c7 !important;
+        border-color: #0284c7 !important;
+        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+      }
+      .type-tab-btn .type-tab-count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2px 8px;
+        font-size: 11px;
+        font-weight: 800;
+        border-radius: 9999px;
+        background: rgba(0, 0, 0, 0.28);
+        color: inherit;
+      }
+      [data-theme="light"] .catalog-type-tabs,
+      body.light-theme .catalog-type-tabs {
+        background: #f8fafc !important;
+        border-color: #cbd5e1 !important;
+      }
+      [data-theme="light"] .type-tab-btn,
+      body.light-theme .type-tab-btn {
+        color: #475569 !important;
+      }
+      [data-theme="light"] .type-tab-btn:hover,
+      body.light-theme .type-tab-btn:hover {
+        background: #e2e8f0 !important;
+        color: #0f172a !important;
+      }
+      [data-theme="light"] .type-tab-btn.active,
+      body.light-theme .type-tab-btn.active {
+        color: #ffffff !important;
+        background: #7c3aed !important;
+        border-color: #7c3aed !important;
+      }
+      [data-theme="light"] .type-tab-btn[data-type="c2c"].active,
+      body.light-theme .type-tab-btn[data-type="c2c"].active {
+        background: #0284c7 !important;
+        border-color: #0284c7 !important;
+      }
     </style>
   </head>
   <body>
@@ -373,6 +456,25 @@
           </div>
         </section>
 
+        <!-- BỘ CHUYỂN ĐỔI SÀN MUA SẮM: ĐỒ MỚI VS ĐỒ CŨ -->
+        <div class="catalog-type-tabs" id="catalogTypeTabs">
+          <button class="type-tab-btn active" data-type="all" type="button" title="Xem toàn bộ sản phẩm">
+            <span class="material-symbols-outlined">grid_view</span>
+            <span>Tất Cả Sản Phẩm</span>
+            <span class="type-tab-count" id="tabCountAll">130</span>
+          </button>
+          <button class="type-tab-btn" data-type="mall" type="button" title="Chuyên trang đồ mới Brand Mall 100%">
+            <span class="material-symbols-outlined text-primary">verified</span>
+            <span>🛍️ Sàn Đồ Mới 100% (Brand Mall)</span>
+            <span class="type-tab-count" id="tabCountMall">65</span>
+          </button>
+          <button class="type-tab-btn" data-type="c2c" type="button" title="Chuyên trang đồ cũ Like New kiểm định Lab">
+            <span class="material-symbols-outlined text-secondary">eco</span>
+            <span>♻️ Chợ Đồ Cũ / Like New (Thẩm Định Lab)</span>
+            <span class="type-tab-count" id="tabCountC2c">65</span>
+          </button>
+        </div>
+
         <!-- Thanh Nút Bấm Mở Bộ Lọc Cho Mobile (<992px) -->
         <div class="mobile-filter-bar hide-lg">
           <button class="btn btn-secondary btn-sm" id="mobileFilterToggleBtn" type="button" aria-expanded="false">
@@ -417,8 +519,8 @@
 
             <!-- 2. Danh mục ngành hàng -->
             <div class="filter-group">
-              <span class="filter-group-label">Ngành Hàng</span>
-              <div class="filter-options">
+              <span class="filter-group-label" id="filterCategoryLabel">Ngành Hàng</span>
+              <div class="filter-options" id="filterCategoryOptions">
                 <label class="filter-radio-item">
                   <input type="radio" name="filterCategory" value="all" checked />
                   <span>Tất Cả Ngành Hàng</span>
@@ -573,7 +675,7 @@
             </div>
 
             <!-- 6. Độ mới C2C -->
-            <div class="filter-group">
+            <div class="filter-group" id="condFilterGroup">
               <span class="filter-group-label">Độ Mới Đồ Cũ (Like New)</span>
               <div class="filter-options">
                 <label class="filter-radio-item">

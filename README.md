@@ -76,20 +76,33 @@ Store-management/
 
 ---
 
-## 🏷️ 3. Danh Mục Ngành Hàng & Dữ Liệu Sản Phẩm
+## 🏷️ 3. Danh Mục Ngành Hàng Phân Biệt: Đồ Mới (Mall) & Đồ Cũ (C2C)
 
-Hệ thống định nghĩa sẵn **8 ngành hàng chính** với hơn 130 sản phẩm mẫu chất lượng cao:
+Hệ thống phân tách chuyên sâu 2 bộ danh mục riêng biệt với hơn 130 sản phẩm mẫu chất lượng cao:
 
-| Mã Danh Mục (`id`) | Tên Ngành Hàng | Biểu Tượng | Điểm Nhấn Đặc Trưng |
+### 🛍️ Bảng Danh Mục Sàn Đồ Mới (Brand Mall 100% Nguyên Seal)
+| Mã (`id`) | Tên Ngành Hàng Mall | Biểu Tượng | Điểm Nhấn Đặc Quyền Mall |
 |:---|:---|:---:|:---|
-| `fashion` | Thời Trang & Streetwear | `checkroom` | Đổi trả 7 ngày, áo khoác, hoodie thiết kế chính hãng Mall |
-| `sneakers` | Sneakers & Giày Dép Hype | `steps` | Soi đèn UV tem giày, kiểm định ngoại quan 100% |
-| `tech` | Đồ Điện Tử & High-Tech | `devices` | iPhone, MacBook, Tablet, kiểm tra vi mạch & dung lượng pin |
-| `appliances` | Đồ Gia Dụng Thông Minh | `coffee_maker` | Máy hút bụi, nồi chiên, robot lau nhà đóng gói chống va đập |
-| `audio` | Âm Thanh & Tai Nghe Hi-Fi | `headphones` | Tai nghe Sony, Marshall, Apple test màng loa và âm trường |
-| `gaming` | Gaming Gear & Bàn Phím Cơ | `sports_esports` | Bàn phím cơ Custom nhôm CNC, chuột không dây siêu nhẹ |
-| `watches` | Đồng Hồ & Phụ Kiện Cao Cấp | `watch` | Kính mắt, nước hoa, túi da, trang sức cao cấp |
-| `camera` | Máy Ảnh & Thiết Bị Quay Chụp | `photo_camera` | Máy ảnh Mirrorless, ống kính lens được test cảm biến sensor |
+| `fashion` | Thời Trang Mall Thiết Kế | `checkroom` | Đổi trả 7 ngày, áo khoác, blazer, sơ mi thiết kế nguyên tag |
+| `sneakers` | Sneakers Brand New Box | `steps` | Hàng chính hãng nguyên hộp full phụ kiện, bảo hành 12 tháng |
+| `tech` | Đồ Điện Tử & Hi-Tech New Seal | `devices` | iPhone, MacBook nguyên seal FPT/VNA, bảo hành hãng 12-24T |
+| `appliances` | Gia Dụng Thông Minh New Seal | `coffee_maker` | Máy hút bụi Dyson, máy pha cà phê mới 100%, bảo hành tận nhà |
+| `audio` | Âm Thanh & Tai Nghe Hi-Fi Mới | `headphones` | Tai nghe Sony XM5, AirPods Pro mới 100%, 1 đổi 1 trong 30 ngày |
+| `gaming` | Gaming Gear Pro Mall | `sports_esports` | Bàn phím cơ Aula F75, chuột Razer Pro mới 100% nguyên hộp |
+| `watches` | Đồng Hồ & Phụ Kiện Mall | `watch` | Đồng hồ cơ Seiko, smartwatch thể thao, thẻ bảo hành quốc tế |
+| `camera` | Máy Ảnh & Quay Chụp Mall | `photo_camera` | Body Sony Alpha, Fuji mirrorless mới 100% bảo hành 24 tháng |
+
+### ♻️ Bảng Danh Mục Chợ Đồ Cũ Tuyển Chọn (C2C Pre-Owned / Like New Thẩm Định)
+| Mã (`id`) | Tên Ngành Hàng Đồ Cũ | Biểu Tượng | Tiêu Chuẩn Thẩm Định Lab AI & Tiết Kiệm |
+|:---|:---|:---:|:---|
+| `tech` | Điện Thoại & Laptop Pass Cũ | `devices` | Đã test vi mạch, pin thực tế >85%, Like New 95%-99%, rẻ hơn 30-50% |
+| `sneakers` | Sneakers 2Hand Soi Đèn UV | `steps` | Soi tia UV tem giày, đế nguyên gai, khử khuẩn & bảo quản Lab |
+| `fashion` | Thời Trang Vintage & Pass Đồ | `checkroom` | Đồ streetwear, hoodie mặc 1-2 lần chụp ảnh pass lại giá siêu hời |
+| `audio` | Tai Nghe & Loa Cũ Like New | `headphones` | Test màng loa không rè, kiểm tra chống ồn ANC & pin tai nghe |
+| `gaming` | Gaming Gear Cũ (Pass Lại) | `sports_esports` | Bàn phím custom, chuột gaming lướt, test switch & mắt đọc |
+| `camera` | Máy Ảnh & Lens Cũ (Check Shot) | `photo_camera` | Đo số shot, cảm biến sensor sạch sẽ, lens không mốc rễ |
+| `appliances` | Gia Dụng Cũ Tiết Kiệm | `coffee_maker` | Máy hút bụi, máy pha cafe pass lại, kiểm tra động cơ & màng lọc |
+| `watches` | Đồng Hồ & Phụ Kiện Lướt | `watch` | Kiểm định máy cơ chính xác, đo độ chống nước, ví da vintage |
 
 ---
 
