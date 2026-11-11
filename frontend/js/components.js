@@ -224,9 +224,13 @@
         var portalBadgeClass = isAdmin ? "badge badge-solid" : "badge badge-secondary";
         var portalIcon = isAdmin ? "terminal" : "token";
         var statusText = options.statusText || (isAdmin ? "HỆ THỐNG ONLINE 99.99%" : "Gian Hàng Hoạt Động");
+        var adminUrl = resolveUrl("pages/admin/admin_system.html", bp);
+        var sellerUrl = resolveUrl("pages/seller/dashboard.html", bp);
         var actionBtnHtml = isAdmin
-          ? '<a class="btn btn-secondary btn-sm hide-sm" href="' + homeUrl + '"><span class="material-symbols-outlined icon-sm">storefront</span> Ra Trang Chủ</a>'
-          : '<a class="btn btn-primary btn-sm" href="' + postItemUrl + '"><span class="material-symbols-outlined icon-sm">add</span> Đăng Bán Món Mới</a>';
+          ? '<a class="btn btn-secondary btn-sm hide-sm" href="' + sellerUrl + '"><span class="material-symbols-outlined icon-sm">store</span> Kênh Người Bán</a>' +
+            '<a class="btn btn-secondary btn-sm hide-sm" href="' + homeUrl + '"><span class="material-symbols-outlined icon-sm">storefront</span> Ra Trang Chủ</a>'
+          : '<a class="btn btn-secondary btn-sm hide-sm" href="' + adminUrl + '"><span class="material-symbols-outlined icon-sm">terminal</span> Master Admin</a>' +
+            '<a class="btn btn-primary btn-sm" href="' + postItemUrl + '"><span class="material-symbols-outlined icon-sm">add</span> Đăng Bán Món Mới</a>';
 
         var headerStyle = isAdmin ? ' style="border-bottom: 2px solid var(--primary-600);"' : "";
 
@@ -406,6 +410,7 @@
       var postItemUrl = resolveUrl("pages/seller/post_item.html", bp);
       var disputeUrl = resolveUrl("pages/buyer/dispute.html", bp);
       var ordersUrl = resolveUrl("pages/buyer/orders.html", bp);
+      var adminUrl = resolveUrl("pages/admin/admin_system.html", bp);
 
       return (
         '<footer class="site-footer" id="siteFooter">' +
@@ -474,6 +479,7 @@
         "</li>" +
         '<li><a href="' + disputeUrl + '">Trung tâm xử lý khiếu nại &amp; Chat</a></li>' +
         '<li><a href="' + ordersUrl + '">Tra cứu tiến độ đơn hàng</a></li>' +
+        '<li><a href="' + adminUrl + '" class="flex items-center gap-1 text-primary fw-600"><span class="material-symbols-outlined icon-xs">terminal</span> Cổng Master Admin</a></li>' +
         "</ul>" +
         '<div class="footer-payment-methods">' +
         '<div class="text-xs text-muted mb-2 fw-600">Thanh toán &amp; Đồng kiểm:</div>' +
@@ -489,10 +495,11 @@
         /* CHÂN TRANG BẢN QUYỀN */
         '<div class="footer-bottom">' +
         "<span>© 2026 HYBRID.STORE — Bán Hàng Mới &amp; Đồ Cũ Tuyển Chọn. All rights reserved.</span>" +
-        '<span class="flex gap-4">' +
+        '<span class="flex gap-4 items-center">' +
         '<a href="' + termsUrl + '">Điều Khoản Dịch Vụ</a>' +
         '<a href="' + warrantyUrl + '">Chính Sách Bảo Hành</a>' +
         '<a href="' + returnUrl + '">Chính Sách Đổi Trả</a>' +
+        '<a href="' + adminUrl + '" class="text-primary fw-600">⚡ Master Admin</a>' +
         "</span>" +
         "</div>" +
         "</div>" +
