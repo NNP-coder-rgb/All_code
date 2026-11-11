@@ -606,6 +606,114 @@
     });
   });
 
+  /* ---------------- Xử lý Tải ảnh trên Modal Đăng bán nhanh ---------------- */
+  const modalPostFileInput = $("#modalPostFileInput");
+  const modalPostDropzone = $("#modalPostDropzone");
+  const modalPostDropzoneText = $("#modalPostDropzoneText");
+  const modalPostPreviewStrip = $("#modalPostPreviewStrip");
+  const modalPostImgCount = $("#modalPostImgCount");
+  let modalUploadedImages = [];
+
+  function compressImage(file, maxWidth = 1000, quality = 0.85) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          let width = img.width;
+          let height = img.height;
+          if (width > maxWidth) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          }
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL("image/jpeg", quality));
+        };
+        img.onerror = () => resolve(e.target.result);
+        img.src = e.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function handleModalPostFiles(files) {
+    const validFiles = Array.from(files).filter((f) => f.type.startsWith("image/"));
+    if (!validFiles.length) {
+      if (typeof Utils !== "undefined" && Utils.toast) {
+        Utils.toast("Vui lòng chọn tệp hình ảnh hợp lệ (PNG, JPG, WEBP)!", "warning");
+      }
+      return;
+    }
+    const filesToProcess = validFiles.slice(0, 6 - modalUploadedImages.length);
+    if (!filesToProcess.length) return;
+
+    if (modalPostDropzoneText) modalPostDropzoneText.textContent = "Đang tối ưu & nén ảnh...";
+    for (const file of filesToProcess) {
+      try {
+        const compressed = await compressImage(file);
+        modalUploadedImages.push(compressed);
+      } catch (err) {}
+    }
+    renderModalPreviews();
+  }
+
+  function renderModalPreviews() {
+    const count = modalUploadedImages.length;
+    if (modalPostImgCount) modalPostImgCount.textContent = `${count}/6 ảnh đã chọn`;
+    if (!count) {
+      if (modalPostPreviewStrip) modalPostPreviewStrip.style.display = "none";
+      if (modalPostDropzoneText) modalPostDropzoneText.textContent = "Bấm để chọn ảnh từ máy hoặc kéo thả vào đây";
+      return;
+    }
+    if (modalPostDropzoneText) modalPostDropzoneText.textContent = `Đã chọn ${count}/6 ảnh (Bấm để thêm)`;
+    if (modalPostPreviewStrip) {
+      modalPostPreviewStrip.style.display = "flex";
+      modalPostPreviewStrip.innerHTML = modalUploadedImages.map((src, i) => `
+        <div style="position: relative; width: 64px; height: 64px; flex-shrink: 0; border-radius: 6px; overflow: hidden; border: 2px solid ${i === 0 ? 'var(--primary, #8b5cf6)' : 'var(--border, #334155)'}; background: #000;">
+          <img src="${src}" style="width: 100%; height: 100%; object-fit: cover;" />
+          <button type="button" data-modal-remove="${i}" style="position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.7); color: #fff; border: none; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 10px;">✕</button>
+        </div>
+      `).join("");
+
+      modalPostPreviewStrip.querySelectorAll("button[data-modal-remove]").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const idx = Number(btn.dataset.modalRemove);
+          modalUploadedImages.splice(idx, 1);
+          renderModalPreviews();
+        });
+      });
+    }
+  }
+
+  if (modalPostDropzone && modalPostFileInput) {
+    modalPostDropzone.addEventListener("click", () => modalPostFileInput.click());
+    modalPostDropzone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      modalPostDropzone.style.borderColor = "var(--primary, #8b5cf6)";
+    });
+    ["dragleave", "dragend"].forEach((type) => {
+      modalPostDropzone.addEventListener(type, () => {
+        modalPostDropzone.style.borderColor = "";
+      });
+    });
+    modalPostDropzone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      modalPostDropzone.style.borderColor = "";
+      if (e.dataTransfer && e.dataTransfer.files.length) {
+        handleModalPostFiles(e.dataTransfer.files);
+      }
+    });
+    modalPostFileInput.addEventListener("change", (e) => {
+      if (e.target.files.length) handleModalPostFiles(e.target.files);
+    });
+  }
+
   /* ---------------- Đăng bán nhanh ---------------- */
   $("#postForm").addEventListener("submit", (e) => {
     e.preventDefault();
@@ -618,6 +726,9 @@
     }
     const name = $("#postName").value.trim();
     const price = parseInt($("#postPrice").value, 10) || 0;
+    const condStr = $("#postCond").value || "99%";
+    const condVal = parseInt(condStr, 10) || 99;
+
     if (!name || price <= 0) {
       showPopup({
         type: "error",
@@ -629,13 +740,55 @@
       });
       return;
     }
+
+    if (!modalUploadedImages.length) {
+      if (typeof Utils !== "undefined" && Utils.toast) {
+        Utils.toast("Vui lòng tải lên ít nhất 1 hình ảnh sản phẩm!", "warning");
+      }
+      return;
+    }
+
+    const curUser = Auth.current();
+    const newProduct = {
+      id: "c2c-user-" + Date.now(),
+      name: name,
+      short: name.split("(")[0].trim(),
+      category: "tech",
+      type: "c2c",
+      badge: "ĐỒ CŨ LIKE NEW",
+      cond: condVal,
+      condText: condStr + " Likenew",
+      condLabel: "Đã qua kiểm tra ngoại quan",
+      seller: curUser ? `${curUser.fullName} (Đã eKYC CCCD)` : "Người bán uy tín (Đã eKYC CCCD)",
+      sellerName: curUser ? curUser.fullName : "Người bán uy tín",
+      price: price,
+      oldPrice: Math.round(price * 1.45),
+      img: modalUploadedImages[0],
+      images: modalUploadedImages,
+      desc: `Sản phẩm đăng bán nhanh từ trang chủ: ${name}. Độ mới ${condStr}.`,
+      status: "active",
+      createdAt: new Date().toISOString()
+    };
+
+    try {
+      let sellerProducts = JSON.parse(localStorage.getItem("hv_seller_products") || "[]");
+      sellerProducts.unshift(newProduct);
+      localStorage.setItem("hv_seller_products", JSON.stringify(sellerProducts));
+    } catch (err) {}
+
     closeModal($("#postModal"));
     e.target.reset();
+    modalUploadedImages = [];
+    renderModalPreviews();
+
     showPopup({
       type: "success",
-      title: "Đã nhận sản phẩm",
-      message: '"' + name + '" đã được đưa vào hàng chờ kiểm duyệt.',
-      confirmText: "Đóng",
+      title: "Đã đăng sản phẩm thành công",
+      message: `"${name}" với ${newProduct.images.length} hình ảnh đã được đưa lên sàn và đồng bộ vào Kênh Người Bán!`,
+      confirmText: "Xem Kênh Người Bán",
+      onConfirm: () => {
+        window.location.href = "pages/seller/dashboard.html";
+      }
     });
   });
 

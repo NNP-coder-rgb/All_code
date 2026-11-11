@@ -786,12 +786,18 @@
                 </select>
               </div>
             </div>
-            <div class="upload-box">
-              <span class="material-symbols-outlined icon-lg text-primary"
-                >add_a_photo</span
-              >
-              <div class="fw-600 text-sm">Chụp 4 góc cạnh + Tem máy</div>
-              <div class="text-xs text-faint">Tối thiểu 3 hình ảnh sắc nét</div>
+            <div class="form-group">
+              <label class="form-label flex justify-between items-center">
+                <span>Hình ảnh sản phẩm (Chụp 4 góc cạnh + Tem máy) (*)</span>
+                <span class="text-xs text-muted" id="modalPostImgCount">0/6 ảnh đã chọn</span>
+              </label>
+              <input type="file" id="modalPostFileInput" multiple accept="image/*" style="display: none;" />
+              <div class="upload-box" id="modalPostDropzone" style="cursor: pointer; transition: all 0.2s ease;">
+                <span class="material-symbols-outlined icon-lg text-primary">add_a_photo</span>
+                <div class="fw-600 text-sm" id="modalPostDropzoneText">Bấm để chọn ảnh từ máy hoặc kéo thả vào đây</div>
+                <div class="text-xs text-faint">Hỗ trợ JPG, PNG, WEBP (Tự động nén tối ưu) • Có thể bấm Ctrl+V để dán ảnh</div>
+              </div>
+              <div id="modalPostPreviewStrip" class="flex gap-2 mt-2" style="display: none; overflow-x: auto; padding: 4px 0;"></div>
             </div>
           </div>
           <div class="modal-foot">

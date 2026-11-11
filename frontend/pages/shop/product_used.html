@@ -294,13 +294,19 @@
         const productId = params.get("id");
         let p = null;
 
-        if (typeof PRODUCTS !== "undefined" && PRODUCTS.length) {
-          if (productId) {
+        if (productId) {
+          if (typeof PRODUCTS !== "undefined" && PRODUCTS.length) {
             p = PRODUCTS.find((x) => x.id === productId);
           }
           if (!p) {
-            p = PRODUCTS.find((x) => x.type === "c2c") || PRODUCTS[0];
+            try {
+              const customList = JSON.parse(localStorage.getItem("hv_seller_products") || "[]");
+              p = customList.find((x) => x.id === productId);
+            } catch (e) {}
           }
+        }
+        if (!p && typeof PRODUCTS !== "undefined" && PRODUCTS.length) {
+          p = PRODUCTS.find((x) => x.type === "c2c") || PRODUCTS[0];
         }
 
         if (!p) return;
@@ -335,13 +341,30 @@
           mediaBadge.textContent = `ĐỒ CŨ ${p.condText || "LIKE NEW"} • -${discountPercent}%`;
         }
 
-        // Cập nhật Thumbnails
+        // Cập nhật danh sách Thumbnails ảnh thật
         const thumbContainer = document.querySelector(".product-detail-grid .flex.gap-3.mt-2");
         if (thumbContainer) {
-          thumbContainer.innerHTML = `
-            <img class="thumb-item active" src="${resolvedImg}" style="width: 70px; height: 70px; border-radius: 8px; object-fit: cover; border: 2px solid var(--secondary-400); cursor: pointer;" alt="Góc chụp 1" />
-            <img class="thumb-item" src="${resolvedImg}" style="width: 70px; height: 70px; border-radius: 8px; object-fit: cover; opacity: 0.6; cursor: pointer;" alt="Góc chụp 2" />
-          `;
+          const allImages = (p.images && p.images.length) ? p.images : [resolvedImg, resolvedImg];
+          thumbContainer.innerHTML = allImages.map((imgSrc, i) => {
+            const rImg = window.resolveAssetUrl ? window.resolveAssetUrl(imgSrc) : imgSrc;
+            return `
+              <img class="thumb-item ${i === 0 ? 'active' : ''}" src="${rImg}" style="width: 70px; height: 70px; border-radius: 8px; object-fit: cover; border: 2px solid ${i === 0 ? 'var(--secondary-400)' : 'transparent'}; opacity: ${i === 0 ? '1' : '0.6'}; cursor: pointer; transition: all 0.2s ease;" alt="Góc chụp ${i + 1}" />
+            `;
+          }).join("");
+
+          thumbContainer.querySelectorAll(".thumb-item").forEach((thumb) => {
+            thumb.addEventListener("click", () => {
+              thumbContainer.querySelectorAll(".thumb-item").forEach((t) => {
+                t.classList.remove("active");
+                t.style.borderColor = "transparent";
+                t.style.opacity = "0.6";
+              });
+              thumb.classList.add("active");
+              thumb.style.borderColor = "var(--secondary-400)";
+              thumb.style.opacity = "1";
+              if (mainUsedImg) mainUsedImg.src = thumb.src;
+            });
+          });
         }
 
         // 4. Báo cáo kiểm định kỹ thuật theo ngành hàng

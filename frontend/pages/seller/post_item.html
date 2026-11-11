@@ -90,15 +90,18 @@
 
           <!-- 2. Khu vực tải ảnh & Quét AI -->
           <div class="form-group">
-            <label class="form-label">Tải ảnh chụp sản phẩm (Tối thiểu 3 góc chụp rõ nét)</label>
+            <label class="form-label flex justify-between items-center">
+              <span>Tải ảnh chụp sản phẩm (Tối thiểu 1 ảnh, khuyến nghị 3-4 góc chụp rõ nét) (*)</span>
+              <span class="text-xs text-muted" id="imageCountText">0/6 ảnh đã chọn</span>
+            </label>
             <input type="file" id="fileInputPost" multiple accept="image/*" style="display: none;" />
-            <div class="panel p-6 text-center" style="border: 2px dashed var(--border-strong); background: var(--bg-surface); cursor: pointer; transition: all 0.2s ease;" id="dropzoneBox">
+            <div class="panel p-6 text-center" style="border: 2px dashed var(--border-strong); background: var(--bg-surface); cursor: pointer; transition: all 0.2s ease; border-radius: var(--radius-lg);" id="dropzoneBox">
               <span class="material-symbols-outlined text-primary" style="font-size: 54px;">add_a_photo</span>
               <div class="fw-600 text-sm mt-2" id="dropzoneText">Bấm để chọn ảnh từ máy hoặc kéo thả vào đây</div>
-              <div class="text-xs text-muted mt-1">Hỗ trợ JPG, PNG, WEBP (Tối đa 15MB)</div>
+              <div class="text-xs text-muted mt-1">Hỗ trợ JPG, PNG, WEBP (Tự động nén &amp; tối ưu dung lượng) • Có thể nhấn Ctrl+V để dán ảnh</div>
             </div>
-            <!-- Strip ảnh xem trước -->
-            <div id="previewImagesStrip" class="flex gap-2 mt-3" style="display: none; overflow-x: auto; padding: 4px;"></div>
+            <!-- Grid ảnh xem trước -->
+            <div id="previewImagesStrip" class="grid gap-3 mt-3" style="display: none; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));"></div>
           </div>
 
           <div class="flex justify-end mb-4">
@@ -116,11 +119,16 @@
               </span>
               <span class="text-xs text-success fw-600">Độ tin cậy: 98.4%</span>
             </div>
-            <div class="grid grid-2 gap-3 text-xs">
-              <div>Thiết bị nhận diện: <strong class="text-text" id="aiDeviceName">Sony WH-1000XM4 (Màu Đen)</strong></div>
-              <div>Độ mới ngoại quan AI: <strong class="text-secondary" id="aiConditionScore">95% (Xước viền đáy siêu nhẹ)</strong></div>
-              <div>Giá máy mới trên thị trường: <strong class="text-faint mono" id="aiNewMarketPrice">6.290.000₫</strong></div>
-              <div>Khung giá thanh lý nhanh đề xuất: <strong class="text-gradient mono" id="aiSuggestPrice">3.400.000₫ – 3.650.000₫</strong></div>
+            <div class="flex gap-4 items-center">
+              <div style="width: 84px; height: 84px; border-radius: 8px; overflow: hidden; border: 2px solid var(--secondary-400); flex-shrink: 0; background: #000;">
+                <img id="aiResultImg" src="" style="width: 100%; height: 100%; object-fit: cover;" alt="Ảnh sản phẩm AI phân tích" />
+              </div>
+              <div class="grid grid-2 gap-3 text-xs flex-1">
+                <div>Thiết bị nhận diện: <strong class="text-text" id="aiDeviceName">Sony WH-1000XM4 (Màu Đen)</strong></div>
+                <div>Độ mới ngoại quan AI: <strong class="text-secondary" id="aiConditionScore">95% (Xước viền đáy siêu nhẹ)</strong></div>
+                <div>Giá máy mới trên thị trường: <strong class="text-faint mono" id="aiNewMarketPrice">6.290.000₫</strong></div>
+                <div>Khung giá thanh lý nhanh đề xuất: <strong class="text-gradient mono" id="aiSuggestPrice">3.400.000₫ – 3.650.000₫</strong></div>
+              </div>
             </div>
             <div class="discount-callout mt-3">
               <span class="material-symbols-outlined icon-sm">savings</span>
@@ -175,15 +183,45 @@
         const dropzoneBox = document.getElementById("dropzoneBox");
         const dropzoneText = document.getElementById("dropzoneText");
         const previewStrip = document.getElementById("previewImagesStrip");
+        const imageCountText = document.getElementById("imageCountText");
+        const aiResultImg = document.getElementById("aiResultImg");
         let uploadedImages = [];
 
-        // 1. Xử lý mở File Picker & Kéo thả
+        // Nén ảnh bằng Canvas để tối ưu dung lượng và tránh lỗi LocalStorage QuotaExceeded
+        function compressImage(file, maxWidth = 1000, quality = 0.85) {
+          return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              const img = new Image();
+              img.onload = () => {
+                let width = img.width;
+                let height = img.height;
+                if (width > maxWidth) {
+                  height = Math.round((height * maxWidth) / width);
+                  width = maxWidth;
+                }
+                const canvas = document.createElement("canvas");
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0, width, height);
+                resolve(canvas.toDataURL("image/jpeg", quality));
+              };
+              img.onerror = () => resolve(e.target.result); // Fallback
+              img.src = e.target.result;
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+          });
+        }
+
+        // 1. Xử lý nạp tệp (Từ File Picker, Drag & Drop hoặc Clipboard)
         if (dropzoneBox && fileInput) {
           dropzoneBox.addEventListener("click", () => fileInput.click());
 
           dropzoneBox.addEventListener("dragover", (e) => {
             e.preventDefault();
-            dropzoneBox.style.borderColor = "var(--primary-500)";
+            dropzoneBox.style.borderColor = "var(--primary-500, #8b5cf6)";
             dropzoneBox.style.background = "rgba(139, 92, 246, 0.08)";
           });
 
@@ -208,41 +246,70 @@
           });
         }
 
-        function handleFiles(files) {
+        // Lắng nghe phím tắt Ctrl+V để dán ảnh trực tiếp từ bộ nhớ tạm
+        window.addEventListener("paste", (e) => {
+          if (e.clipboardData && e.clipboardData.files && e.clipboardData.files.length) {
+            handleFiles(e.clipboardData.files);
+          }
+        });
+
+        async function handleFiles(files) {
           const validFiles = Array.from(files).filter(f => f.type.startsWith("image/"));
           if (!validFiles.length) {
-            Utils.toast("Vui lòng chọn tệp định dạng hình ảnh hợp lệ!", "warning");
+            Utils.toast("Vui lòng chọn tệp định dạng hình ảnh hợp lệ (PNG, JPG, WEBP)!", "warning");
             return;
           }
 
-          let loaded = 0;
-          validFiles.forEach(file => {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-              uploadedImages.push(e.target.result);
-              loaded++;
-              if (loaded === validFiles.length) renderPreviews();
-            };
-            reader.readAsDataURL(file);
-          });
+          if (uploadedImages.length + validFiles.length > 6) {
+            Utils.toast("Bạn chỉ có thể tải lên tối đa 6 hình ảnh cho một sản phẩm!", "warning");
+          }
+
+          const filesToProcess = validFiles.slice(0, 6 - uploadedImages.length);
+          if (!filesToProcess.length) return;
+
+          if (dropzoneText) dropzoneText.textContent = "Đang tối ưu & nén ảnh...";
+
+          for (const file of filesToProcess) {
+            try {
+              const compressedData = await compressImage(file);
+              uploadedImages.push(compressedData);
+            } catch (err) {
+              console.error("Lỗi nén ảnh:", err);
+            }
+          }
+
+          renderPreviews();
+          Utils.toast(`Đã thêm thành công ${filesToProcess.length} ảnh sản phẩm!`, "success");
         }
 
         function renderPreviews() {
-          if (!uploadedImages.length) {
+          const count = uploadedImages.length;
+          if (imageCountText) imageCountText.textContent = `${count}/6 ảnh đã chọn`;
+
+          if (!count) {
             if (previewStrip) previewStrip.style.display = "none";
+            if (dropzoneText) dropzoneText.textContent = "Bấm để chọn ảnh từ máy hoặc kéo thả vào đây";
             return;
           }
-          if (dropzoneText) dropzoneText.textContent = `Đã chọn ${uploadedImages.length} ảnh sản phẩm`;
+
+          if (dropzoneText) dropzoneText.textContent = `Đã chọn ${count}/6 ảnh (Bấm để thêm ảnh khác)`;
+
           if (previewStrip) {
-            previewStrip.style.display = "flex";
+            previewStrip.style.display = "grid";
             previewStrip.innerHTML = uploadedImages.map((src, i) => `
-              <div style="position: relative; width: 80px; height: 80px; flex-shrink: 0; border-radius: 8px; overflow: hidden; border: 2px solid var(--primary-500);">
-                <img src="${src}" style="width: 100%; height: 100%; object-fit: cover;" />
-                <button type="button" data-idx="${i}" style="position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.6); color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 11px;">✕</button>
+              <div class="preview-thumb-card" style="position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; border: 2px solid ${i === 0 ? 'var(--primary-500, #8b5cf6)' : 'var(--border-strong, #334155)'}; background: #000; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+                <img src="${src}" style="width: 100%; height: 100%; object-fit: cover;" alt="Ảnh ${i + 1}" />
+                ${i === 0 ? `
+                  <span style="position: absolute; bottom: 0; left: 0; right: 0; background: #8b5cf6; color: #fff; font-size: 10px; font-weight: 800; text-align: center; padding: 2px 0;">⭐ ẢNH CHÍNH</span>
+                ` : `
+                  <button type="button" data-action="set-cover" data-idx="${i}" style="position: absolute; bottom: 4px; left: 4px; background: rgba(0,0,0,0.75); color: #fff; border: 1px solid rgba(255,255,255,0.4); border-radius: 4px; font-size: 10px; font-weight: 600; padding: 2px 5px; cursor: pointer;">Đặt làm bìa</button>
+                `}
+                <button type="button" data-action="remove" data-idx="${i}" style="position: absolute; top: 4px; right: 4px; background: rgba(239, 68, 68, 0.9); color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; font-weight: bold;" title="Xóa ảnh này">✕</button>
               </div>
             `).join("");
 
-            previewStrip.querySelectorAll("button[data-idx]").forEach(btn => {
+            // Nút xóa ảnh
+            previewStrip.querySelectorAll('button[data-action="remove"]').forEach((btn) => {
               btn.addEventListener("click", (e) => {
                 e.stopPropagation();
                 const idx = Number(btn.dataset.idx);
@@ -250,6 +317,23 @@
                 renderPreviews();
               });
             });
+
+            // Nút đặt làm ảnh bìa
+            previewStrip.querySelectorAll('button[data-action="set-cover"]').forEach((btn) => {
+              btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                const idx = Number(btn.dataset.idx);
+                const [targetImg] = uploadedImages.splice(idx, 1);
+                uploadedImages.unshift(targetImg);
+                renderPreviews();
+                Utils.toast("Đã đổi ảnh đại diện sản phẩm!", "info");
+              });
+            });
+          }
+
+          // Cập nhật ảnh đại diện vào thẻ AI Scanner nếu đang mở
+          if (aiResultImg && uploadedImages.length) {
+            aiResultImg.src = uploadedImages[0];
           }
         }
 
@@ -316,6 +400,9 @@
             setTimeout(() => {
               if (aiCard) {
                 aiCard.style.display = "block";
+                if (aiResultImg) {
+                  aiResultImg.src = uploadedImages.length ? uploadedImages[0] : (window.resolveAssetUrl ? window.resolveAssetUrl(tpl.img) : tpl.img);
+                }
                 document.getElementById("aiDeviceName").textContent = tpl.device;
                 document.getElementById("aiConditionScore").textContent = tpl.score;
                 document.getElementById("aiNewMarketPrice").textContent = tpl.newPrice;
@@ -346,6 +433,11 @@
           const catKey = catRadio ? catRadio.value : "tech";
           const tpl = aiTemplates[catKey] || aiTemplates.tech;
 
+          if (!uploadedImages.length) {
+            Utils.toast("Vui lòng tải lên ít nhất 1 hình ảnh thật của sản phẩm!", "warning");
+            return;
+          }
+
           const nameVal = document.getElementById("txtPostName").value.trim();
           const priceRaw = document.getElementById("txtPostPrice").value.replace(/\D/g, "");
           const priceNum = Number(priceRaw) || 2000000;
@@ -365,7 +457,8 @@
             sellerName: user ? user.fullName : "Việt Dũng",
             price: priceNum,
             oldPrice: Math.round(priceNum * 1.45),
-            img: uploadedImages.length ? uploadedImages[0] : tpl.img,
+            img: uploadedImages[0],
+            images: uploadedImages,
             desc: descVal,
             status: "active",
             createdAt: new Date().toISOString()
@@ -375,7 +468,9 @@
             let sellerProducts = JSON.parse(localStorage.getItem("hv_seller_products") || "[]");
             sellerProducts.unshift(newProduct);
             localStorage.setItem("hv_seller_products", JSON.stringify(sellerProducts));
-          } catch (err) {}
+          } catch (err) {
+            console.error("Lỗi lưu sản phẩm:", err);
+          }
 
           Utils.toast("Đang tải sản phẩm lên gian hàng...", "info");
           setTimeout(() => {
