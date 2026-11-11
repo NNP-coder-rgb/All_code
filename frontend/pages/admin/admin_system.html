@@ -206,26 +206,26 @@
               </button>
             </div>
 
-            <!-- 4 Thẻ KPI Trọng Yếu -->
+            <!-- 4 Thẻ KPI Trọng Yếu (Tự động thu phóng & Chống tràn ô) -->
             <div class="admin-metric-grid">
               <div class="admin-stat-card">
-                <div class="stat-label">Tổng GMV Giao Dịch Toàn Sàn</div>
-                <div class="stat-val mono text-gradient" style="font-size: 1.8rem;">148.520.000.000₫</div>
+                <div class="stat-label" title="Tổng GMV Giao Dịch Toàn Sàn">Tổng GMV Giao Dịch Toàn Sàn</div>
+                <div class="stat-val mono text-gradient" title="148.520.000.000₫">148.520.000.000₫</div>
                 <div class="stat-sub text-success">Tăng trưởng +34% YoY</div>
               </div>
               <div class="admin-stat-card tone-cyan">
-                <div class="stat-label">Đơn Hàng Đang Xử Lý</div>
-                <div class="stat-val mono text-secondary" style="font-size: 1.8rem;">1.842 Đơn</div>
+                <div class="stat-label" title="Đơn Hàng Đang Xử Lý">Đơn Hàng Đang Xử Lý</div>
+                <div class="stat-val mono text-secondary" title="1.842 Đơn">1.842 Đơn</div>
                 <div class="stat-sub text-muted">98.2% giao đúng hẹn 24h</div>
               </div>
               <div class="admin-stat-card tone-coral">
-                <div class="stat-label">Khiếu Nại Cần Xử Lý Gấp</div>
-                <div class="stat-val mono text-danger" style="font-size: 1.8rem;">3 Vụ Việc</div>
+                <div class="stat-label" title="Khiếu Nại Cần Xử Lý Gấp">Khiếu Nại Cần Xử Lý Gấp</div>
+                <div class="stat-val mono text-danger" title="3 Vụ Việc">3 Vụ Việc</div>
                 <div class="stat-sub text-warning">Thời gian phản hồi &lt; 15 phút</div>
               </div>
               <div class="admin-stat-card tone-green">
-                <div class="stat-label">Tải Trọng 3 TT Kiểm Định</div>
-                <div class="stat-val mono text-success" style="font-size: 1.8rem;">78% Công Suất</div>
+                <div class="stat-label" title="Tải Trọng 3 TT Kiểm Định">Tải Trọng 3 TT Kiểm Định</div>
+                <div class="stat-val mono text-success" title="78% Công Suất">78% Công Suất</div>
                 <div class="stat-sub text-success">384 máy kiểm tra / ngày</div>
               </div>
             </div>
@@ -268,102 +268,124 @@
               </div>
 
               <!-- Bảng phê duyệt hòa giải khẩn cấp -->
-              <div class="panel p-5">
-                <div class="flex items-center justify-between mb-4">
-                  <h3 class="panel-title flex items-center gap-2">
-                    <span class="material-symbols-outlined text-warning">warning</span>
-                    Hòa Giải &amp; Khiếu Nại Cần Duyệt Gấp
-                  </h3>
-                  <a class="btn btn-ghost btn-xs text-secondary" href="../buyer/dispute.html">Mở Trung Tâm Khiếu Nại ↗</a>
-                </div>
+              <div class="panel p-5 equal-height-card">
+                <div>
+                  <div class="flex items-center justify-between mb-4">
+                    <h3 class="panel-title flex items-center gap-2">
+                      <span class="material-symbols-outlined text-warning">warning</span>
+                      Hòa Giải &amp; Khiếu Nại Cần Duyệt Gấp
+                    </h3>
+                    <a class="btn btn-ghost btn-xs text-secondary" href="../buyer/dispute.html">Mở Trung Tâm Khiếu Nại ↗</a>
+                  </div>
 
-                <div style="overflow-x: auto;">
-                  <table class="condition-table">
-                    <thead>
-                      <tr>
-                        <th>Mã Vụ</th>
-                        <th>Mặt Hàng</th>
-                        <th>Lý Do</th>
-                        <th>Số Tiền</th>
-                        <th>Phán Quyết</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td><strong class="mono text-secondary">#CASE-9841</strong></td>
-                        <td>iPhone 15 Pro Max Titan</td>
-                        <td class="text-xs">Xước nhẹ viền đáy khi mở hộp</td>
-                        <td class="mono text-success">21.490.000₫</td>
-                        <td>
-                          <button class="btn btn-primary btn-xs btn-quick-approve" data-id="9841">
-                            Duyệt Hoàn Tiền Napas
-                          </button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><strong class="mono text-secondary">#CASE-7720</strong></td>
-                        <td>Air Jordan 1 Origin Story</td>
-                        <td class="text-xs">Khách yêu cầu đổi size 42 lên 42.5</td>
-                        <td class="mono text-success">8.850.000₫</td>
-                        <td>
-                          <button class="btn btn-secondary btn-xs btn-quick-approve" data-id="7720">
-                            Duyệt Đổi Size
-                          </button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><strong class="mono text-secondary">#CASE-4412</strong></td>
-                        <td>Body Sony A7 IV</td>
-                        <td class="text-xs">Thiếu cáp sạc USB-C theo hộp</td>
-                        <td class="mono text-success">450.000₫</td>
-                        <td>
-                          <button class="btn btn-secondary btn-xs btn-quick-approve" data-id="4412">
-                            Bồi Hoàn Phụ Kiện
-                          </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <div class="table-wrap">
+                    <table class="table condition-table">
+                      <thead>
+                        <tr>
+                          <th>Mã Vụ</th>
+                          <th>Mặt Hàng</th>
+                          <th>Lý Do</th>
+                          <th>Số Tiền</th>
+                          <th>Phán Quyết</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><strong class="mono text-secondary">#CASE-9841</strong></td>
+                          <td>iPhone 15 Pro Max Titan</td>
+                          <td class="text-xs">Xước nhẹ viền đáy khi mở hộp</td>
+                          <td class="mono text-success">21.490.000₫</td>
+                          <td>
+                            <button class="btn btn-primary btn-xs btn-quick-approve" data-id="9841">
+                              Duyệt Hoàn Tiền Napas
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><strong class="mono text-secondary">#CASE-7720</strong></td>
+                          <td>Air Jordan 1 Origin Story</td>
+                          <td class="text-xs">Khách yêu cầu đổi size 42 lên 42.5</td>
+                          <td class="mono text-success">8.850.000₫</td>
+                          <td>
+                            <button class="btn btn-secondary btn-xs btn-quick-approve" data-id="7720">
+                              Duyệt Đổi Size
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><strong class="mono text-secondary">#CASE-4412</strong></td>
+                          <td>Body Sony A7 IV</td>
+                          <td class="text-xs">Thiếu cáp sạc USB-C theo hộp</td>
+                          <td class="mono text-success">450.000₫</td>
+                          <td>
+                            <button class="btn btn-secondary btn-xs btn-quick-approve" data-id="4412">
+                              Bồi Hoàn Phụ Kiện
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between text-xs pt-3 mt-2" style="border-top: 1px dashed var(--border)">
+                  <span class="text-muted">Trạng thái hội đồng hòa giải:</span>
+                  <span class="badge badge-warning mono text-2xs">3 / 3 Vụ Việc Trong Hạn Xử Lý &lt; 15 Phút</span>
                 </div>
               </div>
             </div>
 
-            <!-- Tải Trọng 3 Trạm Lab & Đối Soát Quỹ -->
-            <div class="grid grid-2 gap-6 mb-6" style="align-items: start;">
-              <div class="panel p-5">
-                <div class="flex items-center justify-between mb-3">
-                  <h3 class="panel-title">Tải Trọng 3 Trạm Lab ISO/IEC 17025</h3>
-                  <a class="btn btn-ghost btn-xs text-secondary" href="../info/about.html">Xem Quy Trình 15 Bước ↗</a>
+            <!-- Tải Trọng 3 Trạm Lab & Đối Soát Quỹ (Đồng bộ chiều cao & Đầy đủ ô) -->
+            <div class="grid grid-2 gap-6 mb-6" style="align-items: stretch;">
+              <div class="panel p-5 equal-height-card">
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <h3 class="panel-title">Tải Trọng 3 Trạm Lab ISO/IEC 17025</h3>
+                    <a class="btn btn-ghost btn-xs text-secondary" href="../info/about.html">Xem Quy Trình 15 Bước ↗</a>
+                  </div>
+                  <div class="grid grid-3 gap-3 text-xs mb-3">
+                    <div class="panel p-3" style="background: var(--bg-surface)">
+                      <strong>Lab 01 — Hà Nội</strong>
+                      <div class="text-secondary mono mt-1">162 / 200 máy (81%)</div>
+                      <div class="text-muted mt-1">Keangnam Landmark 72</div>
+                    </div>
+                    <div class="panel p-3" style="background: var(--bg-surface)">
+                      <strong>Lab 02 — TP.HCM</strong>
+                      <div class="text-secondary mono mt-1">178 / 220 máy (80%)</div>
+                      <div class="text-muted mt-1">Bitexco Financial Tower</div>
+                    </div>
+                    <div class="panel p-3" style="background: var(--bg-surface)">
+                      <strong>Lab 03 — Đà Nẵng</strong>
+                      <div class="text-secondary mono mt-1">44 / 80 máy (55%)</div>
+                      <div class="text-success mt-1">FPT Complex Ngũ Hành Sơn</div>
+                    </div>
+                  </div>
                 </div>
-                <div class="grid grid-3 gap-3 text-xs">
-                  <div class="panel p-3" style="background: var(--bg-surface)">
-                    <strong>Lab 01 — Hà Nội</strong>
-                    <div class="text-secondary mono mt-1">162 / 200 máy (81%)</div>
-                    <div class="text-muted mt-1">Keangnam Landmark 72</div>
-                  </div>
-                  <div class="panel p-3" style="background: var(--bg-surface)">
-                    <strong>Lab 02 — TP.HCM</strong>
-                    <div class="text-secondary mono mt-1">178 / 220 máy (80%)</div>
-                    <div class="text-muted mt-1">Bitexco Financial Tower</div>
-                  </div>
-                  <div class="panel p-3" style="background: var(--bg-surface)">
-                    <strong>Lab 03 — Đà Nẵng</strong>
-                    <div class="text-secondary mono mt-1">44 / 80 máy (55%)</div>
-                    <div class="text-success mt-1">FPT Complex Ngũ Hành Sơn</div>
-                  </div>
+                <div class="flex items-center justify-between text-xs pt-3 mt-2" style="border-top: 1px dashed var(--border)">
+                  <span class="text-muted">Tổng công suất tiếp nhận:</span>
+                  <span class="badge badge-primary mono text-2xs">384 / 500 máy / ngày (76.8%)</span>
                 </div>
               </div>
 
-              <div class="panel p-5">
-                <h3 class="panel-title mb-3">Đối Soát Quỹ Tài Chính Bảo Đảm (Proof-of-Reserve)</h3>
-                <p class="text-xs text-muted mb-3">Quỹ bảo chứng hoàn tiền Napas 24/7 và bồi thường rủi ro được ký quỹ độc lập tại hệ thống ngân hàng đối tác:</p>
-                <div class="flex items-center justify-between text-xs py-2" style="border-bottom: 1px solid var(--border)">
-                  <span>Techcombank Head Office:</span>
-                  <strong class="mono text-success">85.000.000.000₫ (Đã đối soát)</strong>
+              <div class="panel p-5 equal-height-card">
+                <div>
+                  <h3 class="panel-title mb-3">Đối Soát Quỹ Tài Chính Bảo Đảm (Proof-of-Reserve)</h3>
+                  <p class="text-xs text-muted mb-3">Quỹ bảo chứng hoàn tiền Napas 24/7 và bồi thường rủi ro được ký quỹ độc lập tại hệ thống ngân hàng đối tác:</p>
+                  <div class="flex items-center justify-between text-xs py-2" style="border-bottom: 1px solid var(--border)">
+                    <span>Techcombank Head Office:</span>
+                    <strong class="mono text-success">85.000.000.000₫ (Đã đối soát)</strong>
+                  </div>
+                  <div class="flex items-center justify-between text-xs py-2" style="border-bottom: 1px solid var(--border)">
+                    <span>Vietcombank Sở Giao Dịch:</span>
+                    <strong class="mono text-success">65.000.000.000₫ (Đã đối soát)</strong>
+                  </div>
+                  <div class="flex items-center justify-between text-xs py-2">
+                    <span>BIDV Corporate Center:</span>
+                    <strong class="mono text-success">30.000.000.000₫ (Đã đối soát)</strong>
+                  </div>
                 </div>
-                <div class="flex items-center justify-between text-xs py-2">
-                  <span>Vietcombank Sở Giao Dịch:</span>
-                  <strong class="mono text-success">65.000.000.000₫ (Đã đối soát)</strong>
+                <div class="flex items-center justify-between text-xs pt-3 mt-2" style="border-top: 1px dashed var(--border)">
+                  <span class="text-muted">Tổng quỹ ký quỹ độc lập:</span>
+                  <span class="badge badge-success mono text-2xs">180.000.000.000₫ • 100% Khả Dụng</span>
                 </div>
               </div>
             </div>
@@ -406,8 +428,8 @@
               </div>
 
               <!-- Bảng Dữ Liệu Sản Phẩm -->
-              <div style="overflow-x: auto;">
-                <table class="condition-table" id="adminProductsTable">
+              <div class="table-wrap">
+                <table class="table condition-table" id="adminProductsTable">
                   <thead>
                     <tr>
                       <th>Sản Phẩm</th>
@@ -450,8 +472,8 @@
                 </div>
               </div>
 
-              <div style="overflow-x: auto;">
-                <table class="condition-table">
+              <div class="table-wrap">
+                <table class="table condition-table">
                   <thead>
                     <tr>
                       <th>Mã Đơn Hàng</th>
@@ -549,47 +571,53 @@
                 </div>
               </div>
 
-              <!-- Chi tiết các vụ khiếu nại -->
+              <!-- Chi tiết các vụ khiếu nại (Đồng bộ chiều cao & Chống tràn nút) -->
               <div class="grid grid-3 gap-4 mb-4">
-                <div class="panel p-4" style="background: var(--bg-surface); border-left: 3px solid var(--primary-500);">
-                  <div class="flex items-center justify-between mb-2">
-                    <span class="mono fw-700 text-secondary">#CASE-9841</span>
-                    <span class="badge badge-warning">Chờ Duyệt Hoàn Tiền</span>
+                <div class="panel p-4 equal-height-card" style="background: var(--bg-surface); border-left: 3px solid var(--primary-500);">
+                  <div>
+                    <div class="flex items-center justify-between mb-2">
+                      <span class="mono fw-700 text-secondary">#CASE-9841</span>
+                      <span class="badge badge-warning">Chờ Duyệt Hoàn Tiền</span>
+                    </div>
+                    <strong class="text-sm block mb-1">iPhone 15 Pro Max Titan 256GB</strong>
+                    <p class="text-xs text-muted mb-3">Người mua phát hiện vết xước nhẹ đáy viền khi đồng kiểm unbox cùng shipper.</p>
+                    <div class="text-xs mono text-success fw-700 mb-3">Số tiền đối soát: 21.490.000₫</div>
                   </div>
-                  <strong class="text-sm block mb-1">iPhone 15 Pro Max Titan 256GB</strong>
-                  <p class="text-xs text-muted mb-3">Người mua phát hiện vết xước nhẹ đáy viền khi đồng kiểm unbox cùng shipper.</p>
-                  <div class="text-xs mono text-success fw-700 mb-3">Số tiền đối soát: 21.490.000₫</div>
-                  <div class="flex items-center gap-2">
-                    <button class="btn btn-primary btn-xs is-full btn-quick-approve" data-id="9841">Phê Duyệt Hoàn Tiền</button>
-                    <a class="btn btn-secondary btn-xs" href="../buyer/dispute.html">Xem Case ↗</a>
-                  </div>
-                </div>
-
-                <div class="panel p-4" style="background: var(--bg-surface); border-left: 3px solid var(--secondary-500);">
-                  <div class="flex items-center justify-between mb-2">
-                    <span class="mono fw-700 text-secondary">#CASE-7720</span>
-                    <span class="badge badge-warning">Chờ Đổi Hàng</span>
-                  </div>
-                  <strong class="text-sm block mb-1">Air Jordan 1 Origin Story</strong>
-                  <p class="text-xs text-muted mb-3">Khách hàng thử size bị chật, yêu cầu đổi size 42 lên 42.5 nguyên tem niêm phong.</p>
-                  <div class="text-xs mono text-success fw-700 mb-3">Số tiền đối soát: 8.850.000₫</div>
-                  <div class="flex items-center gap-2">
-                    <button class="btn btn-secondary btn-xs is-full btn-quick-approve" data-id="7720">Duyệt Đổi Size</button>
-                    <a class="btn btn-secondary btn-xs" href="../buyer/dispute.html">Xem Case ↗</a>
+                  <div class="flex items-center gap-2 mt-auto pt-2">
+                    <button class="btn btn-primary btn-xs btn-quick-approve btn-action-flex" data-id="9841">Phê Duyệt Hoàn Tiền</button>
+                    <a class="btn btn-secondary btn-xs flex-shrink-0" style="white-space: nowrap;" href="../buyer/dispute.html">Xem Case ↗</a>
                   </div>
                 </div>
 
-                <div class="panel p-4" style="background: var(--bg-surface); border-left: 3px solid var(--tertiary-500);">
-                  <div class="flex items-center justify-between mb-2">
-                    <span class="mono fw-700 text-secondary">#CASE-4412</span>
-                    <span class="badge badge-warning">Bồi Hoàn Phụ Kiện</span>
+                <div class="panel p-4 equal-height-card" style="background: var(--bg-surface); border-left: 3px solid var(--secondary-500);">
+                  <div>
+                    <div class="flex items-center justify-between mb-2">
+                      <span class="mono fw-700 text-secondary">#CASE-7720</span>
+                      <span class="badge badge-warning">Chờ Đổi Hàng</span>
+                    </div>
+                    <strong class="text-sm block mb-1">Air Jordan 1 Origin Story</strong>
+                    <p class="text-xs text-muted mb-3">Khách hàng thử size bị chật, yêu cầu đổi size 42 lên 42.5 nguyên tem niêm phong.</p>
+                    <div class="text-xs mono text-success fw-700 mb-3">Số tiền đối soát: 8.850.000₫</div>
                   </div>
-                  <strong class="text-sm block mb-1">Body Máy Ảnh Sony A7 IV</strong>
-                  <p class="text-xs text-muted mb-3">Người bán quên bỏ cáp sạc type-C vào hộp máy. Admin yêu cầu bồi hoàn trị giá cáp.</p>
-                  <div class="text-xs mono text-success fw-700 mb-3">Số tiền bồi hoàn: 450.000₫</div>
-                  <div class="flex items-center gap-2">
-                    <button class="btn btn-secondary btn-xs is-full btn-quick-approve" data-id="4412">Duyệt Bồi Hoàn</button>
-                    <a class="btn btn-secondary btn-xs" href="../buyer/dispute.html">Xem Case ↗</a>
+                  <div class="flex items-center gap-2 mt-auto pt-2">
+                    <button class="btn btn-secondary btn-xs btn-quick-approve btn-action-flex" data-id="7720">Duyệt Đổi Size</button>
+                    <a class="btn btn-secondary btn-xs flex-shrink-0" style="white-space: nowrap;" href="../buyer/dispute.html">Xem Case ↗</a>
+                  </div>
+                </div>
+
+                <div class="panel p-4 equal-height-card" style="background: var(--bg-surface); border-left: 3px solid var(--tertiary-500);">
+                  <div>
+                    <div class="flex items-center justify-between mb-2">
+                      <span class="mono fw-700 text-secondary">#CASE-4412</span>
+                      <span class="badge badge-warning">Bồi Hoàn Phụ Kiện</span>
+                    </div>
+                    <strong class="text-sm block mb-1">Body Máy Ảnh Sony A7 IV</strong>
+                    <p class="text-xs text-muted mb-3">Người bán quên bỏ cáp sạc type-C vào hộp máy. Admin yêu cầu bồi hoàn trị giá cáp.</p>
+                    <div class="text-xs mono text-success fw-700 mb-3">Số tiền bồi hoàn: 450.000₫</div>
+                  </div>
+                  <div class="flex items-center gap-2 mt-auto pt-2">
+                    <button class="btn btn-secondary btn-xs btn-quick-approve btn-action-flex" data-id="4412">Duyệt Bồi Hoàn</button>
+                    <a class="btn btn-secondary btn-xs flex-shrink-0" style="white-space: nowrap;" href="../buyer/dispute.html">Xem Case ↗</a>
                   </div>
                 </div>
               </div>
@@ -617,8 +645,8 @@
                 </div>
               </div>
 
-              <div style="overflow-x: auto;">
-                <table class="condition-table" id="kycRequestsTable">
+              <div class="table-wrap">
+                <table class="table condition-table" id="kycRequestsTable">
                   <thead>
                     <tr>
                       <th>Mã Hồ Sơ</th>
@@ -661,8 +689,8 @@
                 </div>
               </div>
 
-              <div style="overflow-x: auto;">
-                <table class="condition-table" id="adminUsersTable">
+              <div class="table-wrap">
+                <table class="table condition-table" id="adminUsersTable">
                   <thead>
                     <tr>
                       <th>Thành Viên</th>
@@ -701,37 +729,84 @@
               </div>
 
               <div class="grid grid-3 gap-4 mb-5">
-                <div class="panel p-4" style="background: var(--bg-surface)">
-                  <div class="flex items-center gap-2 text-secondary mb-2">
-                    <span class="material-symbols-outlined">location_on</span>
-                    <strong class="text-sm">Trạm 01 — Hà Nội</strong>
+                <div class="panel p-4 equal-height-card" style="background: var(--bg-surface)">
+                  <div>
+                    <div class="flex items-center gap-2 text-secondary mb-2">
+                      <span class="material-symbols-outlined">location_on</span>
+                      <strong class="text-sm">Trạm 01 — Hà Nội</strong>
+                    </div>
+                    <p class="text-xs text-muted mb-2">Keangnam Landmark 72, Nam Từ Liêm, Hà Nội</p>
+                    <div class="text-xs mono mb-2">Công suất: <strong class="text-secondary">162 / 200 máy (81%)</strong></div>
+                    <div class="progress progress-secondary mb-3" style="--value: 81%; height: 6px;"><div class="progress-bar"></div></div>
                   </div>
-                  <p class="text-xs text-muted mb-2">Keangnam Landmark 72, Nam Từ Liêm, Hà Nội</p>
-                  <div class="text-xs mono mb-2">Công suất: <strong class="text-secondary">162 / 200 máy (81%)</strong></div>
-                  <div class="progress progress-secondary mb-3" style="--value: 81%; height: 6px;"><div class="progress-bar"></div></div>
-                  <span class="badge badge-success text-2xs">Hoạt động bình thường</span>
+                  <span class="badge badge-success text-2xs mt-auto">Hoạt động bình thường</span>
                 </div>
 
-                <div class="panel p-4" style="background: var(--bg-surface)">
-                  <div class="flex items-center gap-2 text-secondary mb-2">
-                    <span class="material-symbols-outlined">location_on</span>
-                    <strong class="text-sm">Trạm 02 — TP. Hồ Chí Minh</strong>
+                <div class="panel p-4 equal-height-card" style="background: var(--bg-surface)">
+                  <div>
+                    <div class="flex items-center gap-2 text-secondary mb-2">
+                      <span class="material-symbols-outlined">location_on</span>
+                      <strong class="text-sm">Trạm 02 — TP. Hồ Chí Minh</strong>
+                    </div>
+                    <p class="text-xs text-muted mb-2">Tòa Bitexco Financial Tower, Quận 1, TP.HCM</p>
+                    <div class="text-xs mono mb-2">Công suất: <strong class="text-secondary">178 / 220 máy (80%)</strong></div>
+                    <div class="progress progress-secondary mb-3" style="--value: 80%; height: 6px;"><div class="progress-bar"></div></div>
                   </div>
-                  <p class="text-xs text-muted mb-2">Tòa Bitexco Financial Tower, Quận 1, TP.HCM</p>
-                  <div class="text-xs mono mb-2">Công suất: <strong class="text-secondary">178 / 220 máy (80%)</strong></div>
-                  <div class="progress progress-secondary mb-3" style="--value: 80%; height: 6px;"><div class="progress-bar"></div></div>
-                  <span class="badge badge-success text-2xs">Hoạt động bình thường</span>
+                  <span class="badge badge-success text-2xs mt-auto">Hoạt động bình thường</span>
                 </div>
 
-                <div class="panel p-4" style="background: var(--bg-surface)">
-                  <div class="flex items-center gap-2 text-secondary mb-2">
-                    <span class="material-symbols-outlined">location_on</span>
-                    <strong class="text-sm">Trạm 03 — Đà Nẵng</strong>
+                <div class="panel p-4 equal-height-card" style="background: var(--bg-surface)">
+                  <div>
+                    <div class="flex items-center gap-2 text-secondary mb-2">
+                      <span class="material-symbols-outlined">location_on</span>
+                      <strong class="text-sm">Trạm 03 — Đà Nẵng</strong>
+                    </div>
+                    <p class="text-xs text-muted mb-2">Khu Công Nghệ Cao FPT City, Ngũ Hành Sơn, Đà Nẵng</p>
+                    <div class="text-xs mono mb-2">Công suất: <strong class="text-secondary">44 / 80 máy (55%)</strong></div>
+                    <div class="progress progress-secondary mb-3" style="--value: 55%; height: 6px;"><div class="progress-bar"></div></div>
                   </div>
-                  <p class="text-xs text-muted mb-2">Khu Công Nghệ Cao FPT City, Ngũ Hành Sơn, Đà Nẵng</p>
-                  <div class="text-xs mono mb-2">Công suất: <strong class="text-secondary">44 / 80 máy (55%)</strong></div>
-                  <div class="progress progress-secondary mb-3" style="--value: 55%; height: 6px;"><div class="progress-bar"></div></div>
-                  <span class="badge badge-primary text-2xs">Sẵn sàng nhận thêm</span>
+                  <span class="badge badge-primary text-2xs mt-auto">Sẵn sàng nhận thêm</span>
+                </div>
+              </div>
+
+              <!-- Tiêu chuẩn Thẩm Định 15 Tiêu Chí & Chứng Thư QR -->
+              <div class="grid grid-2 gap-4">
+                <div class="panel p-4 equal-height-card" style="background: var(--bg-surface)">
+                  <div>
+                    <div class="flex items-center gap-2 text-primary mb-2">
+                      <span class="material-symbols-outlined">verified</span>
+                      <strong class="text-sm">Quy Trình 15 Tiêu Chí Nghiêm Ngặt</strong>
+                    </div>
+                    <p class="text-xs text-muted mb-3">Mỗi sản phẩm C2C Like New ký gửi đều phải vượt qua 100% 15 bước kiểm định phần cứng:</p>
+                    <ul class="text-xs text-muted space-y-1" style="padding-left: 18px; line-height: 1.8;">
+                      <li>Bước 1-5: Ngoại quan, sườn vỏ, ốc zin và không cấn móp</li>
+                      <li>Bước 6-10: Màn hình không ám ố, cảm ứng mượt và dung lượng pin thực tế</li>
+                      <li>Bước 11-15: Bo mạch chưa sửa chữa, camera sắc nét và dán tem niêm phong QR</li>
+                    </ul>
+                  </div>
+                  <div class="pt-3 mt-3 border-top flex items-center justify-between">
+                    <span class="text-2xs text-muted">Tiêu chuẩn kiểm định:</span>
+                    <span class="badge badge-success text-2xs">ISO/IEC 17025:2017</span>
+                  </div>
+                </div>
+
+                <div class="panel p-4 equal-height-card" style="background: var(--bg-surface)">
+                  <div>
+                    <div class="flex items-center gap-2 text-secondary mb-2">
+                      <span class="material-symbols-outlined">qr_code_scanner</span>
+                      <strong class="text-sm">Chứng Thư Điện Tử &amp; Tem Niêm Phong QR</strong>
+                    </div>
+                    <p class="text-xs text-muted mb-3">Dữ liệu kiểm tra được số hóa và ký số bảo mật, ngăn chặn hoàn toàn việc tráo đổi linh kiện:</p>
+                    <ul class="text-xs text-muted space-y-1" style="padding-left: 18px; line-height: 1.8;">
+                      <li>Tem vỡ phản quang Hologram chống mở nắp lưng trái phép</li>
+                      <li>Mã QR độc bản tra cứu kết quả kiểm định chi tiết trên điện thoại</li>
+                      <li>Bảo hành 6 - 12 tháng phần cứng trực tiếp từ trung tâm kỹ thuật</li>
+                    </ul>
+                  </div>
+                  <div class="pt-3 mt-3 border-top flex items-center justify-between">
+                    <span class="text-2xs text-muted">Bảo hành kỹ thuật:</span>
+                    <span class="badge badge-primary text-2xs">Bảo Hành Sàn 6 - 12 Tháng</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -864,7 +939,7 @@
                   <span class="material-symbols-outlined text-secondary">store</span>
                   2. Phân Hệ Kênh Người Bán (Seller Center) (2 Trang)
                 </div>
-                <div class="sitemap-grid">
+                <div class="sitemap-grid-2">
                   <!-- 7. seller/dashboard.html -->
                   <div class="sitemap-card">
                     <div class="sitemap-card-head">
@@ -1099,16 +1174,32 @@
                       <a class="btn btn-primary btn-xs" href="../info/warranty_policy.html">Mở Trang Này ↗</a>
                     </div>
                   </div>
+
+                  <!-- 20. info/about-web.html (Cổng Hỗ Trợ Pháp Lý & CSKH) -->
+                  <div class="sitemap-card">
+                    <div class="sitemap-card-head">
+                      <div>
+                        <strong class="text-sm block">Cổng Tra Cứu Pháp Lý &amp; CSKH</strong>
+                        <span class="mono text-2xs text-secondary">frontend/pages/info/about-web.html#support</span>
+                      </div>
+                      <span class="badge badge-secondary text-2xs">CSKH 24/7</span>
+                    </div>
+                    <div class="sitemap-card-body">Tổng đài hỗ trợ pháp lý, hướng dẫn quy chế sàn, giải quyết khiếu nại bản quyền và đường dây nóng hỗ trợ 1900 8888.</div>
+                    <div class="sitemap-card-foot">
+                      <span class="text-2xs text-success flex items-center gap-1"><span class="status-dot"></span> Sẵn sàng</span>
+                      <a class="btn btn-primary btn-xs" href="../info/about-web.html">Mở Trang Này ↗</a>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <!-- CỤM 6: QUẢN TRỊ VIÊN HỆ THỐNG -->
+              <!-- CỤM 6: QUẢN TRỊ VIÊN HỆ THỐNG & TRUNG TÂM CHỈ HUY (3 Khối Đồng Bộ) -->
               <div>
                 <div class="flex items-center gap-2 text-sm fw-700 text-text mb-3">
                   <span class="material-symbols-outlined text-secondary">terminal</span>
-                  6. Phân Hệ Quản Trị Hệ Thống (Master Admin) (1 Trang)
+                  6. Phân Hệ Quản Trị Hệ Thống &amp; Giám Sát An Ninh (Master Admin Deck)
                 </div>
-                <div class="sitemap-grid" style="grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));">
+                <div class="sitemap-grid">
                   <!-- 20. admin/admin_system.html -->
                   <div class="sitemap-card" style="border: 1.5px solid var(--primary-500); background: rgba(139, 92, 246, 0.08);">
                     <div class="sitemap-card-head">
@@ -1122,6 +1213,38 @@
                     <div class="sitemap-card-foot">
                       <span class="text-2xs text-primary fw-700 flex items-center gap-1"><span class="status-dot"></span> Trang hiện tại</span>
                       <span class="badge badge-secondary text-2xs">Super Admin</span>
+                    </div>
+                  </div>
+
+                  <!-- 21. Giám Sát An Ninh FIDO2 Passkey -->
+                  <div class="sitemap-card">
+                    <div class="sitemap-card-head">
+                      <div>
+                        <strong class="text-sm block">Trung Tâm An Ninh &amp; FIDO2 Passkey</strong>
+                        <span class="mono text-2xs text-secondary">frontend/pages/account/profile.html#securitySection</span>
+                      </div>
+                      <span class="badge badge-success text-2xs">Bảo Mật L3</span>
+                    </div>
+                    <div class="sitemap-card-body">Hạ tầng xác thực phần cứng chuẩn WebAuthn, quản lý chứng chỉ khóa bảo mật sinh trắc học Touch ID, Face ID và YubiKey.</div>
+                    <div class="sitemap-card-foot">
+                      <span class="text-2xs text-success flex items-center gap-1"><span class="status-dot"></span> Đang hoạt động</span>
+                      <a class="btn btn-secondary btn-xs" href="../account/profile.html#securitySection">Kiểm Tra Khóa ↗</a>
+                    </div>
+                  </div>
+
+                  <!-- 22. Cổng Kết Nối C06 & Napas 24/7 -->
+                  <div class="sitemap-card">
+                    <div class="sitemap-card-head">
+                      <div>
+                        <strong class="text-sm block">Cổng Đối Soát C06 &amp; Napas 24/7</strong>
+                        <span class="mono text-2xs text-secondary">frontend/pages/admin/admin_system.html#tabPane-kyc</span>
+                      </div>
+                      <span class="badge badge-primary text-2xs">ICAO / Napas</span>
+                    </div>
+                    <div class="sitemap-card-body">Hạ tầng đối soát thẻ CCCD gắn chip theo chuẩn C06 ICAO 9303 và kết nối luân chuyển quỹ ký quỹ bảo chứng Napas 24/7.</div>
+                    <div class="sitemap-card-foot">
+                      <span class="text-2xs text-success flex items-center gap-1"><span class="status-dot"></span> Đã kết nối</span>
+                      <button class="btn btn-secondary btn-xs" type="button" onclick="switchAdminTab('kyc')">Xem Đối Soát ↗</button>
                     </div>
                   </div>
                 </div>
@@ -1384,18 +1507,18 @@
             return `
               <tr>
                 <td>
-                  <div class="fw-700 text-sm text-text">${u.name}</div>
+                  <div class="fw-700 text-sm text-text" style="white-space: nowrap;">${u.name}</div>
                 </td>
                 <td>
-                  <div class="text-xs text-secondary">${u.email}</div>
+                  <div class="text-xs text-secondary" style="white-space: nowrap;">${u.email}</div>
                   <div class="mono text-2xs text-muted">${u.phone}</div>
                 </td>
-                <td><span class="badge">${u.role}</span></td>
+                <td><span class="badge" style="white-space: nowrap;">${u.role}</span></td>
                 <td>${ekycBadge}</td>
-                <td class="text-xs text-muted" style="max-width: 200px;">${u.addr}</td>
-                <td><strong class="mono text-success">${u.wallet}</strong></td>
-                <td style="text-align: right;">
-                  <a class="btn btn-secondary btn-xs" href="../account/profile.html" title="Xem hồ sơ">
+                <td class="text-xs text-muted" style="max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${u.addr}">${u.addr}</td>
+                <td><strong class="mono text-success" style="white-space: nowrap;">${u.wallet}</strong></td>
+                <td style="text-align: right; white-space: nowrap;">
+                  <a class="btn btn-secondary btn-xs flex-shrink-0" style="white-space: nowrap;" href="../account/profile.html" title="Xem hồ sơ">
                     Hồ Sơ ↗
                   </a>
                 </td>
@@ -1466,20 +1589,20 @@
                   <div class="text-xs text-muted">${timeStr}</div>
                 </td>
                 <td>${statusBadge}</td>
-                <td style="text-align: right;">
+                <td style="text-align: right; white-space: nowrap;">
                   ${
                     isPending
-                      ? `<div class="flex items-center justify-end gap-2">
-                          <button class="btn btn-primary btn-sm btn-approve-kyc" data-id="${r.id}" data-name="${r.fullName}">
+                      ? `<div class="flex items-center justify-end gap-2" style="white-space: nowrap;">
+                          <button class="btn btn-primary btn-sm btn-approve-kyc" data-id="${r.id}" data-name="${r.fullName}" style="white-space: nowrap;">
                             <span class="material-symbols-outlined icon-xs">check</span> Phê Duyệt CCCD
                           </button>
-                          <button class="btn btn-ghost btn-sm text-danger btn-reject-kyc" data-id="${r.id}" data-name="${r.fullName}">
+                          <button class="btn btn-ghost btn-sm text-danger btn-reject-kyc" data-id="${r.id}" data-name="${r.fullName}" style="white-space: nowrap;">
                             Từ Chối
                           </button>
                         </div>`
                       : isVerified
-                      ? `<span class="text-xs text-success fw-600">✓ Đã mở quyền Mua &amp; Bán</span>`
-                      : `<span class="text-xs text-danger">Đã từ chối hồ sơ</span>`
+                      ? `<span class="badge badge-success text-xs">✓ Đã duyệt eKYC L2</span>`
+                      : `<span class="badge badge-danger text-xs">Đã từ chối hồ sơ</span>`
                   }
                 </td>
               </tr>
