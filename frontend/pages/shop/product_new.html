@@ -214,22 +214,135 @@
     <script>
       (function () {
         Utils.Cart.syncBadge();
-        const product = PRODUCTS.find((p) => p.type === "mall") || PRODUCTS[0];
-        const title = product.short || product.name;
 
-        // Xử lý chuyển đổi ảnh thumbnail
-        var thumbs = document.querySelectorAll(".thumb-item");
-        var mainImg = document.getElementById("mainNewImg");
-        thumbs.forEach(function (t) {
-          t.addEventListener("click", function () {
-            thumbs.forEach(function (item) { item.style.opacity = "0.6"; item.style.border = "2px solid transparent"; });
-            this.style.opacity = "1";
-            this.style.border = "2px solid var(--primary-500)";
-            if (mainImg) mainImg.src = this.src;
+        // 1. Lấy ID sản phẩm từ URL query (?id=...)
+        const params = new URLSearchParams(window.location.search);
+        const productId = params.get("id");
+        let product = null;
+
+        if (typeof PRODUCTS !== "undefined" && PRODUCTS.length) {
+          if (productId) {
+            product = PRODUCTS.find((p) => p.id === productId);
+          }
+          if (!product) {
+            product = PRODUCTS.find((p) => p.type === "mall") || PRODUCTS[0];
+          }
+        }
+
+        if (!product) return;
+
+        const title = product.name;
+        const shortTitle = product.short || product.name;
+        const brandName = product.sub || "CHÍNH HÃNG BRAND MALL";
+        const isMall = product.type === "mall";
+        const oldPriceVal = product.oldPrice || Math.round(product.price * (1 + (product.off || 15) / 100));
+        const offPercent = product.off || Math.round((1 - product.price / oldPriceVal) * 100);
+
+        // 2. Cập nhật tiêu đề trang & Breadcrumb
+        document.title = title + " | HYBRID.STORE BRAND MALL";
+        const newProductName = document.getElementById("newProductName");
+        if (newProductName) newProductName.textContent = shortTitle;
+
+        // 3. Cập nhật hình ảnh sản phẩm
+        const mainNewImg = document.getElementById("mainNewImg");
+        const resolvedImg = window.resolveAssetUrl ? window.resolveAssetUrl(product.img) : product.img;
+        if (mainNewImg) {
+          mainNewImg.src = resolvedImg;
+          mainNewImg.alt = title;
+        }
+
+        // Thumbnails
+        const thumbContainer = document.querySelector(".product-detail-grid .flex.gap-3.mt-3");
+        if (thumbContainer) {
+          thumbContainer.innerHTML = `
+            <img class="thumb-item active" src="${resolvedImg}" style="width: 70px; height: 70px; border-radius: 8px; object-fit: cover; border: 2px solid var(--primary-500); cursor: pointer;" alt="Ảnh 1" />
+            <img class="thumb-item" src="${resolvedImg}" style="width: 70px; height: 70px; border-radius: 8px; object-fit: cover; opacity: 0.6; cursor: pointer;" alt="Ảnh 2" />
+          `;
+          const thumbs = thumbContainer.querySelectorAll(".thumb-item");
+          thumbs.forEach(function (t) {
+            t.addEventListener("click", function () {
+              thumbs.forEach(function (item) { item.style.opacity = "0.6"; item.style.border = "2px solid transparent"; });
+              this.style.opacity = "1";
+              this.style.border = "2px solid var(--primary-500)";
+              if (mainNewImg) mainNewImg.src = this.src;
+            });
           });
-        });
+        }
 
-        // Xử lý tăng giảm số lượng
+        // 4. Cập nhật tên sản phẩm, hãng phân phối & đánh giá
+        const prodTitle = document.getElementById("prodTitle");
+        if (prodTitle) prodTitle.textContent = title;
+
+        const brandBadge = document.querySelector(".mall-seal-badge");
+        if (brandBadge) {
+          brandBadge.innerHTML = `<span class="material-symbols-outlined icon-xs">verified</span> ${brandName} • NGUYÊN SEAL HỘP`;
+        }
+
+        const ratingEl = document.querySelector(".product-detail-grid .text-warning.fw-600");
+        if (ratingEl) ratingEl.textContent = (product.rating || 4.9).toFixed(1) + " / 5.0";
+
+        const reviewsEl = document.querySelector(".product-detail-grid .flex.items-center.gap-3.text-sm.text-muted.mb-4 span:nth-child(3)");
+        if (reviewsEl) reviewsEl.textContent = product.reviews || "(210 đánh giá chính hãng)";
+
+        // 5. Cập nhật giá & mức giảm
+        const priceBox = document.querySelector(".mall-hero-box");
+        if (priceBox) {
+          const curPriceEl = priceBox.querySelector(".mono.text-gradient");
+          if (curPriceEl) curPriceEl.textContent = Utils.formatCurrency(product.price);
+          const oldPriceEl = priceBox.querySelector(".text-faint.line-through.mono");
+          if (oldPriceEl) oldPriceEl.textContent = Utils.formatCurrency(oldPriceVal);
+          const offBadge = priceBox.querySelector(".badge.badge-success");
+          if (offBadge) offBadge.textContent = `-${offPercent}% ƯU ĐÃI`;
+        }
+
+        // 6. Cập nhật biến thể tương ứng ngành hàng
+        const variantGroup = document.querySelector(".form-group.mb-4 .flex.gap-2");
+        if (variantGroup) {
+          let variantHtml = "";
+          if (product.category === "fashion" || product.category === "sneakers") {
+            variantHtml = `
+              <button class="btn btn-secondary btn-sm" type="button">Size S (39)</button>
+              <button class="btn btn-primary btn-sm" type="button">Size M (40 - Chuẩn)</button>
+              <button class="btn btn-secondary btn-sm" type="button">Size L (41)</button>
+              <button class="btn btn-secondary btn-sm" type="button">Size XL (42)</button>
+            `;
+          } else if (product.category === "tech" || product.category === "gaming" || product.category === "camera") {
+            variantHtml = `
+              <button class="btn btn-primary btn-sm" type="button">Bản Tiêu Chuẩn</button>
+              <button class="btn btn-secondary btn-sm" type="button">Nâng Cấp Bộ Nhớ +Pro</button>
+            `;
+          } else {
+            variantHtml = `
+              <button class="btn btn-primary btn-sm" type="button">Màu Tiêu Chuẩn (Silver)</button>
+              <button class="btn btn-secondary btn-sm" type="button">Bản Giới Hạn (Space Black)</button>
+            `;
+          }
+          variantGroup.innerHTML = variantHtml;
+          variantGroup.querySelectorAll(".btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+              variantGroup.querySelectorAll(".btn").forEach(b => {
+                b.classList.remove("btn-primary");
+                b.classList.add("btn-secondary");
+              });
+              btn.classList.remove("btn-secondary");
+              btn.classList.add("btn-primary");
+            });
+          });
+        }
+
+        // 7. Cập nhật mô tả & thông số
+        const specsList = document.querySelector(".product-detail-grid .panel.p-4 ul");
+        if (specsList) {
+          specsList.innerHTML = `
+            <li><strong>Tình trạng:</strong> Mới 100% nguyên seal hộp chính hãng, đầy đủ tem bảo hành.</li>
+            <li><strong>Đặc điểm nổi bật:</strong> ${product.desc || "Thiết kế hiện đại, hoàn thiện cao cấp, hiệu năng dẫn đầu phân khúc."}</li>
+            <li><strong>Chính sách đổi trả:</strong> Đổi trả miễn phí 100% trong 7 ngày nếu lỗi kỹ thuật.</li>
+            <li><strong>Đồng kiểm bưu tá:</strong> Mở hộp kiểm tra ngoại quan cùng shipper trước khi thanh toán.</li>
+            <li><strong>Hóa đơn VAT:</strong> Hóa đơn điện tử chính thức cấp ngay sau khi giao hàng thành công.</li>
+          `;
+        }
+
+        // 8. Xử lý tăng giảm số lượng
         var qtyInput = document.querySelector(".qty-input");
         var qtyBtns = document.querySelectorAll(".qty-btn");
         if (qtyBtns.length === 2 && qtyInput) {
@@ -243,17 +356,19 @@
           });
         }
 
+        // 9. Nút Thêm vào giỏ hàng
         document.getElementById("btnMallAddCart").addEventListener("click", () => {
           var qty = qtyInput ? (parseInt(qtyInput.value, 10) || 1) : 1;
           if (!Auth.ensureLogin(() => {
             Utils.Cart.addItem(product, qty);
           }, {
             title: "Đăng Nhập Mua Hàng",
-            message: 'Vui lòng đăng nhập tài khoản để thêm "' + title + '" vào giỏ hàng.',
+            message: 'Vui lòng đăng nhập tài khoản để thêm "' + shortTitle + '" vào giỏ hàng.',
           })) return;
           Utils.Cart.addItem(product, qty);
         });
 
+        // 10. Nút Mua ngay
         document.getElementById("btnMallBuyNow").addEventListener("click", () => {
           var qty = qtyInput ? (parseInt(qtyInput.value, 10) || 1) : 1;
           if (!Auth.ensureLogin(() => {
@@ -261,7 +376,7 @@
             window.location.href = "cart.html";
           }, {
             title: "Đăng Nhập Mua Hàng",
-            message: 'Vui lòng đăng nhập tài khoản để mua ngay "' + title + '".',
+            message: 'Vui lòng đăng nhập tài khoản để mua ngay "' + shortTitle + '".',
             returnUrl: "cart.html"
           })) return;
           Utils.Cart.addItem(product, qty);

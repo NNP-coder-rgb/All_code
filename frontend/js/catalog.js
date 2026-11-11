@@ -21,7 +21,36 @@
 
   /* ---------------- TRẠNG THÁI CATALOG ---------------- */
   const urlParams = new URLSearchParams(window.location.search);
-  const initialCategory = urlParams.get("cat") || "all";
+  const rawCat = (urlParams.get("cat") || urlParams.get("category") || "all").toLowerCase();
+  const catAliases = {
+    "all": "all",
+    "fashion": "fashion",
+    "thoi-trang": "fashion",
+    "apparel": "fashion",
+    "sneakers": "sneakers",
+    "giay": "sneakers",
+    "giay-dep": "sneakers",
+    "shoes": "sneakers",
+    "tech": "tech",
+    "dien-thoai": "tech",
+    "laptop": "tech",
+    "electronics": "tech",
+    "appliances": "appliances",
+    "gia-dung": "appliances",
+    "home": "appliances",
+    "audio": "audio",
+    "am-thanh": "audio",
+    "tai-nghe": "audio",
+    "gaming": "gaming",
+    "ban-phim": "gaming",
+    "chuot": "gaming",
+    "watches": "watches",
+    "dong-ho": "watches",
+    "phu-kien": "watches",
+    "camera": "camera",
+    "may-anh": "camera",
+  };
+  const initialCategory = catAliases[rawCat] || rawCat;
   const initialKeyword = urlParams.get("q") || "";
   const initialType = urlParams.get("type") || "all";
 

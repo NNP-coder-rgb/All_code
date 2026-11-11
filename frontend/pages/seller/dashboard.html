@@ -132,36 +132,50 @@
                   <th>Thao tác</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td><strong>iPhone 15 Pro Max 256GB Titan</strong></td>
-                  <td>Hi-Tech Đồ Cũ</td>
-                  <td class="mono text-primary">21.990.000₫</td>
-                  <td><span class="badge badge-secondary">99% Likenew</span></td>
-                  <td><span class="badge badge-success">Đang Hiển Thị</span></td>
-                  <td><a href="../shop/product_used.html" class="btn btn-ghost btn-sm">Xem tin</a></td>
-                </tr>
-                <tr>
-                  <td><strong>Tai nghe Sony WH-1000XM4 Đen</strong></td>
-                  <td>Hi-Tech Đồ Cũ</td>
-                  <td class="mono text-primary">3.500.000₫</td>
-                  <td><span class="badge badge-secondary">95% Rất Đẹp</span></td>
-                  <td><span class="badge badge-success">Đang Hiển Thị</span></td>
-                  <td><button class="btn btn-ghost btn-sm">Xem tin</button></td>
-                </tr>
-                <tr>
-                  <td><strong>Body Sony Alpha A7 Mark IV</strong></td>
-                  <td>Máy Ảnh Đồ Cũ</td>
-                  <td class="mono text-primary">37.800.000₫</td>
-                  <td><span class="badge badge-secondary">98% Likenew</span></td>
-                  <td><span class="badge badge-warning">Có Đề Nghị Trả Giá</span></td>
-                  <td><button class="btn btn-secondary btn-sm">Duyệt Giá</button></td>
-                </tr>
+              <tbody id="sellerProductsTableBody">
+                <!-- Nạp động qua JS -->
               </tbody>
             </table>
           </div>
         </div>
       </main>
+    </div>
+
+    <!-- Modal Phê Duyệt Trả Giá C2C -->
+    <div class="modal-backdrop" id="approveOfferModal">
+      <div class="modal" role="dialog" aria-modal="true" style="max-width: 480px;">
+        <div class="modal-head">
+          <h4 class="modal-title flex items-center gap-2">
+            <span class="material-symbols-outlined text-secondary">price_change</span>
+            Xét Duyệt Đề Nghị Trả Giá
+          </h4>
+          <button class="modal-close" type="button" data-close><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <div class="modal-body">
+          <div class="panel p-3 mb-3" style="background: var(--bg-surface);">
+            <div class="text-xs text-muted">Sản phẩm:</div>
+            <strong class="text-white block mt-0.5" id="offerModalProdTitle">Body Sony Alpha A7 Mark IV</strong>
+            <div class="flex items-center justify-between text-xs mt-2 pt-2" style="border-top: 1px solid var(--border);">
+              <span>Giá niêm yết: <strong class="mono text-muted" id="offerModalListedPrice">37.800.000₫</strong></span>
+              <span>Khách trả giá: <strong class="mono text-gradient" style="font-size: 1.1rem;" id="offerModalOfferPrice">34.000.000₫</strong></span>
+            </div>
+          </div>
+          <div class="panel p-3 mb-3 text-xs" style="background: rgba(6, 182, 212, 0.05); border: 1px solid rgba(6, 182, 212, 0.25);">
+            <div class="fw-700 text-secondary mb-1 flex items-center gap-1">
+              <span class="material-symbols-outlined icon-xs">chat</span> Lời nhắn từ người mua:
+            </div>
+            <p class="text-muted" id="offerModalBuyerMsg">"Em qua xem máy trực tiếp tại showroom lấy luôn trong chiều nay ạ, bác bớt chút lộc lá cho em nhé!"</p>
+          </div>
+          <p class="text-xs text-muted">
+            Nếu bạn đồng ý mức giá này, người mua sẽ nhận thông báo tức thì và có 24h để thanh toán đơn hàng.
+          </p>
+        </div>
+        <div class="modal-foot flex gap-2">
+          <button class="btn btn-outlined btn-sm flex-1" id="btnRejectOffer" type="button">Từ Chối</button>
+          <button class="btn btn-secondary btn-sm flex-1" id="btnCounterOffer" type="button">Báo Giá 35.5Tr</button>
+          <button class="btn btn-primary btn-sm flex-1" id="btnAcceptOffer" type="button">Đồng Ý Bán</button>
+        </div>
+      </div>
     </div>
 
     <!-- Modal Rút Tiền Napas -->
@@ -209,18 +223,174 @@
       (function () {
         if (!Auth.requireLogin({ message: "Vui lòng đăng nhập tài khoản người bán." })) return;
 
-        const modal = document.getElementById("withdrawModal");
-        const openModal = () => Utils.openModal("withdrawModal");
+        const tbody = document.getElementById("sellerProductsTableBody");
+        const prodCountBadge = document.querySelector(".side-link span.badge-counter");
 
-        document.getElementById("btnWithdrawAction").addEventListener("click", openModal);
+        // 1. Nạp danh sách sản phẩm (từ localStorage và dữ liệu mẫu C2C)
+        let customProducts = [];
+        try {
+          customProducts = JSON.parse(localStorage.getItem("hv_seller_products") || "[]");
+        } catch (e) { customProducts = []; }
+
+        const defaultSellerProducts = [
+          {
+            id: "t2",
+            name: "iPhone 15 Pro Max 256GB Titan Tự Nhiên",
+            catName: "Hi-Tech Đồ Cũ",
+            price: 21990000,
+            cond: "99% Likenew",
+            status: "active",
+            statusLabel: "Đang Hiển Thị",
+            badgeClass: "badge-success",
+            hasOffer: false,
+          },
+          {
+            id: "au10",
+            name: "Tai nghe Sony WH-1000XM4 Đen",
+            catName: "Hi-Tech Đồ Cũ",
+            price: 3500000,
+            cond: "95% Rất Đẹp",
+            status: "active",
+            statusLabel: "Đang Hiển Thị",
+            badgeClass: "badge-success",
+            hasOffer: false,
+          },
+          {
+            id: "cm10",
+            name: "Body Sony Alpha A7 Mark IV",
+            catName: "Máy Ảnh Đồ Cũ",
+            price: 37800000,
+            cond: "98% Likenew",
+            status: "has_offer",
+            statusLabel: "Có Đề Nghị Trả Giá",
+            badgeClass: "badge-warning",
+            hasOffer: true,
+            offeredPrice: 34000000,
+            buyerMsg: "Em qua xem máy trực tiếp tại showroom lấy luôn trong chiều nay ạ, bác bớt chút lộc lá cho em nhé!",
+          },
+        ];
+
+        // Gộp sản phẩm vừa đăng bán lên đầu
+        const allSellerProducts = [
+          ...customProducts.map(p => ({
+            id: p.id,
+            name: p.name,
+            catName: p.category === "tech" ? "Hi-Tech Đồ Cũ" : p.category === "fashion" ? "Thời Trang Đồ Cũ" : p.category === "sneakers" ? "Sneakers Đồ Cũ" : "Gia Dụng Đồ Cũ",
+            price: p.price,
+            cond: p.condText || `${p.cond || 96}% Likenew`,
+            status: "active",
+            statusLabel: "Mới Đăng Bán",
+            badgeClass: "badge-primary",
+            hasOffer: false,
+          })),
+          ...defaultSellerProducts,
+        ];
+
+        if (prodCountBadge) {
+          prodCountBadge.textContent = allSellerProducts.length;
+        }
+
+        function renderProductsTable() {
+          if (!tbody) return;
+          tbody.innerHTML = allSellerProducts.map(item => `
+            <tr>
+              <td>
+                <strong>${item.name}</strong>
+                ${item.statusLabel === "Mới Đăng Bán" ? '<span class="badge badge-primary" style="font-size: 10px; margin-left: 6px;">Vừa Đăng</span>' : ""}
+              </td>
+              <td>${item.catName}</td>
+              <td class="mono text-primary">${Utils.formatCurrency(item.price)}</td>
+              <td><span class="badge badge-secondary">${item.cond}</span></td>
+              <td><span class="badge ${item.badgeClass}">${item.statusLabel}</span></td>
+              <td>
+                ${item.hasOffer ? `
+                  <button class="btn btn-secondary btn-sm btn-open-offer-modal" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}" data-offer="${item.offeredPrice}" data-msg="${item.buyerMsg}">
+                    Duyệt Giá
+                  </button>
+                ` : `
+                  <a href="../shop/product_used.html?id=${item.id}" class="btn btn-ghost btn-sm">Xem tin</a>
+                `}
+              </td>
+            </tr>
+          `).join("");
+
+          // Bắt sự kiện click nút Duyệt Giá
+          tbody.querySelectorAll(".btn-open-offer-modal").forEach(btn => {
+            btn.addEventListener("click", () => {
+              const name = btn.dataset.name;
+              const price = Number(btn.dataset.price);
+              const offer = Number(btn.dataset.offer);
+              const msg = btn.dataset.msg;
+
+              document.getElementById("offerModalProdTitle").textContent = name;
+              document.getElementById("offerModalListedPrice").textContent = Utils.formatCurrency(price);
+              document.getElementById("offerModalOfferPrice").textContent = Utils.formatCurrency(offer);
+              document.getElementById("offerModalBuyerMsg").textContent = `"${msg}"`;
+
+              Utils.openModal("approveOfferModal");
+            });
+          });
+        }
+
+        renderProductsTable();
+
+        // 2. Xử lý các hành động duyệt trả giá trong Modal
+        const approveModal = document.getElementById("approveOfferModal");
+        document.getElementById("btnAcceptOffer").addEventListener("click", () => {
+          Utils.closeModal("approveOfferModal");
+          Utils.toast("Đã chấp thuận đề xuất trả giá 34.000.000₫! Hệ thống đã gửi thông báo thanh toán tới người mua.", "success");
+        });
+
+        document.getElementById("btnCounterOffer").addEventListener("click", () => {
+          Utils.closeModal("approveOfferModal");
+          Utils.toast("Đã gửi đề xuất thương lượng mức 35.500.000₫ tới người mua!", "info");
+        });
+
+        document.getElementById("btnRejectOffer").addEventListener("click", () => {
+          Utils.closeModal("approveOfferModal");
+          Utils.toast("Đã từ chối đề xuất trả giá này.", "warning");
+        });
+
+        // 3. Quản lý Số dư & Rút tiền Napas
+        let currentBalance = 48250000;
+        try {
+          const savedBal = localStorage.getItem("hv_seller_balance");
+          if (savedBal) currentBalance = Number(savedBal);
+        } catch (e) {}
+
+        const statBalance = document.querySelector(".stat-card .stat-val.mono.text-gradient");
+        const modalBalance = document.querySelector("#withdrawModal strong.mono.text-gradient");
+
+        function updateBalanceDisplay() {
+          if (statBalance) statBalance.textContent = Utils.formatCurrency(currentBalance);
+          if (modalBalance) modalBalance.textContent = Utils.formatCurrency(currentBalance);
+        }
+        updateBalanceDisplay();
+
+        const openWithdrawModal = () => Utils.openModal("withdrawModal");
+        document.getElementById("btnWithdrawAction").addEventListener("click", openWithdrawModal);
         document.getElementById("btnOpenWithdrawModal").addEventListener("click", (e) => {
           e.preventDefault();
-          openModal();
+          openWithdrawModal();
         });
 
         document.getElementById("btnConfirmWithdraw").addEventListener("click", () => {
+          const amountInput = document.querySelector("#withdrawModal input[type='text']:not([readonly])");
+          const val = amountInput ? Number(amountInput.value.replace(/\D/g, "")) : 20000000;
+
+          if (val <= 0 || val > currentBalance) {
+            Utils.toast("Số tiền rút không hợp lệ hoặc vượt quá số dư khả dụng!", "warning");
+            return;
+          }
+
+          currentBalance -= val;
+          try {
+            localStorage.setItem("hv_seller_balance", currentBalance);
+          } catch (e) {}
+
+          updateBalanceDisplay();
           Utils.closeModal("withdrawModal");
-          Utils.toast("Lệnh rút tiền Napas 20.000.000₫ đã chuyển khoản thành công trong 30 giây!", "success");
+          Utils.toast(`Lệnh rút tiền Napas ${Utils.formatCurrency(val)} đã chuyển khoản tức thì về tài khoản Techcombank thành công!`, "success");
         });
       })();
     </script>

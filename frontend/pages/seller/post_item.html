@@ -91,11 +91,14 @@
           <!-- 2. Khu vực tải ảnh & Quét AI -->
           <div class="form-group">
             <label class="form-label">Tải ảnh chụp sản phẩm (Tối thiểu 3 góc chụp rõ nét)</label>
-            <div class="panel p-6 text-center" style="border: 2px dashed var(--border-strong); background: var(--bg-surface); cursor: pointer;" id="dropzoneBox">
+            <input type="file" id="fileInputPost" multiple accept="image/*" style="display: none;" />
+            <div class="panel p-6 text-center" style="border: 2px dashed var(--border-strong); background: var(--bg-surface); cursor: pointer; transition: all 0.2s ease;" id="dropzoneBox">
               <span class="material-symbols-outlined text-primary" style="font-size: 54px;">add_a_photo</span>
-              <div class="fw-600 text-sm mt-2">Bấm để chọn ảnh từ máy hoặc kéo thả vào đây</div>
+              <div class="fw-600 text-sm mt-2" id="dropzoneText">Bấm để chọn ảnh từ máy hoặc kéo thả vào đây</div>
               <div class="text-xs text-muted mt-1">Hỗ trợ JPG, PNG, WEBP (Tối đa 15MB)</div>
             </div>
+            <!-- Strip ảnh xem trước -->
+            <div id="previewImagesStrip" class="flex gap-2 mt-3" style="display: none; overflow-x: auto; padding: 4px;"></div>
           </div>
 
           <div class="flex justify-end mb-4">
@@ -168,22 +171,216 @@
       (function () {
         if (!Auth.requireLogin({ requireKyc: true, message: "Vui lòng đăng nhập và xác thực CCCD để đăng bán đồ cũ." })) return;
 
-        document.getElementById("btnTriggerAiScan").addEventListener("click", function () {
-          this.disabled = true;
-          this.textContent = "AI đang xử lý hình ảnh...";
-          setTimeout(() => {
-            document.getElementById("aiResultCard").style.display = "block";
-            Utils.toast("AI đã quét ảnh & đề xuất khung giá thành công!", "success");
-            this.textContent = "Đã Quét Xong AI";
-          }, 1000);
-        });
+        const fileInput = document.getElementById("fileInputPost");
+        const dropzoneBox = document.getElementById("dropzoneBox");
+        const dropzoneText = document.getElementById("dropzoneText");
+        const previewStrip = document.getElementById("previewImagesStrip");
+        let uploadedImages = [];
 
+        // 1. Xử lý mở File Picker & Kéo thả
+        if (dropzoneBox && fileInput) {
+          dropzoneBox.addEventListener("click", () => fileInput.click());
+
+          dropzoneBox.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            dropzoneBox.style.borderColor = "var(--primary-500)";
+            dropzoneBox.style.background = "rgba(139, 92, 246, 0.08)";
+          });
+
+          ["dragleave", "dragend"].forEach(type => {
+            dropzoneBox.addEventListener(type, () => {
+              dropzoneBox.style.borderColor = "var(--border-strong)";
+              dropzoneBox.style.background = "var(--bg-surface)";
+            });
+          });
+
+          dropzoneBox.addEventListener("drop", (e) => {
+            e.preventDefault();
+            dropzoneBox.style.borderColor = "var(--border-strong)";
+            dropzoneBox.style.background = "var(--bg-surface)";
+            if (e.dataTransfer && e.dataTransfer.files.length) {
+              handleFiles(e.dataTransfer.files);
+            }
+          });
+
+          fileInput.addEventListener("change", (e) => {
+            if (e.target.files.length) handleFiles(e.target.files);
+          });
+        }
+
+        function handleFiles(files) {
+          const validFiles = Array.from(files).filter(f => f.type.startsWith("image/"));
+          if (!validFiles.length) {
+            Utils.toast("Vui lòng chọn tệp định dạng hình ảnh hợp lệ!", "warning");
+            return;
+          }
+
+          let loaded = 0;
+          validFiles.forEach(file => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              uploadedImages.push(e.target.result);
+              loaded++;
+              if (loaded === validFiles.length) renderPreviews();
+            };
+            reader.readAsDataURL(file);
+          });
+        }
+
+        function renderPreviews() {
+          if (!uploadedImages.length) {
+            if (previewStrip) previewStrip.style.display = "none";
+            return;
+          }
+          if (dropzoneText) dropzoneText.textContent = `Đã chọn ${uploadedImages.length} ảnh sản phẩm`;
+          if (previewStrip) {
+            previewStrip.style.display = "flex";
+            previewStrip.innerHTML = uploadedImages.map((src, i) => `
+              <div style="position: relative; width: 80px; height: 80px; flex-shrink: 0; border-radius: 8px; overflow: hidden; border: 2px solid var(--primary-500);">
+                <img src="${src}" style="width: 100%; height: 100%; object-fit: cover;" />
+                <button type="button" data-idx="${i}" style="position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.6); color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 11px;">✕</button>
+              </div>
+            `).join("");
+
+            previewStrip.querySelectorAll("button[data-idx]").forEach(btn => {
+              btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                const idx = Number(btn.dataset.idx);
+                uploadedImages.splice(idx, 1);
+                renderPreviews();
+              });
+            });
+          }
+        }
+
+        // 2. Kích hoạt quét AI linh hoạt theo danh mục được chọn
+        const btnAi = document.getElementById("btnTriggerAiScan");
+        const aiCard = document.getElementById("aiResultCard");
+
+        const aiTemplates = {
+          tech: {
+            device: "iPhone 15 Pro 128GB Titan Tự Nhiên",
+            score: "98% (Không xước, pin zin 97%)",
+            newPrice: "24.990.000₫",
+            suggestRange: "17.200.000₫ – 17.800.000₫",
+            defaultPrice: "17.500.000",
+            name: "iPhone 15 Pro 128GB Titan Tự Nhiên Like New 98%",
+            desc: "Máy bản Quốc tế chính hãng VN/A, nguyên zin chưa từng bung mở, fullbox đầy đủ cáp sạc.",
+            discount: 30,
+            img: "assets/images/products/dien-thoai-smartphone-flagship.png"
+          },
+          fashion: {
+            device: "Áo Khoác Bomber Cyberpunk Multi-Pocket",
+            score: "99% (Mặc 1 lần chụp lookbook, nguyên tag)",
+            newPrice: "5.500.000₫",
+            suggestRange: "3.200.000₫ – 3.500.000₫",
+            defaultPrice: "3.350.000",
+            name: "Áo Khoác Bomber Cyberpunk J1A-GT Like New 99%",
+            desc: "Vải Gore-Tex Pro 3L chống nước tuyệt đối, phụ kiện khóa YKK chính hãng, áo sạch đẹp như mới.",
+            discount: 39,
+            img: "assets/images/products/ao-sweatshirt-streetwear-oversize.png"
+          },
+          sneakers: {
+            device: "Sneakers Thể Thao Chunky Sole Hypebeast",
+            score: "95% (Đế mòn < 2%, da mềm sạch sẽ)",
+            newPrice: "4.200.000₫",
+            suggestRange: "2.100.000₫ – 2.400.000₫",
+            defaultPrice: "2.250.000",
+            name: "Giày Sneaker Nam Thể Thao Chunky Sole Like New 95%",
+            desc: "Đế đệm khí êm ái, phom dáng chuẩn, đã vệ sinh và khử khuẩn Nano Bạc sạch sẽ trước khi đóng hộp.",
+            discount: 46,
+            img: "assets/images/products/giay-the-thao-nam-sneaker-de-day.png"
+          },
+          appliances: {
+            device: "Nồi Chiên Không Dầu Điện Tử 6.5L",
+            score: "96% (Lòng nồi nguyên chống dính, chạy êm)",
+            newPrice: "3.800.000₫",
+            suggestRange: "1.800.000₫ – 2.050.000₫",
+            defaultPrice: "1.950.000",
+            name: "Nồi Chiên Không Dầu Smart Touch Like New 96%",
+            desc: "Dung tích lớn 6.5L, nhiệt đối lưu 360 độ giòn đều, lòng nồi còn lớp chống dính nguyên bản.",
+            discount: 48,
+            img: "assets/images/products/noi-chien-khong-dau.png"
+          }
+        };
+
+        if (btnAi) {
+          btnAi.addEventListener("click", function () {
+            this.disabled = true;
+            this.textContent = "AI đang xử lý hình ảnh...";
+
+            const catRadio = document.querySelector('input[name="postCat"]:checked');
+            const catKey = catRadio ? catRadio.value : "tech";
+            const tpl = aiTemplates[catKey] || aiTemplates.tech;
+
+            setTimeout(() => {
+              if (aiCard) {
+                aiCard.style.display = "block";
+                document.getElementById("aiDeviceName").textContent = tpl.device;
+                document.getElementById("aiConditionScore").textContent = tpl.score;
+                document.getElementById("aiNewMarketPrice").textContent = tpl.newPrice;
+                document.getElementById("aiSuggestPrice").textContent = tpl.suggestRange;
+                const callout = aiCard.querySelector(".discount-callout span:nth-child(2)");
+                if (callout) callout.textContent = `Mức giá đề xuất rẻ hơn đồ mới khoảng ${tpl.discount}%, tỷ lệ chốt đơn trong 48h đạt 94%.`;
+              }
+
+              const txtName = document.getElementById("txtPostName");
+              const txtPrice = document.getElementById("txtPostPrice");
+              const txtDesc = document.querySelector("#postMasterForm textarea");
+              if (txtName) txtName.value = tpl.name;
+              if (txtPrice) txtPrice.value = tpl.defaultPrice;
+              if (txtDesc) txtDesc.value = tpl.desc;
+
+              Utils.toast("AI đã quét ảnh & đề xuất khung giá thành công!", "success");
+              this.disabled = false;
+              this.textContent = "Đã Quét Xong AI (Bấm để quét lại)";
+            }, 800);
+          });
+        }
+
+        // 3. Xử lý Submit & Lưu dữ liệu vào LocalStorage
         document.getElementById("postMasterForm").addEventListener("submit", (e) => {
           e.preventDefault();
+          const user = Auth.current();
+          const catRadio = document.querySelector('input[name="postCat"]:checked');
+          const catKey = catRadio ? catRadio.value : "tech";
+          const tpl = aiTemplates[catKey] || aiTemplates.tech;
+
+          const nameVal = document.getElementById("txtPostName").value.trim();
+          const priceRaw = document.getElementById("txtPostPrice").value.replace(/\D/g, "");
+          const priceNum = Number(priceRaw) || 2000000;
+          const descVal = document.querySelector("#postMasterForm textarea").value.trim();
+
+          const newProduct = {
+            id: "c2c-user-" + Date.now(),
+            name: nameVal,
+            short: nameVal.split("(")[0].trim(),
+            category: catKey,
+            type: "c2c",
+            badge: "ĐỒ CŨ LIKE NEW",
+            cond: 96,
+            condText: "96% Likenew",
+            condLabel: "Đã qua kiểm tra kỹ lưỡng",
+            seller: user ? `${user.fullName} (Đã eKYC CCCD)` : "Việt Dũng (Đã eKYC CCCD)",
+            sellerName: user ? user.fullName : "Việt Dũng",
+            price: priceNum,
+            oldPrice: Math.round(priceNum * 1.45),
+            img: uploadedImages.length ? uploadedImages[0] : tpl.img,
+            desc: descVal,
+            status: "active",
+            createdAt: new Date().toISOString()
+          };
+
+          try {
+            let sellerProducts = JSON.parse(localStorage.getItem("hv_seller_products") || "[]");
+            sellerProducts.unshift(newProduct);
+            localStorage.setItem("hv_seller_products", JSON.stringify(sellerProducts));
+          } catch (err) {}
+
           Utils.toast("Đang tải sản phẩm lên gian hàng...", "info");
           setTimeout(() => {
             window.location.href = "dashboard.html";
-          }, 800);
+          }, 600);
         });
       })();
     </script>

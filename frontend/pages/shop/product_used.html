@@ -215,18 +215,6 @@
       </div>
     </main>
 
-    <!-- ===== FOOTER ===== -->
-    <footer class="site-footer mt-8">
-      <div class="container footer-bar" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding: 20px 0;">
-        <span class="text-xs text-faint">© 2026 HYBRID.STORE — Chợ Đồ Cũ Like New Tuyển Chọn &amp; Đồng Kiểm.</span>
-        <div class="flex gap-4 text-xs">
-          <a href="../../terms_of_service.html">Điều Khoản Dịch Vụ</a>
-          <a href="../../warranty_policy.html">Chính Sách Bảo Hành</a>
-          <a href="../../return_policy.html">Chính Sách Đổi Trả</a>
-        </div>
-      </div>
-    </footer>
-
     <!-- Modal Trả Giá Thông Minh -->
     <div class="modal-backdrop" id="usedOfferModal">
       <div class="modal" role="dialog" aria-modal="true" style="max-width: 500px;">
@@ -300,8 +288,123 @@
     <script>
       (function () {
         Utils.Cart.syncBadge();
-        const p = PRODUCTS.find((x) => x.type === "c2c") || PRODUCTS[0];
+
+        // 1. Phân giải sản phẩm từ URL query (?id=...)
+        const params = new URLSearchParams(window.location.search);
+        const productId = params.get("id");
+        let p = null;
+
+        if (typeof PRODUCTS !== "undefined" && PRODUCTS.length) {
+          if (productId) {
+            p = PRODUCTS.find((x) => x.id === productId);
+          }
+          if (!p) {
+            p = PRODUCTS.find((x) => x.type === "c2c") || PRODUCTS[0];
+          }
+        }
+
+        if (!p) return;
+
         const originalPrice = p.price || 21990000;
+        const oldPriceVal = p.oldPrice || Math.round(originalPrice * 1.35);
+        const discountPercent = Math.round((1 - originalPrice / oldPriceVal) * 100);
+        const savedAmount = oldPriceVal - originalPrice;
+        const resolvedImg = window.resolveAssetUrl ? window.resolveAssetUrl(p.img) : p.img;
+        const prodShortTitle = p.short || p.name;
+        const prodFullTitle = p.name + " (" + (p.condText || "Like New " + (p.cond || 98) + "%") + ")";
+
+        // 2. Cập nhật tiêu đề trang & Breadcrumb
+        document.title = prodFullTitle + " | HYBRID.STORE C2C";
+        const breadcrumbActive = document.querySelector(".subnav nav .active");
+        if (breadcrumbActive) breadcrumbActive.textContent = prodShortTitle;
+
+        const breadcrumbSavings = document.querySelector(".subnav-info .text-success");
+        if (breadcrumbSavings) {
+          breadcrumbSavings.innerHTML = `<span class="material-symbols-outlined icon-sm">savings</span> Rẻ hơn đồ mới ${discountPercent}%`;
+        }
+
+        // 3. Cập nhật hình ảnh & huy hiệu ảnh chính
+        const mainUsedImg = document.getElementById("mainUsedImg");
+        if (mainUsedImg) {
+          mainUsedImg.src = resolvedImg;
+          mainUsedImg.alt = p.name;
+        }
+
+        const mediaBadge = document.querySelector(".product-detail-grid .badge-c2c");
+        if (mediaBadge) {
+          mediaBadge.textContent = `ĐỒ CŨ ${p.condText || "LIKE NEW"} • -${discountPercent}%`;
+        }
+
+        // Cập nhật Thumbnails
+        const thumbContainer = document.querySelector(".product-detail-grid .flex.gap-3.mt-2");
+        if (thumbContainer) {
+          thumbContainer.innerHTML = `
+            <img class="thumb-item active" src="${resolvedImg}" style="width: 70px; height: 70px; border-radius: 8px; object-fit: cover; border: 2px solid var(--secondary-400); cursor: pointer;" alt="Góc chụp 1" />
+            <img class="thumb-item" src="${resolvedImg}" style="width: 70px; height: 70px; border-radius: 8px; object-fit: cover; opacity: 0.6; cursor: pointer;" alt="Góc chụp 2" />
+          `;
+        }
+
+        // 4. Báo cáo kiểm định kỹ thuật theo ngành hàng
+        const labGrid = document.querySelector(".lab-report-box .grid");
+        if (labGrid) {
+          if (p.category === "tech" || p.category === "audio" || p.category === "gaming" || p.category === "camera") {
+            labGrid.innerHTML = `
+              <div>Dung lượng pin: <strong class="text-text">${(p.cond || 98) >= 95 ? "99% Zin" : "91% Zin"}</strong></div>
+              <div>Màn hình: <strong class="text-text">Sáng đẹp, không ám ố</strong></div>
+              <div>Ốc vít / Vỏ: <strong class="text-text">Chưa từng bung mở, tem zin</strong></div>
+              <div>Chức năng: <strong class="text-text">Hoạt động hoàn hảo 100%</strong></div>
+            `;
+          } else if (p.category === "fashion" || p.category === "sneakers") {
+            labGrid.innerHTML = `
+              <div>Đường may / Chỉ: <strong class="text-text">Nguyên bản 100%, không xước sờn</strong></div>
+              <div>Chất liệu vải / da: <strong class="text-text">Mềm mại, chuẩn form zin</strong></div>
+              <div>Đế giày / Khóa: <strong class="text-text">Độ mòn < 3%, trơn tru</strong></div>
+              <div>Tem mác phụ kiện: <strong class="text-text">Đầy đủ tem tag chính hãng</strong></div>
+            `;
+          } else {
+            labGrid.innerHTML = `
+              <div>Động cơ / Mạch: <strong class="text-text">Vận hành êm, mạch zin</strong></div>
+              <div>Ngoại quan vỏ: <strong class="text-text">Đẹp ${p.cond || 95}%, không cấn móp</strong></div>
+              <div>Dây cáp / Pin: <strong class="text-text">An toàn, đúng tiêu chuẩn</strong></div>
+              <div>Linh kiện kèm theo: <strong class="text-text">Đầy đủ phụ kiện theo máy</strong></div>
+            `;
+          }
+        }
+
+        // 5. Cập nhật thông tin người bán & Tiêu đề
+        const sellerMeta = document.querySelector(".product-detail-grid .text-xs.text-muted");
+        if (sellerMeta) {
+          sellerMeta.textContent = `${p.seller || p.sellerName || "Việt Dũng"} (Đã eKYC CCCD • 18 lượt bán)`;
+        }
+
+        const pageTitle = document.querySelector(".product-detail-grid .page-title");
+        if (pageTitle) {
+          pageTitle.textContent = prodFullTitle;
+        }
+
+        // 6. Thanh đo độ mới (Condition meter)
+        const condCard = document.querySelector(".cond-meter-card");
+        if (condCard) {
+          const condVal = p.cond || 98;
+          const condLabel = condCard.querySelector("strong.text-secondary.mono");
+          if (condLabel) condLabel.textContent = `${condVal}% (${p.condText || p.condLabel || "Rất Đẹp"})`;
+          const progBar = condCard.querySelector(".progress");
+          if (progBar) progBar.style.setProperty("--value", `${condVal}%`);
+          const sellerNote = condCard.querySelector(".text-xs.text-muted.mt-2 em");
+          if (sellerNote) {
+            sellerNote.textContent = `"${p.desc || p.condLabel || "Hàng dùng lướt kỹ lưỡng, đầy đủ hộp và phụ kiện nguyên bản."}"`;
+          }
+        }
+
+        // 7. Giá & Mức tiết kiệm
+        const curPriceEl = document.querySelector(".product-detail-grid .mono.text-gradient");
+        if (curPriceEl) curPriceEl.textContent = Utils.formatCurrency(originalPrice);
+        const oldPriceEl = document.querySelector(".product-detail-grid .text-faint.line-through.mono");
+        if (oldPriceEl) oldPriceEl.textContent = Utils.formatCurrency(oldPriceVal);
+        const discountCallout = document.querySelector(".discount-callout span:nth-child(2)");
+        if (discountCallout) {
+          discountCallout.textContent = `Rẻ hơn đồ mới ${discountPercent}% (Tiết kiệm ngay ${Utils.formatCurrency(savedAmount)})`;
+        }
 
         // Elements
         const btnUsedAddCart = document.getElementById("btnUsedAddCart");
@@ -325,7 +428,7 @@
         // Đồng bộ dữ liệu sản phẩm vào modal
         if (modalProductName) modalProductName.textContent = p.name || p.short;
         if (modalListedPrice) modalListedPrice.textContent = Utils.formatCurrency(originalPrice);
-        if (modalProductThumb && p.image) modalProductThumb.src = p.image;
+        if (modalProductThumb) modalProductThumb.src = resolvedImg;
 
         // Tính toán lại nhãn cho các chip gợi ý
         quickOfferChips.forEach((chip) => {
