@@ -59,6 +59,7 @@
         pathname.indexOf("/pages/seller/") !== -1 ||
         pathname.indexOf("/pages/admin/") !== -1 ||
         pathname.indexOf("/pages/buyer/") !== -1 ||
+        pathname.indexOf("/pages/info/") !== -1 ||
         pathname.indexOf("/test/") !== -1
       ) {
         return "../../";
@@ -397,11 +398,11 @@
 
       var homeUrl = resolveUrl("index.html", bp);
       var catalogUrl = resolveUrl("pages/shop/catalog.html", bp);
-      var aboutWebUrl = resolveUrl("about-web.html", bp);
-      var aboutInspectionUrl = resolveUrl("about.html", bp);
-      var warrantyUrl = resolveUrl("warranty_policy.html", bp);
-      var returnUrl = resolveUrl("return_policy.html", bp);
-      var termsUrl = resolveUrl("terms_of_service.html", bp);
+      var aboutWebUrl = resolveUrl("pages/info/about-web.html", bp);
+      var aboutInspectionUrl = resolveUrl("pages/info/about.html", bp);
+      var warrantyUrl = resolveUrl("pages/info/warranty_policy.html", bp);
+      var returnUrl = resolveUrl("pages/info/return_policy.html", bp);
+      var termsUrl = resolveUrl("pages/info/terms_of_service.html", bp);
       var postItemUrl = resolveUrl("pages/seller/post_item.html", bp);
       var disputeUrl = resolveUrl("pages/buyer/dispute.html", bp);
       var ordersUrl = resolveUrl("pages/buyer/orders.html", bp);

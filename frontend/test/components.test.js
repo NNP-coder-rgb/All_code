@@ -116,9 +116,9 @@ it("Footer có cấu trúc 4 cột chuẩn responsive và hiển thị 3 showroo
   assert(html.includes("Keangnam Landmark 72"), "Phải có Showroom Hà Nội");
   assert(html.includes("Tòa FPT Complex"), "Phải có Showroom Đà Nẵng");
   assert(html.includes("Bitexco Financial Tower"), "Phải có Showroom TP.HCM");
-  assert(html.includes("terms_of_service.html"), "Phải có link Điều khoản dịch vụ");
-  assert(html.includes("warranty_policy.html"), "Phải có link Chính sách bảo hành");
-  assert(html.includes("return_policy.html"), "Phải có link Chính sách đổi trả");
+  assert(html.includes("pages/info/terms_of_service.html"), "Phải có link Điều khoản dịch vụ trong pages/info/");
+  assert(html.includes("pages/info/warranty_policy.html"), "Phải có link Chính sách bảo hành trong pages/info/");
+  assert(html.includes("pages/info/return_policy.html"), "Phải có link Chính sách đổi trả trong pages/info/");
   assert(html.includes("Napas 24/7"), "Phải có Napas 24/7");
   assert(html.includes("COD Đồng Kiểm 100%"), "Phải có COD Đồng Kiểm 100%");
   assert(!html.includes("ký quỹ") && !html.includes("escrow"), "Tuyệt đối không chứa ký quỹ");
