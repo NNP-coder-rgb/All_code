@@ -122,6 +122,8 @@ it("Footer có cấu trúc 4 cột chuẩn responsive và hiển thị 3 showroo
   assert(html.includes("Napas 24/7"), "Phải có Napas 24/7");
   assert(html.includes("COD Đồng Kiểm 100%"), "Phải có COD Đồng Kiểm 100%");
   assert(!html.includes("ký quỹ") && !html.includes("escrow"), "Tuyệt đối không chứa ký quỹ");
+  assert(!html.includes("admin_system.html"), "Footer công khai tuyệt đối không chứa link sang Master Admin");
+  assert(!html.includes("Master Admin"), "Footer công khai không chứa text Master Admin");
 });
 
 /* ---------------- 4. KIỂM THỬ TASK T14: BREADCRUMB ---------------- */

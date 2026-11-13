@@ -414,7 +414,6 @@
       var postItemUrl = resolveUrl("pages/seller/post_item.html", bp);
       var disputeUrl = resolveUrl("pages/buyer/dispute.html", bp);
       var ordersUrl = resolveUrl("pages/buyer/orders.html", bp);
-      var adminUrl = resolveUrl("pages/admin/admin_system.html", bp);
 
       return (
         '<footer class="site-footer" id="siteFooter">' +
@@ -483,7 +482,6 @@
         "</li>" +
         '<li><a href="' + disputeUrl + '">Trung tâm xử lý khiếu nại &amp; Chat</a></li>' +
         '<li><a href="' + ordersUrl + '">Tra cứu tiến độ đơn hàng</a></li>' +
-        '<li><a href="' + adminUrl + '" class="flex items-center gap-1 text-primary fw-600"><span class="material-symbols-outlined icon-xs">terminal</span> Cổng Master Admin</a></li>' +
         "</ul>" +
         '<div class="footer-payment-methods">' +
         '<div class="text-xs text-muted mb-2 fw-600">Thanh toán &amp; Đồng kiểm:</div>' +
@@ -503,7 +501,6 @@
         '<a href="' + termsUrl + '">Điều Khoản Dịch Vụ</a>' +
         '<a href="' + warrantyUrl + '">Chính Sách Bảo Hành</a>' +
         '<a href="' + returnUrl + '">Chính Sách Đổi Trả</a>' +
-        '<a href="' + adminUrl + '" class="text-primary fw-600">⚡ Master Admin</a>' +
         "</span>" +
         "</div>" +
         "</div>" +

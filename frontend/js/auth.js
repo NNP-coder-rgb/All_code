@@ -201,6 +201,38 @@
       kycStatus: "UNVERIFIED",
       kycData: null,
     },
+    {
+      id: "u-admin-root",
+      role: "admin",
+      fullName: "Nguyễn Ngọc Phúc (Super Admin)",
+      username: "admin_master",
+      email: "admin@hybrid.store",
+      phone: "1900 8888",
+      password: "password123",
+      avatar: "AD",
+      dob: "18/09/1994",
+      gender: "Nam",
+      address: "Trung Tâm Điều Hành Toàn Sàn HYBRID.STORE, Tòa Landmark 81, Vinhomes Central Park, TP. Hồ Chí Minh",
+      membershipTitle: "ROOT SUPER ADMIN",
+      bio: "Tài khoản Quản Trị Viên tối cao phụ trách vận hành và điều phối toàn bộ 20 phân hệ sàn HYBRID.STORE.",
+      bankName: "Techcombank",
+      bankAccountNumber: "1903 6888 8888 8",
+      bankAccountName: "NGUYỄN NGỌC PHÚC (SUPER ADMIN)",
+      interestCategory: "all",
+      kycStatus: "VERIFIED",
+      kycData: {
+        idCardNumber: "001202008849",
+        cardFullName: "NGUYỄN NGỌC PHÚC (SUPER ADMIN)",
+        dob: "18/09/1994",
+        issueDate: "24/02/2023",
+        expiryDate: "Không thời hạn",
+        gender: "Nam",
+        address: "Trung Tâm Điều Hành Toàn Sàn HYBRID.STORE, Tòa Landmark 81, TP. Hồ Chí Minh",
+        faceMatch: 100,
+        submittedAt: "2026-11-01T00:00:00.000Z",
+        verifiedAt: "2026-11-01T00:00:00.000Z",
+      },
+    },
   ];
 
   // Danh sách yêu cầu phê duyệt CCCD mẫu ban đầu
@@ -361,16 +393,18 @@
         };
       }
       if (role && user.role !== role) {
-        const label =
-          user.role === "seller" ? "Người Bán (Seller)" : "Người Mua (Buyer)";
-        return {
-          ok: false,
-          warning: true,
-          error:
-            "Tài khoản này được đăng ký với vai trò " +
-            label +
-            ". Hãy chọn đúng vai trò rồi đăng nhập lại.",
-        };
+        if (!this.isAdmin(user)) {
+          const label =
+            user.role === "seller" ? "Người Bán (Seller)" : "Người Mua (Buyer)";
+          return {
+            ok: false,
+            warning: true,
+            error:
+              "Tài khoản này được đăng ký với vai trò " +
+              label +
+              ". Hãy chọn đúng vai trò rồi đăng nhập lại.",
+          };
+        }
       }
       const session = {
         id: user.id,

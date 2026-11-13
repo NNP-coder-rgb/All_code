@@ -2499,6 +2499,18 @@
             Utils.toast(`Đã phê duyệt giải quyết khiếu nại #${id} thành công!`, "success");
           });
         });
+
+        // Hỗ trợ chuyển tab trực tiếp qua URL Hash (#tabPane-kyc, #tabPane-orders...)
+        function handleHashTab() {
+          if (window.location.hash) {
+            const rawKey = window.location.hash.replace("#tabPane-", "").replace("#tab-", "").replace("#", "");
+            if (rawKey && typeof switchAdminTab === "function") {
+              switchAdminTab(rawKey);
+            }
+          }
+        }
+        handleHashTab();
+        window.addEventListener("hashchange", handleHashTab);
       });
     </script>
   </body>

@@ -807,4 +807,41 @@
       }
     });
   }
+
+  // Điền nhanh tài khoản mẫu
+  const btnFillAdmin = document.getElementById("btnFillAdminAcc");
+  const btnFillBuyer = document.getElementById("btnFillBuyerAcc");
+  const btnFillSeller = document.getElementById("btnFillSellerAcc");
+
+  if (btnFillAdmin) {
+    btnFillAdmin.addEventListener("click", () => {
+      if (tabLoginPassword) tabLoginPassword.click();
+      if (idInput) idInput.value = "admin@hybrid.store";
+      if (pwd) pwd.value = "password123";
+      clearErrors();
+      notify({
+        type: "info",
+        title: "Tài khoản Super Admin",
+        message: "Đã điền tài khoản: <strong>admin@hybrid.store</strong>",
+      });
+    });
+  }
+
+  if (btnFillBuyer) {
+    btnFillBuyer.addEventListener("click", () => {
+      if (tabLoginPassword) tabLoginPassword.click();
+      if (idInput) idInput.value = "phuc@hybrid.store";
+      if (pwd) pwd.value = "password123";
+      clearErrors();
+    });
+  }
+
+  if (btnFillSeller) {
+    btnFillSeller.addEventListener("click", () => {
+      if (tabLoginPassword) tabLoginPassword.click();
+      if (idInput) idInput.value = "binh@sneakers.vn";
+      if (pwd) pwd.value = "password123";
+      clearErrors();
+    });
+  }
 })();
