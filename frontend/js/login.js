@@ -284,25 +284,50 @@
   });
 
   // =========================================================================
-  // 3. ĐĂNG NHẬP BẰNG TÀI KHOẢN GOOGLE (TỰ ĐỘNG LẤY TÀI KHOẢN TRÌNH DUYỆT)
+  // 3. ĐĂNG NHẬP BẰNG TÀI KHOẢN GOOGLE CỦA TỪNG THIẾT BỊ
   // =========================================================================
+  const escapeSafeHtml = (str) =>
+    typeof Utils !== "undefined" && Utils.escapeHtml
+      ? Utils.escapeHtml(str)
+      : String(str || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+
   function updateGoogleAccountUI() {
     if (typeof Auth === "undefined" || typeof Auth.getBrowserGoogleAccount !== "function") return;
     const browserAcc = Auth.getBrowserGoogleAccount();
-    if (browserGoogleEmailDisplay) {
-      browserGoogleEmailDisplay.textContent = browserAcc.email;
-    }
-    if (modalGoogleEmail) {
-      modalGoogleEmail.textContent = browserAcc.email;
-    }
-    if (modalGoogleName) {
-      modalGoogleName.textContent = browserAcc.name || "Nguyễn Ngọc Phúc";
-    }
-    if (modalGoogleAvatar) {
-      modalGoogleAvatar.textContent = browserAcc.avatar || "NP";
+    const googleHintRow = document.getElementById("googleHintRow");
+    const currentCard = document.getElementById("currentBrowserGoogleCard");
+    const orDivider = document.getElementById("googleOrDivider");
+    const modalDesc = document.getElementById("googleModalDesc");
+
+    if (browserAcc && browserAcc.email) {
+      if (googleLoginBtnText) {
+        googleLoginBtnText.innerHTML = `Tiếp tục với Google (<strong>${escapeSafeHtml(browserAcc.email)}</strong>)`;
+      }
+      if (googleHintRow) googleHintRow.style.display = "flex";
+      if (currentCard) currentCard.style.display = "flex";
+      if (orDivider) orDivider.style.display = "block";
+      if (modalGoogleEmail) modalGoogleEmail.textContent = browserAcc.email;
+      if (modalGoogleName) modalGoogleName.textContent = browserAcc.name || browserAcc.email.split("@")[0];
+      if (modalGoogleAvatar) modalGoogleAvatar.textContent = browserAcc.avatar || "G";
+      if (modalDesc) {
+        modalDesc.innerHTML = `Tài khoản Google đang được lưu trên thiết bị này:`;
+      }
+    } else {
+      if (googleLoginBtnText) {
+        googleLoginBtnText.textContent = "Tiếp tục với tài khoản Google";
+      }
+      if (googleHintRow) googleHintRow.style.display = "none";
+      if (currentCard) currentCard.style.display = "none";
+      if (orDivider) orDivider.style.display = "none";
+      if (modalDesc) {
+        modalDesc.innerHTML = `Đăng nhập bằng tài khoản Google trên thiết bị này:`;
+      }
     }
     if (customGoogleEmail && !customGoogleEmail.value) {
-      customGoogleEmail.placeholder = browserAcc.email;
+      customGoogleEmail.placeholder = browserAcc ? browserAcc.email : "ten-cua-ban@gmail.com";
     }
   }
 
@@ -372,7 +397,7 @@
       showPopup({
         type: "success",
         title: "Đăng nhập Google thành công!",
-        message: "Đã đồng bộ tài khoản Google từ trình duyệt: " + userSession.fullName + " (" + userSession.email + ")!",
+        message: "Đã đồng bộ tài khoản Google trên thiết bị này: " + userSession.fullName + " (" + userSession.email + ")!",
         confirmText: targetAfterLogin ? "Tiếp tục" : "Vào trang chủ",
         onConfirm: () => {
           if (targetAfterLogin) {
@@ -388,26 +413,28 @@
     }
   }
 
-  // Khi bấm nút "Tiếp tục với Google": TỰ ĐỘNG LẤY TÀI KHOẢN GOOGLE TRÊN TRÌNH DUYỆT ĐĂNG NHẬP NGAY
+  // Khi bấm nút "Tiếp tục với Google":
+  // Nếu thiết bị đã có tài khoản -> Đăng nhập 1-chạm
+  // Nếu thiết bị chưa có tài khoản -> Mở popup chọn/nhập tài khoản Google cho thiết bị đó
   if (btnGoogleLogin) {
     btnGoogleLogin.addEventListener("click", () => {
       const browserAcc = Auth.getBrowserGoogleAccount();
 
-      // Hiệu ứng đang đồng bộ tài khoản Google
+      if (!browserAcc || !browserAcc.email) {
+        updateGoogleAccountUI();
+        showModal(googleAuthModal);
+        if (customGoogleEmail) customGoogleEmail.focus();
+        return;
+      }
+
+      // Đã có tài khoản trên thiết bị này -> Đăng nhập 1-chạm
       btnGoogleLogin.disabled = true;
       btnGoogleLogin.classList.add("loading");
       const originalHtml = btnGoogleLogin.innerHTML;
       btnGoogleLogin.innerHTML = `
         <span class="material-symbols-outlined icon-sm spin">sync</span>
-        <span>Đang lấy tài khoản Google từ trình duyệt (<strong>${browserAcc.email}</strong>)...</span>
+        <span>Đang đăng nhập tài khoản thiết bị (<strong>${escapeSafeHtml(browserAcc.email)}</strong>)...</span>
       `;
-
-      // Nếu có sẵn Google One Tap prompt đã cấu hình Client ID
-      if (window.google && window.google.accounts && window.google.accounts.id && localStorage.getItem("hv_google_client_id")) {
-        try {
-          window.google.accounts.id.prompt();
-        } catch (e) {}
-      }
 
       setTimeout(() => {
         btnGoogleLogin.disabled = false;
@@ -431,7 +458,7 @@
             message: res.error || "Không thể đồng bộ tài khoản Google.",
           });
         }
-      }, 500);
+      }, 400);
     });
   }
 
@@ -442,6 +469,7 @@
       e.stopPropagation();
       updateGoogleAccountUI();
       showModal(googleAuthModal);
+      if (customGoogleEmail) customGoogleEmail.focus();
     });
   }
 
@@ -451,10 +479,11 @@
     });
   }
 
-  // Trong modal: Bấm "Đăng nhập" với tài khoản hiện tại
+  // Trong modal: Bấm "Đăng nhập" với tài khoản hiện tại của thiết bị
   if (btnConfirmCurrentGoogle) {
     btnConfirmCurrentGoogle.addEventListener("click", () => {
       const browserAcc = Auth.getBrowserGoogleAccount();
+      if (!browserAcc || !browserAcc.email) return;
       const res = Auth.loginWithGoogle({
         email: browserAcc.email,
         name: browserAcc.name,
@@ -468,7 +497,23 @@
     });
   }
 
-  // Trong modal: Đăng nhập & Lưu tài khoản Google mới của trình duyệt
+  // Trong modal: Nút xóa tài khoản đã lưu khỏi thiết bị này
+  const btnClearDeviceGoogle = document.getElementById("btnClearDeviceGoogle");
+  if (btnClearDeviceGoogle) {
+    btnClearDeviceGoogle.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      Auth.clearBrowserGoogleAccount();
+      updateGoogleAccountUI();
+      notify({
+        type: "info",
+        title: "Đã xóa tài khoản",
+        message: "Đã xóa tài khoản Google được ghi nhớ khỏi thiết bị này.",
+      });
+    });
+  }
+
+  // Trong modal: Đăng nhập & Lưu tài khoản Google trên thiết bị này
   if (btnSubmitCustomGoogle && customGoogleEmail) {
     const handleCustomGoogleSubmit = () => {
       const email = customGoogleEmail.value.trim().toLowerCase();
@@ -476,7 +521,7 @@
         notify({
           type: "warning",
           title: "Email không hợp lệ",
-          message: "Vui lòng nhập địa chỉ Google Email hợp lệ (ví dụ: nguyenphuc230607@gmail.com).",
+          message: "Vui lòng nhập địa chỉ Google Email hợp lệ (ví dụ: ten-cua-ban@gmail.com).",
         });
         customGoogleEmail.focus();
         return;
@@ -490,7 +535,7 @@
         email: email,
         name: derivedName,
         avatar: avatarInitials,
-        phone: "0384416977",
+        phone: "",
       };
 
       if (!rememberCustomGoogle || rememberCustomGoogle.checked) {
@@ -505,6 +550,12 @@
 
       if (res.ok) {
         handleGoogleLoginSuccess(res.user);
+      } else {
+        notify({
+          type: "error",
+          title: "Đăng nhập thất bại",
+          message: res.error || "Không thể đăng nhập tài khoản Google.",
+        });
       }
     };
 

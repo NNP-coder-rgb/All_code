@@ -432,19 +432,14 @@
       return { ok: true, user: session };
     },
 
-    // 1. Quản lý tài khoản Google của trình duyệt
+    // 1. Quản lý tài khoản Google lưu trữ riêng trên từng thiết bị (localStorage của thiết bị đó)
     getBrowserGoogleAccount() {
       try {
         const raw = localStorage.getItem("hv_browser_google_account");
         if (raw) return JSON.parse(raw);
       } catch (e) {}
-      // Mặc định tài khoản Google đang sử dụng trên trình duyệt của máy
-      return {
-        email: "nguyenphuc230607@gmail.com",
-        name: "Nguyễn Ngọc Phúc",
-        avatar: "NP",
-        phone: "0384416977",
-      };
+      // Không gán tài khoản mặc định cố định, mỗi thiết bị tự lưu tài khoản riêng
+      return null;
     },
 
     setBrowserGoogleAccount(acc) {
@@ -454,15 +449,35 @@
       } catch (e) {}
     },
 
-    // Đăng nhập nhanh bằng tài khoản Google (tự động nhận diện tài khoản Google trình duyệt)
-    loginWithGoogle(googleUser = {}) {
-      const browserAcc = this.getBrowserGoogleAccount();
-      const email = (googleUser.email || browserAcc.email || "nguyenphuc230607@gmail.com").trim().toLowerCase();
-      const name = googleUser.name || browserAcc.name || "Nguyễn Ngọc Phúc";
-      const avatar = googleUser.avatar || browserAcc.avatar || "NP";
-      const phone = googleUser.phone || browserAcc.phone || "0384416977";
+    clearBrowserGoogleAccount() {
+      try {
+        localStorage.removeItem("hv_browser_google_account");
+      } catch (e) {}
+    },
 
-      // Cập nhật lại tài khoản Google trình duyệt ghi nhớ
+    // Đăng nhập bằng tài khoản Google của từng thiết bị
+    loginWithGoogle(googleUser = {}) {
+      const browserAcc = this.getBrowserGoogleAccount() || {};
+      const email = (googleUser.email || browserAcc.email || "").trim().toLowerCase();
+      if (!email) {
+        return {
+          ok: false,
+          error: "Vui lòng nhập hoặc chọn tài khoản Google trên thiết bị của bạn.",
+        };
+      }
+      const derivedName = email.split("@")[0].replace(/[._-]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+      const name = googleUser.name || browserAcc.name || derivedName;
+      let initials = "G";
+      const parts = name.trim().split(/\s+/);
+      if (parts.length >= 2) {
+        initials = (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+      } else if (parts.length === 1 && parts[0].length > 0) {
+        initials = parts[0].slice(0, 2).toUpperCase();
+      }
+      const avatar = googleUser.avatar || browserAcc.avatar || initials;
+      const phone = googleUser.phone || browserAcc.phone || "";
+
+      // Ghi nhớ tài khoản Google cho riêng thiết bị này
       this.setBrowserGoogleAccount({ email, name, avatar, phone });
 
       const users = readUsers();
@@ -479,14 +494,14 @@
           createdAt: new Date().toISOString(),
           kycStatus: "VERIFIED",
           kycData: {
-            idCardNumber: "001202008849",
+            idCardNumber: "001" + Math.floor(100000000 + Math.random() * 900000000),
             cardFullName: name.toUpperCase(),
-            dob: "18/09/1994",
-            issueDate: "24/02/2023",
+            dob: "01/01/1998",
+            issueDate: "15/05/2023",
             expiryDate: "Không thời hạn",
             gender: "Nam",
-            address: "Căn hộ Landmark 81, Vinhomes Central Park, TP.HCM",
-            faceMatch: 99.6,
+            address: "TP. Hồ Chí Minh",
+            faceMatch: 99.5,
             verifiedAt: new Date().toISOString(),
           },
         };
@@ -505,17 +520,17 @@
         fullName: user.fullName,
         username: user.username || email.split("@")[0],
         email: user.email,
-        phone: user.phone,
-        dob: user.dob || "18/09/1994",
+        phone: user.phone || "",
+        dob: user.dob || "01/01/1998",
         gender: user.gender || "Nam",
-        address: user.address || (user.kycData && user.kycData.address) || "Căn hộ Landmark 81, Vinhomes Central Park, TP.HCM",
-        bio: user.bio || "Thành viên đăng nhập qua Google Account.",
+        address: user.address || (user.kycData && user.kycData.address) || "TP. Hồ Chí Minh",
+        bio: user.bio || "Thành viên đăng nhập qua Google trên thiết bị.",
         avatar: user.avatar,
         bankName: user.bankName || "Techcombank",
-        bankAccountNumber: user.bankAccountNumber || "1903 6888 8888 8",
+        bankAccountNumber: user.bankAccountNumber || "1903 8888 9999",
         bankAccountName: user.bankAccountName || user.fullName.toUpperCase(),
-        membershipTitle: user.membershipTitle || "VIP BUYER",
-        interestCategory: user.interestCategory || "sneakers",
+        membershipTitle: user.membershipTitle || "THÀNH VIÊN GOOGLE",
+        interestCategory: user.interestCategory || "all",
         kycStatus: user.kycStatus || "VERIFIED",
         kycData: user.kycData || null,
       };
