@@ -1857,8 +1857,8 @@
           const val = Math.round((maxVal / 4) * i);
           const y = padT + plotH - (plotH / 4) * i;
           gridHtml += `
-            <line x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}" stroke="var(--chart-grid)" stroke-dasharray="3,3" stroke-width="1" />
-            <text x="${padL - 8}" y="${y + 4}" fill="var(--chart-axis)" font-size="10" font-family="monospace" text-anchor="end">${val}T</text>
+            <line x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}" stroke="var(--chart-grid, rgba(255,255,255,0.08))" stroke-dasharray="3,3" stroke-width="1" />
+            <text class="chart-axis-text" x="${padL - 8}" y="${y + 4}" fill="var(--chart-axis, #94a3b8)" font-size="10" font-family="monospace" text-anchor="end">${val}T</text>
           `;
         }
 
@@ -1889,10 +1889,10 @@
               <rect class="chart-bar-rect" x="${x}" y="${yC2c}" width="${barW}" height="${hC2c}" rx="3" fill="url(#gradC2c)" opacity="0.9" />
               <!-- Mall Bar (Top) -->
               <rect class="chart-bar-rect" x="${x}" y="${yMall}" width="${barW}" height="${hMall}" rx="3" fill="url(#gradMall)" opacity="0.9" />
-              <!-- Giá trị tổng trên đầu cột -->
-              <text x="${cx}" y="${yMall - 6}" fill="var(--chart-axis)" font-size="9.5" font-family="monospace" font-weight="700" text-anchor="middle">${item.total.toFixed(1)}T</text>
+              <!-- Giá trị tổng trên đầu cột (Màu sáng rõ nét, cách đỉnh đường xu hướng 10px) -->
+              <text class="chart-val-text" x="${cx}" y="${yTotal - 10}" fill="var(--chart-val, #ffffff)" font-size="10" font-family="monospace" font-weight="700" text-anchor="middle">${item.total.toFixed(1)}T</text>
               <!-- Nhãn trục X -->
-              <text x="${cx}" y="${H - 12}" fill="var(--chart-axis)" font-size="11" font-weight="600" text-anchor="middle">${item.label}</text>
+              <text class="chart-axis-text" x="${cx}" y="${H - 12}" fill="var(--chart-axis, #94a3b8)" font-size="11" font-weight="600" text-anchor="middle">${item.label}</text>
             </g>
           `;
 

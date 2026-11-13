@@ -2207,6 +2207,27 @@ body.light-theme .cccd-upload-box:hover {
   height: 100%;
   overflow: visible;
 }
+.chart-val-text {
+  fill: #ffffff;
+  font-family: var(--font-mono, monospace);
+  font-weight: 700;
+  font-size: 10px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
+}
+.chart-axis-text {
+  fill: #94a3b8;
+  font-size: 10.5px;
+  font-weight: 500;
+}
+[data-theme="light"] .chart-val-text,
+body.light-theme .chart-val-text {
+  fill: #0f172a;
+  filter: none;
+}
+[data-theme="light"] .chart-axis-text,
+body.light-theme .chart-axis-text {
+  fill: #475569;
+}
 .chart-bar-rect {
   transition: transform 0.2s ease, opacity 0.2s ease, filter 0.2s ease;
   cursor: pointer;
@@ -2476,6 +2497,19 @@ body.light-theme .chart-tooltip-floating {
 body.light-theme .donut-legend-item {
   background: #ffffff;
   border-color: #e2e8f0;
+}
+
+/* Biểu đồ SVG Variables & Colors */
+:root {
+  --chart-axis: #94a3b8;
+  --chart-grid: rgba(255, 255, 255, 0.08);
+  --chart-val: #f8fafc;
+}
+[data-theme="light"],
+body.light-theme {
+  --chart-axis: #475569;
+  --chart-grid: rgba(0, 0, 0, 0.08);
+  --chart-val: #0f172a;
 }
 
 
