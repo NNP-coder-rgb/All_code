@@ -411,6 +411,7 @@
       var warrantyUrl = resolveUrl("pages/info/warranty_policy.html", bp);
       var returnUrl = resolveUrl("pages/info/return_policy.html", bp);
       var termsUrl = resolveUrl("pages/info/terms_of_service.html", bp);
+      var privacyUrl = resolveUrl("pages/info/privacy_policy.html", bp);
       var postItemUrl = resolveUrl("pages/seller/post_item.html", bp);
       var disputeUrl = resolveUrl("pages/buyer/dispute.html", bp);
       var ordersUrl = resolveUrl("pages/buyer/orders.html", bp);
@@ -466,6 +467,7 @@
         '<li><a href="' + warrantyUrl + '">Chính sách bảo hành chính hãng</a></li>' +
         '<li><a href="' + returnUrl + '">Chính sách đổi trả trong 7 ngày</a></li>' +
         '<li><a href="' + termsUrl + '">Điều khoản dịch vụ sàn</a></li>' +
+        '<li><a href="' + privacyUrl + '">Chính sách bảo mật dữ liệu</a></li>' +
         '<li><a href="' + postItemUrl + '">Quy định đăng tin bán đồ cũ C2C</a></li>' +
         "</ul>" +
         "</div>" +
@@ -497,8 +499,9 @@
         /* CHÂN TRANG BẢN QUYỀN */
         '<div class="footer-bottom">' +
         "<span>© 2026 HYBRID.STORE — Bán Hàng Mới &amp; Đồ Cũ Tuyển Chọn. All rights reserved.</span>" +
-        '<span class="flex gap-4 items-center">' +
+        '<span class="flex gap-4 items-center flex-wrap">' +
         '<a href="' + termsUrl + '">Điều Khoản Dịch Vụ</a>' +
+        '<a href="' + privacyUrl + '">Chính Sách Bảo Mật</a>' +
         '<a href="' + warrantyUrl + '">Chính Sách Bảo Hành</a>' +
         '<a href="' + returnUrl + '">Chính Sách Đổi Trả</a>' +
         "</span>" +
