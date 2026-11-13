@@ -696,10 +696,26 @@
       } catch (e) {}
     },
 
-    // Lấy trạng thái KYC của người dùng hiện tại
-    getKycStatus() {
-      const user = this.current();
-      return user ? (user.kycStatus || "UNVERIFIED") : "NOT_LOGGED_IN";
+    // Kiểm tra xem người dùng có phải là Quản Trị Viên (Admin) hay không
+    isAdmin(user) {
+      const u = user || this.current();
+      return !!(u && (u.role === "ADMIN" || u.role === "admin"));
+    },
+
+    // Kiểm tra tài khoản đã xác thực hoặc có đặc quyền Admin
+    isVerified(user) {
+      const u = user || this.current();
+      if (!u) return false;
+      if (this.isAdmin(u)) return true;
+      return (u.kycStatus || "UNVERIFIED") === "VERIFIED";
+    },
+
+    // Lấy trạng thái KYC của người dùng hiện tại (Admin luôn là VERIFIED và miễn trừ xác thực)
+    getKycStatus(user) {
+      const u = user || this.current();
+      if (!u) return "NOT_LOGGED_IN";
+      if (this.isAdmin(u)) return "VERIFIED";
+      return u.kycStatus || "UNVERIFIED";
     },
 
     // Người dùng gửi hồ sơ CCCD để yêu cầu Admin duyệt
@@ -962,6 +978,9 @@
 
       // Nếu trang yêu cầu CCCD đã được duyệt (ví dụ thanh toán, đăng bán)
       if (options.requireKyc) {
+        if (this.isAdmin(user)) {
+          return true; // Admin có toàn quyền, miễn trừ xác thực CCCD
+        }
         const kycStatus = user.kycStatus || "UNVERIFIED";
         if (kycStatus !== "VERIFIED") {
           if (typeof window !== "undefined") {
@@ -1026,7 +1045,15 @@
         return false;
       }
 
-      // 2. Kiểm tra xác thực CCCD (Admin đã phê duyệt xong mới được thao tác)
+      // 2. Đặc quyền Quản Trị Viên: Miễn trừ hoàn toàn xác thực CCCD & địa chỉ, có mọi quyền
+      if (this.isAdmin(user)) {
+        if (typeof actionCallback === "function") {
+          actionCallback(user);
+        }
+        return true;
+      }
+
+      // 3. Kiểm tra xác thực CCCD đối với người dùng thông thường
       const requireKyc = options.requireKyc !== false;
       if (requireKyc) {
         const kycStatus = user.kycStatus || "UNVERIFIED";
@@ -1181,6 +1208,20 @@
             express2h: true,
           }
         ];
+      } else if (this.isAdmin(u)) {
+        seeded = [
+          {
+            id: "addr_admin_hq",
+            name: fullName || "Ban Quản Trị HYBRID.STORE",
+            phone: phone || "1900 8888",
+            city: "TP. Hồ Chí Minh — Quận Bình Thạnh",
+            detail: "Trung Tâm Điều Hành Toàn Sàn HYBRID.STORE, Tòa Landmark 81, Vinhomes Central Park",
+            type: "office",
+            note: "Trụ sở Quản Trị Viên (Toàn Quyền Sàn - Miễn Trừ Nhập Địa Chỉ)",
+            isDefault: true,
+            express2h: true,
+          }
+        ];
       } else if (userAddr) {
         let city = "TP. Hồ Chí Minh";
         if (userAddr.includes("Hà Nội")) city = "Hà Nội";
@@ -1206,6 +1247,14 @@
         } catch (e) {}
       }
       return seeded;
+    },
+
+    hasAddress(user) {
+      const u = user || this.current();
+      if (!u) return false;
+      if (this.isAdmin(u)) return true;
+      const list = this.getAddresses(u);
+      return Array.isArray(list) && list.length > 0;
     },
 
     saveAddresses(list, user) {

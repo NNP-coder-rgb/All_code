@@ -1057,6 +1057,22 @@
       }
       return user;
     },
+    isAdmin(user) {
+      if (typeof window !== "undefined" && window.Auth && typeof window.Auth.isAdmin === "function" && window.Auth !== Auth) {
+        return window.Auth.isAdmin(user);
+      }
+      const u = user || Auth.current();
+      return !!(u && (u.role === "ADMIN" || u.role === "admin"));
+    },
+    isVerified(user) {
+      if (typeof window !== "undefined" && window.Auth && typeof window.Auth.isVerified === "function" && window.Auth !== Auth) {
+        return window.Auth.isVerified(user);
+      }
+      const u = user || Auth.current();
+      if (!u) return false;
+      if (u.role === "ADMIN" || u.role === "admin") return true;
+      return (u.ekycStatus === "verified" || u.kycStatus === "VERIFIED");
+    },
     getUserAddressKey(user) {
       if (typeof window !== "undefined" && window.Auth && typeof window.Auth.getUserAddressKey === "function" && window.Auth !== Auth) {
         return window.Auth.getUserAddressKey(user);
@@ -1080,16 +1096,22 @@
           if (Array.isArray(list) && list.length > 0) return list;
         }
       } catch (e) {}
-      const userAddr = u.address || "Căn hộ Landmark 81, Vinhomes Central Park, Phường 22, Quận Bình Thạnh, TP. Hồ Chí Minh";
+
+      // Đặc quyền Admin: Tự động cấp địa chỉ Trụ Sở Quản Trị Viên Toàn Sàn nếu chưa có địa chỉ riêng
+      const isAdminUser = u.role === "ADMIN" || u.role === "admin";
+      const userAddr = isAdminUser
+        ? "Trung Tâm Điều Hành Toàn Sàn HYBRID.STORE, Landmark 81, Vinhomes Central Park"
+        : (u.address || "Căn hộ Landmark 81, Vinhomes Central Park, Phường 22, Quận Bình Thạnh, TP. Hồ Chí Minh");
+
       const seed = [
         {
           id: "addr_" + (u.id || "main") + "_1",
-          name: u.fullName || "Khách Hàng",
-          phone: u.phone || "0901234567",
+          name: u.fullName || (isAdminUser ? "Ban Quản Trị HYBRID.STORE" : "Khách Hàng"),
+          phone: u.phone || (isAdminUser ? "1900 8888" : "0901234567"),
           city: "TP. Hồ Chí Minh — Quận Bình Thạnh",
           detail: userAddr,
-          type: u.role === "seller" ? "office" : "home",
-          note: "Giao tận tay / Giờ hành chính",
+          type: isAdminUser || u.role === "seller" ? "office" : "home",
+          note: isAdminUser ? "Trụ sở Quản Trị Viên (Toàn Quyền Sàn - Miễn Trừ Nhập Địa Chỉ)" : "Giao tận tay / Giờ hành chính",
           isDefault: true,
           express2h: true,
         },
@@ -1098,6 +1120,16 @@
         localStorage.setItem(key, JSON.stringify(seed));
       } catch (e) {}
       return seed;
+    },
+    hasAddress(user) {
+      if (typeof window !== "undefined" && window.Auth && typeof window.Auth.hasAddress === "function" && window.Auth !== Auth) {
+        return window.Auth.hasAddress(user);
+      }
+      const u = user || Auth.current();
+      if (!u) return false;
+      if (u.role === "ADMIN" || u.role === "admin") return true;
+      const list = this.getAddresses(u);
+      return Array.isArray(list) && list.length > 0;
     },
     saveAddresses(list, user) {
       if (typeof window !== "undefined" && window.Auth && typeof window.Auth.saveAddresses === "function" && window.Auth !== Auth) {
@@ -1115,7 +1147,8 @@
       if (typeof window !== "undefined" && window.Auth && typeof window.Auth.requireLogin === "function" && window.Auth !== Auth) {
         return window.Auth.requireLogin(options);
       }
-      if (!Auth.current()) {
+      const cur = Auth.current();
+      if (!cur) {
         const isSubpage = typeof window !== "undefined" && window.location.pathname.includes("/pages/");
         const loginPage = isSubpage ? "../account/auth_login.html" : "pages/account/auth_login.html";
         let returnUrl = options.returnUrl || (typeof window !== "undefined" ? window.location.href : "");
@@ -1131,6 +1164,9 @@
           window.location.href = loginPage + (returnUrl ? "?redirect=" + encodeURIComponent(returnUrl) : "");
         }
         return false;
+      }
+      if (cur.role === "ADMIN" || cur.role === "admin") {
+        return true; // Admin có mọi quyền không bị ràng buộc
       }
       return true;
     },

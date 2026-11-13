@@ -766,6 +766,7 @@
               <div class="form-group mb-3">
                 <label class="form-label" for="profileSelectRole">Vai trò tài khoản</label>
                 <select class="select" id="profileSelectRole">
+                  <option value="ADMIN">Quản Trị Viên Toàn Sàn (Super Admin - Toàn Quyền)</option>
                   <option value="buyer">Khách Hàng Mua Sắm (Buyer Cá Nhân)</option>
                   <option value="seller">Gian Hàng / Người Bán Hàng (Seller C2C)</option>
                   <option value="both">Tài Khoản Đa Năng (Vừa Mua Vừa Bán C2C)</option>
@@ -994,17 +995,23 @@
           document.getElementById("userEmailDisplay").textContent = u.email || "Chưa cập nhật";
 
           // Cập nhật vai trò / danh hiệu
-          const roleLabel = u.membershipTitle || (u.role === "seller" ? "STORE SELLER" : u.role === "both" ? "BUYER & SELLER" : "VIP BUYER");
+          const isAdminUser = u.role === "ADMIN" || u.role === "admin";
+          const roleLabel = isAdminUser
+            ? "ROOT SUPER ADMIN"
+            : (u.membershipTitle || (u.role === "seller" ? "STORE SELLER" : u.role === "both" ? "BUYER & SELLER" : "VIP BUYER"));
           const roleBadgeEl = document.getElementById("roleBadgeDisplay");
-          if (roleBadgeEl) roleBadgeEl.textContent = roleLabel;
+          if (roleBadgeEl) {
+            roleBadgeEl.textContent = roleLabel;
+            if (isAdminUser) roleBadgeEl.className = "badge badge-primary";
+          }
 
           // Cập nhật Mục 1: Thông tin cá nhân & tài khoản chi tiết
           const phone = u.phone || "Chưa cập nhật";
           const email = u.email || "Chưa cập nhật";
           const dob = u.dob || (u.kycData && u.kycData.dob) || "Chưa cập nhật";
           const gender = u.gender || (u.kycData && u.kycData.gender) || "Chưa cập nhật";
-          const address = u.address || (u.kycData && u.kycData.address) || "Chưa cập nhật";
-          const bio = u.bio || "Chưa có lời giới thiệu bản thân.";
+          const address = u.address || (u.kycData && u.kycData.address) || (isAdminUser ? "Trung Tâm Điều Hành Toàn Sàn HYBRID.STORE, Landmark 81 (Đặc quyền Quản trị)" : "Chưa cập nhật");
+          const bio = u.bio || (isAdminUser ? "Tài khoản Quản Trị Viên cấp cao của hệ thống sàn HYBRID.STORE." : "Chưa có lời giới thiệu bản thân.");
 
           if (document.getElementById("infoFullName")) document.getElementById("infoFullName").textContent = fullName;
           if (document.getElementById("infoUsername")) document.getElementById("infoUsername").textContent = "@" + username;
@@ -1034,35 +1041,51 @@
           const kycData = u.kycData || {};
 
           // Cập nhật thông tin chi tiết CCCD
-          if (kycData.cardFullName) {
-            document.getElementById("cccdFullName").textContent = kycData.cardFullName.toUpperCase();
+          if (isAdminUser) {
+            document.getElementById("cccdFullName").textContent = fullName.toUpperCase() + " (ROOT ADMIN)";
+            document.getElementById("cccdNumber").textContent = "001202008849 (ĐẶC QUYỀN TOÀN SÀN)";
+            document.getElementById("cccdDob").textContent = "Không thời hạn — Miễn trừ pháp lý";
+            document.getElementById("cccdFaceMatch").textContent = "100% ROOT PRIVILEGED";
           } else {
-            document.getElementById("cccdFullName").textContent = fullName.toUpperCase();
+            if (kycData.cardFullName) {
+              document.getElementById("cccdFullName").textContent = kycData.cardFullName.toUpperCase();
+            } else {
+              document.getElementById("cccdFullName").textContent = fullName.toUpperCase();
+            }
+
+            if (kycData.idCardNumber) {
+              const raw = String(kycData.idCardNumber);
+              document.getElementById("cccdNumber").textContent = raw.slice(0, 6) + "****" + raw.slice(-2);
+            } else {
+              document.getElementById("cccdNumber").textContent = "Chưa cung cấp";
+            }
+
+            if (kycData.dob) {
+              document.getElementById("cccdDob").textContent = kycData.dob + (kycData.issueDate ? " — Cấp: " + kycData.issueDate : "");
+            } else if (u.dob) {
+              document.getElementById("cccdDob").textContent = u.dob + " — Cấp: 24/02/2023";
+            }
+
+            if (kycData.faceMatch) {
+              document.getElementById("cccdFaceMatch").textContent = kycData.faceMatch + "% ANTI-DEEPFAKE AI";
+            }
           }
 
-          if (kycData.idCardNumber) {
-            const raw = String(kycData.idCardNumber);
-            document.getElementById("cccdNumber").textContent = raw.slice(0, 6) + "****" + raw.slice(-2);
-          } else {
-            document.getElementById("cccdNumber").textContent = "Chưa cung cấp";
-          }
-
-          if (kycData.dob) {
-            document.getElementById("cccdDob").textContent = kycData.dob + (kycData.issueDate ? " — Cấp: " + kycData.issueDate : "");
-          } else if (u.dob) {
-            document.getElementById("cccdDob").textContent = u.dob + " — Cấp: 24/02/2023";
-          }
-
-          if (kycData.faceMatch) {
-            document.getElementById("cccdFaceMatch").textContent = kycData.faceMatch + "% ANTI-DEEPFAKE AI";
-          }
           // Hiển thị ảnh CCCD đã lưu
           const savedSection = document.getElementById("cccdSavedPhotosSection");
           const frontImg = document.getElementById("mainCccdFrontImg");
           const backImg = document.getElementById("mainCccdBackImg");
           const statusTag = document.getElementById("cccdPhotosStatusTag");
 
-          if (kycData.frontImage || kycData.backImage) {
+          if (isAdminUser) {
+            if (savedSection) savedSection.style.display = "block";
+            if (frontImg) frontImg.src = Auth.createSampleCccdSvg("front", fullName, "001202008849");
+            if (backImg) backImg.src = Auth.createSampleCccdSvg("back", fullName, "001202008849");
+            if (statusTag) {
+              statusTag.textContent = "✓ Đặc quyền Quản trị viên tối cao (Miễn trừ xác thực CCCD)";
+              statusTag.className = "text-xs text-primary fw-700";
+            }
+          } else if (kycData.frontImage || kycData.backImage) {
             if (savedSection) savedSection.style.display = "block";
             if (frontImg) {
               frontImg.src = kycData.frontImage || Auth.createSampleCccdSvg("front", kycData.cardFullName || fullName, kycData.idCardNumber);
@@ -1082,9 +1105,34 @@
             if (savedSection) savedSection.style.display = "none";
           }
 
-
           // Cập nhật trạng thái hiển thị
-          if (kycStatus === "VERIFIED") {
+          if (isAdminUser) {
+            // ĐẶC QUYỀN ROOT ADMIN: Miễn trừ hoàn toàn xác thực CCCD & Không cần nhập địa chỉ
+            topBadges.innerHTML = `
+              <span class="badge badge-primary"><span class="material-symbols-outlined icon-xs">shield</span> ROOT ADMIN • QUYỀN TỐI CAO</span>
+              <span class="badge badge-success"><span class="material-symbols-outlined icon-xs">verified</span> MIỄN TRỪ XÁC THỰC CCCD</span>
+              <span class="badge badge-secondary">TOÀN QUYỀN TẤT CẢ CÁC TRANG</span>
+            `;
+            kycCardBadge.innerHTML = `<span class="badge badge-primary" style="font-size: 13px; padding: 6px 14px;"><span class="material-symbols-outlined icon-xs">admin_panel_settings</span> ĐẶC QUYỀN ROOT ADMIN</span>`;
+            document.getElementById("verifiedStatusBadge").textContent = "QUYỀN TỐI CAO (ALL RIGHTS)";
+            document.getElementById("verifiedStatusBadge").className = "badge badge-primary";
+            document.getElementById("avatarBadgeIcon").innerHTML = `<span class="material-symbols-outlined icon-sm text-primary">admin_panel_settings</span>`;
+
+            kycNoticeContainer.innerHTML = `
+              <div class="kyc-status-box verified" style="border-left: 4px solid var(--primary-500); background: rgba(139, 92, 246, 0.08);">
+                <span class="material-symbols-outlined text-primary" style="font-size: 32px;">shield_person</span>
+                <div class="flex-1">
+                  <div class="flex items-center gap-2">
+                    <strong class="text-sm text-primary">Tài Khoản Quản Trị Viên Tối Cao (Master Admin)</strong>
+                    <span class="badge badge-primary text-2xs">Miễn trừ thủ tục</span>
+                  </div>
+                  <p class="text-xs text-muted mb-0 mt-1">
+                    Tài khoản Quản Trị Viên sở hữu toàn quyền trên hệ thống sàn HYBRID.STORE: <strong>Không cần xác thực CCCD, không cần nhập địa chỉ</strong> và không chịu bất kỳ ràng buộc nào ở tất cả các trang mua sắm, trả giá, đăng bán, phê duyệt hay quản trị.
+                  </p>
+                </div>
+              </div>
+            `;
+          } else if (kycStatus === "VERIFIED") {
             topBadges.innerHTML = `
               <span class="badge badge-success"><span class="material-symbols-outlined icon-xs">verified</span> eKYC Level 2: ĐÃ XÁC MINH</span>
               <span class="badge badge-primary">TÀI KHOẢN ĐÃ DUYỆT</span>
@@ -1315,8 +1363,14 @@
           }
 
           // Tab 2: Vai trò & Ngành hàng
-          document.getElementById("profileSelectRole").value = u.role || "buyer";
-          document.getElementById("profileInputMembershipTitle").value = u.membershipTitle || (u.role === "seller" ? "TOP SELLER C2C" : "VIP BUYER");
+          if (u.role === "ADMIN" || u.role === "admin") {
+            document.getElementById("profileSelectRole").value = "ADMIN";
+            document.getElementById("profileInputMembershipTitle").value = u.membershipTitle || "ROOT SUPER ADMIN";
+            document.getElementById("profileInputAddress").placeholder = "Miễn trừ đối với Admin (Tự động dùng Trụ sở Quản Trị)";
+          } else {
+            document.getElementById("profileSelectRole").value = u.role || "buyer";
+            document.getElementById("profileInputMembershipTitle").value = u.membershipTitle || (u.role === "seller" ? "TOP SELLER C2C" : "VIP BUYER");
+          }
           document.getElementById("profileSelectCategory").value = u.interestCategory || "sneakers";
 
           // Tab 3: Ngân hàng Napas
@@ -1353,12 +1407,19 @@
           const email = document.getElementById("profileInputEmail").value.trim();
           const dob = document.getElementById("profileInputDob").value.trim();
           const gender = document.getElementById("profileSelectGender").value;
-          const address = document.getElementById("profileInputAddress").value.trim();
+          let address = document.getElementById("profileInputAddress").value.trim();
           const avatar = (modalAvatarHidden ? modalAvatarHidden.value : "").trim();
           const bio = document.getElementById("profileInputBio").value.trim();
 
-          const role = document.getElementById("profileSelectRole").value;
-          const membershipTitle = document.getElementById("profileInputMembershipTitle").value.trim();
+          const curUser = Auth.current();
+          const isAdminUser = curUser && (curUser.role === "ADMIN" || curUser.role === "admin");
+
+          if (!address && isAdminUser) {
+            address = curUser.address || "Trung Tâm Điều Hành Toàn Sàn HYBRID.STORE, Landmark 81 (Đặc quyền Quản trị)";
+          }
+
+          const role = isAdminUser ? "ADMIN" : document.getElementById("profileSelectRole").value;
+          const membershipTitle = isAdminUser ? "ROOT SUPER ADMIN" : document.getElementById("profileInputMembershipTitle").value.trim();
           const interestCategory = document.getElementById("profileSelectCategory").value;
 
           const bankName = document.getElementById("profileSelectBank").value;
@@ -1608,6 +1669,10 @@
         // Mở Modal nộp hồ sơ CCCD
         document.getElementById("btnOpenKycModal").addEventListener("click", () => {
           const u = Auth.current();
+          if (u && (u.role === "ADMIN" || u.role === "admin")) {
+            Utils.toast("Tài khoản Quản Trị Viên đã được cấp toàn quyền tối cao, miễn trừ hoàn toàn thủ tục nộp CCCD!", "info");
+            return;
+          }
           if (u) {
             document.getElementById("inputCardFullName").value = (u.kycData?.cardFullName || u.fullName || "").toUpperCase();
             if (u.kycData?.idCardNumber) {

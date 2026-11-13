@@ -453,7 +453,7 @@
             cond: 96,
             condText: "96% Likenew",
             condLabel: "Đã qua kiểm tra kỹ lưỡng",
-            seller: user ? `${user.fullName} (Đã eKYC CCCD)` : "Việt Dũng (Đã eKYC CCCD)",
+            seller: user && (user.role === "ADMIN" || user.role === "admin") ? `${user.fullName} (Master Admin • Toàn Quyền)` : (user ? `${user.fullName} (Đã eKYC CCCD)` : "Việt Dũng (Đã eKYC CCCD)"),
             sellerName: user ? user.fullName : "Việt Dũng",
             price: priceNum,
             oldPrice: Math.round(priceNum * 1.45),

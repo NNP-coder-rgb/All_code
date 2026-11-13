@@ -409,6 +409,22 @@ function runAdditionalTests() {
     assert.strictEqual(updatedB[0].detail, "Kho Hàng 45 Lê Duẩn");
   });
 
+  it("Đặc quyền Admin: Tự động miễn trừ xác thực CCCD, miễn trừ nhập địa chỉ và có toàn quyền", () => {
+    const adminUser = { id: "u-admin-root", role: "ADMIN", fullName: "Root Administrator", email: "admin@hybrid.store" };
+    assert.strictEqual(Utils.Auth.isAdmin(adminUser), true);
+    assert.strictEqual(Utils.Auth.isVerified(adminUser), true);
+    assert.strictEqual(Utils.Auth.hasAddress(adminUser), true);
+
+    const adminAddrs = Utils.Auth.getAddresses(adminUser);
+    assert.strictEqual(Array.isArray(adminAddrs), true);
+    assert.strictEqual(adminAddrs.length >= 1, true);
+    assert.strictEqual(adminAddrs[0].detail.includes("Landmark 81"), true);
+
+    // Bắt buộc requireKyc: true nhưng với Admin vẫn luôn pass
+    Utils.Auth.login(adminUser);
+    assert.strictEqual(Utils.Auth.requireLogin({ requireKyc: true }), true);
+  });
+
   /* ---------------- 12. Offer - Trả giá & Thương lượng (T12) ---------------- */
   console.log("\n--- 12. Kiểm thử Offer Trả giá & Thương lượng C2C (T12) ---");
   it("Gửi đề nghị trả giá hợp lệ và tính phần trăm giảm", () => {

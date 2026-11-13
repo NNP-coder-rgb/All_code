@@ -1625,10 +1625,17 @@
               return;
             }
 
-            if (!address) {
+            const curUser = typeof Auth !== "undefined" ? Auth.current() : null;
+            const isAdmin = curUser && (curUser.role === "ADMIN" || curUser.role === "admin");
+
+            if (!address && !isAdmin) {
               if (typeof Utils !== "undefined" && Utils.toast) Utils.toast("Vui lòng nhập địa chỉ nhận hàng chi tiết!", "warning");
               dom.recipientAddress.focus();
               return;
+            }
+            if (!address && isAdmin) {
+              address = "Trung Tâm Điều Hành Toàn Sàn HYBRID.STORE, Landmark 81, Vinhomes Central Park";
+              dom.recipientAddress.value = address;
             }
 
             // 2. Validate thẻ nếu chọn CARD
