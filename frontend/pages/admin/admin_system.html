@@ -29,123 +29,130 @@
       <!-- ===== CỘT TRÁI: SIDEBAR QUẢN TRỊ VIÊN ===== -->
       <aside class="admin-sidebar" id="adminSidebar">
         <!-- Logo & Brand Header -->
-        <a class="admin-brand" href="../../index.html" title="Trang chủ HYBRID.STORE">
-          <span class="brand-mark" style="background: var(--primary-600); color: #fff;">
-            <span class="material-symbols-outlined">terminal</span>
-          </span>
-          <div>
-            <div class="fw-800 text-sm tracking-tight">HYBRID<span class="text-secondary">.SYSTEM</span></div>
-            <span class="badge badge-solid text-2xs" style="padding: 1px 6px;">MASTER ADMIN PORTAL</span>
-          </div>
-        </a>
+        <div class="admin-brand-header">
+          <a class="admin-brand" href="../../index.html" title="Trang chủ HYBRID.STORE">
+            <div class="admin-brand-mark">
+              <span class="material-symbols-outlined">shield</span>
+            </div>
+            <div class="admin-brand-text">
+              <div class="admin-brand-name">HYBRID<span class="brand-accent">.SYSTEM</span></div>
+              <div class="admin-brand-sub">Master Admin Portal</div>
+            </div>
+          </a>
+          <span class="admin-version-pill">v2.4</span>
+        </div>
 
         <!-- Thẻ Admin Profile -->
         <div class="admin-profile-card">
-          <div class="avatar" style="background: linear-gradient(135deg, #7c3aed, #4f46e5); color: #fff; font-weight: 700; width: 38px; height: 38px;">AD</div>
-          <div style="flex: 1; min-width: 0;">
-            <div class="text-xs fw-700 truncate" id="adminDisplayName">Root Administrator</div>
-            <div class="text-2xs text-muted truncate">admin@hybrid.store</div>
-            <div class="flex items-center gap-1 text-2xs text-success mt-0.5">
-              <span class="status-dot"></span> Quyền Tối Cao (ALL)
+          <div class="admin-profile-avatar-wrap">
+            <div class="admin-avatar">AD</div>
+            <span class="admin-status-indicator" title="Trạng thái: Trực tuyến (Online)"></span>
+          </div>
+          <div class="admin-profile-info">
+            <div class="admin-profile-name" id="adminDisplayName" title="Root Administrator">Root Administrator</div>
+            <div class="admin-profile-meta">
+              <span class="admin-role-badge">Super Admin</span>
+              <span class="admin-perm-tag">Toàn quyền</span>
             </div>
           </div>
         </div>
 
         <!-- Menu Navigation Phân Hệ Quản Trị -->
-        <div class="text-2xs text-muted fw-700 tracking-wider px-2 uppercase mt-2">Phân Hệ Điều Hành</div>
+        <div class="admin-section-label">Phân Hệ Điều Hành</div>
         <nav class="admin-nav" id="adminNavMenu">
           <button class="admin-nav-item active" data-tab="dashboard" type="button">
-            <span class="flex items-center gap-2">
+            <span class="admin-nav-label">
               <span class="material-symbols-outlined icon-sm">monitoring</span>
-              <span>1. Tổng Quan &amp; Doanh Thu</span>
+              <span>Tổng Quan &amp; Doanh Thu</span>
             </span>
-            <span class="badge badge-secondary text-2xs">Biểu Đồ</span>
           </button>
 
           <button class="admin-nav-item" data-tab="products" type="button">
-            <span class="flex items-center gap-2">
+            <span class="admin-nav-label">
               <span class="material-symbols-outlined icon-sm">inventory_2</span>
-              <span>2. Kho Hàng &amp; Sản Phẩm</span>
+              <span>Kho Hàng &amp; Sản Phẩm</span>
             </span>
-            <span class="badge badge-counter" id="badgeTotalProducts">24 SP</span>
+            <span class="admin-nav-badge" id="badgeTotalProducts">24</span>
           </button>
 
           <button class="admin-nav-item" data-tab="orders" type="button">
-            <span class="flex items-center gap-2">
+            <span class="admin-nav-label">
               <span class="material-symbols-outlined icon-sm">local_shipping</span>
-              <span>3. Giám Sát Đơn Toàn Sàn</span>
+              <span>Giám Sát Đơn Hàng</span>
             </span>
-            <span class="badge badge-counter">1.842 Đơn</span>
+            <span class="admin-nav-badge">1.8k</span>
           </button>
 
           <button class="admin-nav-item" data-tab="disputes" type="button">
-            <span class="flex items-center gap-2">
+            <span class="admin-nav-label">
               <span class="material-symbols-outlined icon-sm">gavel</span>
-              <span>4. Trọng Tài &amp; Khiếu Nại</span>
+              <span>Trọng Tài &amp; Khiếu Nại</span>
             </span>
-            <span class="badge badge-warning text-2xs" id="badgeDisputesCount">3 Vụ Gấp</span>
+            <span class="admin-nav-badge badge-warning" id="badgeDisputesCount">3</span>
           </button>
 
           <button class="admin-nav-item" data-tab="kyc" type="button">
-            <span class="flex items-center gap-2">
+            <span class="admin-nav-label">
               <span class="material-symbols-outlined icon-sm">badge</span>
-              <span>5. Phê Duyệt CCCD (eKYC)</span>
+              <span>Phê Duyệt eKYC</span>
             </span>
-            <span class="badge badge-warning text-2xs" id="badgeSidebarKycPending">2 Chờ Duyệt</span>
+            <span class="admin-nav-badge badge-warning" id="badgeSidebarKycPending">2</span>
           </button>
 
           <button class="admin-nav-item" data-tab="users" type="button">
-            <span class="flex items-center gap-2">
+            <span class="admin-nav-label">
               <span class="material-symbols-outlined icon-sm">group</span>
-              <span>6. Danh Sách Thành Viên</span>
+              <span>Quản Lý Thành Viên</span>
             </span>
-            <span class="badge badge-counter">5 User</span>
+            <span class="admin-nav-badge">5</span>
           </button>
 
           <button class="admin-nav-item" data-tab="labs" type="button">
-            <span class="flex items-center gap-2">
+            <span class="admin-nav-label">
               <span class="material-symbols-outlined icon-sm">biotech</span>
-              <span>7. Trạm Kiểm Định 15 Bước</span>
+              <span>Trạm Kiểm Định 15 Bước</span>
             </span>
-            <span class="badge badge-success text-2xs">3 Lab ISO</span>
           </button>
 
           <button class="admin-nav-item" data-tab="security" type="button">
-            <span class="flex items-center gap-2">
+            <span class="admin-nav-label">
               <span class="material-symbols-outlined icon-sm">receipt_long</span>
-              <span>8. Nhật Ký Hoạt Động &amp; Kiểm Toán</span>
+              <span>Nhật Ký &amp; Kiểm Toán</span>
             </span>
-            <span class="badge badge-primary text-2xs">Audit Logs</span>
           </button>
 
-          <button class="admin-nav-item" data-tab="sitemap" type="button" style="border: 1px dashed rgba(139, 92, 246, 0.4); background: rgba(139, 92, 246, 0.06);">
-            <span class="flex items-center gap-2 text-secondary fw-700">
-              <span class="material-symbols-outlined icon-sm text-secondary">alt_route</span>
-              <span>9. Sơ Đồ 20 Trang Toàn Sàn</span>
+          <button class="admin-nav-item" data-tab="sitemap" type="button">
+            <span class="admin-nav-label">
+              <span class="material-symbols-outlined icon-sm">alt_route</span>
+              <span>Sơ Đồ Hệ Thống</span>
             </span>
-            <span class="badge badge-primary text-2xs">20 Trang</span>
           </button>
         </nav>
 
         <!-- Lối Tắt Nhanh Ra Toàn Bộ Hệ Thống -->
-        <div class="mt-auto pt-3 border-top flex flex-col gap-2">
-          <div class="text-2xs text-muted fw-700 tracking-wider px-2 uppercase">Lối Tắt Ra Sàn</div>
-          <div class="grid grid-2 gap-2 text-xs">
-            <a class="btn btn-secondary btn-xs flex items-center justify-center gap-1" href="../../index.html">
-              <span class="material-symbols-outlined icon-xs">storefront</span> Trang Chủ
+        <div class="admin-sidebar-footer">
+          <div class="admin-section-label">Lối Tắt Ra Sàn</div>
+          <div class="admin-shortcuts-grid">
+            <a class="admin-shortcut-chip" href="../../index.html" title="Trang chủ HYBRID.STORE">
+              <span class="material-symbols-outlined">storefront</span>
+              <span>Trang Chủ</span>
             </a>
-            <a class="btn btn-secondary btn-xs flex items-center justify-center gap-1" href="../seller/dashboard.html">
-              <span class="material-symbols-outlined icon-xs">store</span> Người Bán
+            <a class="admin-shortcut-chip" href="../seller/dashboard.html" title="Trang người bán">
+              <span class="material-symbols-outlined">store</span>
+              <span>Người Bán</span>
             </a>
-            <a class="btn btn-secondary btn-xs flex items-center justify-center gap-1" href="../shop/catalog.html">
-              <span class="material-symbols-outlined icon-xs">shopping_bag</span> Mua Sắm
+            <a class="admin-shortcut-chip" href="../shop/catalog.html" title="Mua sắm">
+              <span class="material-symbols-outlined">shopping_bag</span>
+              <span>Mua Sắm</span>
             </a>
-            <a class="btn btn-secondary btn-xs flex items-center justify-center gap-1" href="../account/profile.html">
-              <span class="material-symbols-outlined icon-xs">person</span> Cá Nhân
+            <a class="admin-shortcut-chip" href="../account/profile.html" title="Hồ sơ cá nhân">
+              <span class="material-symbols-outlined">person</span>
+              <span>Cá Nhân</span>
             </a>
           </div>
-          <button class="btn btn-outlined btn-xs text-danger is-full mt-1" id="btnAdminLogout" type="button">
-            <span class="material-symbols-outlined icon-xs">logout</span> Đăng Xuất Admin
+          <button class="admin-logout-btn" id="btnAdminLogout" type="button">
+            <span class="material-symbols-outlined">logout</span>
+            <span>Đăng Xuất Admin</span>
           </button>
         </div>
       </aside>
@@ -1761,15 +1768,15 @@
         const breadcrumbTitle = document.getElementById("adminBreadcrumbTitle");
 
         const titles = {
-          dashboard: "1. Bảng Điều Khiển Tổng Quan & GMV Toàn Sàn",
-          products: "2. Quản Lý Kho Hàng & Sản Phẩm Toàn Sàn",
-          orders: "3. Giám Sát Đơn Hàng & Vận Chuyển Hỏa Tốc",
-          disputes: "4. Hội Đồng Trọng Tài & Xử Lý Khiếu Nại",
-          kyc: "5. Phê Duyệt Căn Cước Công Dân (eKYC L2)",
-          users: "6. Quản Lý Thành Viên & Phân Quyền",
-          labs: "7. Trạm Kiểm Định Kỹ Thuật 15 Bước",
-          security: "8. Nhật Ký Hoạt Động & Kiểm Toán Quản Trị",
-          sitemap: "9. Sơ Đồ Hệ Thống & Cổng Điều Hướng 20 Trang Toàn Sàn",
+          dashboard: "Bảng Điều Khiển Tổng Quan & GMV Toàn Sàn",
+          products: "Quản Lý Kho Hàng & Sản Phẩm Toàn Sàn",
+          orders: "Giám Sát Đơn Hàng & Vận Chuyển Hỏa Tốc",
+          disputes: "Hội Đồng Trọng Tài & Xử Lý Khiếu Nại",
+          kyc: "Phê Duyệt Căn Cước Công Dân (eKYC L2)",
+          users: "Quản Lý Thành Viên & Phân Quyền",
+          labs: "Trạm Kiểm Định Kỹ Thuật 15 Bước",
+          security: "Nhật Ký Hoạt Động & Kiểm Toán Quản Trị",
+          sitemap: "Sơ Đồ Hệ Thống & Cổng Điều Hướng 20 Trang Toàn Sàn",
         };
 
         navButtons.forEach((btn) => {
@@ -2137,7 +2144,13 @@
         }
 
         const nameEl = document.getElementById("adminDisplayName");
-        if (nameEl) nameEl.textContent = cur.fullName || "Root Administrator";
+        if (nameEl) {
+          const rawName = cur.fullName || "Root Administrator";
+          // Loại bỏ phần ngoặc đơn (Super Admin) thừa để tên hiển thị gọn gàng, không bị tràn ô
+          const cleanName = rawName.replace(/\s*\([^)]*\)/g, "").trim() || rawName;
+          nameEl.textContent = cleanName;
+          nameEl.title = rawName;
+        }
 
         // Gắn sự kiện chuyển tab
         document.querySelectorAll("#adminNavMenu .admin-nav-item").forEach((btn) => {
@@ -2298,8 +2311,15 @@
             countBadge.className = pending.length > 0 ? "badge badge-warning" : "badge badge-success";
           }
           if (sidebarKycBadge) {
-            sidebarKycBadge.textContent = `${pending.length} Chờ Duyệt`;
-            sidebarKycBadge.className = pending.length > 0 ? "badge badge-warning text-2xs" : "badge badge-success text-2xs";
+            if (pending.length > 0) {
+              sidebarKycBadge.textContent = pending.length;
+              sidebarKycBadge.className = "admin-nav-badge badge-warning";
+              sidebarKycBadge.style.display = "inline-flex";
+            } else {
+              sidebarKycBadge.textContent = "0";
+              sidebarKycBadge.className = "admin-nav-badge";
+              sidebarKycBadge.style.display = "none";
+            }
           }
 
           const tbody = document.getElementById("kycRequestsBody");
