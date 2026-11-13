@@ -346,6 +346,7 @@
   display: inline-flex;
   white-space: nowrap;
   animation: marquee 32s linear infinite;
+  will-change: transform;
 }
 .ticker-inner:hover {
   animation-play-state: paused;
@@ -369,8 +370,11 @@
   background: var(--tone);
 }
 @keyframes marquee {
-  to {
-    transform: translateX(-50%);
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
