@@ -516,6 +516,55 @@ function runAdditionalTests() {
     assert.strictEqual(Utils.Theme.get(), "dark");
   });
 
+  /* ---------------- 15. KIỂM THỬ WISHLIST & VIETNAM LOCATIONS ---------------- */
+  console.log("\n--- 15. Kiểm thử Wishlist (Danh sách yêu thích) & VietnamLocations ---");
+  it("Thêm, kiểm tra, xóa và đếm sản phẩm trong Wishlist", () => {
+    let store = {};
+    global.localStorage = {
+      getItem: (k) => store[k] || null,
+      setItem: (k, v) => { store[k] = String(v); },
+      removeItem: (k) => { delete store[k]; },
+      clear: () => { store = {}; },
+    };
+
+    assert.ok(Utils.Wishlist, "Có module Utils.Wishlist");
+    assert.strictEqual(Utils.Wishlist.count(), 0);
+    assert.strictEqual(Utils.Wishlist.has("p-mall-01"), false);
+
+    // Toggle thêm
+    const added = Utils.Wishlist.toggle("p-mall-01");
+    assert.strictEqual(added, true);
+    assert.strictEqual(Utils.Wishlist.has("p-mall-01"), true);
+    assert.strictEqual(Utils.Wishlist.count(), 1);
+
+    // Thêm món thứ 2
+    Utils.Wishlist.toggle("p-c2c-02");
+    assert.strictEqual(Utils.Wishlist.count(), 2);
+    assert.strictEqual(Utils.Wishlist.has("p-c2c-02"), true);
+
+    // Toggle bỏ món thứ 1
+    const removed = Utils.Wishlist.toggle("p-mall-01");
+    assert.strictEqual(removed, false);
+    assert.strictEqual(Utils.Wishlist.has("p-mall-01"), false);
+    assert.strictEqual(Utils.Wishlist.count(), 1);
+  });
+
+  it("Truy vấn Tỉnh/Thành, Quận/Huyện, Phường/Xã từ VietnamLocations", () => {
+    assert.ok(Utils.VietnamLocations, "Có module Utils.VietnamLocations");
+    const provinces = Utils.VietnamLocations.getProvinces();
+    assert(Array.isArray(provinces) && provinces.length >= 7, "Có danh sách các tỉnh thành lớn");
+    assert(provinces.includes("Hà Nội"), "Bao gồm Hà Nội");
+    assert(provinces.includes("TP. Hồ Chí Minh"), "Bao gồm TP. Hồ Chí Minh");
+
+    const hnDistricts = Utils.VietnamLocations.getDistricts("Hà Nội");
+    assert(Array.isArray(hnDistricts) && hnDistricts.length > 0, "Lấy được danh sách quận huyện Hà Nội");
+    assert(hnDistricts.includes("Quận Nam Từ Liêm"), "Bao gồm Quận Nam Từ Liêm");
+
+    const wards = Utils.VietnamLocations.getWards("Hà Nội", "Quận Nam Từ Liêm");
+    assert(Array.isArray(wards) && wards.length > 0, "Lấy được danh sách phường xã");
+    assert(wards.includes("Phường Đại Mỗ"), "Bao gồm Phường Đại Mỗ");
+  });
+
   finish();
 }
 

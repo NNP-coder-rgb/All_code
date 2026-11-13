@@ -114,7 +114,9 @@
             <div style="position: absolute; top: 16px; left: 16px; z-index: 2;">
               <span class="badge badge-solid"><span class="material-symbols-outlined icon-xs">verified</span> BRAND MALL MỚI 100%</span>
             </div>
-            <img id="mainNewImg" src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=700" alt="Ảnh sản phẩm mới" style="width: 100%; border-radius: var(--radius-lg); aspect-ratio: 1/1; object-fit: cover;" />
+            <div class="img-zoom-container" id="zoomContainer" title="Bấm để xem ảnh phóng to toàn màn hình">
+              <img id="mainNewImg" src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=700" alt="Ảnh sản phẩm mới" style="width: 100%; border-radius: var(--radius-lg); aspect-ratio: 1/1; object-fit: cover;" />
+            </div>
           </div>
 
           <div class="flex gap-3 mt-3">
@@ -203,6 +205,28 @@
 
     <!-- ===== FOOTER ===== -->
     <footer class="site-footer" data-component="footer"></footer>
+
+    <!-- Mobile Sticky Buy Bar -->
+    <div class="mobile-sticky-buy-bar hide-md" id="mobileStickyBuyBar">
+      <div class="sticky-price-info">
+        <span class="text-xs text-muted">Giá Brand Mall:</span>
+        <strong class="mono text-primary fs-base" id="stickyPrice">4.690.000₫</strong>
+      </div>
+      <div class="sticky-actions">
+        <button class="btn btn-outlined btn-sm" id="stickyBtnAddCart" type="button" title="Thêm vào giỏ">
+          <span class="material-symbols-outlined icon-sm">add_shopping_cart</span>
+        </button>
+        <button class="btn btn-primary btn-sm" id="stickyBtnBuyNow" type="button">
+          <span class="material-symbols-outlined icon-sm">bolt</span> Mua Ngay
+        </button>
+      </div>
+    </div>
+
+    <!-- Lightbox phóng to ảnh fullscreen -->
+    <div class="lightbox-modal" id="productLightbox" role="dialog" aria-modal="true">
+      <button class="lightbox-close-btn" id="lightboxCloseBtn" type="button" aria-label="Đóng"><span class="material-symbols-outlined">close</span></button>
+      <img id="lightboxImg" src="" alt="Ảnh sản phẩm phóng to" />
+    </div>
 
     <div class="toast-stack" id="toastStack"></div>
 
@@ -382,6 +406,48 @@
           Utils.Cart.addItem(product, qty);
           window.location.href = "cart.html";
         });
+
+        // 11. Lightbox phóng to ảnh fullscreen
+        const lightbox = document.getElementById("productLightbox");
+        const lightboxImg = document.getElementById("lightboxImg");
+        const lightboxCloseBtn = document.getElementById("lightboxCloseBtn");
+        const mainImgEl = document.getElementById("mainNewImg");
+
+        if (mainImgEl && lightbox && lightboxImg) {
+          mainImgEl.addEventListener("click", () => {
+            lightboxImg.src = mainImgEl.src;
+            lightbox.classList.add("active");
+          });
+          lightboxCloseBtn.addEventListener("click", () => {
+            lightbox.classList.remove("active");
+          });
+          lightbox.addEventListener("click", (e) => {
+            if (e.target === lightbox) lightbox.classList.remove("active");
+          });
+          document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && lightbox.classList.contains("active")) {
+              lightbox.classList.remove("active");
+            }
+          });
+        }
+
+        // 12. Mobile Sticky Buy Bar
+        const stickyPrice = document.getElementById("stickyPrice");
+        if (stickyPrice) stickyPrice.textContent = Utils.formatCurrency(product.price);
+
+        const stickyAddCart = document.getElementById("stickyBtnAddCart");
+        if (stickyAddCart) {
+          stickyAddCart.addEventListener("click", () => {
+            document.getElementById("btnMallAddCart").click();
+          });
+        }
+
+        const stickyBuyNow = document.getElementById("stickyBtnBuyNow");
+        if (stickyBuyNow) {
+          stickyBuyNow.addEventListener("click", () => {
+            document.getElementById("btnMallBuyNow").click();
+          });
+        }
       })();
     </script>
   </body>

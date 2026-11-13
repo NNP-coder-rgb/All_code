@@ -183,6 +183,73 @@ it("Components cung cấp các hàm shortcut renderHeader, renderFooter, renderB
   assert(typeof Components.initAuto === "function");
 });
 
+/* ---------------- 7. KIỂM THỬ CÁC COMPONENT NÂNG CAO (ADVANCED CRO) ---------------- */
+console.log("\n--- 7. KIỂM THỬ CÁC UI COMPONENT NÂNG CAO (DRAWER CART, SEARCH, MOBILE NAV, NOTIFS, LIVE CHAT) ---");
+
+it("DrawerCart: Sinh mã HTML giỏ hàng trượt với backdrop, thanh freeship, tổng tiền và nút checkout", () => {
+  assert.ok(Components.DrawerCart, "Phải có Components.DrawerCart");
+  const html = Components.DrawerCart.createHTML({ basePath: "" });
+  assert(html.includes('id="drawerCart"'), "Phải có aside id='drawerCart'");
+  assert(html.includes('id="drawerCartBackdrop"'), "Phải có backdrop id='drawerCartBackdrop'");
+  assert(html.includes('id="drawerCartBody"'), "Phải có body giỏ hàng id='drawerCartBody'");
+  assert(html.includes("Thanh Toán Nhanh"), "Phải có nút Thanh Toán Nhanh");
+  assert(html.includes("Freeship"), "Phải có thông điệp freeship");
+});
+
+it("AutocompleteSearch: Tạo dropdown với tìm kiếm gần đây, xu hướng và kết quả gợi ý trực tiếp", () => {
+  assert.ok(Components.AutocompleteSearch, "Phải có Components.AutocompleteSearch");
+
+  // Khi chưa gõ: Hiển thị từ khóa xu hướng
+  const emptyHtml = Components.AutocompleteSearch.createDropdownHTML("");
+  assert(emptyHtml.includes("Từ Khóa Xu Hướng"), "Hiển thị tiêu đề Từ Khóa Xu Hướng");
+  assert(emptyHtml.includes("iPhone 15 Pro Max"), "Hiển thị từ khóa xu hướng hot");
+
+  // Khi gõ từ khóa khớp
+  global.window = { PRODUCTS };
+  const queryHtml = Components.AutocompleteSearch.createDropdownHTML("iPhone");
+  assert(queryHtml.includes("search-prod-item"), "Phải có các mục sản phẩm khớp");
+  assert(queryHtml.includes("Xem tất cả kết quả"), "Phải có link xem tất cả kết quả trong catalog");
+});
+
+it("MobileBottomNav: Sinh thanh điều hướng di động 5 mục thiết yếu kèm badge giỏ hàng", () => {
+  assert.ok(Components.MobileBottomNav, "Phải có Components.MobileBottomNav");
+  const html = Components.MobileBottomNav.createHTML({ basePath: "" });
+  assert(html.includes('id="mobileBottomNav"'), "Phải có nav id='mobileBottomNav'");
+  assert(html.includes("Trang Chủ"), "Có nút Trang Chủ");
+  assert(html.includes("Cửa Hàng"), "Có nút Cửa Hàng");
+  assert(html.includes("Đăng Bán"), "Có nút Đăng Bán nổi bật");
+  assert(html.includes("Giỏ Hàng"), "Có nút Giỏ Hàng");
+  assert(html.includes("Tài Khoản"), "Có nút Tài Khoản");
+  assert(html.includes('id="bottomNavCartCount"'), "Có badge số lượng giỏ hàng");
+});
+
+it("NotificationCenter: Sinh dropdown trung tâm thông báo đa tab (Đơn hàng, Khuyến mãi, Hệ thống)", () => {
+  assert.ok(Components.NotificationCenter, "Phải có Components.NotificationCenter");
+  const html = Components.NotificationCenter.createHTML({ basePath: "" });
+  assert(html.includes('id="notifDropdown"'), "Phải có dropdown id='notifDropdown'");
+  assert(html.includes("Trung Tâm Thông Báo"), "Tiêu đề Trung Tâm Thông Báo");
+  assert(html.includes("notif-tab"), "Có các tab phân loại thông báo");
+  assert(html.includes("Đã đọc tất cả"), "Có nút Đã đọc tất cả");
+});
+
+it("LiveChat: Sinh widget hỗ trợ trực tuyến 24/7 và phản hồi thông minh quy trình 15 bước", () => {
+  assert.ok(Components.LiveChat, "Phải có Components.LiveChat");
+  const html = Components.LiveChat.createHTML();
+  assert(html.includes('id="liveChatWidget"'), "Phải có widget id='liveChatWidget'");
+  assert(html.includes('id="liveChatFloatingBtn"'), "Phải có nút nổi liveChatFloatingBtn");
+  assert(html.includes('id="liveChatWindow"'), "Phải có cửa sổ chat liveChatWindow");
+  assert(html.includes("HYBRID Assistant"), "Có trợ lý AI HYBRID Assistant");
+
+  // Kiểm thử câu trả lời tự động cho quy trình 15 bước
+  const reply15 = Components.LiveChat.getBotReply("15 bước kiểm định phần cứng");
+  assert(reply15.includes("15 bước"), "Trả lời chi tiết về 15 bước kiểm định");
+  assert(reply15.includes("IMEI"), "Bao gồm kiểm tra IMEI");
+
+  // Kiểm thử câu trả lời tự động cho bảo hành
+  const replyWarr = Components.LiveChat.getBotReply("Chính sách bảo hành");
+  assert(replyWarr.includes("Bảo hành"), "Trả lời chính sách bảo hành");
+});
+
 console.log("\n========================================================");
 console.log(`KẾT QUẢ KIỂM THỬ: ${passed} / ${passed + failed} PASS`);
 console.log("========================================================\n");

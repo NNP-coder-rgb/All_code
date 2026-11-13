@@ -880,10 +880,27 @@
                 <input class="input" id="addrPhone" type="tel" required placeholder="0396 403 893" />
               </div>
             </div>
-            <div class="form-group mb-3">
-              <label class="form-label" for="addrCity">Tỉnh / Thành phố &amp; Quận / Huyện (*)</label>
-              <input class="input" id="addrCity" type="text" required placeholder="TP. Hồ Chí Minh — Quận Bình Thạnh" />
+            <div class="grid grid-3 gap-3 mb-3">
+              <div class="form-group">
+                <label class="form-label text-xs fw-600" for="addrProvince">Tỉnh / Thành phố (*)</label>
+                <select class="input" id="addrProvince" required>
+                  <option value="">-- Chọn Tỉnh / TP --</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label text-xs fw-600" for="addrDistrict">Quận / Huyện (*)</label>
+                <select class="input" id="addrDistrict" required disabled>
+                  <option value="">-- Chọn Quận / Huyện --</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label text-xs fw-600" for="addrWard">Phường / Xã (*)</label>
+                <select class="input" id="addrWard" required disabled>
+                  <option value="">-- Chọn Phường / Xã --</option>
+                </select>
+              </div>
             </div>
+            <input type="hidden" id="addrCity" value="" />
             <div class="form-group mb-3">
               <label class="form-label" for="addrDetail">Địa chỉ chi tiết (Số nhà, tên đường, tòa nhà...) (*)</label>
               <input class="input" id="addrDetail" type="text" required placeholder="Căn hộ Landmark 81, Vinhomes Central Park, Phường 22" />
@@ -1778,6 +1795,22 @@
             .join("");
         }
 
+        // Khởi tạo bộ chọn địa giới hành chính 3 cấp chuẩn Việt Nam (Tỉnh/TP -> Quận/Huyện -> Phường/Xã)
+        if (Utils && Utils.VietnamLocations && typeof Utils.VietnamLocations.setupSelects === "function") {
+          Utils.VietnamLocations.setupSelects({
+            provinceSelect: document.getElementById("addrProvince"),
+            districtSelect: document.getElementById("addrDistrict"),
+            wardSelect: document.getElementById("addrWard"),
+            onAddressChange: () => {
+              const prov = document.getElementById("addrProvince").value;
+              const dist = document.getElementById("addrDistrict").value;
+              const ward = document.getElementById("addrWard").value;
+              const parts = [ward, dist, prov].filter(Boolean);
+              document.getElementById("addrCity").value = parts.join(", ");
+            }
+          });
+        }
+
         function openAddAddressModal() {
           const u = Auth.current() || {};
           document.getElementById("addressModalTitle").innerHTML = `
@@ -1787,7 +1820,11 @@
           document.getElementById("addrEditId").value = "";
           document.getElementById("addrReceiverName").value = u.fullName || "";
           document.getElementById("addrPhone").value = u.phone || "";
-          document.getElementById("addrCity").value = "TP. Hồ Chí Minh — ";
+          const provSelect = document.getElementById("addrProvince");
+          if (provSelect) {
+            provSelect.value = "Hà Nội";
+            provSelect.dispatchEvent(new Event("change"));
+          }
           document.getElementById("addrDetail").value = "";
           document.getElementById("addrType").value = u.role === "seller" ? "office" : "home";
           document.getElementById("addrNote").value = "";
@@ -1807,11 +1844,37 @@
           document.getElementById("addrEditId").value = item.id;
           document.getElementById("addrReceiverName").value = item.name;
           document.getElementById("addrPhone").value = item.phone;
-          document.getElementById("addrCity").value = item.city;
           document.getElementById("addrDetail").value = item.detail;
           document.getElementById("addrType").value = item.type || "home";
           document.getElementById("addrNote").value = item.note || "";
           document.getElementById("addrIsDefault").checked = !!item.isDefault;
+
+          if (item.city && Utils && Utils.VietnamLocations) {
+            const provinces = Utils.VietnamLocations.getProvinces();
+            const matchedProv = provinces.find((p) => item.city.includes(p));
+            if (matchedProv) {
+              const provSelect = document.getElementById("addrProvince");
+              provSelect.value = matchedProv;
+              provSelect.dispatchEvent(new Event("change"));
+
+              const dists = Utils.VietnamLocations.getDistricts(matchedProv);
+              const matchedDist = dists.find((d) => item.city.includes(d));
+              if (matchedDist) {
+                const distSelect = document.getElementById("addrDistrict");
+                distSelect.value = matchedDist;
+                distSelect.dispatchEvent(new Event("change"));
+
+                const wards = Utils.VietnamLocations.getWards(matchedProv, matchedDist);
+                const matchedWard = wards.find((w) => item.city.includes(w));
+                if (matchedWard) {
+                  const wardSelect = document.getElementById("addrWard");
+                  wardSelect.value = matchedWard;
+                  wardSelect.dispatchEvent(new Event("change"));
+                }
+              }
+            }
+          }
+          document.getElementById("addrCity").value = item.city;
           Utils.openModal("addressModal");
         }
 
@@ -1857,7 +1920,11 @@
           const editId = document.getElementById("addrEditId").value;
           const name = document.getElementById("addrReceiverName").value.trim();
           const phone = document.getElementById("addrPhone").value.trim();
-          const city = document.getElementById("addrCity").value.trim();
+          const prov = document.getElementById("addrProvince").value;
+          const dist = document.getElementById("addrDistrict").value;
+          const ward = document.getElementById("addrWard").value;
+          let city = [ward, dist, prov].filter(Boolean).join(", ");
+          if (!city) city = document.getElementById("addrCity").value.trim();
           const detail = document.getElementById("addrDetail").value.trim();
           const type = document.getElementById("addrType").value;
           const note = document.getElementById("addrNote").value.trim();

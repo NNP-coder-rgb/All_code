@@ -826,6 +826,13 @@
         });
       }
       Cart.saveItems(items);
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(
+          new CustomEvent("cart:item-added", {
+            detail: { product, qty: numQty, variant },
+          }),
+        );
+      }
       if (typeof toast === "function") {
         toast({
           title: "Đã thêm vào giỏ hàng",
@@ -1390,7 +1397,202 @@
   };
 
   /* =========================================================================
-     11. XUẤT RA TOÀN CỤC VÀ MODULE (CHO NODE.JS / TRÌNH DUYỆT)
+     11. DANH SÁCH YÊU THÍCH (Wishlist)
+     ========================================================================= */
+  const WISHLIST_STORAGE_KEY = "hv_wishlist_items";
+
+  const Wishlist = {
+    getItems() {
+      if (typeof localStorage === "undefined") return [];
+      try {
+        return JSON.parse(localStorage.getItem(WISHLIST_STORAGE_KEY)) || [];
+      } catch (e) {
+        return [];
+      }
+    },
+    has(productId) {
+      if (!productId) return false;
+      const items = Wishlist.getItems();
+      return items.some((id) => String(id) === String(productId));
+    },
+    toggle(productId) {
+      if (!productId) return false;
+      const items = Wishlist.getItems();
+      const strId = String(productId);
+      const idx = items.findIndex((id) => String(id) === strId);
+      let isAdded = false;
+      if (idx >= 0) {
+        items.splice(idx, 1);
+        isAdded = false;
+      } else {
+        items.push(strId);
+        isAdded = true;
+      }
+      if (typeof localStorage !== "undefined") {
+        try {
+          localStorage.setItem(WISHLIST_STORAGE_KEY, JSON.stringify(items));
+        } catch (e) {}
+      }
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(
+          new CustomEvent("wishlist:updated", {
+            detail: { items, isAdded, productId: strId },
+          }),
+        );
+      }
+      return isAdded;
+    },
+    count() {
+      return Wishlist.getItems().length;
+    },
+  };
+
+  /* =========================================================================
+     12. DỮ LIỆU ĐỊA GIỚI HÀNH CHÍNH VIỆT NAM (Vietnam Administrative Locations)
+     ========================================================================= */
+  const VIETNAM_LOCATIONS = [
+    {
+      name: "Hà Nội",
+      districts: [
+        { name: "Quận Nam Từ Liêm", wards: ["Phường Mễ Trì", "Phường Mỹ Đình 1", "Phường Mỹ Đình 2", "Phường Đại Mỗ", "Phường Trung Văn", "Phường Tây Mỗ"] },
+        { name: "Quận Cầu Giấy", wards: ["Phường Dịch Vọng Hậu", "Phường Nghĩa Tân", "Phường Yên Hòa", "Phường Quan Hoa", "Phường Mai Dịch", "Phường Dịch Vọng"] },
+        { name: "Quận Hoàn Kiếm", wards: ["Phường Tràng Tiền", "Phường Hàng Trống", "Phường Hàng Bạc", "Phường Lý Thái Tổ", "Phường Cửa Đông", "Phường Hàng Gai"] },
+        { name: "Quận Ba Đình", wards: ["Phường Điện Bàn", "Phường Đội Cấn", "Phường Giảng Võ", "Phường Kim Mã", "Phường Liễu Giai", "Phường Quán Thánh"] },
+        { name: "Quận Đống Đa", wards: ["Phường Láng Hạ", "Phường Ô Chợ Dừa", "Phường Kim Liên", "Phường Trung Tự", "Phường Cát Linh", "Phường Khâm Thiên"] },
+        { name: "Quận Thanh Xuân", wards: ["Phường Nhân Chính", "Phường Khương Mai", "Phường Thanh Xuân Bắc", "Phường Hạ Đình", "Phường Khương Trung"] },
+        { name: "Quận Hai Bà Trưng", wards: ["Phường Bạch Đằng", "Phường Bách Khoa", "Phường Đồng Tâm", "Phường Lê Đại Hành", "Phường Minh Khai"] },
+        { name: "Huyện Đông Anh", wards: ["Thị trấn Đông Anh", "Xã Kim Chung", "Xã Hải Bối", "Xã Vĩnh Ngọc"] },
+        { name: "Quận Long Biên", wards: ["Phường Bồ Đề", "Phường Gia Thụy", "Phường Ngọc Lâm", "Phường Thượng Thanh"] },
+      ],
+    },
+    {
+      name: "TP. Hồ Chí Minh",
+      districts: [
+        { name: "Quận 1", wards: ["Phường Bến Nghé", "Phường Bến Thành", "Phường Đa Kao", "Phường Tân Định", "Phường Phạm Ngũ Lão", "Phường Cô Giang"] },
+        { name: "Quận 3", wards: ["Phường Võ Thị Sáu", "Phường 1", "Phường 2", "Phường 3", "Phường 4", "Phường 5", "Phường 9", "Phường 11"] },
+        { name: "Quận Bình Thạnh", wards: ["Phường 22", "Phường 25", "Phường 19", "Phường 17", "Phường 26", "Phường 27", "Phường 15"] },
+        { name: "TP. Thủ Đức", wards: ["Phường Thảo Điền", "Phường An Phú", "Phường Linh Trung", "Phường Hiệp Phú", "Phường Tam Bình", "Phường Bình Thọ"] },
+        { name: "Quận 7", wards: ["Phường Tân Phong", "Phường Phú Mỹ", "Phường Tân Quy", "Phường Tân Hưng", "Phường Tân Thuận Đông"] },
+        { name: "Quận 10", wards: ["Phường 12", "Phường 14", "Phường 15", "Phường 10", "Phường 1", "Phường 6"] },
+        { name: "Quận Tân Bình", wards: ["Phường 2", "Phường 4", "Phường 13", "Phường 15", "Phường 8", "Phường 12"] },
+        { name: "Quận Phú Nhuận", wards: ["Phường 1", "Phường 2", "Phường 7", "Phường 9", "Phường 15"] },
+      ],
+    },
+    {
+      name: "Đà Nẵng",
+      districts: [
+        { name: "Quận Hải Châu", wards: ["Phường Thạch Thang", "Phường Hải Châu 1", "Phường Hải Châu 2", "Phường Bình Hiên", "Phường Hòa Cường Bắc", "Phường Hòa Thuận Đông"] },
+        { name: "Quận Ngũ Hành Sơn", wards: ["Phường Hòa Hải", "Phường Hòa Quý", "Phường Khuê Mỹ", "Phường Mỹ An"] },
+        { name: "Quận Sơn Trà", wards: ["Phường An Hải Bắc", "Phường An Hải Đông", "Phường Phước Mỹ", "Phường Nại Hiên Đông", "Phường Thọ Quang"] },
+        { name: "Quận Thanh Khê", wards: ["Phường Vĩnh Trung", "Phường Tam Thuận", "Phường Tân Chính", "Phường Chính Gián", "Phường An Khê"] },
+        { name: "Quận Liên Chiểu", wards: ["Phường Hòa Khánh Bắc", "Phường Hòa Khánh Nam", "Phường Hòa Minh"] },
+      ],
+    },
+    {
+      name: "Hải Phòng",
+      districts: [
+        { name: "Quận Hồng Bàng", wards: ["Phường Hoàng Văn Thụ", "Phường Minh Khai", "Phường Phan Bội Châu", "Phường Quán Toan"] },
+        { name: "Quận Ngô Quyền", wards: ["Phường Lạc Viên", "Phường Cầu Đất", "Phường Máy Chai", "Phường Đằng Giang"] },
+        { name: "Quận Lê Chân", wards: ["Phường An Biên", "Phường Cát Dài", "Phường Hàng Kênh", "Phường Niệm Nghĩa"] },
+      ],
+    },
+    {
+      name: "Cần Thơ",
+      districts: [
+        { name: "Quận Ninh Kiều", wards: ["Phường Tân An", "Phường An Cư", "Phường An Khánh", "Phường Xuân Khánh", "Phường Hưng Lợi"] },
+        { name: "Quận Cái Răng", wards: ["Phường Lê Bình", "Phường Hưng Phú", "Phường Ba Láng", "Phường Phú Thứ"] },
+        { name: "Quận Bình Thủy", wards: ["Phường Bình Thủy", "Phường Trà Nóc", "Phường An Thới", "Phường Bùi Hữu Nghĩa"] },
+      ],
+    },
+    {
+      name: "Bình Dương",
+      districts: [
+        { name: "TP. Thủ Dầu Một", wards: ["Phường Phú Hòa", "Phường Hiệp Thành", "Phường Định Hòa", "Phường Phú Cường"] },
+        { name: "TP. Dĩ An", wards: ["Phường Dĩ An", "Phường Tân Bình", "Phường An Bình", "Phường Đông Hòa"] },
+        { name: "TP. Thuận An", wards: ["Phường Lái Thiêu", "Phường An Phú", "Phường Bình Hòa", "Phường Vĩnh Phú"] },
+      ],
+    },
+    {
+      name: "Đồng Nai",
+      districts: [
+        { name: "TP. Biên Hòa", wards: ["Phường Quyết Thắng", "Phường Thống Nhất", "Phường Tân Phong", "Phường Trảng Dài", "Phường Hố Nai"] },
+        { name: "Huyện Long Thành", wards: ["Thị trấn Long Thành", "Xã Lộc An", "Xã Bình Sơn", "Xã An Phước"] },
+      ],
+    },
+  ];
+
+  const VietnamLocations = {
+    data: VIETNAM_LOCATIONS,
+    getProvinces() {
+      return VIETNAM_LOCATIONS.map((p) => p.name);
+    },
+    getDistricts(provinceName) {
+      const p = VIETNAM_LOCATIONS.find((item) => item.name === provinceName);
+      return p ? p.districts.map((d) => d.name) : [];
+    },
+    getWards(provinceName, districtName) {
+      const p = VIETNAM_LOCATIONS.find((item) => item.name === provinceName);
+      if (!p) return [];
+      const d = p.districts.find((item) => item.name === districtName);
+      return d ? d.wards : [];
+    },
+    setupSelects({ provinceSelect, districtSelect, wardSelect, onAddressChange }) {
+      if (!provinceSelect || !districtSelect || !wardSelect) return;
+
+      provinceSelect.innerHTML =
+        '<option value="">-- Chọn Tỉnh / Thành Phố --</option>' +
+        VietnamLocations.getProvinces()
+          .map((p) => `<option value="${p}">${p}</option>`)
+          .join("");
+
+      districtSelect.innerHTML = '<option value="">-- Chọn Quận / Huyện --</option>';
+      wardSelect.innerHTML = '<option value="">-- Chọn Phường / Xã --</option>';
+      districtSelect.disabled = true;
+      wardSelect.disabled = true;
+
+      provinceSelect.addEventListener("change", () => {
+        const prov = provinceSelect.value;
+        if (!prov) {
+          districtSelect.innerHTML = '<option value="">-- Chọn Quận / Huyện --</option>';
+          districtSelect.disabled = true;
+          wardSelect.innerHTML = '<option value="">-- Chọn Phường / Xã --</option>';
+          wardSelect.disabled = true;
+        } else {
+          const dists = VietnamLocations.getDistricts(prov);
+          districtSelect.innerHTML =
+            '<option value="">-- Chọn Quận / Huyện --</option>' +
+            dists.map((d) => `<option value="${d}">${d}</option>`).join("");
+          districtSelect.disabled = false;
+          wardSelect.innerHTML = '<option value="">-- Chọn Phường / Xã --</option>';
+          wardSelect.disabled = true;
+        }
+        if (typeof onAddressChange === "function") onAddressChange();
+      });
+
+      districtSelect.addEventListener("change", () => {
+        const prov = provinceSelect.value;
+        const dist = districtSelect.value;
+        if (!dist) {
+          wardSelect.innerHTML = '<option value="">-- Chọn Phường / Xã --</option>';
+          wardSelect.disabled = true;
+        } else {
+          const wards = VietnamLocations.getWards(prov, dist);
+          wardSelect.innerHTML =
+            '<option value="">-- Chọn Phường / Xã --</option>' +
+            wards.map((w) => `<option value="${w}">${w}</option>`).join("");
+          wardSelect.disabled = false;
+        }
+        if (typeof onAddressChange === "function") onAddressChange();
+      });
+
+      wardSelect.addEventListener("change", () => {
+        if (typeof onAddressChange === "function") onAddressChange();
+      });
+    },
+  };
+
+  /* =========================================================================
+     13. XUẤT RA TOÀN CỤC VÀ MODULE (CHO NODE.JS / TRÌNH DUYỆT)
      ========================================================================= */
 
   function escapeHtml(str) {
@@ -1423,6 +1625,8 @@
     Offer,
     Theme,
     getUsedDiscountPercent,
+    Wishlist,
+    VietnamLocations,
   };
 
   const $ = (sel, root) => (root || document).querySelector(sel);
@@ -1458,6 +1662,8 @@
     window.Offer = Offer;
     window.Theme = Theme;
     window.getUsedDiscountPercent = getUsedDiscountPercent;
+    window.Wishlist = Wishlist;
+    window.VietnamLocations = VietnamLocations;
 
     // Tự động khởi tạo Theme & Giỏ hàng khi trang tải xong (nếu chạy trong trình duyệt)
     if (typeof document !== "undefined") {
