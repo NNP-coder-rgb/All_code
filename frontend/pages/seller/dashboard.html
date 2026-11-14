@@ -63,13 +63,21 @@
       <!-- SIDEBAR NGƯỜI BÁN -->
       <aside class="dash-sidebar">
         <!-- Thẻ thông tin Shop người bán (Động theo Auth.current) -->
-        <div class="seller-profile-card mb-2" id="sellerProfileCard">
-          <div class="seller-avatar-badge" id="sellerAvatarInitials">VD</div>
+        <div class="seller-profile-card-deluxe mb-3" id="sellerProfileCard">
+          <div class="seller-profile-badge-ring">
+            <div class="seller-avatar-badge" id="sellerAvatarInitials" style="background: linear-gradient(135deg, #8b5cf6, #06b6d4); color: #fff; font-weight: 800; border: 2px solid rgba(255,255,255,0.2);">VD</div>
+          </div>
           <div style="min-width: 0; flex: 1;">
-            <strong class="text-sm block truncate" id="sellerStoreName">Việt Dũng Store</strong>
-            <small class="text-xs text-success block truncate" id="sellerKycBadge">
-              ● Đã eKYC CCCD Chip L2
+            <div class="flex items-center justify-between">
+              <strong class="text-sm text-white block truncate" id="sellerStoreName">Việt Dũng Store</strong>
+              <span class="badge badge-primary" style="font-size: 9px; padding: 2px 6px;">PRO</span>
+            </div>
+            <small class="text-xs text-success flex items-center gap-1 mt-0.5 truncate" id="sellerKycBadge">
+              <span class="material-symbols-outlined icon-xs">verified</span> eKYC CCCD Chip L2
             </small>
+            <div class="seller-level-progress-bar" title="Tiến trình thăng hạng Đối Tác Kim Cương (85%)">
+              <div class="seller-level-progress-fill"></div>
+            </div>
           </div>
         </div>
 
@@ -158,31 +166,48 @@
             </div>
           </div>
 
-          <!-- 4 Thẻ Stat Cards -->
+          <!-- 4 Thẻ Stat Cards Deluxe -->
           <div class="grid grid-4 gap-4 mb-6">
-            <div class="stat-card" style="cursor: pointer;" onclick="document.querySelector('[data-tab=wallet]').click()">
+            <div class="stat-card-deluxe" style="--card-accent: linear-gradient(90deg, #10b981, #06b6d4); --card-color: #34d399;" onclick="document.querySelector('[data-tab=wallet]').click()">
+              <div class="stat-icon-wrap">
+                <span class="material-symbols-outlined">account_balance_wallet</span>
+              </div>
               <div class="stat-label">Số Dư Ví Khả Dụng</div>
               <div class="stat-val mono text-gradient" id="overviewBalance">48.250.000₫</div>
-              <div class="stat-sub text-success">
+              <div class="stat-sub text-success flex items-center gap-1 mt-2">
                 <span class="material-symbols-outlined icon-xs">verified</span> Rút tiền tức thì 24/7 Napas
               </div>
             </div>
-            <div class="stat-card">
+
+            <div class="stat-card-deluxe" style="--card-accent: linear-gradient(90deg, #06b6d4, #8b5cf6); --card-color: #22d3ee;">
+              <div class="stat-icon-wrap">
+                <span class="material-symbols-outlined">payments</span>
+              </div>
               <div class="stat-label">Doanh Thu Đã Thu Về</div>
               <div class="stat-val mono text-secondary" id="overviewRevenue">126.800.000₫</div>
-              <div class="stat-sub text-muted">Tăng +28% so với tháng trước</div>
+              <div class="stat-sub text-muted flex items-center gap-1 mt-2">
+                <span class="material-symbols-outlined icon-xs">trending_up</span> Tăng +28% so với tháng trước
+              </div>
             </div>
-            <div class="stat-card" style="cursor: pointer;" onclick="document.querySelector('[data-tab=orders]').click()">
+
+            <div class="stat-card-deluxe" style="--card-accent: linear-gradient(90deg, #f59e0b, #ef4444); --card-color: #fbbf24;" onclick="document.querySelector('[data-tab=orders]').click()">
+              <div class="stat-icon-wrap">
+                <span class="material-symbols-outlined">local_shipping</span>
+              </div>
               <div class="stat-label">Đơn Hàng Cần Giao</div>
-              <div class="stat-val mono text-primary" id="overviewPendingOrders">2 Đơn</div>
-              <div class="stat-sub text-warning">
+              <div class="stat-val mono text-warning" id="overviewPendingOrders">2 Đơn</div>
+              <div class="stat-sub text-warning flex items-center gap-1 mt-2">
                 <span class="material-symbols-outlined icon-xs">alarm</span> Bưu tá hẹn lấy trong 1-2h
               </div>
             </div>
-            <div class="stat-card">
+
+            <div class="stat-card-deluxe" style="--card-accent: linear-gradient(90deg, #8b5cf6, #ec4899); --card-color: #c084fc;">
+              <div class="stat-icon-wrap">
+                <span class="material-symbols-outlined">workspace_premium</span>
+              </div>
               <div class="stat-label">Điểm Tín Nhiệm Shop</div>
               <div class="stat-val mono text-success">99.8%</div>
-              <div class="stat-sub text-success">
+              <div class="stat-sub text-success flex items-center gap-1 mt-2">
                 <span class="material-symbols-outlined icon-xs">grade</span> Hạng Bạch Kim Uy Tín
               </div>
             </div>
@@ -464,22 +489,32 @@
 
           <!-- GRID VÍ & THẺ DEBIT CARD ẢO -->
           <div class="grid grid-3 gap-4 mb-6">
-            <!-- Thẻ Virtual Merchant Card mô phỏng -->
+            <!-- Thẻ Virtual Merchant Card mô phỏng với Chip EMV vàng kim -->
             <div class="virtual-debit-card">
-              <div class="flex justify-between items-center mb-4">
-                <span class="fw-800 tracking-wider text-xs">HYBRID MERCHANT CARD</span>
-                <span class="text-xs fw-700 text-cyan-300">NAPAS 24/7</span>
+              <div class="flex justify-between items-center mb-3">
+                <span class="fw-800 tracking-wider text-xs flex items-center gap-1.5 text-white">
+                  <span class="material-symbols-outlined icon-xs text-secondary">token</span> HYBRID MERCHANT CARD
+                </span>
+                <span class="badge badge-warning text-2xs fw-800 tracking-wider">PLATINUM</span>
               </div>
-              <div class="mono" style="font-size: 1.15rem; letter-spacing: 3px; margin: 16px 0;">
-                9704 2200 **** 8888
+
+              <!-- EMV Chip & Contactless -->
+              <div class="flex items-center gap-3 my-3">
+                <div class="emv-chip" title="EMV Smart Chip Security"></div>
+                <span class="material-symbols-outlined text-white" style="opacity: 0.6; font-size: 20px;" title="Napas Contactless">contactless</span>
               </div>
-              <div class="flex justify-between items-end">
+
+              <div class="mono text-white fw-700" style="font-size: 1.15rem; letter-spacing: 3.5px; margin: 12px 0; text-shadow: 0 2px 4px rgba(0,0,0,0.6);">
+                9704 2200 8829 8888
+              </div>
+
+              <div class="flex justify-between items-end pt-1">
                 <div>
-                  <div class="text-2xs text-muted uppercase">CHỦ TÀI KHOẢN</div>
-                  <strong class="text-xs text-white uppercase" id="cardHolderName">NGUYEN NGOC PHUC</strong>
+                  <div class="text-2xs text-muted uppercase tracking-wider">CHỦ TÀI KHOẢN</div>
+                  <strong class="text-xs text-white uppercase tracking-wider" id="cardHolderName">NGUYEN NGOC PHUC</strong>
                 </div>
                 <div style="text-align: right;">
-                  <div class="text-2xs text-muted uppercase">SỐ DƯ KHẢ DỤNG</div>
+                  <div class="text-2xs text-muted uppercase tracking-wider">NAPAS 24/7 INSTANT</div>
                   <strong class="mono text-sm text-gradient" id="cardBalanceDisplay">48.250.000₫</strong>
                 </div>
               </div>

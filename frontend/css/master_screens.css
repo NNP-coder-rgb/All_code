@@ -3403,3 +3403,408 @@ body.light-theme .action-reminder-card {
 
 
 
+
+
+/* ==========================================================================
+   16. PHÒNG PHÂN XỬ 3 BÊN DELUXE & KÊNH NGƯỜI BÁN HIỆN ĐẠI (HYBRID.STORE 2026)
+   ========================================================================== */
+
+/* ---------- PHÒNG PHÂN XỬ 3 BÊN: HIỆU ỨNG THẨM ĐỊNH MINH BẠCH ---------- */
+.dispute-ambient-glow {
+  position: relative;
+}
+.dispute-ambient-glow::before {
+  content: "";
+  position: absolute;
+  top: -80px;
+  right: -5%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, rgba(6, 182, 212, 0.05) 50%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(40px);
+}
+
+/* Stepper 4 chặng nâng cấp với đường nối Gradient */
+.dispute-stepper-deluxe {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  padding: 18px 24px;
+  background: linear-gradient(135deg, rgba(21, 21, 38, 0.95), rgba(14, 14, 26, 0.95));
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-xl, 16px);
+  margin-bottom: 24px;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+@media (max-width: 900px) {
+  .dispute-stepper-deluxe {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 16px;
+  }
+}
+@media (max-width: 560px) {
+  .dispute-stepper-deluxe {
+    grid-template-columns: 1fr;
+  }
+}
+
+.step-node {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+.step-node-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 800;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  color: var(--text-muted, #94a3b8);
+  transition: all 0.3s ease;
+}
+.step-node.done .step-node-circle {
+  background: linear-gradient(135deg, #10b981, #059669);
+  border-color: #34d399;
+  color: #ffffff;
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.45);
+}
+.step-node.active .step-node-circle {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  border-color: #fbbf24;
+  color: #0f172a;
+  box-shadow: 0 0 18px rgba(245, 158, 11, 0.6);
+  animation: stepPulse 2s infinite ease-in-out;
+}
+@keyframes stepPulse {
+  0% { transform: scale(1); box-shadow: 0 0 12px rgba(245, 158, 11, 0.5); }
+  50% { transform: scale(1.08); box-shadow: 0 0 22px rgba(245, 158, 11, 0.85); }
+  100% { transform: scale(1); box-shadow: 0 0 12px rgba(245, 158, 11, 0.5); }
+}
+
+.step-node-info strong {
+  display: block;
+  font-size: 13px;
+  color: var(--text, #f8fafc);
+  margin-bottom: 2px;
+}
+.step-node.active .step-node-info strong {
+  color: #fbbf24;
+}
+.step-node-info span {
+  font-size: 11px;
+  color: var(--text-muted, #94a3b8);
+}
+
+/* Thẻ Video Mở Hộp Hi-Tech Mockup */
+.video-evidence-player {
+  position: relative;
+  border-radius: var(--radius-lg, 12px);
+  overflow: hidden;
+  background: #000000;
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+.video-evidence-player:hover {
+  border-color: #22d3ee;
+  box-shadow: 0 12px 32px rgba(6, 182, 212, 0.35);
+  transform: translateY(-2px);
+}
+.video-evidence-thumb {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  opacity: 0.82;
+  transition: opacity 0.3s ease;
+}
+.video-evidence-player:hover .video-evidence-thumb {
+  opacity: 0.95;
+}
+.video-overlay-scanline {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.04), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.04));
+  background-size: 100% 3px, 3px 100%;
+  pointer-events: none;
+}
+.video-play-btn-pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(6, 182, 212, 0.85);
+  backdrop-filter: blur(6px);
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+  box-shadow: 0 0 25px rgba(6, 182, 212, 0.7);
+  transition: all 0.3s var(--ease-spring);
+}
+.video-evidence-player:hover .video-play-btn-pulse {
+  transform: translate(-50%, -50%) scale(1.12);
+  background: #06b6d4;
+  box-shadow: 0 0 35px rgba(6, 182, 212, 0.9);
+}
+.video-badge-top-left {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  color: #22d3ee;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  border: 1px solid rgba(34, 211, 238, 0.4);
+}
+.video-badge-bottom-right {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #ffffff;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+
+/* Tem Niêm Phong QR Hologram */
+.qr-seal-card {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(6, 182, 212, 0.05));
+  border: 1.5px solid rgba(16, 185, 129, 0.35);
+  border-radius: var(--radius-lg, 12px);
+  padding: 14px;
+  position: relative;
+  overflow: hidden;
+}
+.qr-seal-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transform: skewX(-25deg);
+  animation: qrShimmer 4s infinite;
+}
+@keyframes qrShimmer {
+  0% { left: -100%; }
+  30%, 100% { left: 160%; }
+}
+
+/* Thẻ Đóng Băng Ký Quỹ Escrow Vault */
+.escrow-vault-card {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(245, 158, 11, 0.06));
+  border: 1.5px solid rgba(139, 92, 246, 0.4);
+  border-radius: var(--radius-lg, 12px);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+.escrow-vault-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md, 10px);
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.5);
+  color: #c4b5fd;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+/* Tinh chỉnh Khung Chat 3 Bên Nâng Cao */
+.chat-tripartite {
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.1) !important;
+}
+.chat-participant-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill, 999px);
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.chat-bubble-evidence-img {
+  width: 140px;
+  height: 100px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-top: 8px;
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.chat-bubble-evidence-img:hover {
+  transform: scale(1.04);
+  border-color: var(--secondary-400, #22d3ee);
+}
+
+/* Thẻ Lựa Chọn Phương Án Phán Quyết Deluxe */
+.settlement-option-item {
+  border-radius: var(--radius-lg, 12px) !important;
+  padding: 14px 16px !important;
+  transition: all 0.25s var(--ease-spring) !important;
+}
+.settlement-option-item:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary-400, #a855f7) !important;
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.2);
+}
+.settlement-option-item.selected {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.14), rgba(6, 182, 212, 0.08)) !important;
+  border-color: #8b5cf6 !important;
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.28) !important;
+}
+
+/* ---------- KÊNH NGƯỜI BÁN DELUXE: THỐNG KÊ & VÍ TIỀN HIỆN ĐẠI ---------- */
+
+/* Cải tiến 4 Thẻ Stat Cards Kênh Người Bán */
+.stat-card-deluxe {
+  background: linear-gradient(135deg, rgba(21, 21, 38, 0.9), rgba(15, 15, 28, 0.9));
+  border: 1.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-xl, 16px);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s var(--ease-spring), border-color 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+}
+.stat-card-deluxe:hover {
+  transform: translateY(-4px);
+  border-color: rgba(139, 92, 246, 0.5);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35), 0 0 20px rgba(139, 92, 246, 0.15);
+}
+.stat-card-deluxe::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--card-accent, linear-gradient(90deg, #8b5cf6, #06b6d4));
+}
+.stat-card-deluxe .stat-icon-wrap {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--card-color, #c4b5fd);
+  margin-bottom: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Thẻ Hồ Sơ Người Bán Mini Trong Sidebar */
+.seller-profile-card-deluxe {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg, 12px);
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+}
+.seller-profile-badge-ring {
+  position: relative;
+  flex-shrink: 0;
+}
+.seller-profile-badge-ring .seller-avatar-badge {
+  width: 44px;
+  height: 44px;
+  font-size: 1rem;
+}
+.seller-level-progress-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+.seller-level-progress-fill {
+  height: 100%;
+  width: 85%;
+  background: linear-gradient(90deg, #06b6d4, #8b5cf6);
+  border-radius: 99px;
+}
+
+/* Thẻ Virtual Debit Card Titanium */
+.virtual-debit-card {
+  background: linear-gradient(135deg, #090916 0%, #1e1b4b 45%, #0e7490 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.3) !important;
+}
+.emv-chip {
+  width: 40px;
+  height: 30px;
+  border-radius: 5px;
+  background: linear-gradient(135deg, #d97706, #fbbf24, #f59e0b);
+  border: 1px solid #b45309;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6);
+}
+.emv-chip::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  border-radius: 2px;
+}
+
+/* Light Theme Overrides */
+[data-theme="light"] .dispute-stepper-deluxe,
+body.light-theme .dispute-stepper-deluxe {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+}
+[data-theme="light"] .stat-card-deluxe,
+body.light-theme .stat-card-deluxe {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05);
+}
+[data-theme="light"] .stat-card-deluxe:hover,
+body.light-theme .stat-card-deluxe:hover {
+  border-color: #7c3aed;
+  box-shadow: 0 10px 25px rgba(124, 58, 237, 0.12);
+}
+[data-theme="light"] .seller-profile-card-deluxe,
+body.light-theme .seller-profile-card-deluxe {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}

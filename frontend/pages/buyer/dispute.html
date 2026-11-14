@@ -392,7 +392,7 @@
       </div>
     </div>
 
-    <main class="container dispute-container">
+    <main class="container dispute-container dispute-ambient-glow">
       <!-- 1. TIÊU ĐỀ PHÒNG PHÂN XỬ & ĐẾM NGƯỢC SLA -->
       <div class="dispute-header-bar">
         <div>
@@ -417,36 +417,36 @@
       </div>
 
       <!-- 2. STEPPER 4 CHẶNG TIẾN TRÌNH HÒA GIẢI -->
-      <div class="dispute-stepper" id="disputeStepperBar">
-        <div class="dispute-step-item done">
-          <div class="dispute-step-circle">✓</div>
-          <div>
-            <strong class="block">1. Tiếp Nhận Khiếu Nại</strong>
-            <span class="text-xs text-muted">Mở hồ sơ &amp; nạp bằng chứng</span>
+      <div class="dispute-stepper-deluxe" id="disputeStepperBar">
+        <div class="step-node done">
+          <div class="step-node-circle">✓</div>
+          <div class="step-node-info">
+            <strong>1. Tiếp Nhận Khiếu Nại</strong>
+            <span>Mở hồ sơ &amp; nạp bằng chứng</span>
           </div>
         </div>
 
-        <div class="dispute-step-item done">
-          <div class="dispute-step-circle">✓</div>
-          <div>
-            <strong class="block">2. Người Bán Đối Chất</strong>
-            <span class="text-xs text-muted">Giải trình &amp; đối soát video</span>
+        <div class="step-node done">
+          <div class="step-node-circle">✓</div>
+          <div class="step-node-info">
+            <strong>2. Người Bán Đối Chất</strong>
+            <span>Giải trình &amp; đối soát video</span>
           </div>
         </div>
 
-        <div class="dispute-step-item active" id="stepArbitrator">
-          <div class="dispute-step-circle">3</div>
-          <div>
-            <strong class="block">3. Trọng Tài Giám Định</strong>
-            <span class="text-xs text-muted">Test tem QR &amp; phân tích lỗi</span>
+        <div class="step-node active" id="stepArbitrator">
+          <div class="step-node-circle">3</div>
+          <div class="step-node-info">
+            <strong>3. Trọng Tài Giám Định</strong>
+            <span>Test tem QR &amp; phân tích lỗi</span>
           </div>
         </div>
 
-        <div class="dispute-step-item" id="stepVerdict">
-          <div class="dispute-step-circle">4</div>
-          <div>
-            <strong class="block">4. Phán Quyết &amp; Bồi Hoàn</strong>
-            <span class="text-xs text-muted">Hoàn tiền 100% / Đổi máy 1:1</span>
+        <div class="step-node" id="stepVerdict">
+          <div class="step-node-circle">4</div>
+          <div class="step-node-info">
+            <strong>4. Phán Quyết &amp; Bồi Hoàn</strong>
+            <span>Hoàn tiền 100% / Đổi máy 1:1</span>
           </div>
         </div>
       </div>
@@ -455,6 +455,23 @@
       <div class="dispute-3col-layout">
         <!-- CỘT 1: THÔNG TIN ĐƠN HÀNG & BẰNG CHỨNG ĐỒNG KIỂM -->
         <aside class="dispute-col-info">
+          <!-- THẺ ĐÓNG BĂNG KÝ QUỸ ESCROW VAULT -->
+          <div class="escrow-vault-card mb-4">
+            <div class="escrow-vault-icon">
+              <span class="material-symbols-outlined" style="font-size: 26px;">lock_clock</span>
+            </div>
+            <div style="flex: 1; min-width: 0;">
+              <div class="flex items-center justify-between">
+                <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: #c4b5fd; letter-spacing: 0.5px;">Ký Quỹ Đóng Băng (Escrow)</span>
+                <span class="badge badge-warning" style="font-size: 9px; padding: 2px 7px;">ĐANG BẢO LƯU</span>
+              </div>
+              <div class="mono text-white fw-700" style="font-size: 1.25rem; margin-top: 2px;" id="escrowVaultAmount">21.490.000₫</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">
+                Được giữ an toàn tại cổng Napas 24/7 • Chờ kết quả phân xử
+              </div>
+            </div>
+          </div>
+
           <!-- THẺ SẢN PHẨM KHIẾU NẠI -->
           <div class="dispute-panel">
             <div class="dispute-panel-title">
@@ -492,19 +509,40 @@
               <span class="material-symbols-outlined icon-xs text-success">verified</span> Bằng Chứng Mở Hộp Đồng Kiểm
             </div>
 
-            <div class="panel p-3 text-center mb-3" style="background: var(--bg-surface); border: 1px dashed var(--border-strong); border-radius: var(--radius-md); cursor: pointer;" id="btnViewUnboxVideo">
-              <span class="material-symbols-outlined text-secondary" style="font-size: 38px;">smart_display</span>
-              <div class="text-xs fw-700 text-white mt-1">video_unbox_4k_dongkiem.mp4</div>
+            <div class="video-evidence-player mb-3" id="btnViewUnboxVideo" title="Nhấp để phát video mở hộp 4K đồng kiểm cùng shipper">
+              <img
+                src="https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=600"
+                alt="Video mở hộp đồng kiểm"
+                class="video-evidence-thumb"
+              />
+              <div class="video-overlay-scanline"></div>
+              <div class="video-badge-top-left">
+                <span class="material-symbols-outlined icon-xs">videocam</span> 4K HDR • BƯU TÁ ĐỒNG KIỂM
+              </div>
+              <div class="video-play-btn-pulse">
+                <span class="material-symbols-outlined" style="font-size: 28px; margin-left: 3px;">play_arrow</span>
+              </div>
+              <div class="video-badge-bottom-right">02:45 • REC</div>
+            </div>
               <div class="text-xs text-muted">Thời lượng: 02:45 • Ghi hình cùng bưu tá</div>
               <span class="badge badge-success mt-2" style="font-size: 10px;">✔ ĐÃ XÁC MINH TÍNH TOÀN VẸN</span>
             </div>
 
-            <div class="panel p-2.5 text-xs" style="background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.25); border-radius: var(--radius-md);">
-              <div class="flex items-center gap-1.5 text-success fw-700 mb-1">
-                <span class="material-symbols-outlined icon-xs">task_alt</span> Tem Niêm Phong Màng Vỡ QR:
+            <div class="qr-seal-card">
+              <div class="flex items-start gap-3">
+                <div style="width: 46px; height: 46px; background: #ffffff; border-radius: 6px; padding: 3px; display: grid; place-items: center; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+                  <svg viewBox="0 0 24 24" width="40" height="40" fill="#0f172a">
+                    <path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm10-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm14-2h4v2h-4v-2zm-4 0h2v4h-2v-4zm2 2h2v4h-2v-4zm2 2h2v4h-2v-4zm-4 2h2v2h-2v-2z"/>
+                  </svg>
+                </div>
+                <div style="flex: 1; min-width: 0;">
+                  <div class="flex items-center gap-1.5 text-success fw-700" style="font-size: 12px; margin-bottom: 2px;">
+                    <span class="material-symbols-outlined icon-xs">verified</span> Tem Niêm Phong Màng Vỡ QR
+                  </div>
+                  <div style="font-size: 11px; color: var(--text-muted);">Mã tem: <strong class="mono text-white">QR-HYBRID-884920</strong></div>
+                  <div style="font-size: 10.5px; color: #34d399; margin-top: 2px;">✔ Nguyên vẹn 100% • Khớp mã SHA-256 đối soát sàn</div>
+                </div>
               </div>
-              <div class="text-muted">Mã tem: <strong class="mono text-white">QR-HYBRID-884920</strong></div>
-              <div class="text-muted mt-0.5">Trạng thái: Tem nguyên vẹn, trùng khớp video lưu kho của kỹ thuật viên.</div>
             </div>
           </div>
 
@@ -514,28 +552,46 @@
               <span class="material-symbols-outlined icon-xs text-warning">group</span> 3 Bên Tham Gia Phân Xử
             </div>
 
-            <div class="flex flex-col gap-2.5 text-xs">
+            <div class="flex flex-col gap-3 text-xs">
               <div class="flex items-center gap-2.5">
-                <div class="chat-avatar" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid #3b82f6;">P</div>
-                <div>
-                  <strong class="text-white block" id="partyBuyerName">Nguyễn Ngọc Phúc (Người Mua)</strong>
-                  <span class="text-muted">SĐT: 0912 345 678 • Tài khoản đã xác thực</span>
+                <div class="chat-avatar" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1.5px solid #3b82f6; position: relative;">
+                  P
+                  <span style="position: absolute; bottom: -2px; right: -2px; width: 8px; height: 8px; border-radius: 50%; background: #10b981; border: 1.5px solid #0f172a;"></span>
+                </div>
+                <div style="flex: 1; min-width: 0;">
+                  <div class="flex items-center justify-between">
+                    <strong class="text-white block truncate" id="partyBuyerName">Nguyễn Ngọc Phúc (Người Mua)</strong>
+                    <span class="badge badge-success" style="font-size: 9px; padding: 1px 5px;">ĐÃ XÁC THỰC</span>
+                  </div>
+                  <span class="text-muted block truncate mt-0.5">SĐT: 0912 345 678 • eKYC Level 2</span>
                 </div>
               </div>
 
               <div class="flex items-center gap-2.5">
-                <div class="chat-avatar" style="background: rgba(34, 211, 238, 0.2); color: #22d3ee; border: 1px solid #06b6d4;">Đ</div>
-                <div>
-                  <strong class="text-white block" id="partySellerName">Trần Minh Đức (Người Bán)</strong>
-                  <span class="text-muted">Shop: TechZone C2C • Đánh giá 4.9★</span>
+                <div class="chat-avatar" style="background: rgba(34, 211, 238, 0.2); color: #22d3ee; border: 1.5px solid #06b6d4; position: relative;">
+                  Đ
+                  <span style="position: absolute; bottom: -2px; right: -2px; width: 8px; height: 8px; border-radius: 50%; background: #10b981; border: 1.5px solid #0f172a;"></span>
+                </div>
+                <div style="flex: 1; min-width: 0;">
+                  <div class="flex items-center justify-between">
+                    <strong class="text-white block truncate" id="partySellerName">Trần Minh Đức (Người Bán)</strong>
+                    <span class="badge badge-secondary" style="font-size: 9px; padding: 1px 5px;">PRO SELLER</span>
+                  </div>
+                  <span class="text-muted block truncate mt-0.5">Shop: TechZone C2C • 4.9★ (382 đơn)</span>
                 </div>
               </div>
 
               <div class="flex items-center gap-2.5">
-                <div class="chat-avatar" style="background: rgba(139, 92, 246, 0.2); color: var(--secondary-300); border: 1px solid var(--primary-500);">L</div>
-                <div>
-                  <strong class="text-white block">Trọng Tài KTV Hoàng Nam</strong>
-                  <span class="text-muted">Ban Giám Định Kỹ Thuật HYBRID.STORE</span>
+                <div class="chat-avatar" style="background: rgba(139, 92, 246, 0.2); color: var(--secondary-300); border: 1.5px solid var(--primary-500); position: relative;">
+                  L
+                  <span style="position: absolute; bottom: -2px; right: -2px; width: 8px; height: 8px; border-radius: 50%; background: #10b981; border: 1.5px solid #0f172a;"></span>
+                </div>
+                <div style="flex: 1; min-width: 0;">
+                  <div class="flex items-center justify-between">
+                    <strong class="text-white block truncate">Trọng Tài KTV Hoàng Nam</strong>
+                    <span class="badge badge-primary" style="font-size: 9px; padding: 1px 5px;">ARBITRATOR</span>
+                  </div>
+                  <span class="text-muted block truncate mt-0.5">Ban Giám Định Kỹ Thuật HYBRID.STORE</span>
                 </div>
               </div>
             </div>
@@ -549,10 +605,20 @@
               <span class="shipper-live-dot" style="width: 10px; height: 10px; background: #22c55e;"></span>
               <div>
                 <strong class="text-sm text-white block">Kênh Đàm Phán &amp; Đối Soát Trực Tiếp 3 Bên</strong>
-                <span class="text-xs text-muted">Có lưu trữ dữ liệu đối chứng pháp lý</span>
+                <span class="text-xs text-muted">Có lưu trữ dữ liệu đối chứng pháp lý • Mã hóa bảo mật</span>
               </div>
             </div>
-            <span class="badge badge-warning" style="font-size: 11px;">TRỌNG TÀI SÀN ĐANG TRỰC TUYẾN</span>
+            <div class="flex items-center gap-2 hide-sm">
+              <span class="chat-participant-pill" style="color: #60a5fa; border-color: rgba(59, 130, 246, 0.3);">
+                <span class="material-symbols-outlined icon-xs">person</span> Mua (Online)
+              </span>
+              <span class="chat-participant-pill" style="color: #22d3ee; border-color: rgba(34, 211, 238, 0.3);">
+                <span class="material-symbols-outlined icon-xs">store</span> Bán (Online)
+              </span>
+              <span class="chat-participant-pill" style="color: #a78bfa; border-color: rgba(139, 92, 246, 0.3);">
+                <span class="material-symbols-outlined icon-xs">gavel</span> Trọng Tài (Online)
+              </span>
+            </div>
           </div>
 
           <div class="chat-tripartite-body" id="disputeChatBody">
@@ -570,6 +636,18 @@
                 </div>
                 <div>
                   Tôi vừa mở hộp cùng bưu tá, phát hiện viền camera có vết cấn sâu khoảng 1.5mm, trong khi bài đăng người bán cam kết like new 99% không tì vết. Bưu tá đã ký biên bản đồng kiểm xác nhận. Tôi muốn đổi sang máy khác hoặc hoàn lại tiền 100%.
+                </div>
+                <div class="mt-2">
+                  <img
+                    src="https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=400"
+                    alt="Ảnh chụp vết cấn viền camera"
+                    class="chat-bubble-evidence-img"
+                    id="btnZoomEvidenceImg"
+                    title="Bằng chứng macro: Vết cấn viền camera 1.5mm (Nhấp xem)"
+                  />
+                  <div class="text-xs text-muted mt-1" style="font-size: 10.5px;">
+                    📎 anh_chup_macro_vet_can_camera.jpg (3.2 MB)
+                  </div>
                 </div>
               </div>
             </div>
@@ -667,9 +745,14 @@
             <div class="settlement-options-list mb-4" id="settleOptionsContainer">
               <label class="settlement-option-item selected" data-value="REFUND">
                 <input type="radio" name="settleOption" value="REFUND" checked style="margin-top: 2px;" />
-                <div>
-                  <strong class="text-xs text-success block">Phương Án 1: Hoàn Tiền 100%</strong>
-                  <span class="text-xs text-muted block mt-0.5">
+                <div style="flex: 1;">
+                  <div class="flex items-center justify-between">
+                    <strong class="text-xs text-success flex items-center gap-1">
+                      <span class="material-symbols-outlined icon-xs">currency_exchange</span> Phương Án 1: Hoàn Tiền 100%
+                    </strong>
+                    <span class="badge badge-success" style="font-size: 9px; padding: 1px 5px;">KHUYÊN DÙNG</span>
+                  </div>
+                  <span class="text-xs text-muted block mt-1">
                     Hoàn lại <strong class="mono text-white" id="settleRefundAmount">21.490.000₫</strong> về tài khoản Napas 24/7 của bạn. Bưu tá thu hồi máy tại nhà 0₫ phí.
                   </span>
                 </div>
@@ -677,9 +760,14 @@
 
               <label class="settlement-option-item" data-value="EXCHANGE">
                 <input type="radio" name="settleOption" value="EXCHANGE" style="margin-top: 2px;" />
-                <div>
-                  <strong class="text-xs text-secondary block">Phương Án 2: Đổi Máy 1:1 Khác</strong>
-                  <span class="text-xs text-muted block mt-0.5">
+                <div style="flex: 1;">
+                  <div class="flex items-center justify-between">
+                    <strong class="text-xs text-secondary flex items-center gap-1">
+                      <span class="material-symbols-outlined icon-xs">sync_saved_locally</span> Phương Án 2: Đổi Máy 1:1 Khác
+                    </strong>
+                    <span class="badge badge-secondary" style="font-size: 9px; padding: 1px 5px;">HỎA TỐC</span>
+                  </div>
+                  <span class="text-xs text-muted block mt-1">
                     Người bán chuyển máy iPhone 15 Pro Max Like New 99.9% khác đã qua test 15 bước đến tận nhà trong 24 giờ.
                   </span>
                 </div>
@@ -687,9 +775,13 @@
 
               <label class="settlement-option-item" data-value="COMPENSATION">
                 <input type="radio" name="settleOption" value="COMPENSATION" style="margin-top: 2px;" />
-                <div>
-                  <strong class="text-xs text-warning block">Phương Án 3: Bồi Thường Voucher &amp; Giữ Máy</strong>
-                  <span class="text-xs text-muted block mt-0.5">
+                <div style="flex: 1;">
+                  <div class="flex items-center justify-between">
+                    <strong class="text-xs text-warning flex items-center gap-1">
+                      <span class="material-symbols-outlined icon-xs">card_giftcard</span> Phương Án 3: Bồi Thường Voucher &amp; Giữ Máy
+                    </strong>
+                  </div>
+                  <span class="text-xs text-muted block mt-1">
                     Tặng voucher 1.500.000₫ vào ví mua sắm, bạn giữ lại máy và kích hoạt gói bảo hành rơi vỡ 12 tháng.
                   </span>
                 </div>
@@ -835,6 +927,7 @@
           const orderIdLink = document.getElementById("disputeOrderIdLink");
           const linkToOrderDetail = document.getElementById("btnLinkToOrderDetail");
           const settleRefundAmount = document.getElementById("settleRefundAmount");
+          const escrowVaultAmount = document.getElementById("escrowVaultAmount");
           const partyBuyerName = document.getElementById("partyBuyerName");
 
           const firstItem = (selectedOrder.items && selectedOrder.items[0]) || {};
@@ -857,6 +950,9 @@
           }
           if (settleRefundAmount) {
             settleRefundAmount.textContent = formatMoney(selectedOrder.total || 0);
+          }
+          if (escrowVaultAmount) {
+            escrowVaultAmount.textContent = formatMoney(selectedOrder.total || 0);
           }
           if (partyBuyerName && selectedOrder.shippingAddress && selectedOrder.shippingAddress.fullName) {
             partyBuyerName.textContent = `${selectedOrder.shippingAddress.fullName} (Người Mua)`;
@@ -887,8 +983,9 @@
               if (verdictBox) verdictBox.style.display = "block";
               if (actionPanel) actionPanel.style.display = "none";
               if (stepVerdict) {
-                stepVerdict.className = "dispute-step-item done";
-                stepVerdict.querySelector(".dispute-step-circle").textContent = "✓";
+                stepVerdict.className = "step-node done";
+                const circle = stepVerdict.querySelector(".step-node-circle") || stepVerdict.querySelector(".dispute-step-circle");
+                if (circle) circle.textContent = "✓";
               }
               if (slaCountdownPill) {
                 slaCountdownPill.innerHTML = '<span class="material-symbols-outlined icon-xs text-success">verified</span> ĐÃ HOÀN TẤT PHÁN QUYẾT';
