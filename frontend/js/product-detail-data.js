@@ -45,38 +45,24 @@
     },
 
     /**
-     * Danh sách 4 ảnh gallery trực quan theo từng sản phẩm
+     * Danh sách ảnh gallery trực quan theo từng sản phẩm
+     * Tuyệt đối chỉ hiển thị ảnh của chính sản phẩm đó, không chèn sản phẩm khác
      */
     getGalleryImages: function (p) {
       if (!p) return [];
       const resolve = typeof window !== "undefined" && window.resolveAssetUrl ? window.resolveAssetUrl : (u) => u;
-      const main = resolve(p.img || "");
 
-      // Nếu sản phẩm đã khai báo mảng images riêng biệt
-      if (Array.isArray(p.images) && p.images.length >= 2) {
-        return p.images.map(resolve);
-      }
-
-      // Sinh 4 góc nhìn chân thực
-      const list = [main];
-
-      // Tìm ảnh bổ trợ cùng danh mục trong mock_data
-      if (typeof PRODUCTS !== "undefined" && Array.isArray(PRODUCTS)) {
-        const others = PRODUCTS.filter((x) => x.id !== p.id && x.category === p.category && x.img);
-        if (others.length >= 2) {
-          list.push(resolve(others[0].img));
-          list.push(resolve(others[1].img));
-        } else if (others.length === 1) {
-          list.push(resolve(others[0].img));
+      // 1. Nếu sản phẩm đã khai báo mảng images riêng biệt của chính nó
+      if (Array.isArray(p.images) && p.images.length > 0) {
+        const resolvedList = p.images.map(resolve).filter(Boolean);
+        if (resolvedList.length > 0) {
+          return resolvedList;
         }
       }
 
-      // Đảm bảo đủ tối thiểu 3-4 góc nhìn
-      while (list.length < 4) {
-        list.push(main);
-      }
-
-      return list.slice(0, 4);
+      // 2. Chỉ trả về duy nhất ảnh của chính sản phẩm đó (tuyệt đối không lấy ảnh sản phẩm khác)
+      const main = resolve(p.img || "");
+      return main ? [main] : [];
     },
 
     /**

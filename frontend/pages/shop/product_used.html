@@ -501,24 +501,30 @@
         }
 
         const thumbStrip = document.getElementById("thumbStrip");
-        if (thumbStrip && galleryImgs.length) {
-          thumbStrip.innerHTML = galleryImgs
-            .map(
-              (imgUrl, idx) => `
-              <div class="thumb-slot ${idx === 0 ? "active" : ""}" data-src="${imgUrl}">
-                <img src="${imgUrl}" alt="Góc chụp ${idx + 1}" />
-              </div>
-            `
-            )
-            .join("");
+        if (thumbStrip) {
+          if (galleryImgs.length > 0) {
+            thumbStrip.style.display = "flex";
+            thumbStrip.innerHTML = galleryImgs
+              .map(
+                (imgUrl, idx) => `
+                <div class="thumb-slot ${idx === 0 ? "active" : ""}" data-src="${imgUrl}">
+                  <img src="${imgUrl}" alt="Góc chụp ${idx + 1}" />
+                </div>
+              `
+              )
+              .join("");
 
-          thumbStrip.querySelectorAll(".thumb-slot").forEach((slot) => {
-            slot.addEventListener("click", () => {
-              thumbStrip.querySelectorAll(".thumb-slot").forEach((s) => s.classList.remove("active"));
-              slot.classList.add("active");
-              if (mainUsedImg) mainUsedImg.src = slot.dataset.src;
+            thumbStrip.querySelectorAll(".thumb-slot").forEach((slot) => {
+              slot.addEventListener("click", () => {
+                thumbStrip.querySelectorAll(".thumb-slot").forEach((s) => s.classList.remove("active"));
+                slot.classList.add("active");
+                if (mainUsedImg) mainUsedImg.src = slot.dataset.src;
+              });
             });
-          });
+          } else {
+            thumbStrip.style.display = "none";
+            thumbStrip.innerHTML = "";
+          }
         }
 
         // 4. Báo cáo kiểm định 15 bước theo đúng ngành hàng
