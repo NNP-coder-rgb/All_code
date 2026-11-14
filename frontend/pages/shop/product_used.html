@@ -360,6 +360,28 @@
       </section>
     </main>
 
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer" data-component="footer"></footer>
+
+    <!-- Mobile Sticky Buy Bar cho Đồ Cũ Like New -->
+    <div class="mobile-sticky-buy-bar hide-md" id="mobileStickyBuyBar">
+      <div class="sticky-price-info">
+        <span class="text-xs text-muted">Giá Like New:</span>
+        <strong class="mono text-secondary fs-base" id="stickyPrice">0₫</strong>
+      </div>
+      <div class="sticky-actions">
+        <button class="btn btn-outlined btn-sm" id="stickyBtnAddCart" type="button" title="Thêm vào giỏ">
+          <span class="material-symbols-outlined icon-sm">add_shopping_cart</span>
+        </button>
+        <button class="btn btn-secondary btn-sm" id="stickyBtnOffer" type="button" title="Trả Giá">
+          <span class="material-symbols-outlined icon-sm">handshake</span> Trả Giá
+        </button>
+        <button class="btn btn-primary btn-sm" id="stickyBtnBuyNow" type="button">
+          <span class="material-symbols-outlined icon-sm">bolt</span> Mua Ngay
+        </button>
+      </div>
+    </div>
+
     <!-- ===== MODAL TRẢ GIÁ THÔNG MINH (OFFER MODAL) ===== -->
     <div class="modal-backdrop" id="usedOfferModal">
       <div class="modal" role="dialog" aria-modal="true" style="max-width: 500px;">
@@ -736,6 +758,22 @@
         }
 
         // 12. Modal Trả Giá Thông Minh (Smart Offer)
+        // Mobile Sticky Bar
+        const stickyPrice = document.getElementById("stickyPrice");
+        if (stickyPrice) stickyPrice.textContent = Utils.formatCurrency(p.price);
+        const stickyBtnAddCart = document.getElementById("stickyBtnAddCart");
+        if (stickyBtnAddCart && btnUsedAddCart) {
+          stickyBtnAddCart.addEventListener("click", () => btnUsedAddCart.click());
+        }
+        const stickyBtnOffer = document.getElementById("stickyBtnOffer");
+        if (stickyBtnOffer && btnUsedOffer) {
+          stickyBtnOffer.addEventListener("click", () => btnUsedOffer.click());
+        }
+        const stickyBtnBuyNow = document.getElementById("stickyBtnBuyNow");
+        if (stickyBtnBuyNow && btnUsedBuyNow) {
+          stickyBtnBuyNow.addEventListener("click", () => btnUsedBuyNow.click());
+        }
+
         const btnUsedOffer = document.getElementById("btnUsedOffer");
         const modalProductName = document.getElementById("modalProductName");
         const modalListedPrice = document.getElementById("modalListedPrice");

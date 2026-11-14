@@ -653,6 +653,7 @@ small,
   height: var(--header-h);
   background: rgba(10, 10, 22, 0.85);
   backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--border);
 }
 .site-header .container {
@@ -4325,6 +4326,7 @@ body.light-theme .btn-outlined:hover {
   z-index: 980;
   background: rgba(18, 18, 31, 0.96);
   backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-top: 1.5px solid var(--border);
   padding: 10px 16px;
   display: none;
