@@ -39,7 +39,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 24px;
+        margin-bottom: 20px;
         flex-wrap: wrap;
         gap: 16px;
       }
@@ -70,63 +70,6 @@
         font-size: var(--fs-xs);
       }
 
-      /* Stepper 4 chặng phân xử minh bạch */
-      .dispute-stepper {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 14px;
-        padding: 16px 22px;
-        background: var(--bg-surface);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-lg);
-        margin-bottom: 26px;
-      }
-      @media (max-width: 768px) {
-        .dispute-stepper {
-          grid-template-columns: repeat(2, 1fr);
-          row-gap: 14px;
-        }
-      }
-      .dispute-step-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-size: 12px;
-        color: var(--text-faint);
-      }
-      .dispute-step-item.done {
-        color: var(--text);
-        font-weight: 600;
-      }
-      .dispute-step-item.active {
-        color: var(--warning);
-        font-weight: 700;
-      }
-      .dispute-step-circle {
-        width: 26px;
-        height: 26px;
-        border-radius: 50%;
-        display: grid;
-        place-items: center;
-        font-size: 11px;
-        font-weight: 700;
-        background: var(--neutral-800);
-        border: 1px solid var(--border);
-        color: var(--text-muted);
-        flex-shrink: 0;
-      }
-      .dispute-step-item.done .dispute-step-circle {
-        background: var(--success);
-        border-color: var(--success);
-        color: #fff;
-      }
-      .dispute-step-item.active .dispute-step-circle {
-        background: var(--warning);
-        border-color: var(--warning);
-        color: #000;
-        box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
-      }
-
       /* Bố cục 3 Cột: Thông tin - Khung chat - Phán quyết */
       .dispute-3col-layout {
         display: grid;
@@ -148,7 +91,7 @@
         }
       }
 
-      /* Card chung */
+      /* Panel chung */
       .dispute-panel {
         background: var(--bg-surface);
         border: 1px solid var(--border);
@@ -179,7 +122,7 @@
         border-radius: var(--radius-xl);
         display: flex;
         flex-direction: column;
-        height: 640px;
+        height: 680px;
         overflow: hidden;
       }
       .chat-tripartite-head {
@@ -237,8 +180,8 @@
       }
 
       .chat-avatar {
-        width: 34px;
-        height: 34px;
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
         display: grid;
         place-items: center;
@@ -271,7 +214,6 @@
         border-color: var(--primary-500);
         color: #fff;
       }
-
       .chat-msg-meta {
         display: flex;
         align-items: center;
@@ -306,24 +248,6 @@
         border-color: var(--primary-500);
       }
 
-      /* Thẻ phương án hòa giải */
-      .settlement-option-item {
-        background: rgba(255, 255, 255, 0.02);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-md);
-        padding: 12px 14px;
-        margin-bottom: 12px;
-        cursor: pointer;
-        display: flex;
-        gap: 12px;
-        transition: all var(--speed-fast);
-      }
-      .settlement-option-item:hover,
-      .settlement-option-item.selected {
-        background: rgba(139, 92, 246, 0.08);
-        border-color: var(--primary-500);
-      }
-
       /* Trạng thái đã hòa giải thành công */
       .verdict-success-box {
         background: linear-gradient(135deg, rgba(34, 197, 94, 0.12) 0%, rgba(59, 130, 246, 0.08) 100%);
@@ -352,7 +276,7 @@
             id="themeToggleBtn"
             type="button"
             aria-label="Chuyển chế độ sáng / tối"
-            title="Chuyển sang giao diện Sáng"
+            title="Chuyển sang giao diện Sáng / Tối"
           >
             <span class="material-symbols-outlined theme-toggle-icon">light_mode</span>
           </button>
@@ -393,9 +317,25 @@
     </div>
 
     <main class="container dispute-container dispute-ambient-glow">
+      <!-- THANH CHUYỂN ĐỔI NHANH CÁC HỒ SƠ KHIẾU NẠI CỦA TÀI KHOẢN -->
+      <div class="dispute-case-tabs" id="disputeCaseTabs">
+        <button class="dispute-case-tab-btn active" type="button" data-case-id="DSP-20261108-01">
+          <span class="material-symbols-outlined icon-xs text-warning">warning</span>
+          #DSP-20261108-01 • iPhone 15 Pro Max (Đang phân xử)
+        </button>
+        <button class="dispute-case-tab-btn" type="button" data-case-id="DSP-20261105-7720">
+          <span class="material-symbols-outlined icon-xs text-secondary">inventory_2</span>
+          #DSP-20261105-7720 • Air Jordan 1 &amp; Puffer Set
+        </button>
+      </div>
+
       <!-- 1. TIÊU ĐỀ PHÒNG PHÂN XỬ & ĐẾM NGƯỢC SLA -->
       <div class="dispute-header-bar">
         <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="badge badge-warning" id="disputeStatusBadge">ĐANG PHÂN XỬ 3 BÊN</span>
+            <span class="badge badge-secondary hide-sm">HYBRID ESCROW PROTECTED</span>
+          </div>
           <h1 class="dispute-header-title">
             <span class="material-symbols-outlined text-warning" style="font-size: 28px;">gavel</span>
             <span id="caseHeaderCode">Hồ Sơ Hòa Giải &amp; Phân Xử: #DSP-20261108-01</span>
@@ -498,6 +438,18 @@
               <span class="text-muted" id="disputeReasonText">Ngoại quan viền camera có vết cấn 1.5mm không đúng cam kết Like New 99%.</span>
             </div>
 
+            <!-- Khối So Sánh Kỹ Thuật Cam Kết vs Thực Tế -->
+            <div class="panel p-2 text-2xs mb-3" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: var(--radius-md);">
+              <div class="flex justify-between items-center pb-1 mb-1" style="border-bottom: 1px dashed var(--border);">
+                <span class="text-muted">Cam kết người bán:</span>
+                <span class="text-success fw-700">Like New 99% không tì vết</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-muted">Thực tế mở hộp:</span>
+                <span class="text-danger fw-700">Cấn viền camera 1.5mm (~95%)</span>
+              </div>
+            </div>
+
             <a id="btnLinkToOrderDetail" href="order_detail.html" class="btn btn-outlined btn-sm is-full">
               <span class="material-symbols-outlined icon-xs">visibility</span> Xem Chi Tiết Đơn Hàng
             </a>
@@ -509,6 +461,7 @@
               <span class="material-symbols-outlined icon-xs text-success">verified</span> Bằng Chứng Mở Hộp Đồng Kiểm
             </div>
 
+            <!-- Trình phát Video Mockup -->
             <div class="video-evidence-player mb-3" id="btnViewUnboxVideo" title="Nhấp để phát video mở hộp 4K đồng kiểm cùng shipper">
               <img
                 src="https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=600"
@@ -524,11 +477,9 @@
               </div>
               <div class="video-badge-bottom-right">02:45 • REC</div>
             </div>
-              <div class="text-xs text-muted">Thời lượng: 02:45 • Ghi hình cùng bưu tá</div>
-              <span class="badge badge-success mt-2" style="font-size: 10px;">✔ ĐÃ XÁC MINH TÍNH TOÀN VẸN</span>
-            </div>
 
-            <div class="qr-seal-card">
+            <!-- Tem Niêm Phong Màng Vỡ QR -->
+            <div class="qr-seal-card mb-3" id="btnViewQrSeal" style="cursor: pointer;" title="Nhấp để kiểm tra mã băm bảo mật SHA-256">
               <div class="flex items-start gap-3">
                 <div style="width: 46px; height: 46px; background: #ffffff; border-radius: 6px; padding: 3px; display: grid; place-items: center; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
                   <svg viewBox="0 0 24 24" width="40" height="40" fill="#0f172a">
@@ -540,8 +491,25 @@
                     <span class="material-symbols-outlined icon-xs">verified</span> Tem Niêm Phong Màng Vỡ QR
                   </div>
                   <div style="font-size: 11px; color: var(--text-muted);">Mã tem: <strong class="mono text-white">QR-HYBRID-884920</strong></div>
-                  <div style="font-size: 10.5px; color: #34d399; margin-top: 2px;">✔ Nguyên vẹn 100% • Khớp mã SHA-256 đối soát sàn</div>
+                  <div style="font-size: 10.5px; color: #34d399; margin-top: 2px;">✔ Nguyên vẹn 100% • Khớp mã SHA-256 (Xem chi tiết →)</div>
                 </div>
+              </div>
+            </div>
+
+            <!-- Thẻ Biên Bản Đồng Kiểm Bưu Tá -->
+            <div class="co-inspection-card" id="btnViewCoInspection" title="Nhấp để xem biên bản đồng kiểm có chữ ký bưu tá">
+              <div class="flex items-center justify-between mb-1">
+                <strong class="text-xs text-white flex items-center gap-1">
+                  <span class="material-symbols-outlined icon-xs text-primary">description</span>
+                  Biên Bản Đồng Kiểm Bưu Tá
+                </strong>
+                <span class="badge badge-success text-2xs">HỢP LỆ</span>
+              </div>
+              <div class="text-2xs text-muted">
+                Bưu tá VNPost: <strong>Hoàng Văn Thắng</strong> • Mã BB: <span class="mono">BB-DK-884920</span>
+              </div>
+              <div class="text-2xs text-secondary mt-1 flex items-center gap-1">
+                <span class="material-symbols-outlined icon-xs">draw</span> Có chữ ký bưu tá &amp; khách hàng (Xem văn bản →)
               </div>
             </div>
           </div>
@@ -621,13 +589,20 @@
             </div>
           </div>
 
+          <!-- Bộ lọc tin nhắn nhanh -->
+          <div class="chat-filter-bar">
+            <button class="chat-filter-btn active" type="button" data-filter="all">Tất cả tin nhắn (4)</button>
+            <button class="chat-filter-btn" type="button" data-filter="arbitrator">⚖ Trọng tài viên (1)</button>
+            <button class="chat-filter-btn" type="button" data-filter="evidence">📎 Bằng chứng &amp; Tệp (2)</button>
+          </div>
+
           <div class="chat-tripartite-body" id="disputeChatBody">
-            <div class="chat-msg system-notice">
+            <div class="chat-msg system-notice" data-type="system">
               Phiên hòa giải #DSP-20261108-01 được mở tự động lúc 15:20 ngày 08/11/2026
             </div>
 
             <!-- Tin nhắn Người mua -->
-            <div class="chat-msg buyer">
+            <div class="chat-msg buyer" data-type="buyer" data-has-evidence="true">
               <div class="chat-avatar" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa;">P</div>
               <div class="chat-bubble-content">
                 <div class="chat-msg-meta">
@@ -643,17 +618,17 @@
                     alt="Ảnh chụp vết cấn viền camera"
                     class="chat-bubble-evidence-img"
                     id="btnZoomEvidenceImg"
-                    title="Bằng chứng macro: Vết cấn viền camera 1.5mm (Nhấp xem)"
+                    title="Bằng chứng macro: Vết cấn viền camera 1.5mm (Nhấp xem phóng to)"
                   />
                   <div class="text-xs text-muted mt-1" style="font-size: 10.5px;">
-                    📎 anh_chup_macro_vet_can_camera.jpg (3.2 MB)
+                    📎 anh_chup_macro_vet_can_camera.jpg (3.2 MB) • <span class="text-secondary" style="cursor: pointer;">Nhấp xem chi tiết đo lường</span>
                   </div>
                 </div>
               </div>
             </div>
 
             <!-- Tin nhắn Trọng tài viên -->
-            <div class="chat-msg arbitrator">
+            <div class="chat-msg arbitrator" data-type="arbitrator">
               <div class="chat-avatar" style="background: rgba(139, 92, 246, 0.2); color: var(--secondary-300);">L</div>
               <div class="chat-bubble-content">
                 <div class="chat-msg-meta">
@@ -665,11 +640,27 @@
                 <div>
                   Chào anh Phúc và anh Đức! Ban Giám Định đã tiếp nhận khiếu nại và trích xuất video mở hộp 4K do bưu tá tải lên máy chủ. Tem niêm phong màng vỡ QR-HYBRID-884920 còn nguyên vẹn, vết cấn ngoại quan là có thật. Người bán vui lòng đưa ra phương án đền bù hoặc đồng thuận hoàn tiền trong vòng 24 giờ.
                 </div>
+                <!-- Tin nhắn thoại mô phỏng (Voice Note) -->
+                <div class="voice-note-msg">
+                  <button class="voice-play-btn" type="button" id="btnPlayVoiceNote" title="Nghe lời giải trình của Trọng tài">
+                    <span class="material-symbols-outlined icon-xs">play_arrow</span>
+                  </button>
+                  <div class="voice-waveform">
+                    <span class="voice-bar" style="height: 6px;"></span>
+                    <span class="voice-bar" style="height: 14px;"></span>
+                    <span class="voice-bar" style="height: 18px;"></span>
+                    <span class="voice-bar" style="height: 10px;"></span>
+                    <span class="voice-bar" style="height: 16px;"></span>
+                    <span class="voice-bar" style="height: 8px;"></span>
+                    <span class="voice-bar" style="height: 12px;"></span>
+                  </div>
+                  <span class="text-2xs mono text-muted" id="voiceDuration">0:18</span>
+                </div>
               </div>
             </div>
 
             <!-- Tin nhắn Người bán -->
-            <div class="chat-msg seller">
+            <div class="chat-msg seller" data-type="seller">
               <div class="chat-avatar" style="background: rgba(34, 211, 238, 0.2); color: #22d3ee;">Đ</div>
               <div class="chat-bubble-content">
                 <div class="chat-msg-meta">
@@ -680,6 +671,14 @@
                   Dạ em xin lỗi anh Phúc và Sàn ạ! Do khâu đóng gói nhân viên em kiểm tra chưa kỹ góc viền camera. Bên em đồng ý nhận lại máy và hoàn tiền 100% hoặc đổi ngay cây iPhone 15 Pro Max khác nguyên seal 99.9% cho anh Phúc trong chiều nay ạ.
                 </div>
               </div>
+            </div>
+
+            <!-- Typing indicator (ẩn mặc định) -->
+            <div class="chat-typing-indicator" id="chatTypingIndicator" style="display: none;">
+              <div class="typing-dots">
+                <span></span><span></span><span></span>
+              </div>
+              <span id="typingSenderText">Trọng tài viên đang xem xét bằng chứng...</span>
             </div>
           </div>
 
@@ -729,8 +728,17 @@
             <p class="text-xs text-muted mb-2">
               Biên bản hòa giải đã được 3 bên thông qua. Sàn đã kích hoạt lệnh hoàn tiền 100% qua Napas 24/7 và gửi phiếu hoàn trả thiết bị.
             </p>
-            <div class="vat-stamp mb-2" style="font-size: 10px;">✔ PHÁN QUYẾT CÓ HIỆU LỰC SÀN</div>
-            <div class="text-xs text-muted">Mã hoàn tiền: <strong class="mono text-white">REFUND-20261108-9841</strong></div>
+            <div class="legal-red-stamp mb-3">✔ PHÁN QUYẾT CÓ HIỆU LỰC SÀN</div>
+            <div class="text-xs text-muted mb-3">Mã hoàn tiền: <strong class="mono text-white">REFUND-20261108-9841</strong></div>
+
+            <div class="flex flex-col gap-2">
+              <button class="btn btn-secondary btn-sm is-full" type="button" id="btnDownloadReportPdf">
+                <span class="material-symbols-outlined icon-xs">download</span> Tải Biên Bản Hòa Giải (.PDF)
+              </button>
+              <a href="orders.html" class="btn btn-outlined btn-sm is-full text-center">
+                Quay Lại Danh Sách Đơn Mua
+              </a>
+            </div>
           </div>
 
           <!-- BẢNG ĐỀ XUẤT CÁC PHƯƠNG ÁN XỬ LÝ -->
@@ -790,7 +798,7 @@
 
             <button class="btn btn-primary is-full py-3 mb-2" id="btnApplySettlement" type="button" style="font-weight: 700;">
               <span class="material-symbols-outlined icon-sm">handshake</span>
-              Đồng Thuận Phương Án &amp; Giải Quyết
+              Đồng Thuận Phương Án &amp; Ký Biên Bản
             </button>
 
             <button class="btn btn-ghost btn-sm is-full text-danger" id="btnEscalateCase" type="button">
@@ -813,31 +821,313 @@
       </div>
     </main>
 
-    <!-- ===== MODAL: XEM VIDEO UNBOX 4K ĐỒNG KIỂM ===== -->
+    <!-- ============================================================== -->
+    <!-- MODAL 1: XEM VIDEO UNBOX 4K ĐỒNG KIỂM (SIMULATED 4K PLAYER) -->
+    <!-- ============================================================== -->
     <div class="modal-backdrop" id="unboxVideoModal" style="display: none;">
-      <div class="modal" role="dialog" aria-modal="true" style="max-width: 640px;">
-        <div class="modal-head flex items-center justify-between pb-3" style="border-bottom: 1px solid var(--border);">
+      <div class="modal" role="dialog" aria-modal="true" style="max-width: 720px; padding: 0; overflow: hidden;">
+        <div class="modal-head flex items-center justify-between p-4" style="border-bottom: 1px solid var(--border); background: var(--bg-surface);">
           <h3 class="modal-title text-sm fw-700 flex items-center gap-2">
             <span class="material-symbols-outlined text-secondary">smart_display</span>
-            Video Mở Hộp Đồng Kiểm Cùng Shipper (4K HDR)
+            Trình Chiếu Video Mở Hộp 4K Đồng Kiểm • Bưu Tá &amp; Khách Hàng
+          </h3>
+          <button class="icon-btn" type="button" data-close title="Đóng">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <div class="modal-body p-4">
+          <div class="video-player-modal-box">
+            <div class="video-screen-hud" id="simVideoScreen">
+              <img
+                src="https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=1000"
+                alt="Video playback frame"
+                style="width: 100%; height: 100%; object-fit: cover; opacity: 0.85;"
+              />
+              <div class="video-overlay-scanline"></div>
+              <div class="video-telemetry-overlay">
+                <div class="flex justify-between items-center">
+                  <span class="flex items-center gap-1.5 text-danger font-bold">
+                    <span style="width: 8px; height: 8px; border-radius: 50%; background: #ef4444; display: inline-block;"></span> REC [4K 60FPS]
+                  </span>
+                  <span>GPS: 21.0168° N, 105.7838° E • Keangnam Landmark 72</span>
+                </div>
+                <div class="video-target-box">
+                  <span>Vết cấn viền 1.5mm</span>
+                </div>
+                <div class="flex justify-between items-center text-xs">
+                  <span>MÃ ĐƠN: ORD-20261108-9841</span>
+                  <span>TEM: QR-HYBRID-884920 (NGUYÊN VẸN)</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="video-controls-deluxe">
+              <div class="video-timeline-bar" id="videoTimelineBar">
+                <div class="video-timeline-progress" id="videoTimelineProgress"></div>
+              </div>
+              <div class="flex items-center justify-between flex-wrap gap-2 text-xs">
+                <div class="flex items-center gap-3">
+                  <button class="icon-btn" type="button" id="btnToggleSimPlay" title="Phát / Tạm dừng" style="background: var(--primary-600); color: #fff;">
+                    <span class="material-symbols-outlined icon-xs" id="simPlayIcon">pause</span>
+                  </button>
+                  <span class="mono text-white" id="simVideoTimeText">01:45 / 02:45</span>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  <span class="badge badge-secondary" style="font-size: 10px;">4K UHD</span>
+                  <span class="badge badge-success" style="font-size: 10px;">HEVC H.265</span>
+                  <button class="btn btn-ghost btn-sm text-xs py-1" type="button" id="btnSeekBookmark">
+                    ⏩ Nhảy tới mốc phát hiện lỗi (01:45)
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel p-3 mt-3 text-xs" style="background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.25); border-radius: var(--radius-md);">
+            <strong class="text-success block mb-0.5">Xác nhận giám định viên:</strong>
+            Video ghi rõ khoảnh khắc bóc tem màng vỡ QR-HYBRID-884920 và phát hiện vết cấn viền camera ngay tại thời điểm mở hộp lúc 15:18 ngày 08/11/2026.
+          </div>
+        </div>
+        <div class="modal-foot flex justify-end p-3" style="border-top: 1px solid var(--border); background: var(--bg-surface);">
+          <button class="btn btn-secondary btn-sm" type="button" data-close>Đóng</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL 2: PHÓNG TO ẢNH BẰNG CHỨNG MACRO (LIGHTBOX ZOOM) -->
+    <!-- ============================================================== -->
+    <div class="modal-backdrop" id="evidenceZoomModal" style="display: none;">
+      <div class="modal" role="dialog" aria-modal="true" style="max-width: 680px;">
+        <div class="modal-head flex items-center justify-between pb-3" style="border-bottom: 1px solid var(--border);">
+          <h3 class="modal-title text-sm fw-700 flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">search</span>
+            Bằng Chứng Giám Định Macro: Vết Cấn Viền Camera (1.5mm)
           </h3>
           <button class="icon-btn" type="button" data-close title="Đóng">
             <span class="material-symbols-outlined">close</span>
           </button>
         </div>
         <div class="modal-body py-4">
-          <div class="panel p-6 text-center" style="background: #000; border-radius: 8px; position: relative;">
-            <span class="material-symbols-outlined text-secondary" style="font-size: 64px; opacity: 0.8;">play_circle</span>
-            <div class="text-xs text-white mt-2 fw-700">video_unbox_4k_dongkiem_ORD-20261108.mp4</div>
-            <div class="text-xs text-muted mt-1">Ghi hình tại Keangnam Landmark 72 • Thời lượng: 02:45 • Khách hàng mở tem cùng bưu tá</div>
+          <div style="position: relative; border-radius: 8px; overflow: hidden; background: #000; text-align: center;">
+            <img
+              src="https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=900"
+              alt="Ảnh phóng to vết cấn viền"
+              style="max-height: 380px; width: 100%; object-fit: cover;"
+            />
+            <div style="position: absolute; top: 48%; left: 52%; transform: translate(-50%, -50%); border: 2px dashed #ef4444; width: 90px; height: 90px; border-radius: 50%; pointer-events: none; box-shadow: 0 0 15px rgba(239, 68, 68, 0.6);">
+              <span class="badge badge-danger" style="position: absolute; top: -14px; left: 50%; transform: translateX(-50%); font-size: 10px;">
+                |◀ 1.5mm ▶|
+              </span>
+            </div>
           </div>
-          <div class="panel p-3 mt-3 text-xs" style="background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.25);">
-            <strong class="text-success block mb-0.5">Xác nhận giám định viên:</strong>
-            Video ghi rõ khoảnh khắc bóc tem màng vỡ QR-HYBRID-884920 và phát hiện vết cấn viền camera ngay tại thời điểm mở hộp.
+
+          <div class="grid grid-2 gap-3 mt-3 text-xs">
+            <div class="panel p-3" style="background: var(--bg-surface);">
+              <strong class="text-white block mb-1">Dữ liệu tệp ảnh gốc:</strong>
+              <div class="text-muted">Tên tệp: <span class="mono text-white">IMG_MACRO_08112026.RAW</span></div>
+              <div class="text-muted">Độ phân giải: 4032 x 3024 (12.2 MP)</div>
+              <div class="text-muted">Thời gian chụp: 15:18:22 ngày 08/11/2026</div>
+            </div>
+            <div class="panel p-3" style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25);">
+              <strong class="text-danger block mb-1">Kết luận Trọng Tài:</strong>
+              <div class="text-muted">Vết cấn sâu 0.15mm trên viền hợp kim Titan. Không ảnh hưởng đến thấu kính nhưng làm giảm ngoại quan so với cam kết 99%.</div>
+            </div>
           </div>
         </div>
         <div class="modal-foot flex justify-end pt-3" style="border-top: 1px solid var(--border);">
           <button class="btn btn-secondary btn-sm" type="button" data-close>Đóng</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL 3: TRA CỨU TEM NIÊM PHONG QR (SHA-256 HOLOGRAM) -->
+    <!-- ============================================================== -->
+    <div class="modal-backdrop" id="qrSealModal" style="display: none;">
+      <div class="modal" role="dialog" aria-modal="true" style="max-width: 520px;">
+        <div class="modal-head flex items-center justify-between pb-3" style="border-bottom: 1px solid var(--border);">
+          <h3 class="modal-title text-sm fw-700 flex items-center gap-2">
+            <span class="material-symbols-outlined text-success">qr_code_scanner</span>
+            Đối Soát Tem Niêm Phong Màng Vỡ QR
+          </h3>
+          <button class="icon-btn" type="button" data-close title="Đóng">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <div class="modal-body py-4 text-center">
+          <div style="width: 140px; height: 140px; margin: 0 auto 16px; background: #ffffff; border-radius: 12px; padding: 10px; display: grid; place-items: center; box-shadow: 0 8px 24px rgba(0,0,0,0.4); border: 3px solid #10b981;">
+            <svg viewBox="0 0 24 24" width="120" height="120" fill="#0f172a">
+              <path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm10-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm14-2h4v2h-4v-2zm-4 0h2v4h-2v-4zm2 2h2v4h-2v-4zm2 2h2v4h-2v-4zm-4 2h2v2h-2v-2z"/>
+            </svg>
+          </div>
+
+          <h4 class="text-sm font-bold text-white mb-1">MÃ TEM: QR-HYBRID-884920</h4>
+          <span class="badge badge-success mb-3">XÁC MINH NGUYÊN VẸN 100%</span>
+
+          <div class="panel p-3 text-left text-xs" style="background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px;">
+            <div class="mb-2">
+              <span class="text-muted block">Mã băm mật mã đối soát (SHA-256):</span>
+              <code class="text-secondary mono" style="font-size: 10.5px; word-break: break-all;">
+                9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08
+              </code>
+            </div>
+            <div class="flex justify-between items-center text-muted pt-2" style="border-top: 1px solid var(--border);">
+              <span>KTV Niêm Phong Kho:</span>
+              <strong class="text-white">KTV-082 Đỗ Trọng Nghĩa</strong>
+            </div>
+            <div class="flex justify-between items-center text-muted mt-1">
+              <span>Thời điểm dán tem:</span>
+              <span class="text-white mono">11:30:15 - 08/11/2026</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-foot flex justify-end pt-3" style="border-top: 1px solid var(--border);">
+          <button class="btn btn-secondary btn-sm" type="button" data-close>Đóng</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL 4: BIÊN BẢN ĐỒNG KIỂM BƯU TÁ (CO-INSPECTION CERTIFICATE) -->
+    <!-- ============================================================== -->
+    <div class="modal-backdrop" id="coInspectionReportModal" style="display: none;">
+      <div class="modal" role="dialog" aria-modal="true" style="max-width: 600px;">
+        <div class="modal-head flex items-center justify-between pb-3" style="border-bottom: 1px solid var(--border);">
+          <h3 class="modal-title text-sm fw-700 flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">description</span>
+            Biên Bản Đồng Kiểm Bưu Tá &amp; Khách Hàng Tại Chỗ
+          </h3>
+          <button class="icon-btn" type="button" data-close title="Đóng">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <div class="modal-body py-4 text-xs">
+          <div class="panel p-4" style="background: rgba(255,255,255,0.02); border: 1.5px solid var(--border-strong); border-radius: 8px;">
+            <div class="flex justify-between items-center mb-3">
+              <div>
+                <strong class="text-white block text-sm">TỔNG CÔNG TY BƯU ĐIỆN VIỆT NAM (VNPOST)</strong>
+                <span class="text-muted text-2xs">TRẠM GIAO NHẬN NAM TỪ LIÊM - HÀ NỘI</span>
+              </div>
+              <div class="legal-red-stamp">ĐÃ ĐỐI SOÁT</div>
+            </div>
+
+            <div class="grid grid-2 gap-2 mb-3">
+              <div>Mã biên bản: <strong class="mono text-white">BB-DK-884920/VNPOST</strong></div>
+              <div>Thời gian lập: <span class="mono text-white">15:20 - 08/11/2026</span></div>
+              <div>Bưu tá phụ trách: <strong class="text-white">Hoàng Văn Thắng</strong></div>
+              <div>Mã nhân viên: <span class="mono text-white">VN-HN-1049</span></div>
+              <div>Người nhận hàng: <strong class="text-white">Nguyễn Ngọc Phúc</strong></div>
+              <div>Số điện thoại: <span class="mono text-white">0912 345 678</span></div>
+            </div>
+
+            <div class="p-2.5 rounded mb-3" style="background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25);">
+              <strong class="text-danger block mb-1">Ghi nhận ngoại quan tại chỗ:</strong>
+              <p class="text-muted" style="margin: 0; line-height: 1.5;">
+                Khách hàng mở gói hàng dưới sự chứng kiến của bưu tá. Tem niêm phong màng vỡ còn nguyên vẹn. Thân máy có vết cấn viền camera góc trên bên phải khoảng 1.5mm. Khách hàng chưa kích hoạt máy và yêu cầu chuyển phòng phân xử 3 bên.
+              </p>
+            </div>
+
+            <div class="flex justify-between items-end pt-3" style="border-top: 1px dashed var(--border);">
+              <div class="text-center" style="width: 45%;">
+                <span class="text-muted block text-2xs uppercase">CHỮ KÝ BƯU TÁ</span>
+                <div class="mono text-primary my-2" style="font-style: italic; font-size: 15px;">Thang_Hoang</div>
+                <strong class="text-white block">Hoàng Văn Thắng</strong>
+              </div>
+              <div class="text-center" style="width: 45%;">
+                <span class="text-muted block text-2xs uppercase">CHỮ KÝ KHÁCH HÀNG</span>
+                <div class="mono text-success my-2" style="font-style: italic; font-size: 15px;">Phuc_Nguyen</div>
+                <strong class="text-white block">Nguyễn Ngọc Phúc</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-foot flex justify-end pt-3" style="border-top: 1px solid var(--border);">
+          <button class="btn btn-secondary btn-sm" type="button" data-close>Đóng</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL 5: KÝ DUYỆT PHÁN QUYẾT HÒA GIẢI ĐIỆN TỬ (SIGN MODAL) -->
+    <!-- ============================================================== -->
+    <div class="modal-backdrop" id="settlementSignModal" style="display: none;">
+      <div class="modal" role="dialog" aria-modal="true" style="max-width: 520px;">
+        <div class="modal-head flex items-center justify-between pb-3" style="border-bottom: 1px solid var(--border);">
+          <h3 class="modal-title text-sm fw-700 flex items-center gap-2">
+            <span class="material-symbols-outlined text-success">draw</span>
+            Ký Điện Tử Thông Qua Phương Án Hòa Giải
+          </h3>
+          <button class="icon-btn" type="button" data-close title="Đóng">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <div class="modal-body py-4 text-xs">
+          <div class="panel p-3 mb-3" style="background: rgba(139, 92, 246, 0.08); border: 1px solid rgba(139, 92, 246, 0.3);">
+            <div class="text-muted">Phương án đồng thuận đã chọn:</div>
+            <strong class="text-white block text-sm mt-0.5" id="signModalOptionTitle">
+              Phương Án 1: Hoàn tiền 100% (21.490.000₫) về Napas 24/7
+            </strong>
+          </div>
+
+          <p class="text-muted mb-3" style="line-height: 1.6;">
+            Bằng việc xác nhận chữ ký điện tử, bạn và các bên cam kết tuân thủ tuyệt đối phán quyết của Trọng tài sàn HYBRID.STORE. Lệnh giải ngân bồi hoàn sẽ được tự động thực thi ngay lập tức.
+          </p>
+
+          <div class="electronic-sign-pad mb-3">
+            <div class="text-muted mb-1 text-2xs">CHỮ KÝ ĐIỆN TỬ XÁC THỰC CỦA BẠN (OTP / E-SIGN):</div>
+            <div class="mono text-success fw-700" style="font-size: 1.35rem; font-style: italic;">
+              Nguyễn Ngọc Phúc (Đã chứng thực eKYC)
+            </div>
+            <div class="text-2xs text-muted mt-1">Mã xác thực: <span class="mono text-secondary">OTP-AUTH-882910</span></div>
+          </div>
+
+          <label class="flex items-center gap-2 cursor-pointer mb-2">
+            <input type="checkbox" id="chkAgreeLegalTerms" checked />
+            <span>Tôi đã đọc, hiểu rõ và đồng ý với các điều khoản hòa giải 3 bên.</span>
+          </label>
+        </div>
+        <div class="modal-foot flex justify-end gap-2 pt-3" style="border-top: 1px solid var(--border);">
+          <button class="btn btn-secondary btn-sm" type="button" data-close>Hủy Bỏ</button>
+          <button class="btn btn-primary btn-sm" type="button" id="btnConfirmSignSettlement">
+            <span class="material-symbols-outlined icon-xs">verified</span> Ký Điện Tử &amp; Thi Hành Ngay
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL 6: ĐÍNH KÈM TỆP BẰNG CHỨNG MỚI (ATTACH EVIDENCE) -->
+    <!-- ============================================================== -->
+    <div class="modal-backdrop" id="attachEvidenceModal" style="display: none;">
+      <div class="modal" role="dialog" aria-modal="true" style="max-width: 480px;">
+        <div class="modal-head flex items-center justify-between pb-3" style="border-bottom: 1px solid var(--border);">
+          <h3 class="modal-title text-sm fw-700 flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">attach_file</span>
+            Tải Lên Bằng Chứng Đối Soát
+          </h3>
+          <button class="icon-btn" type="button" data-close title="Đóng">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <div class="modal-body py-4 text-xs">
+          <label class="form-label mb-1 block">Chọn mẫu tệp bằng chứng có sẵn:</label>
+          <select class="input input-sm mb-3 is-full" id="selectSampleEvidence">
+            <option value="anh_chup_macro_vet_can_1.jpg">📷 anh_chup_macro_vet_can_1.jpg (Ảnh macro 12MP)</option>
+            <option value="bien_ban_dong_kiem_buu_ta_ky_ten.pdf">📄 bien_ban_dong_kiem_buu_ta_ky_ten.pdf (Biên bản bưu tá)</option>
+            <option value="anh_tem_niem_phong_qr_mang_vo.png">🛡 anh_tem_niem_phong_qr_mang_vo.png (Tem màng vỡ)</option>
+            <option value="video_quay_goc_can_360.mp4">🎥 video_quay_goc_can_360.mp4 (Video quay cận cảnh)</option>
+          </select>
+
+          <label class="form-label mb-1 block">Lời nhắn ghi chú kèm theo:</label>
+          <textarea class="input is-full mb-3" id="attachEvidenceNote" rows="2" placeholder="Ví dụ: Em gửi thêm ảnh chụp macro góc nghiêng 45 độ cho Trọng tài xem xét ạ..."></textarea>
+        </div>
+        <div class="modal-foot flex justify-end gap-2 pt-3" style="border-top: 1px solid var(--border);">
+          <button class="btn btn-secondary btn-sm" type="button" data-close>Hủy</button>
+          <button class="btn btn-primary btn-sm" type="button" id="btnSubmitAttachEvidence">
+            <span class="material-symbols-outlined icon-xs">upload</span> Tải Lên Phòng Phân Xử
+          </button>
         </div>
       </div>
     </div>
@@ -919,6 +1209,20 @@
           });
         }
 
+        // Chuyển đổi tab case
+        document.querySelectorAll(".dispute-case-tab-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            document.querySelectorAll(".dispute-case-tab-btn").forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+            const caseId = btn.dataset.caseId;
+            if (caseId.includes("7720")) {
+              window.location.href = "dispute.html?orderId=ORD-20261105-7720";
+            } else {
+              window.location.href = "dispute.html?orderId=ORD-20261108-9841";
+            }
+          });
+        });
+
         // Cập nhật thông tin đơn hàng lên giao diện
         if (selectedOrder) {
           const productImg = document.getElementById("disputeProductImg");
@@ -929,6 +1233,7 @@
           const settleRefundAmount = document.getElementById("settleRefundAmount");
           const escrowVaultAmount = document.getElementById("escrowVaultAmount");
           const partyBuyerName = document.getElementById("partyBuyerName");
+          const caseHeaderCode = document.getElementById("caseHeaderCode");
 
           const firstItem = (selectedOrder.items && selectedOrder.items[0]) || {};
           const rawImg = firstItem.img || firstItem.image;
@@ -957,74 +1262,103 @@
           if (partyBuyerName && selectedOrder.shippingAddress && selectedOrder.shippingAddress.fullName) {
             partyBuyerName.textContent = `${selectedOrder.shippingAddress.fullName} (Người Mua)`;
           }
+          if (caseHeaderCode) {
+            caseHeaderCode.textContent = `Hồ Sơ Hòa Giải & Phân Xử: #DSP-${currentOrderId.replace('ORD-', '')}`;
+          }
         }
 
-        // 3. Xử lý đồng thuận phương án hòa giải
+        // 3. Xử lý nút mở Modal Ký Phán Quyết Hòa Giải
         const btnApplySettlement = document.getElementById("btnApplySettlement");
-        if (btnApplySettlement) {
+        const settlementSignModal = document.getElementById("settlementSignModal");
+        const signModalOptionTitle = document.getElementById("signModalOptionTitle");
+        const btnConfirmSignSettlement = document.getElementById("btnConfirmSignSettlement");
+
+        if (btnApplySettlement && settlementSignModal) {
           btnApplySettlement.addEventListener("click", () => {
             const selectedOpt = document.querySelector('input[name="settleOption"]:checked');
             const optVal = selectedOpt ? selectedOpt.value : "REFUND";
-            let optTitle = "Hoàn Tiền 100%";
-            if (optVal === "EXCHANGE") optTitle = "Đổi Máy 1:1 Khác Trong 24H";
-            if (optVal === "COMPENSATION") optTitle = "Bồi Thường Voucher 1.500.000₫ & Giữ Lại Máy";
+            let optTitle = "Phương Án 1: Hoàn tiền 100% (" + (selectedOrder ? formatMoney(selectedOrder.total || 0) : "21.490.000₫") + ") về Napas 24/7";
+            if (optVal === "EXCHANGE") optTitle = "Phương Án 2: Đổi máy khác Like New 99.9% trong 24 giờ";
+            if (optVal === "COMPENSATION") optTitle = "Phương Án 3: Bồi thường Voucher 1.500.000₫ & Giữ lại máy";
 
-            const conf = confirm(
-              `Bạn có chắc chắn muốn xác nhận ĐỒNG THUẬN "${optTitle}" không?\n\nPhán quyết này sẽ có hiệu lực thi hành ngay lập tức bởi Ban Quản Trị HYBRID.STORE.`
-            );
+            if (signModalOptionTitle) signModalOptionTitle.textContent = optTitle;
+            settlementSignModal.style.display = "flex";
+          });
+        }
 
-            if (conf) {
-              // Cập nhật giao diện sang resolved
-              const verdictBox = document.getElementById("verdictSuccessBox");
-              const actionPanel = document.getElementById("settlementActionPanel");
-              const stepVerdict = document.getElementById("stepVerdict");
-              const slaCountdownPill = document.getElementById("slaCountdownPill");
+        if (btnConfirmSignSettlement) {
+          btnConfirmSignSettlement.addEventListener("click", () => {
+            const chk = document.getElementById("chkAgreeLegalTerms");
+            if (chk && !chk.checked) {
+              alert("Vui lòng tích chọn đồng ý với điều khoản hòa giải 3 bên trước khi ký.");
+              return;
+            }
 
-              if (verdictBox) verdictBox.style.display = "block";
-              if (actionPanel) actionPanel.style.display = "none";
-              if (stepVerdict) {
-                stepVerdict.className = "step-node done";
-                const circle = stepVerdict.querySelector(".step-node-circle") || stepVerdict.querySelector(".dispute-step-circle");
-                if (circle) circle.textContent = "✓";
-              }
-              if (slaCountdownPill) {
-                slaCountdownPill.innerHTML = '<span class="material-symbols-outlined icon-xs text-success">verified</span> ĐÃ HOÀN TẤT PHÁN QUYẾT';
-                slaCountdownPill.className = "sla-countdown-pill text-success";
-                slaCountdownPill.style.background = "rgba(34, 197, 94, 0.12)";
-                slaCountdownPill.style.borderColor = "rgba(34, 197, 94, 0.35)";
-              }
+            if (settlementSignModal) settlementSignModal.style.display = "none";
 
-              // Thêm tin nhắn hệ thống vào chat
-              const chatBody = document.getElementById("disputeChatBody");
-              if (chatBody) {
-                const now = new Date();
-                const timeStr = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
-                const verdictMsg = `
-                  <div class="chat-msg arbitrator">
-                    <div class="chat-avatar" style="background: rgba(34, 197, 94, 0.2); color: #22c55e;">✔</div>
-                    <div class="chat-bubble-content" style="background: rgba(34, 197, 94, 0.12); border-color: rgba(34, 197, 94, 0.4);">
-                      <div class="chat-msg-meta">
-                        <strong class="text-success flex items-center gap-1">
-                          <span class="material-symbols-outlined icon-xs">gavel</span> Phán Quyết Hòa Giải Chính Thức Có Hiệu Lực
-                        </strong>
-                        <span class="text-muted">${timeStr}</span>
-                      </div>
-                      <div>
-                        Chúc mừng hai bên! Phương án <strong>${optTitle}</strong> đã được cả 3 bên chính thức thông qua. Lệnh thực hiện giải ngân bồi hoàn đã được chuyển tới Cổng Napas 24/7. Hồ sơ #DSP-20261108 được đóng lại thành công.
-                      </div>
+            // Cập nhật giao diện sang resolved
+            const verdictBox = document.getElementById("verdictSuccessBox");
+            const actionPanel = document.getElementById("settlementActionPanel");
+            const stepVerdict = document.getElementById("stepVerdict");
+            const slaCountdownPill = document.getElementById("slaCountdownPill");
+            const disputeStatusBadge = document.getElementById("disputeStatusBadge");
+
+            if (verdictBox) verdictBox.style.display = "block";
+            if (actionPanel) actionPanel.style.display = "none";
+            if (disputeStatusBadge) {
+              disputeStatusBadge.textContent = "HÒA GIẢI THÀNH CÔNG";
+              disputeStatusBadge.className = "badge badge-success";
+            }
+            if (stepVerdict) {
+              stepVerdict.className = "step-node done";
+              const circle = stepVerdict.querySelector(".step-node-circle") || stepVerdict.querySelector(".dispute-step-circle");
+              if (circle) circle.textContent = "✓";
+            }
+            if (slaCountdownPill) {
+              slaCountdownPill.innerHTML = '<span class="material-symbols-outlined icon-xs text-success">verified</span> ĐÃ HOÀN TẤT PHÁN QUYẾT';
+              slaCountdownPill.className = "sla-countdown-pill text-success";
+              slaCountdownPill.style.background = "rgba(34, 197, 94, 0.12)";
+              slaCountdownPill.style.borderColor = "rgba(34, 197, 94, 0.35)";
+            }
+
+            // Thêm tin nhắn hệ thống vào chat
+            const chatBody = document.getElementById("disputeChatBody");
+            if (chatBody) {
+              const now = new Date();
+              const timeStr = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+              const verdictMsg = `
+                <div class="chat-msg arbitrator" data-type="arbitrator">
+                  <div class="chat-avatar" style="background: rgba(34, 197, 94, 0.2); color: #22c55e;">✔</div>
+                  <div class="chat-bubble-content" style="background: rgba(34, 197, 94, 0.12); border-color: rgba(34, 197, 94, 0.4);">
+                    <div class="chat-msg-meta">
+                      <strong class="text-success flex items-center gap-1">
+                        <span class="material-symbols-outlined icon-xs">gavel</span> Phán Quyết Hòa Giải Chính Thức Có Hiệu Lực
+                      </strong>
+                      <span class="text-muted">${timeStr}</span>
+                    </div>
+                    <div>
+                      Chúc mừng hai bên! Phương án hòa giải đã được cả 3 bên ký điện tử thông qua. Lệnh thực hiện giải ngân bồi hoàn đã được chuyển tới Cổng Napas 24/7. Hồ sơ #DSP-20261108 được đóng lại thành công.
                     </div>
                   </div>
-                `;
-                chatBody.insertAdjacentHTML("beforeend", verdictMsg);
-                chatBody.scrollTop = chatBody.scrollHeight;
-              }
-
-              if (typeof Utils !== "undefined" && Utils.toast) {
-                Utils.toast("Đồng thuận hòa giải thành công! Lệnh hoàn tiền đã được ban hành.", "success");
-              } else {
-                alert("Chúc mừng! Phương án hòa giải đã được 3 bên thông qua thành công.");
-              }
+                </div>
+              `;
+              chatBody.insertAdjacentHTML("beforeend", verdictMsg);
+              chatBody.scrollTop = chatBody.scrollHeight;
             }
+
+            if (typeof Utils !== "undefined" && Utils.toast) {
+              Utils.toast("Đã ký điện tử thành công! Lệnh bồi hoàn Napas 24/7 đã được kích hoạt.", "success");
+            } else {
+              alert("Chúc mừng! Bạn đã ký điện tử thông qua biên bản hòa giải thành công.");
+            }
+          });
+        }
+
+        // Tải biên bản PDF giả lập
+        const btnDownloadPdf = document.getElementById("btnDownloadReportPdf");
+        if (btnDownloadPdf) {
+          btnDownloadPdf.addEventListener("click", () => {
+            alert("Đang tạo và tải xuống bản điện tử có chữ ký số: Bien_Ban_Hoa_Giai_HYBRID_DSP-20261108.pdf");
           });
         }
 
@@ -1049,7 +1383,7 @@
               if (chatBody) {
                 chatBody.insertAdjacentHTML(
                   "beforeend",
-                  `<div class="chat-msg system-notice" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">
+                  `<div class="chat-msg system-notice" data-type="system" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">
                     ⚠ Khách hàng đã kích hoạt quyền yêu cầu can thiệp khẩn cấp từ Giám Đốc Kỹ Thuật sàn.
                   </div>`
                 );
@@ -1059,10 +1393,11 @@
           });
         }
 
-        // 6. Gửi tin nhắn chat & Tự động phản hồi mô phỏng thông minh
+        // 6. Gửi tin nhắn chat & Typing indicator & Tự động phản hồi
         const chatForm = document.getElementById("disputeChatForm");
         const chatInput = document.getElementById("disputeChatInput");
         const chatBody = document.getElementById("disputeChatBody");
+        const typingIndicator = document.getElementById("chatTypingIndicator");
 
         if (chatForm && chatInput && chatBody) {
           chatForm.addEventListener("submit", (e) => {
@@ -1075,7 +1410,7 @@
 
             // Tin nhắn của Bạn
             const userHtml = `
-              <div class="chat-msg own">
+              <div class="chat-msg own" data-type="own">
                 <div class="chat-avatar" style="background: var(--primary-500); color: #fff;">Bạn</div>
                 <div class="chat-bubble-content">
                   <div class="chat-msg-meta">
@@ -1090,8 +1425,17 @@
             chatInput.value = "";
             chatBody.scrollTop = chatBody.scrollHeight;
 
+            // Hiển thị typing indicator
+            if (typingIndicator) {
+              typingIndicator.style.display = "flex";
+              chatBody.appendChild(typingIndicator);
+              chatBody.scrollTop = chatBody.scrollHeight;
+            }
+
             // Phản hồi tự động thông minh từ Trọng tài viên hoặc Người bán sau 1.2s
             setTimeout(() => {
+              if (typingIndicator) typingIndicator.style.display = "none";
+
               const autoReplies = [
                 {
                   sender: "arbitrator",
@@ -1113,7 +1457,7 @@
               const reply = autoReplies[Math.floor(Math.random() * autoReplies.length)];
 
               const replyHtml = `
-                <div class="chat-msg ${reply.sender}">
+                <div class="chat-msg ${reply.sender}" data-type="${reply.sender}">
                   <div class="chat-avatar" style="background: ${reply.bg}; color: ${reply.color};">${reply.avatar}</div>
                   <div class="chat-bubble-content">
                     <div class="chat-msg-meta">
@@ -1141,65 +1485,176 @@
           });
         });
 
-        // 8. Nút đính kèm bằng chứng
-        const btnAttach = document.getElementById("btnAttachEvidence");
-        if (btnAttach) {
-          btnAttach.addEventListener("click", () => {
-            const sampleFiles = [
-              "anh_chup_macro_vet_can_1.jpg",
-              "bien_ban_dong_kiem_buu_ta_ky_ten.pdf",
-              "anh_tem_niem_phong_qr_mang_vo.png",
-            ];
-            const chosen = sampleFiles[Math.floor(Math.random() * sampleFiles.length)];
-            const conf = confirm(`Bạn có muốn tải tệp bằng chứng [${chosen}] vào phòng phân xử không?`);
-            if (conf) {
-              const now = new Date();
-              const timeStr = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
-              const attachMsg = `
-                <div class="chat-msg own">
-                  <div class="chat-avatar" style="background: var(--primary-500); color: #fff;">Bạn</div>
-                  <div class="chat-bubble-content">
-                    <div class="chat-msg-meta"><strong class="text-white">Bạn</strong><span class="text-white" style="opacity:0.8;">${timeStr}</span></div>
-                    <div class="flex items-center gap-2 p-2 rounded" style="background: rgba(0,0,0,0.25); border: 1px dashed rgba(255,255,255,0.2);">
-                      <span class="material-symbols-outlined text-secondary">attachment</span>
-                      <div>
-                        <strong>${chosen}</strong>
-                        <div style="font-size: 10px; opacity: 0.8;">Đã tải lên &amp; đính kèm vào hồ sơ đối soát</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              `;
-              if (chatBody) {
-                chatBody.insertAdjacentHTML("beforeend", attachMsg);
-                chatBody.scrollTop = chatBody.scrollHeight;
+        // 8. Bộ lọc tin nhắn trong Chat (All, Arbitrator, Evidence)
+        document.querySelectorAll(".chat-filter-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            document.querySelectorAll(".chat-filter-btn").forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+            const filter = btn.dataset.filter;
+
+            document.querySelectorAll("#disputeChatBody .chat-msg").forEach((msg) => {
+              if (filter === "all") {
+                msg.style.display = "flex";
+              } else if (filter === "arbitrator") {
+                if (msg.dataset.type === "arbitrator" || msg.dataset.type === "system") {
+                  msg.style.display = "flex";
+                } else {
+                  msg.style.display = "none";
+                }
+              } else if (filter === "evidence") {
+                if (msg.dataset.hasEvidence === "true") {
+                  msg.style.display = "flex";
+                } else {
+                  msg.style.display = "none";
+                }
               }
-            }
+            });
+          });
+        });
+
+        // 9. Phóng to ảnh bằng chứng (Lightbox zoom)
+        const btnZoomImg = document.getElementById("btnZoomEvidenceImg");
+        const evidenceZoomModal = document.getElementById("evidenceZoomModal");
+        if (btnZoomImg && evidenceZoomModal) {
+          btnZoomImg.addEventListener("click", () => {
+            evidenceZoomModal.style.display = "flex";
           });
         }
 
-        // 9. Xem video mở hộp unbox 4K modal
+        // 10. Tra cứu tem niêm phong QR
+        const btnViewQrSeal = document.getElementById("btnViewQrSeal");
+        const qrSealModal = document.getElementById("qrSealModal");
+        if (btnViewQrSeal && qrSealModal) {
+          btnViewQrSeal.addEventListener("click", () => {
+            qrSealModal.style.display = "flex";
+          });
+        }
+
+        // 11. Xem biên bản đồng kiểm bưu tá
+        const btnViewCoInspection = document.getElementById("btnViewCoInspection");
+        const coInspectionModal = document.getElementById("coInspectionReportModal");
+        if (btnViewCoInspection && coInspectionModal) {
+          btnViewCoInspection.addEventListener("click", () => {
+            coInspectionModal.style.display = "flex";
+          });
+        }
+
+        // 12. Xem video mở hộp unbox 4K modal & Video simulation player
         const btnViewVideo = document.getElementById("btnViewUnboxVideo");
         const unboxModal = document.getElementById("unboxVideoModal");
+        const btnTogglePlay = document.getElementById("btnToggleSimPlay");
+        const simPlayIcon = document.getElementById("simPlayIcon");
+        const btnSeekBookmark = document.getElementById("btnSeekBookmark");
+        const timelineProgress = document.getElementById("videoTimelineProgress");
+        const videoTimeText = document.getElementById("simVideoTimeText");
+
+        let isSimPlaying = true;
+        let simSeconds = 105; // 01:45
+
         if (btnViewVideo && unboxModal) {
           btnViewVideo.addEventListener("click", () => {
             unboxModal.style.display = "flex";
           });
         }
 
-        // 10. Đóng modal
-        document.querySelectorAll("[data-close]").forEach((btn) => {
-          btn.addEventListener("click", () => {
-            if (unboxModal) unboxModal.style.display = "none";
-          });
-        });
-        if (unboxModal) {
-          unboxModal.addEventListener("click", (e) => {
-            if (e.target === unboxModal) unboxModal.style.display = "none";
+        if (btnTogglePlay && simPlayIcon) {
+          btnTogglePlay.addEventListener("click", () => {
+            isSimPlaying = !isSimPlaying;
+            simPlayIcon.textContent = isSimPlaying ? "pause" : "play_arrow";
           });
         }
 
-        // 11. Đếm ngược SLA
+        if (btnSeekBookmark && timelineProgress && videoTimeText) {
+          btnSeekBookmark.addEventListener("click", () => {
+            simSeconds = 105;
+            timelineProgress.style.width = "63%";
+            videoTimeText.textContent = "01:45 / 02:45";
+            if (typeof Utils !== "undefined" && Utils.toast) {
+              Utils.toast("Đã chuyển tới mốc thời gian phát hiện lỗi ngoại quan (01:45)", "info");
+            }
+          });
+        }
+
+        // 13. Voice note giả lập
+        const btnPlayVoiceNote = document.getElementById("btnPlayVoiceNote");
+        if (btnPlayVoiceNote) {
+          let isVoicePlaying = false;
+          btnPlayVoiceNote.addEventListener("click", () => {
+            isVoicePlaying = !isVoicePlaying;
+            btnPlayVoiceNote.querySelector(".material-symbols-outlined").textContent = isVoicePlaying ? "pause" : "play_arrow";
+            if (isVoicePlaying) {
+              btnPlayVoiceNote.style.background = "#10b981";
+              if (typeof Utils !== "undefined" && Utils.toast) {
+                Utils.toast("Đang phát bản ghi âm giải trình kỹ thuật của KTV Hoàng Nam...", "info");
+              }
+            } else {
+              btnPlayVoiceNote.style.background = "";
+            }
+          });
+        }
+
+        // 14. Đính kèm bằng chứng mới qua Modal
+        const btnAttach = document.getElementById("btnAttachEvidence");
+        const attachEvidenceModal = document.getElementById("attachEvidenceModal");
+        const btnSubmitAttach = document.getElementById("btnSubmitAttachEvidence");
+        const selectSampleEvidence = document.getElementById("selectSampleEvidence");
+        const attachEvidenceNote = document.getElementById("attachEvidenceNote");
+
+        if (btnAttach && attachEvidenceModal) {
+          btnAttach.addEventListener("click", () => {
+            attachEvidenceModal.style.display = "flex";
+          });
+        }
+
+        if (btnSubmitAttach && attachEvidenceModal) {
+          btnSubmitAttach.addEventListener("click", () => {
+            const fileName = selectSampleEvidence ? selectSampleEvidence.value : "anh_chup_macro_vet_can_1.jpg";
+            const noteText = attachEvidenceNote ? attachEvidenceNote.value.trim() : "";
+            attachEvidenceModal.style.display = "none";
+
+            const now = new Date();
+            const timeStr = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+            const attachMsg = `
+              <div class="chat-msg own" data-type="own" data-has-evidence="true">
+                <div class="chat-avatar" style="background: var(--primary-500); color: #fff;">Bạn</div>
+                <div class="chat-bubble-content">
+                  <div class="chat-msg-meta"><strong class="text-white">Bạn</strong><span class="text-white" style="opacity:0.8;">${timeStr}</span></div>
+                  ${noteText ? `<div class="mb-2">${noteText}</div>` : ""}
+                  <div class="flex items-center gap-2 p-2 rounded" style="background: rgba(0,0,0,0.25); border: 1px dashed rgba(255,255,255,0.2);">
+                    <span class="material-symbols-outlined text-secondary">attachment</span>
+                    <div>
+                      <strong>${fileName}</strong>
+                      <div style="font-size: 10px; opacity: 0.8;">Đã tải lên &amp; đính kèm vào hồ sơ đối soát sàn</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+            if (chatBody) {
+              chatBody.insertAdjacentHTML("beforeend", attachMsg);
+              chatBody.scrollTop = chatBody.scrollHeight;
+            }
+            if (typeof Utils !== "undefined" && Utils.toast) {
+              Utils.toast("Đã đính kèm tệp bằng chứng vào phòng đối chất thành công!", "success");
+            }
+          });
+        }
+
+        // 15. Đóng modal chung
+        document.querySelectorAll("[data-close]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            document.querySelectorAll(".modal-backdrop").forEach((m) => {
+              m.style.display = "none";
+            });
+          });
+        });
+        document.querySelectorAll(".modal-backdrop").forEach((m) => {
+          m.addEventListener("click", (e) => {
+            if (e.target === m) m.style.display = "none";
+          });
+        });
+
+        // 16. Đếm ngược SLA
         const slaText = document.getElementById("slaCountdownText");
         if (slaText) {
           let s = 18 * 3600 + 24 * 60 + 10;
