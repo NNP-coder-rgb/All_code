@@ -126,6 +126,19 @@ const IMG = {
 
   // Danh mục Máy Ảnh & Quay Chụp
   camera_mirrorless: "assets/images/products/may-anh-ky-thuat-so-mirrorless.png",
+  camera_canon_eos: "assets/images/products/images.jpg",
+  camera_canon_flash: "assets/images/products/images (1).jpg",
+  camera_lens_tele: "assets/images/products/images (2).jpg",
+  camera_lens_zoom: "assets/images/products/images (3).jpg",
+  camera_mirrorless_white: "assets/images/products/images (4).jpg",
+  camera_osmo_pocket3_stand: "assets/images/products/images (5).jpg",
+  camera_osmo_pocket3_action: "assets/images/products/images (6).jpg",
+  camera_osmo_pocket_selfie: "assets/images/products/images (7).jpg",
+  camera_panasonic_4k: "assets/images/products/images (8).jpg",
+  camera_moza_gimbal: "assets/images/products/images (9).jpg",
+  camera_sony_alpha: "assets/images/products/images (10).jpg",
+  camera_ixy_compact: "assets/images/products/images (11).jpg",
+  camera_canon_r6_body: "assets/images/products/images (18).jpg",
 };
 
 // tone: primary | secondary | tertiary | success  (màu chủ đạo của từng ngành hàng)
@@ -1063,7 +1076,7 @@ const PRODUCTS = [
     desc: "Màu bạc vintage, ống kính trong veo không mốc rễ",
     price: 17200000,
     oldPrice: 24500000,
-    img: IMG.camera_mirrorless,
+    img: IMG.camera_mirrorless_white,
   },
   {
     id: "t7",
@@ -1169,7 +1182,7 @@ const PRODUCTS = [
     price: 1650000,
     oldPrice: 2490000,
     buy: "Mua Ngay",
-    img: IMG.gaming_razer_mouse_white,
+    img: IMG.gaming_office_mouse,
   },
   {
     id: "t13",
@@ -1860,7 +1873,7 @@ const PRODUCTS = [
     price: 38990000,
     off: 5,
     buy: "Mua Ngay",
-    img: IMG.camera_mirrorless,
+    img: IMG.camera_canon_eos,
   },
   {
     id: "cm2",
@@ -1879,7 +1892,7 @@ const PRODUCTS = [
     price: 39500000,
     oldPrice: 49990000,
     buy: "Mua Ngay",
-    img: IMG.camera_mirrorless,
+    img: IMG.camera_lens_zoom,
   },
   {
     id: "cm3",
@@ -1914,7 +1927,7 @@ const PRODUCTS = [
     price: 34500000,
     oldPrice: 42000000,
     buy: "Mua Ngay",
-    img: IMG.camera_mirrorless,
+    img: IMG.camera_ixy_compact,
   },
   {
     id: "cm5",
@@ -1930,7 +1943,7 @@ const PRODUCTS = [
     price: 15890000,
     off: 5,
     buy: "Mua Ngay",
-    img: IMG.camera_mirrorless,
+    img: IMG.camera_osmo_pocket3_stand,
   },
   {
     id: "cm6",
@@ -1949,7 +1962,7 @@ const PRODUCTS = [
     price: 18900000,
     oldPrice: 26500000,
     buy: "Mua Ngay",
-    img: IMG.camera_mirrorless,
+    img: IMG.camera_lens_tele,
   },
   {
     id: "cm7",
@@ -1965,7 +1978,7 @@ const PRODUCTS = [
     price: 68900000,
     off: 7,
     buy: "Mua Ngay",
-    img: IMG.camera_mirrorless,
+    img: IMG.camera_canon_flash,
   },
   {
     id: "cm8",
@@ -1984,7 +1997,7 @@ const PRODUCTS = [
     price: 14500000,
     oldPrice: 22900000,
     buy: "Mua Ngay",
-    img: IMG.camera_mirrorless,
+    img: IMG.camera_moza_gimbal,
   },
   {
     id: "f13",
@@ -2765,7 +2778,7 @@ const PRODUCTS = [
     price: 47990000,
     off: 6,
     buy: "Mua Ngay",
-    img: IMG.camera_mirrorless,
+    img: IMG.camera_sony_alpha,
   },
   {
     id: "cm10",
@@ -2784,7 +2797,7 @@ const PRODUCTS = [
     price: 42500000,
     oldPrice: 52000000,
     buy: "Mua Ngay",
-    img: IMG.camera_mirrorless,
+    img: IMG.camera_osmo_pocket_selfie,
   },
   {
     id: "cm11",
@@ -2800,7 +2813,7 @@ const PRODUCTS = [
     price: 15890000,
     off: 5,
     buy: "Mua Ngay",
-    img: IMG.camera_mirrorless,
+    img: IMG.camera_osmo_pocket3_action,
   },
   {
     id: "cm12",
@@ -2819,7 +2832,7 @@ const PRODUCTS = [
     price: 46800000,
     oldPrice: 62000000,
     buy: "Mua Ngay",
-    img: IMG.camera_mirrorless,
+    img: IMG.camera_canon_r6_body,
   },
   {
     id: "cm13",
@@ -2836,7 +2849,7 @@ const PRODUCTS = [
     price: 41990000,
     off: 7,
     buy: "Mua Ngay",
-    img: IMG.camera_mirrorless,
+    img: IMG.camera_panasonic_4k,
   },
   {
     id: "cm14",
@@ -2856,7 +2869,7 @@ const PRODUCTS = [
     price: 43500000,
     oldPrice: 56990000,
     buy: "Mua Ngay",
-    img: IMG.camera_mirrorless,
+    img: IMG.camera_lens_zoom,
   },
 ];
 
