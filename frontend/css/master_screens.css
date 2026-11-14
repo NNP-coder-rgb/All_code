@@ -3174,6 +3174,196 @@ body.light-theme .side-link.active {
   box-shadow: 0 4px 16px rgba(124, 58, 237, 0.25);
 }
 
+/* ===================================================================
+   15. AI POST STUDIO & SELLER DASHBOARD DELUXE
+   =================================================================== */
+/* Bố cục 2 Cột Studio cho Đăng Bán AI */
+.post-studio-layout {
+  display: grid;
+  grid-template-columns: 440px minmax(0, 1fr);
+  gap: var(--sp-6, 24px);
+  align-items: start;
+}
+@media (max-width: 1040px) {
+  .post-studio-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Khung Kính Ngắm Laser Scanner HUD */
+.ai-viewfinder-box {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-xl, 16px);
+  overflow: hidden;
+  background: #020617;
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 0 40px rgba(6, 182, 212, 0.15);
+}
+.ai-viewfinder-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.ai-laser-beam {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent 0%, #22d3ee 50%, #a855f7 100%);
+  box-shadow: 0 0 16px #22d3ee, 0 0 30px #a855f7;
+  pointer-events: none;
+  z-index: 10;
+  display: none;
+}
+.ai-laser-beam.scanning {
+  display: block;
+  animation: aiLaserPulse 1.8s ease-in-out infinite;
+}
+@keyframes aiLaserPulse {
+  0% { top: 4%; opacity: 0.9; }
+  50% { top: 94%; opacity: 1; }
+  100% { top: 4%; opacity: 0.9; }
+}
+
+/* Các góc ngắm HUD */
+.hud-corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #22d3ee;
+  pointer-events: none;
+  z-index: 5;
+}
+.hud-corner-tl { top: 12px; left: 12px; border-right: none; border-bottom: none; }
+.hud-corner-tr { top: 12px; right: 12px; border-left: none; border-bottom: none; }
+.hud-corner-bl { bottom: 12px; left: 12px; border-right: none; border-top: none; }
+.hud-corner-br { bottom: 12px; right: 12px; border-left: none; border-top: none; }
+
+/* Bounding tags trên kính ngắm */
+.hud-tag {
+  position: absolute;
+  padding: 3px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 4px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(6px);
+  border: 1px solid #22d3ee;
+  color: #22d3ee;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  z-index: 6;
+  letter-spacing: 0.5px;
+}
+
+/* 3 Thẻ Chiến Lược Giá Động (Dynamic Pricing Strategy) */
+.pricing-strategy-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 12px;
+}
+.pricing-strategy-card {
+  padding: 12px 10px;
+  background: var(--bg-surface, #111422);
+  border: 1.5px solid var(--border, rgba(255, 255, 255, 0.08));
+  border-radius: var(--radius-lg, 12px);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.pricing-strategy-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--secondary-400, #22d3ee);
+  background: rgba(34, 211, 238, 0.04);
+}
+.pricing-strategy-card.selected {
+  border-color: var(--secondary-400, #22d3ee);
+  background: linear-gradient(145deg, rgba(6, 182, 212, 0.12), rgba(139, 92, 246, 0.12));
+  box-shadow: 0 4px 15px rgba(6, 182, 212, 0.25);
+}
+
+/* Thẻ Xem Trước Trực Tiếp Khi Đăng Bán (Live Preview Card) */
+.live-preview-box {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-xl, 16px);
+  padding: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* Thẻ Nhắc Việc Cần Xử Lý Trong Dashboard */
+.action-reminder-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 18px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(239, 68, 68, 0.06));
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: var(--radius-lg, 12px);
+  margin-bottom: var(--sp-5, 20px);
+}
+
+/* Thẻ Thẻ Ngân Hàng Ảo Napas (Virtual Merchant Card) */
+.virtual-debit-card {
+  background: linear-gradient(135deg, #1e1b4b, #312e81 40%, #0e7490 100%);
+  border-radius: 18px;
+  padding: 22px;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.virtual-debit-card::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.18) 0%, transparent 60%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Light Theme Overrides cho AI Studio & Dashboard Widgets */
+[data-theme="light"] .ai-viewfinder-box,
+body.light-theme .ai-viewfinder-box {
+  background: #0f172a;
+  border-color: #0891b2;
+}
+[data-theme="light"] .pricing-strategy-card,
+body.light-theme .pricing-strategy-card {
+  background: #ffffff;
+  border-color: #e2e8f0;
+}
+[data-theme="light"] .pricing-strategy-card:hover,
+body.light-theme .pricing-strategy-card:hover {
+  background: #ecfeff;
+  border-color: #0891b2;
+}
+[data-theme="light"] .pricing-strategy-card.selected,
+body.light-theme .pricing-strategy-card.selected {
+  background: #f0fdfa;
+  border-color: #0d9488;
+  box-shadow: 0 4px 15px rgba(13, 148, 136, 0.15);
+}
+[data-theme="light"] .live-preview-box,
+body.light-theme .live-preview-box {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+[data-theme="light"] .action-reminder-card,
+body.light-theme .action-reminder-card {
+  background: #fffbeb;
+  border-color: #fde68a;
+}
+
 @media (max-width: 992px) {
   .dash-layout {
     grid-template-columns: 1fr;

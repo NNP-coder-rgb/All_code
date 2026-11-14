@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Đăng Bán Đồ Cũ &amp; Định Giá Tự Động Bằng AI | HYBRID.STORE</title>
+    <title>Đăng Bán Đồ Cũ &amp; Định Giá Tự Động AI Studio | HYBRID.STORE</title>
 
     <!-- Chống giật giao diện (Zero-FOUC Theme Init) -->
     <script>
@@ -30,7 +30,7 @@
       <div class="container">
         <a class="brand" href="../../index.html">
           <span class="brand-mark"><span class="material-symbols-outlined">token</span></span>
-          <span>HYBRID<span class="text-secondary">.STORE</span> <span class="badge">ĐĂNG BÁN AI</span></span>
+          <span>HYBRID<span class="text-secondary">.STORE</span> <span class="badge badge-secondary">AI LISTING STUDIO</span></span>
         </a>
 
         <div class="header-actions">
@@ -62,232 +62,353 @@
           <span class="text-faint">/</span>
           <a href="dashboard.html">Kênh Người Bán</a>
           <span class="text-faint">/</span>
-          <span class="active">Đăng Bán Đồ Cũ AI</span>
+          <span class="active">AI Listing Studio Đăng Bán</span>
         </nav>
       </div>
     </div>
 
-    <main class="container py-6" style="max-width: 860px;">
-      <div class="mb-5">
-        <h1 class="page-title flex items-center gap-2">
-          <span class="material-symbols-outlined text-primary">sell</span>
-          Đăng Bán Đồ Cũ &amp; Định Giá Tự Động Bằng AI
-        </h1>
-        <p class="text-sm text-muted">
-          Hệ thống AI thị giác máy tính sẽ quét ảnh sản phẩm, tự động nhận diện đời máy, chấm điểm độ mới và đề xuất mức giá thanh lý nhanh nhất.
-        </p>
+    <main class="container py-6" style="max-width: 1360px;">
+      <!-- Tiêu đề trang -->
+      <div class="dash-title-row mb-5">
+        <div>
+          <h1 class="page-title flex items-center gap-2 mb-1" style="font-size: 1.85rem;">
+            <span class="material-symbols-outlined text-primary" style="font-size: 32px;">psychology</span>
+            AI Vision Listing Studio — Đăng Bán &amp; Định Giá Thông Minh
+          </h1>
+          <p class="text-sm text-muted">
+            Trí tuệ nhân tạo quét hình ảnh thực tế, tự động bóc tách linh kiện, chấm điểm độ mới và đề xuất khung giá thanh lý tối ưu theo 3 chiến lược.
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="badge badge-success flex items-center gap-1">
+            <span class="status-dot"></span> AI Engine v4.2 Sẵn Sàng
+          </span>
+        </div>
       </div>
 
-      <div class="panel p-6">
-        <form id="postMasterForm">
-          <!-- 1. CHỌN NGÀNH HÀNG -->
-          <div class="form-group mb-5">
-            <label class="form-label fw-700">1. Chọn ngành hàng thanh lý (*)</label>
-            <div class="chip-row" id="categoryChips">
-              <label class="chip"><input type="radio" name="postCat" value="tech" checked /> 💻 Hi-Tech &amp; Laptop</label>
-              <label class="chip"><input type="radio" name="postCat" value="audio" /> 🎧 Âm Thanh &amp; Tai Nghe</label>
-              <label class="chip"><input type="radio" name="postCat" value="gaming" /> 🎮 Gaming Gear</label>
-              <label class="chip"><input type="radio" name="postCat" value="camera" /> 📷 Máy Ảnh &amp; Lens</label>
-              <label class="chip"><input type="radio" name="postCat" value="fashion" /> 👔 Thời Trang &amp; Streetwear</label>
-              <label class="chip"><input type="radio" name="postCat" value="sneakers" /> 👟 Sneakers Hype</label>
-              <label class="chip"><input type="radio" name="postCat" value="appliances" /> 🏠 Đồ Gia Dụng Smart IoT</label>
-              <label class="chip"><input type="radio" name="postCat" value="watches" /> ⌚ Đồng Hồ &amp; Phụ Kiện</label>
-            </div>
+      <!-- BỐ CỤC 2 CỘT STUDIO -->
+      <div class="post-studio-layout">
+        <!-- ============================================================== -->
+        <!-- CỘT TRÁI (LEFT): AI VISION STUDIO & PHÂN TÍCH HÌNH ẢNH -->
+        <!-- ============================================================== -->
+        <div>
+          <!-- 1. Kính ngắm quét Laser HUD -->
+          <div class="ai-viewfinder-box mb-3" id="viewfinderBox">
+            <div class="hud-corner hud-corner-tl"></div>
+            <div class="hud-corner hud-corner-tr"></div>
+            <div class="hud-corner hud-corner-bl"></div>
+            <div class="hud-corner hud-corner-br"></div>
+
+            <!-- Bounding tags động -->
+            <div class="hud-tag" style="top: 24px; left: 24px;" id="tagScreen">MÀN HÌNH: 99%</div>
+            <div class="hud-tag" style="bottom: 30px; right: 24px;" id="tagFrame">KHUNG VIỀN: 98%</div>
+            <div class="hud-tag" style="top: 24px; right: 24px;" id="tagLens">CAMERA / SENSOR: 100%</div>
+
+            <!-- Tia laser quét ảnh -->
+            <div class="ai-laser-beam" id="aiLaserBeam"></div>
+
+            <!-- Ảnh hiển thị trong kính ngắm -->
+            <img
+              class="ai-viewfinder-img"
+              id="aiViewfinderImg"
+              src="../../assets/images/products/dien-thoai-smartphone-flagship.png"
+              alt="Kính ngắm quét AI"
+            />
           </div>
 
-          <!-- 2. KHU VỰC TẢI ẢNH CHÂN THỰC -->
-          <div class="form-group mb-5">
-            <label class="form-label flex justify-between items-center">
-              <span class="fw-700">2. Tải ảnh chụp sản phẩm (Tối thiểu 1 ảnh, tối đa 6 ảnh) (*)</span>
-              <span class="text-xs text-muted" id="imageCountText">0/6 ảnh đã chọn</span>
-            </label>
-            <input type="file" id="fileInputPost" multiple accept="image/*" style="display: none;" />
-            <div
-              class="panel p-6 text-center"
-              style="border: 2px dashed var(--border-strong); background: var(--bg-surface); cursor: pointer; transition: all 0.2s ease; border-radius: var(--radius-lg);"
-              id="dropzoneBox"
-            >
-              <span class="material-symbols-outlined text-primary" style="font-size: 54px;">add_a_photo</span>
-              <div class="fw-600 text-sm mt-2" id="dropzoneText">Bấm để chọn ảnh từ máy hoặc kéo thả vào đây</div>
-              <div class="text-xs text-muted mt-1">Hỗ trợ JPG, PNG, WEBP (Tự động nén &amp; tối ưu dung lượng) • Có thể nhấn Ctrl+V để dán ảnh</div>
+          <!-- Dải điều khiển nạp ảnh & Ảnh chụp mẫu nhanh -->
+          <div class="panel p-3 mb-4">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs fw-700 text-muted">DÙNG NHANH ẢNH MẪU ĐỂ TRẢI NGHIỆM AI:</span>
+              <span class="text-2xs text-secondary">3 Preset có sẵn</span>
             </div>
-
-            <!-- Grid ảnh xem trước -->
-            <div id="previewImagesStrip" class="grid gap-3 mt-3" style="display: none; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));"></div>
-          </div>
-
-          <!-- NÚT KÍCH HOẠT AI QUÉT ẢNH -->
-          <div class="flex justify-end mb-4">
-            <button class="btn btn-secondary btn-sm" id="btnTriggerAiScan" type="button">
-              <span class="material-symbols-outlined icon-xs text-secondary">psychology</span>
-              Kích Hoạt AI Quét Ngoại Quan &amp; Gợi Ý Giá
-            </button>
-          </div>
-
-          <!-- KHỐI KẾT QUẢ AI GỢI Ý (ẨN BAN ĐẦU) -->
-          <div class="ai-scan-card mb-5" id="aiResultCard" style="display: none">
-            <div class="flex items-center justify-between mb-3">
-              <span class="ai-badge">
-                <span class="material-symbols-outlined icon-xs">smart_toy</span> KẾT QUẢ AI PHÂN TÍCH HÌNH ẢNH
-              </span>
-              <span class="text-xs text-success fw-600">Độ tin cậy: 98.4%</span>
-            </div>
-            <div class="flex gap-4 items-center">
-              <div style="width: 84px; height: 84px; border-radius: 8px; overflow: hidden; border: 2px solid var(--secondary-400); flex-shrink: 0; background: #000;">
-                <img id="aiResultImg" src="" style="width: 100%; height: 100%; object-fit: cover;" alt="Ảnh sản phẩm AI phân tích" />
-              </div>
-              <div class="grid grid-2 gap-3 text-xs flex-1">
-                <div>Thiết bị nhận diện: <strong class="text-text" id="aiDeviceName">Sony WH-1000XM4 (Màu Đen)</strong></div>
-                <div>Độ mới ngoại quan AI: <strong class="text-secondary" id="aiConditionScore">95% (Xước viền đáy siêu nhẹ)</strong></div>
-                <div>Giá máy mới trên thị trường: <strong class="text-faint mono" id="aiNewMarketPrice">6.290.000₫</strong></div>
-                <div>Khung giá thanh lý nhanh đề xuất: <strong class="text-gradient mono" id="aiSuggestPrice">3.400.000₫ – 3.650.000₫</strong></div>
-              </div>
-            </div>
-            <div class="discount-callout mt-3 flex items-center justify-between flex-wrap gap-2">
-              <div class="flex items-center gap-1.5 text-xs">
-                <span class="material-symbols-outlined icon-sm text-success">savings</span>
-                <span id="aiCalloutText">Mức giá đề xuất rẻ hơn đồ mới khoảng 44%, tỷ lệ chốt đơn trong 48h đạt 92%.</span>
-              </div>
-              <button class="btn btn-secondary btn-xs" id="btnApplyAiSuggestion" type="button">
-                Áp Dụng Gợi Ý Này
+            <div class="grid grid-3 gap-2">
+              <button class="btn btn-outlined btn-xs btn-sample-img" type="button" data-key="tech">
+                📱 iPhone 15 Pro
+              </button>
+              <button class="btn btn-outlined btn-xs btn-sample-img" type="button" data-key="audio">
+                🎧 Sony WH-1000
+              </button>
+              <button class="btn btn-outlined btn-xs btn-sample-img" type="button" data-key="fashion">
+                👔 Set Techwear
               </button>
             </div>
           </div>
 
-          <!-- 3. THÔNG TIN CƠ BẢN SẢN PHẨM -->
-          <div class="form-row mb-4">
-            <div class="form-group flex-1">
-              <label class="form-label fw-700" for="txtPostName">Tên thiết bị hiển thị (*)</label>
-              <input class="input" id="txtPostName" type="text" placeholder="Ví dụ: iPhone 15 Pro Max 256GB Titan Tự Nhiên Like New" required />
-            </div>
+          <!-- Dropzone tải ảnh tự chọn -->
+          <div class="panel p-4 mb-4 text-center" style="border: 2px dashed var(--border-strong); cursor: pointer;" id="dropzoneBox">
+            <input type="file" id="fileInputPost" multiple accept="image/*" style="display: none;" />
+            <span class="material-symbols-outlined text-secondary" style="font-size: 38px;">cloud_upload</span>
+            <div class="fw-600 text-xs mt-1" id="dropzoneText">Bấm để tải ảnh từ máy tính hoặc kéo thả vào đây</div>
+            <div class="text-2xs text-muted mt-0.5">Tối đa 6 ảnh • Hỗ trợ PNG, JPG, WEBP • Nhấn Ctrl+V để dán trực tiếp</div>
           </div>
 
-          <!-- ĐỘ MỚI NGOẠI QUAN (%) -->
-          <div class="form-group mb-4">
-            <label class="form-label fw-700">Tình trạng độ mới ngoại quan (*)</label>
-            <div class="chip-row" id="conditionChips">
-              <label class="chip"><input type="radio" name="postCond" value="99" checked /> ⭐ 99% Like New (Chưa vết trầy)</label>
-              <label class="chip"><input type="radio" name="postCond" value="98" /> 💎 98% Siêu Lướt (Xước dăm rất mờ)</label>
-              <label class="chip"><input type="radio" name="postCond" value="95" /> 👍 95% Rất Đẹp (Trầy nhẹ viền/đáy)</label>
-              <label class="chip"><input type="radio" name="postCond" value="90" /> 📦 90% Đã Sử Dụng (Cấn viền nhẹ)</label>
-              <label class="chip"><input type="radio" name="postCond" value="85" /> 🔧 85% Cũ (Ngoại hình xước)</label>
+          <!-- Dải thumbnail ảnh đã chọn -->
+          <div id="previewImagesStrip" class="grid gap-2 mb-4" style="display: none; grid-template-columns: repeat(auto-fill, minmax(68px, 1fr));"></div>
+
+          <!-- Nút kích hoạt AI Scanner -->
+          <button class="btn btn-secondary w-full mb-4 py-2.5 flex items-center justify-center gap-2" id="btnTriggerAiScan" type="button">
+            <span class="material-symbols-outlined icon-sm text-secondary">psychology</span>
+            <strong id="btnAiText">Kích Hoạt AI Quét Ngoại Quan &amp; Gợi Ý Giá</strong>
+          </button>
+
+          <!-- Bảng Kết quả Chẩn Đoán AI (AI Diagnosis Card) -->
+          <div class="panel p-4 mb-4" id="aiDiagnosisCard" style="background: rgba(6, 182, 212, 0.04); border-color: rgba(6, 182, 212, 0.25);">
+            <div class="flex items-center justify-between mb-3">
+              <span class="ai-badge">
+                <span class="material-symbols-outlined icon-xs">smart_toy</span> KẾT QUẢ PHÂN TÍCH NGOẠI QUAN AI
+              </span>
+              <span class="badge badge-success text-2xs fw-700" id="aiConfidenceBadge">Độ tin cậy: 98.6%</span>
+            </div>
+
+            <div class="grid grid-2 gap-2 text-xs mb-3">
+              <div>Thiết bị nhận diện: <strong class="text-white block mt-0.5" id="aiDeviceName">iPhone 15 Pro 128GB Titan</strong></div>
+              <div>Chấm điểm độ mới: <strong class="text-secondary block mt-0.5" id="aiConditionScore">98% Siêu Lướt</strong></div>
+              <div>Giá máy mới: <strong class="mono text-faint block mt-0.5" id="aiNewMarketPrice">24.990.000₫</strong></div>
+              <div>Tỷ lệ thanh khoản: <strong class="text-success block mt-0.5">94% chốt đơn 48h</strong></div>
+            </div>
+
+            <!-- Breakdown 4 tiêu chí ngoại quan -->
+            <div class="panel p-3 mb-3 text-2xs" style="background: var(--bg-surface); border-radius: 8px;">
+              <div class="fw-700 text-muted uppercase mb-2">Đánh giá 4 thành phần phần cứng:</div>
+              <div class="flex justify-between py-1 border-bottom" style="border-color: rgba(255,255,255,0.05);">
+                <span>1. Màn hình &amp; Mặt kính cảm ứng</span>
+                <strong class="text-success" id="bdScreen">99% — Không trầy, kính nguyên bản</strong>
+              </div>
+              <div class="flex justify-between py-1 border-bottom" style="border-color: rgba(255,255,255,0.05);">
+                <span>2. Thân vỏ &amp; Khung viền kim loại</span>
+                <strong class="text-secondary" id="bdFrame">98% — Xước dăm siêu mờ khó thấy</strong>
+              </div>
+              <div class="flex justify-between py-1 border-bottom" style="border-color: rgba(255,255,255,0.05);">
+                <span>3. Cổng sạc, Loa &amp; Cảm biến</span>
+                <strong class="text-success" id="bdPorts">100% — Sạch sẽ, tiếp xúc hoàn hảo</strong>
+              </div>
+              <div class="flex justify-between py-1">
+                <span>4. Pin zin &amp; Tình trạng linh kiện</span>
+                <strong class="text-primary" id="bdBattery">Dung lượng pin 98%, nguyên bản</strong>
+              </div>
+            </div>
+
+            <!-- 3 Chiến Lược Giá Động (Dynamic Pricing Strategy) -->
+            <div class="fw-700 text-xs text-muted uppercase mb-1">Chọn 1 trong 3 chiến lược định giá:</div>
+            <div class="pricing-strategy-grid" id="pricingStrategyGrid">
+              <div class="pricing-strategy-card" data-strat="fast" id="stratFast">
+                <span class="text-2xs text-warning fw-700 block">⚡ BÁN NHANH</span>
+                <strong class="mono text-xs block my-1" id="stratFastPrice">16.800.000₫</strong>
+                <span class="text-2xs text-muted block">1-2 ngày chốt</span>
+              </div>
+              <div class="pricing-strategy-card selected" data-strat="balanced" id="stratBalanced">
+                <span class="text-2xs text-secondary fw-700 block">⚖️ ĐỀ XUẤT</span>
+                <strong class="mono text-xs text-gradient block my-1" id="stratBalancedPrice">17.500.000₫</strong>
+                <span class="text-2xs text-success block">Tối ưu nhất</span>
+              </div>
+              <div class="pricing-strategy-card" data-strat="profit" id="stratProfit">
+                <span class="text-2xs text-primary fw-700 block">💎 GIÁ CAO</span>
+                <strong class="mono text-xs block my-1" id="stratProfitPrice">18.400.000₫</strong>
+                <span class="text-2xs text-muted block">1-2 tuần</span>
+              </div>
             </div>
           </div>
+        </div>
 
-          <!-- GHI CHÚ TÌNH TRẠNG -->
-          <div class="form-group mb-4">
-            <label class="form-label" for="txtCondLabel">Ghi chú tình trạng máy ngắn gọn</label>
-            <input class="input" id="txtCondLabel" type="text" placeholder="Ví dụ: Máy nguyên zin 100%, chưa từng mở ốc, pin zin 98%" value="Máy nguyên bản hoạt động hoàn hảo, chưa từng bung mở sửa chữa" />
-          </div>
+        <!-- ============================================================== -->
+        <!-- CỘT PHẢI (RIGHT): KHUNG BIÊN TẬP & LIVE MARKETPLACE PREVIEW -->
+        <!-- ============================================================== -->
+        <div>
+          <!-- THẺ XEM TRƯỚC TRỰC TIẾP TRÊN SÀN (LIVE PREVIEW) -->
+          <div class="live-preview-box mb-5">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs fw-700 text-muted uppercase flex items-center gap-1.5">
+                <span class="material-symbols-outlined icon-xs text-secondary">visibility</span>
+                Mô Phỏng Thẻ Sản Phẩm Hiển Thị Trên Chợ C2C:
+              </span>
+              <span class="badge badge-secondary text-2xs">Cập nhật trực tiếp</span>
+            </div>
 
-          <!-- 4. GIÁ BÁN & GIÁ MÁY MỚI -->
-          <div class="form-row mb-4">
-            <div class="form-group flex-1">
-              <label class="form-label fw-700" for="txtPostPrice">Giá muốn bán (VNĐ) (*)</label>
-              <input class="input mono" id="txtPostPrice" type="text" placeholder="Ví dụ: 3.500.000" required />
-              <span class="text-xs text-muted mt-1 block" id="priceDisplayHint">Số tiền: 3.500.000₫</span>
-            </div>
-            <div class="form-group flex-1">
-              <label class="form-label" for="txtPostOldPrice">Giá máy mới trên thị trường (VNĐ)</label>
-              <input class="input mono" id="txtPostOldPrice" type="text" placeholder="Ví dụ: 5.500.000" />
-              <span class="text-xs text-secondary mt-1 block" id="savingsHint">Dự kiến rẻ hơn đồ mới khoảng 36%</span>
-            </div>
-          </div>
-
-          <!-- 5. PHỤ KIỆN ĐI KÈM -->
-          <div class="form-group mb-4">
-            <label class="form-label fw-700">Phụ kiện &amp; Giấy tờ đi kèm</label>
-            <div class="grid grid-3 gap-2 text-xs">
-              <label class="flex items-center gap-2" style="cursor: pointer;">
-                <input type="checkbox" name="postAcc" value="Hộp nguyên bản (Fullbox)" checked />
-                <span>Hộp nguyên bản (Fullbox)</span>
-              </label>
-              <label class="flex items-center gap-2" style="cursor: pointer;">
-                <input type="checkbox" name="postAcc" value="Cáp sạc zin theo máy" checked />
-                <span>Cáp sạc zin theo máy</span>
-              </label>
-              <label class="flex items-center gap-2" style="cursor: pointer;">
-                <input type="checkbox" name="postAcc" value="Củ sạc nhanh chính hãng" />
-                <span>Củ sạc nhanh chính hãng</span>
-              </label>
-              <label class="flex items-center gap-2" style="cursor: pointer;">
-                <input type="checkbox" name="postAcc" value="Hóa đơn VAT / Phiếu bảo hành" checked />
-                <span>Hóa đơn / Phiếu bảo hành</span>
-              </label>
-              <label class="flex items-center gap-2" style="cursor: pointer;">
-                <input type="checkbox" name="postAcc" value="Bao da / Ốp lưng / Túi đựng" />
-                <span>Bao da / Ốp lưng / Túi đựng</span>
-              </label>
-              <label class="flex items-center gap-2" style="cursor: pointer;">
-                <input type="checkbox" name="postAcc" value="Đầy đủ phụ kiện theo máy" />
-                <span>Đầy đủ phụ kiện tiêu chuẩn</span>
-              </label>
-            </div>
-          </div>
-
-          <!-- 6. KHU VỰC GIAO DỊCH & VẬN CHUYỂN -->
-          <div class="form-row mb-4">
-            <div class="form-group flex-1">
-              <label class="form-label fw-700" for="selectLocation">Khu vực người bán (*)</label>
-              <select class="input" id="selectLocation">
-                <option value="Hà Nội — Hoàn Kiếm" selected>Hà Nội — Quận Hoàn Kiếm</option>
-                <option value="Hà Nội — Cầu Giấy">Hà Nội — Quận Cầu Giấy</option>
-                <option value="Hà Nội — Ba Đình">Hà Nội — Quận Ba Đình</option>
-                <option value="TP. Hồ Chí Minh — Quận 1">TP. Hồ Chí Minh — Quận 1</option>
-                <option value="TP. Hồ Chí Minh — Bình Thạnh">TP. Hồ Chí Minh — Quận Bình Thạnh</option>
-                <option value="Đà Nẵng — Hải Châu">Đà Nẵng — Quận Hải Châu</option>
-                <option value="Hải Phòng — Hồng Bàng">Hải Phòng — Quận Hồng Bàng</option>
-                <option value="Cần Thơ — Ninh Kiều">Cần Thơ — Quận Ninh Kiều</option>
-              </select>
-            </div>
-            <div class="form-group flex-1">
-              <label class="form-label fw-700">Hình thức giao nhận hỗ trợ</label>
-              <div class="flex flex-col gap-1.5 text-xs mt-1">
-                <label class="flex items-center gap-2" style="cursor: pointer;">
-                  <input type="checkbox" name="postShipping" value="express" checked />
-                  <span>Giao hỏa tốc 2H qua sàn (Nội thành)</span>
-                </label>
-                <label class="flex items-center gap-2" style="cursor: pointer;">
-                  <input type="checkbox" name="postShipping" value="carrier" checked />
-                  <span>Chuyển phát bưu tá Viettel Post / GHTK toàn quốc</span>
-                </label>
-                <label class="flex items-center gap-2" style="cursor: pointer;">
-                  <input type="checkbox" name="postShipping" value="direct" checked />
-                  <span>Đồng kiểm trực tiếp tại Trạm Kỹ thuật Sàn</span>
-                </label>
+            <!-- Card mô phỏng chính xác giao diện sàn -->
+            <div class="panel p-4" style="background: var(--bg-surface); border-radius: 12px; border: 1px solid var(--border);">
+              <div class="flex gap-4 items-center">
+                <div style="width: 100px; height: 100px; border-radius: 10px; overflow: hidden; flex-shrink: 0; background: #000; border: 1px solid var(--border);">
+                  <img id="livePrevImg" src="../../assets/images/products/dien-thoai-smartphone-flagship.png" style="width: 100%; height: 100%; object-fit: cover;" alt="Preview" />
+                </div>
+                <div style="min-width: 0; flex: 1;">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="badge badge-c2c text-2xs" id="livePrevCondBadge">ĐỒ CŨ LIKE NEW 98%</span>
+                    <span class="text-2xs text-muted" id="livePrevLocation">Hà Nội — Hoàn Kiếm</span>
+                  </div>
+                  <strong class="text-sm block truncate text-white" id="livePrevTitle">iPhone 15 Pro 128GB Titan Tự Nhiên Like New 98%</strong>
+                  <div class="flex items-baseline gap-2 mt-1">
+                    <span class="mono fw-800 text-primary" style="font-size: 1.15rem;" id="livePrevPrice">17.500.000₫</span>
+                    <span class="mono text-xs text-faint" style="text-decoration: line-through;" id="livePrevOldPrice">24.990.000₫</span>
+                    <span class="badge badge-success text-2xs" id="livePrevSavingsBadge">Tiết kiệm 7.490.000₫ (-30%)</span>
+                  </div>
+                  <div class="text-2xs text-muted mt-1 flex items-center gap-2">
+                    <span>Người bán: <strong class="text-white" id="livePrevSeller">Việt Dũng (Đã eKYC CCCD)</strong></span>
+                    <span>•</span>
+                    <span class="text-secondary flex items-center gap-0.5">
+                      <span class="material-symbols-outlined icon-2xs">verified</span> Đồng kiểm khi nhận
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- 7. TÙY CHỌN TRẢ GIÁ C2C -->
-          <div class="panel p-4 mb-4" style="background: rgba(255, 255, 255, 0.02); border-color: rgba(255, 255, 255, 0.08);">
-            <div class="flex items-center justify-between mb-2">
-              <label class="flex items-center gap-2 fw-700 text-sm" style="cursor: pointer;">
-                <input type="checkbox" id="chkAllowOffers" checked />
-                <span>Cho phép người mua gửi đề nghị trả giá (Thương lượng C2C)</span>
-              </label>
-              <span class="badge badge-secondary text-2xs">BẬT TÍNH NĂNG</span>
-            </div>
-            <p class="text-xs text-muted" style="margin: 0;">
-              Người mua có thể đề xuất mức giá mua nhanh. Bạn có quyền Chấp nhận, Báo giá lại hoặc Từ chối bất cứ lúc nào trong Kênh Người Bán.
-            </p>
-          </div>
+          <!-- FORM BIÊN TẬP CHI TIẾT SẢN PHẨM -->
+          <div class="panel p-6">
+            <form id="postMasterForm">
+              <!-- BƯỚC 1: CHỌN NGÀNH HÀNG -->
+              <div class="form-group mb-5">
+                <label class="form-label fw-700 flex justify-between">
+                  <span>1. Ngành hàng thanh lý (*)</span>
+                  <span class="text-xs text-muted">Hệ thống tự nhận diện thông số phù hợp</span>
+                </label>
+                <div class="chip-row" id="categoryChips">
+                  <label class="chip"><input type="radio" name="postCat" value="tech" checked /> 💻 Hi-Tech &amp; Laptop</label>
+                  <label class="chip"><input type="radio" name="postCat" value="audio" /> 🎧 Âm Thanh &amp; Tai Nghe</label>
+                  <label class="chip"><input type="radio" name="postCat" value="gaming" /> 🎮 Gaming Gear</label>
+                  <label class="chip"><input type="radio" name="postCat" value="camera" /> 📷 Máy Ảnh &amp; Lens</label>
+                  <label class="chip"><input type="radio" name="postCat" value="fashion" /> 👔 Thời Trang &amp; Streetwear</label>
+                  <label class="chip"><input type="radio" name="postCat" value="sneakers" /> 👟 Sneakers Hype</label>
+                  <label class="chip"><input type="radio" name="postCat" value="appliances" /> 🏠 Đồ Gia Dụng IoT</label>
+                  <label class="chip"><input type="radio" name="postCat" value="watches" /> ⌚ Đồng Hồ &amp; Phụ Kiện</label>
+                </div>
+              </div>
 
-          <!-- 8. MÔ TẢ CHI TIẾT SẢN PHẨM -->
-          <div class="form-group mb-5">
-            <label class="form-label fw-700" for="txtPostDesc">Mô tả chi tiết sản phẩm &amp; lý do thanh lý (*)</label>
-            <textarea class="textarea" id="txtPostDesc" rows="4" placeholder="Mô tả cụ thể nguồn gốc xuất xứ, thời gian đã sử dụng, các tính năng hoạt động, phụ kiện kèm theo..."></textarea>
-          </div>
+              <!-- BƯỚC 2: TÊN THIẾT BỊ -->
+              <div class="form-group mb-4">
+                <label class="form-label fw-700" for="txtPostName">2. Tên thiết bị &amp; Phiên bản (*)</label>
+                <input class="input" id="txtPostName" type="text" placeholder="Ví dụ: iPhone 15 Pro 128GB Titan Tự Nhiên Like New 98%" required />
+              </div>
 
-          <!-- NÚT ĐĂNG BÁN -->
-          <div class="flex justify-end gap-3 mt-6">
-            <a class="btn btn-secondary" href="dashboard.html">Hủy Bỏ</a>
-            <button class="btn btn-primary btn-lg" id="btnSubmitPost" type="submit" style="padding-inline: 32px;">
-              <span class="material-symbols-outlined">publish</span>
-              Đăng Bán Lên Sàn Ngay
-            </button>
+              <!-- BƯỚC 3: ĐỘ MỚI NGOẠI QUAN (%) -->
+              <div class="form-group mb-4">
+                <label class="form-label fw-700">3. Tình trạng độ mới ngoại quan (*)</label>
+                <div class="chip-row" id="conditionChips">
+                  <label class="chip"><input type="radio" name="postCond" value="99" /> ⭐ 99% Like New (Nguyên vẹn)</label>
+                  <label class="chip"><input type="radio" name="postCond" value="98" checked /> 💎 98% Siêu Lướt (Xước dăm rất mờ)</label>
+                  <label class="chip"><input type="radio" name="postCond" value="95" /> 👍 95% Rất Đẹp (Trầy nhẹ viền/đáy)</label>
+                  <label class="chip"><input type="radio" name="postCond" value="90" /> 📦 90% Đã Dùng (Cấn nhẹ)</label>
+                  <label class="chip"><input type="radio" name="postCond" value="85" /> 🔧 85% Cũ (Ngoại hình xước)</label>
+                </div>
+              </div>
+
+              <!-- GHI CHÚ TÌNH TRẠNG -->
+              <div class="form-group mb-4">
+                <label class="form-label" for="txtCondLabel">Ghi chú tình trạng máy ngắn gọn</label>
+                <input class="input" id="txtCondLabel" type="text" placeholder="Ví dụ: Máy nguyên zin 100%, chưa từng mở ốc, pin zin 98%" value="Bản Quốc Tế VN/A, nguyên zin 100%, pin tốt 98%" />
+              </div>
+
+              <!-- BƯỚC 4: GIÁ BÁN & GIÁ MÁY MỚI -->
+              <div class="form-row mb-4">
+                <div class="form-group flex-1">
+                  <label class="form-label fw-700" for="txtPostPrice">4. Giá muốn bán (VNĐ) (*)</label>
+                  <input class="input mono" id="txtPostPrice" type="text" value="17.500.000" required />
+                  <span class="text-xs text-muted mt-1 block" id="priceDisplayHint">Số tiền: 17.500.000₫</span>
+                </div>
+                <div class="form-group flex-1">
+                  <label class="form-label" for="txtPostOldPrice">Giá máy mới trên thị trường (VNĐ)</label>
+                  <input class="input mono" id="txtPostOldPrice" type="text" value="24.990.000" />
+                  <span class="text-xs text-secondary mt-1 block" id="savingsHint">Rẻ hơn đồ mới khoảng 30% (Tiết kiệm 7.490.000₫)</span>
+                </div>
+              </div>
+
+              <!-- BƯỚC 5: PHỤ KIỆN ĐI KÈM -->
+              <div class="form-group mb-4">
+                <label class="form-label fw-700">5. Phụ kiện &amp; Giấy tờ kèm theo</label>
+                <div class="grid grid-3 gap-2 text-xs">
+                  <label class="flex items-center gap-2" style="cursor: pointer;">
+                    <input type="checkbox" name="postAcc" value="Hộp nguyên bản (Fullbox)" checked />
+                    <span>Hộp nguyên bản (Fullbox)</span>
+                  </label>
+                  <label class="flex items-center gap-2" style="cursor: pointer;">
+                    <input type="checkbox" name="postAcc" value="Cáp sạc zin theo máy" checked />
+                    <span>Cáp sạc zin theo máy</span>
+                  </label>
+                  <label class="flex items-center gap-2" style="cursor: pointer;">
+                    <input type="checkbox" name="postAcc" value="Củ sạc nhanh chính hãng" />
+                    <span>Củ sạc nhanh chính hãng</span>
+                  </label>
+                  <label class="flex items-center gap-2" style="cursor: pointer;">
+                    <input type="checkbox" name="postAcc" value="Hóa đơn / Phiếu bảo hành" checked />
+                    <span>Hóa đơn / Phiếu bảo hành</span>
+                  </label>
+                  <label class="flex items-center gap-2" style="cursor: pointer;">
+                    <input type="checkbox" name="postAcc" value="Túi đựng / Ốp lưng" />
+                    <span>Túi đựng / Ốp lưng</span>
+                  </label>
+                  <label class="flex items-center gap-2" style="cursor: pointer;">
+                    <input type="checkbox" name="postAcc" value="Đầy đủ phụ kiện tiêu chuẩn" />
+                    <span>Đầy đủ phụ kiện chuẩn</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- BƯỚC 6: KHU VỰC & GIAO HÀNG HỎA TỐC -->
+              <div class="form-row mb-4">
+                <div class="form-group flex-1">
+                  <label class="form-label fw-700" for="selectLocation">6. Khu vực người bán (*)</label>
+                  <select class="input" id="selectLocation">
+                    <option value="Hà Nội — Hoàn Kiếm" selected>Hà Nội — Quận Hoàn Kiếm</option>
+                    <option value="Hà Nội — Cầu Giấy">Hà Nội — Quận Cầu Giấy</option>
+                    <option value="Hà Nội — Ba Đình">Hà Nội — Quận Ba Đình</option>
+                    <option value="TP. Hồ Chí Minh — Quận 1">TP. Hồ Chí Minh — Quận 1</option>
+                    <option value="TP. Hồ Chí Minh — Bình Thạnh">TP. Hồ Chí Minh — Quận Bình Thạnh</option>
+                    <option value="Đà Nẵng — Hải Châu">Đà Nẵng — Quận Hải Châu</option>
+                    <option value="Hải Phòng — Hồng Bàng">Hải Phòng — Quận Hồng Bàng</option>
+                    <option value="Cần Thơ — Ninh Kiều">Cần Thơ — Quận Ninh Kiều</option>
+                  </select>
+                </div>
+                <div class="form-group flex-1">
+                  <label class="form-label fw-700">Hình thức giao nhận hỗ trợ</label>
+                  <div class="flex flex-col gap-1 text-xs mt-1">
+                    <label class="flex items-center gap-2" style="cursor: pointer;">
+                      <input type="checkbox" name="postShipping" value="express" checked />
+                      <span>Giao hỏa tốc 2H qua Sàn (Nội thành)</span>
+                    </label>
+                    <label class="flex items-center gap-2" style="cursor: pointer;">
+                      <input type="checkbox" name="postShipping" value="carrier" checked />
+                      <span>Bưu tá Viettel Post / GHTK toàn quốc</span>
+                    </label>
+                    <label class="flex items-center gap-2" style="cursor: pointer;">
+                      <input type="checkbox" name="postShipping" value="direct" checked />
+                      <span>Đồng kiểm tại Showroom / Trạm Kỹ thuật Sàn</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- BƯỚC 7: TÙY CHỌN TRẢ GIÁ C2C -->
+              <div class="panel p-4 mb-4" style="background: rgba(255, 255, 255, 0.02); border-color: rgba(255, 255, 255, 0.08);">
+                <div class="flex items-center justify-between mb-2">
+                  <label class="flex items-center gap-2 fw-700 text-sm" style="cursor: pointer;">
+                    <input type="checkbox" id="chkAllowOffers" checked />
+                    <span>Cho phép người mua gửi đề nghị trả giá (Thương lượng C2C)</span>
+                  </label>
+                  <span class="badge badge-secondary text-2xs">BẬT TÍNH NĂNG</span>
+                </div>
+                <p class="text-xs text-muted" style="margin: 0;">
+                  Người mua có thể đề xuất mức giá mua nhanh. Bạn có quyền Chấp nhận, Báo giá lại hoặc Từ chối bất cứ lúc nào trong Kênh Người Bán.
+                </p>
+              </div>
+
+              <!-- BƯỚC 8: MÔ TẢ CHI TIẾT SẢN PHẨM -->
+              <div class="form-group mb-5">
+                <label class="form-label fw-700" for="txtPostDesc">8. Mô tả chi tiết sản phẩm &amp; lý do thanh lý (*)</label>
+                <textarea class="textarea" id="txtPostDesc" rows="4" placeholder="Mô tả cụ thể nguồn gốc xuất xứ, thời gian đã sử dụng, các tính năng hoạt động, phụ kiện kèm theo...">Máy bản Quốc tế chính hãng VN/A, ngoại hình đẹp keng không cấn móp, đầy đủ cáp sạc zin và hóa đơn bảo hành.</textarea>
+              </div>
+
+              <!-- NÚT HÀNH ĐỘNG -->
+              <div class="flex justify-end gap-3 mt-6">
+                <a class="btn btn-secondary" href="dashboard.html">Hủy Bỏ</a>
+                <button class="btn btn-primary btn-lg" id="btnSubmitPost" type="submit" style="padding-inline: 36px;">
+                  <span class="material-symbols-outlined">publish</span>
+                  Đăng Bán Lên Sàn Ngay
+                </button>
+              </div>
+            </form>
           </div>
-        </form>
+        </div>
       </div>
     </main>
 
@@ -316,9 +437,25 @@
         const dropzoneBox = document.getElementById("dropzoneBox");
         const dropzoneText = document.getElementById("dropzoneText");
         const previewStrip = document.getElementById("previewImagesStrip");
-        const imageCountText = document.getElementById("imageCountText");
-        const aiResultImg = document.getElementById("aiResultImg");
+        const aiViewfinderImg = document.getElementById("aiViewfinderImg");
+        const aiLaserBeam = document.getElementById("aiLaserBeam");
+        const livePrevImg = document.getElementById("livePrevImg");
+        const livePrevTitle = document.getElementById("livePrevTitle");
+        const livePrevPrice = document.getElementById("livePrevPrice");
+        const livePrevOldPrice = document.getElementById("livePrevOldPrice");
+        const livePrevSavingsBadge = document.getElementById("livePrevSavingsBadge");
+        const livePrevCondBadge = document.getElementById("livePrevCondBadge");
+        const livePrevLocation = document.getElementById("livePrevLocation");
+        const livePrevSeller = document.getElementById("livePrevSeller");
+
         let uploadedImages = [];
+
+        // Cập nhật tên seller trên Live Preview
+        if (currentUser && livePrevSeller) {
+          livePrevSeller.textContent = isAdmin
+            ? `${currentUser.fullName} (Toàn Quyền Admin Sàn)`
+            : `${currentUser.fullName} (Đã eKYC CCCD)`;
+        }
 
         // Nén ảnh bằng Canvas để tối ưu dung lượng và tránh lỗi LocalStorage QuotaExceeded
         function compressImage(file, maxWidth = 900, quality = 0.82) {
@@ -348,7 +485,163 @@
           });
         }
 
-        // 2. Xử lý tải ảnh (Drag & Drop, Picker, Paste)
+        // 2. Cơ sở tri thức AI Scanner cho 8 ngành hàng
+        const aiPresets = {
+          tech: {
+            device: "iPhone 15 Pro 128GB Titan Tự Nhiên",
+            score: "98% Siêu Lướt",
+            cond: "98",
+            condLabel: "Bản Quốc Tế VN/A, nguyên zin 100%, pin tốt 98%",
+            newPrice: "24.990.000₫",
+            newPriceNum: 24990000,
+            fastPrice: "16.800.000₫",
+            balancedPrice: "17.500.000₫",
+            profitPrice: "18.400.000₫",
+            defaultPrice: "17.500.000",
+            name: "iPhone 15 Pro 128GB Titan Tự Nhiên Like New 98%",
+            desc: "Máy bản Quốc tế chính hãng VN/A, ngoại hình đẹp keng không cấn móp, đầy đủ cáp sạc zin và hóa đơn bảo hành.",
+            bdScreen: "99% — Không trầy, kính nguyên bản",
+            bdFrame: "98% — Xước dăm siêu mờ khó thấy",
+            bdPorts: "100% — Sạch sẽ, tiếp xúc hoàn hảo",
+            bdBattery: "Dung lượng pin 98%, nguyên bản",
+            img: "assets/images/products/dien-thoai-smartphone-flagship.png",
+          },
+          audio: {
+            device: "Tai Nghe Chống Ồn Sony WH-1000XM4 Đen",
+            score: "95% Rất Đẹp",
+            cond: "95",
+            condLabel: "Đệm da nguyên bản sạch sẽ, chống ồn chủ động đỉnh cao",
+            newPrice: "6.490.000₫",
+            newPriceNum: 6490000,
+            fastPrice: "3.200.000₫",
+            balancedPrice: "3.500.000₫",
+            profitPrice: "3.800.000₫",
+            defaultPrice: "3.500.000",
+            name: "Tai Nghe Chống Ồn Sony WH-1000XM4 Đen Like New 95%",
+            desc: "Tai nghe đầy đủ túi đựng vải cao cấp, cáp 3.5mm và adapter máy bay. Pin nghe liên tục trên 28 tiếng có ANC.",
+            bdScreen: "100% — Màng loa sinh thái không móp méo",
+            bdFrame: "95% — Trầy nhẹ viền đáy cất túi xách",
+            bdPorts: "100% — Jack 3.5mm & Type-C tiếp xúc nhạy",
+            bdBattery: "Pin 28 tiếng nghe liên tục",
+            img: "assets/images/products/tai-nghe-sony-wh-ch520.png",
+          },
+          fashion: {
+            device: "Set Nam Techwear All Black Chống Nước",
+            score: "98% Đẹp Keng",
+            cond: "98",
+            condLabel: "Vải Gore-Tex Pro 3L chống nước, khóa kéo YKK xịn",
+            newPrice: "5.200.000₫",
+            newPriceNum: 5200000,
+            fastPrice: "2.600.000₫",
+            balancedPrice: "2.850.000₫",
+            profitPrice: "3.100.000₫",
+            defaultPrice: "2.850.000",
+            name: "Set Nam Techwear All Black Chống Nước Form Rộng",
+            desc: "Set đồ mặc đúng 2 lần chụp lookbook sự kiện thời trang, vải phủ nano trượt nước hoàn hảo, phom đứng chuẩn.",
+            bdScreen: "99% — Vải sạch sẽ chưa bạc màu",
+            bdFrame: "98% — Đường may gia cố chắc chắn",
+            bdPorts: "100% — Khóa kéo YKK mượt mà",
+            bdBattery: "Đã giặt hấp sấy khử khuẩn",
+            img: "assets/images/products/set-nam-techwear-all-black.png",
+          },
+          gaming: {
+            device: "Bàn Phím Cơ Custom Nhôm CNC Aula F75 RGB",
+            score: "99% Like New",
+            cond: "99",
+            condLabel: "Cấu trúc Gasket mount êm ái, switch Reaper mượt mà",
+            newPrice: "1.890.000₫",
+            newPriceNum: 1890000,
+            fastPrice: "1.100.000₫",
+            balancedPrice: "1.250.000₫",
+            profitPrice: "1.400.000₫",
+            defaultPrice: "1.250.000",
+            name: "Bàn Phím Cơ Không Dây Aula F75 RGB Like New 99%",
+            desc: "Bàn phím cơ fullbox đầy đủ nắp che bụi, puller nhổ switch, keycap tặng kèm. Đã mod foam tiêu âm hoàn chỉnh.",
+            bdScreen: "100% — Keycap PBT double-shot không bóng",
+            bdFrame: "99% — Vỏ nhôm không vết trầy",
+            bdPorts: "100% — 3 Mode kết nối nhạy bén",
+            bdBattery: "Pin 4000mAh dùng 3 tuần",
+            img: "assets/images/products/ban-phim-co-aula-f75-rgb.png",
+          },
+          camera: {
+            device: "Body Máy Ảnh Sony Alpha A7 Mark IV Full-Frame",
+            score: "98% Siêu Lướt",
+            cond: "98",
+            condLabel: "Số shot chụp ít, cảm biến sạch đẹp được bảo quản tủ ẩm",
+            newPrice: "52.990.000₫",
+            newPriceNum: 52990000,
+            fastPrice: "35.500.000₫",
+            balancedPrice: "37.500.000₫",
+            profitPrice: "39.000.000₫",
+            defaultPrice: "37.500.000",
+            name: "Body Sony Alpha A7 Mark IV Full-Frame Like New 98%",
+            desc: "Body hàng chính hãng Sony Vietnam hết bảo hành, hoạt động hoàn hảo mọi chức năng. Tặng kèm pin dự phòng và sạc đôi.",
+            bdScreen: "99% — Màn hình lật xoay dán cường lực",
+            bdFrame: "98% — Sơn cao su sần nguyên vẹn",
+            bdPorts: "100% — Khe cắm thẻ kép SD/CFexpress",
+            bdBattery: "Pin FZ100 chụp 600 shot",
+            img: "assets/images/products/may-anh-ky-thuat-so-mirrorless.png",
+          },
+          sneakers: {
+            device: "Sneakers Thể Thao Chunky Sole Hypebeast",
+            score: "95% Rất Đẹp",
+            cond: "95",
+            condLabel: "Đế đệm khí êm ái, đã vệ sinh và khử khuẩn sạch sẽ",
+            newPrice: "4.200.000₫",
+            newPriceNum: 4200000,
+            fastPrice: "1.990.000₫",
+            balancedPrice: "2.250.000₫",
+            profitPrice: "2.500.000₫",
+            defaultPrice: "2.250.000",
+            name: "Giày Sneaker Nam Thể Thao Chunky Sole Like New 95%",
+            desc: "Giày nguyên hộp size 42, lót giày zin êm ái. Đã được gửi vệ sinh chuyên nghiệp tại trạm giày của sàn trước khi chụp ảnh.",
+            bdScreen: "96% — Thân da sạch sẽ, khử mùi nano",
+            bdFrame: "95% — Đế mòn < 2%, đệm khí êm",
+            bdPorts: "100% — Dây buộc và lỗ xỏ nguyên bản",
+            bdBattery: "Kèm hộp đựng và túi zip",
+            img: "assets/images/products/giay-the-thao-nam-sneaker-de-day.png",
+          },
+          appliances: {
+            device: "Nồi Chiên Không Dầu Smart Touch 6.5L",
+            score: "96% Đẹp",
+            cond: "96",
+            condLabel: "Lòng nồi chống dính không trầy xước, phím cảm ứng nhạy",
+            newPrice: "3.800.000₫",
+            newPriceNum: 3800000,
+            fastPrice: "1.750.000₫",
+            balancedPrice: "1.950.000₫",
+            profitPrice: "2.150.000₫",
+            defaultPrice: "1.950.000",
+            name: "Nồi Chiên Không Dầu Smart Touch Like New 96%",
+            desc: "Nồi chiên hoạt động cực êm, đối lưu nhiệt 360 độ giòn đều. Đầy đủ khay nướng phụ kiện kèm theo.",
+            bdScreen: "100% — Bảng điều khiển cảm ứng LED nhạy",
+            bdFrame: "96% — Vỏ nhựa bóng đẹp, xước mờ nhỏ",
+            bdPorts: "100% — Dây nguồn chắc chắn",
+            bdBattery: "Thanh nhiệt sáng đều",
+            img: "assets/images/products/noi-chien-khong-dau.png",
+          },
+          watches: {
+            device: "Đồng Hồ Smartwatch Sapphire Edition",
+            score: "98% Siêu Lướt",
+            cond: "98",
+            condLabel: "Kính Sapphire chống trầy, đầy đủ dock sạc không dây",
+            newPrice: "8.990.000₫",
+            newPriceNum: 8990000,
+            fastPrice: "4.500.000₫",
+            balancedPrice: "4.990.000₫",
+            profitPrice: "5.400.000₫",
+            defaultPrice: "4.990.000",
+            name: "Smartwatch Sapphire Edition Thép Không Gỉ Like New 98%",
+            desc: "Đồng hồ theo dõi sức khỏe và nhịp tim chính xác. Pin dùng liên tục 5-7 ngày, tặng kèm 2 bộ dây da và cao su thể thao.",
+            bdScreen: "100% — Kính sapphire không tì vết",
+            bdFrame: "98% — Khung viền thép sáng bóng",
+            bdPorts: "100% — Cảm biến nhịp tim & SpO2 nhạy",
+            bdBattery: "Pin 5 ngày sử dụng",
+            img: "assets/images/products/dong-ho-thong-minh-smartwatch.png",
+          },
+        };
+
+        // 3. Xử lý Upload Ảnh & Drag Drop
         if (dropzoneBox && fileInput) {
           dropzoneBox.addEventListener("click", () => fileInput.click());
 
@@ -411,32 +704,36 @@
           }
 
           renderPreviews();
+          triggerLaserScan();
           Utils.toast(`Đã thêm thành công ${filesToProcess.length} ảnh sản phẩm!`, "success");
         }
 
         function renderPreviews() {
           const count = uploadedImages.length;
-          if (imageCountText) imageCountText.textContent = `${count}/6 ảnh đã chọn`;
-
           if (!count) {
             if (previewStrip) previewStrip.style.display = "none";
-            if (dropzoneText) dropzoneText.textContent = "Bấm để chọn ảnh từ máy hoặc kéo thả vào đây";
+            if (dropzoneText) dropzoneText.textContent = "Bấm để tải ảnh từ máy tính hoặc kéo thả vào đây";
             return;
           }
 
           if (dropzoneText) dropzoneText.textContent = `Đã chọn ${count}/6 ảnh (Bấm để thêm ảnh khác)`;
 
+          // Cập nhật ảnh chính lên Kính ngắm HUD & Live Preview
+          const coverImg = uploadedImages[0];
+          if (aiViewfinderImg) aiViewfinderImg.src = coverImg;
+          if (livePrevImg) livePrevImg.src = coverImg;
+
           if (previewStrip) {
             previewStrip.style.display = "grid";
             previewStrip.innerHTML = uploadedImages.map((src, i) => `
-              <div class="preview-thumb-card" style="position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; border: 2px solid ${i === 0 ? 'var(--primary-500, #8b5cf6)' : 'var(--border-strong, #334155)'}; background: #000; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+              <div class="preview-thumb-card" style="position: relative; aspect-ratio: 1; border-radius: 6px; overflow: hidden; border: 2px solid ${i === 0 ? 'var(--primary-500, #8b5cf6)' : 'var(--border-strong, #334155)'}; background: #000;">
                 <img src="${src}" style="width: 100%; height: 100%; object-fit: cover;" alt="Ảnh ${i + 1}" />
                 ${i === 0 ? `
-                  <span style="position: absolute; bottom: 0; left: 0; right: 0; background: #8b5cf6; color: #fff; font-size: 10px; font-weight: 800; text-align: center; padding: 2px 0;">⭐ ẢNH BÌA</span>
+                  <span style="position: absolute; bottom: 0; left: 0; right: 0; background: #8b5cf6; color: #fff; font-size: 8px; font-weight: 800; text-align: center; padding: 1px 0;">BÌA</span>
                 ` : `
-                  <button type="button" data-action="set-cover" data-idx="${i}" style="position: absolute; bottom: 4px; left: 4px; background: rgba(0,0,0,0.75); color: #fff; border: 1px solid rgba(255,255,255,0.4); border-radius: 4px; font-size: 10px; font-weight: 600; padding: 2px 5px; cursor: pointer;">Đặt bìa</button>
+                  <button type="button" data-action="set-cover" data-idx="${i}" style="position: absolute; bottom: 2px; left: 2px; background: rgba(0,0,0,0.8); color: #fff; border: none; border-radius: 3px; font-size: 8px; padding: 1px 3px; cursor: pointer;">Bìa</button>
                 `}
-                <button type="button" data-action="remove" data-idx="${i}" style="position: absolute; top: 4px; right: 4px; background: rgba(239, 68, 68, 0.9); color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; font-weight: bold;" title="Xóa ảnh này">✕</button>
+                <button type="button" data-action="remove" data-idx="${i}" style="position: absolute; top: 2px; right: 2px; background: rgba(239, 68, 68, 0.9); color: #fff; border: none; border-radius: 50%; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 10px; font-weight: bold;">✕</button>
               </div>
             `).join("");
 
@@ -460,165 +757,77 @@
               });
             });
           }
-
-          if (aiResultImg && uploadedImages.length) {
-            aiResultImg.src = uploadedImages[0];
-          }
         }
 
-        // 3. Cơ sở tri thức AI Scanner cho 8 ngành hàng
-        const aiTemplates = {
-          tech: {
-            device: "iPhone 15 Pro 128GB Titan Tự Nhiên",
-            score: "98% (Không trầy cấn, pin zin 98%)",
-            newPrice: "24.990.000₫",
-            suggestRange: "17.200.000₫ – 17.800.000₫",
-            defaultPrice: "17.500.000",
-            oldPrice: "24.990.000",
-            name: "iPhone 15 Pro 128GB Titan Tự Nhiên Like New 98%",
-            cond: "98",
-            condLabel: "Bản Quốc Tế VN/A, nguyên zin 100%, pin tốt 98%",
-            desc: "Máy bản Quốc tế chính hãng VN/A, ngoại hình đẹp keng không cấn móp, đầy đủ cáp sạc zin và hóa đơn bảo hành.",
-            discount: 30,
-            img: "assets/images/products/dien-thoai-smartphone-flagship.png",
-          },
-          audio: {
-            device: "Tai Nghe Sony WH-1000XM4 Noise Canceling",
-            score: "95% (Đệm da êm ái, trầy nhẹ viền đáy)",
-            newPrice: "6.490.000₫",
-            suggestRange: "3.300.000₫ – 3.600.000₫",
-            defaultPrice: "3.500.000",
-            oldPrice: "6.490.000",
-            name: "Tai Nghe Chống Ồn Sony WH-1000XM4 Đen Like New 95%",
-            cond: "95",
-            condLabel: "Đệm da nguyên bản sạch sẽ, chống ồn chủ động đỉnh cao",
-            desc: "Tai nghe đầy đủ túi đựng vải cao cấp, cáp 3.5mm và adapter máy bay. Pin nghe liên tục trên 28 tiếng có ANC.",
-            discount: 46,
-            img: "assets/images/products/tai-nghe-sony-wh-ch520.png",
-          },
-          gaming: {
-            device: "Bàn Phím Cơ Custom Nhôm CNC Aula F75 RGB",
-            score: "99% (Mới gõ thử vài ngày, full phụ kiện)",
-            newPrice: "1.890.000₫",
-            suggestRange: "1.150.000₫ – 1.300.000₫",
-            defaultPrice: "1.250.000",
-            oldPrice: "1.890.000",
-            name: "Bàn Phím Cơ Không Dây Aula F75 RGB Like New 99%",
-            cond: "99",
-            condLabel: "Cấu trúc Gasket mount êm ái, switch Reaper mượt mà",
-            desc: "Bàn phím cơ fullbox đầy đủ nắp che bụi, puller nhổ switch, keycap tặng kèm. Đã mod foam tiêu âm hoàn chỉnh.",
-            discount: 34,
-            img: "assets/images/products/ban-phim-co-aula-f75-rgb.png",
-          },
-          camera: {
-            device: "Body Máy Ảnh Sony Alpha A7 Mark IV Full-Frame",
-            score: "98% (Chụp 4.200 shot, sensor sạch bóng)",
-            newPrice: "52.990.000₫",
-            suggestRange: "36.500.000₫ – 38.000.000₫",
-            defaultPrice: "37.500.000",
-            oldPrice: "52.990.000",
-            name: "Body Sony Alpha A7 Mark IV Full-Frame Like New 98%",
-            cond: "98",
-            condLabel: "Số shot chụp ít, cảm biến sạch đẹp được bảo quản tủ ẩm",
-            desc: "Body hàng chính hãng Sony Vietnam hết bảo hành, hoạt động hoàn hảo mọi chức năng. Tặng kèm pin dự phòng và sạc đôi.",
-            discount: 29,
-            img: "assets/images/products/may-anh-ky-thuat-so-mirrorless.png",
-          },
-          fashion: {
-            device: "Áo Khoác Bomber Cyberpunk J1A-GT Multi-Pocket",
-            score: "99% (Mặc 1 lần chụp lookbook, nguyên tag)",
-            newPrice: "5.500.000₫",
-            suggestRange: "3.200.000₫ – 3.500.000₫",
-            defaultPrice: "3.350.000",
-            oldPrice: "5.500.000",
-            name: "Áo Khoác Bomber Cyberpunk J1A-GT Like New 99%",
-            cond: "99",
-            condLabel: "Vải Gore-Tex Pro 3L chống nước, khóa kéo YKK xịn",
-            desc: "Áo khoác form suông unisex, vải công nghệ chống mưa gió cực tốt. Áo sạch đẹp như mới mua tại store.",
-            discount: 39,
-            img: "assets/images/products/ao-sweatshirt-streetwear-oversize.png",
-          },
-          sneakers: {
-            device: "Sneakers Thể Thao Chunky Sole Hypebeast",
-            score: "95% (Đế mòn < 2%, da mềm sạch sẽ)",
-            newPrice: "4.200.000₫",
-            suggestRange: "2.100.000₫ – 2.400.000₫",
-            defaultPrice: "2.250.000",
-            oldPrice: "4.200.000",
-            name: "Giày Sneaker Nam Thể Thao Chunky Sole Like New 95%",
-            cond: "95",
-            condLabel: "Đế đệm khí êm ái, đã vệ sinh và khử khuẩn sạch sẽ",
-            desc: "Giày nguyên hộp size 42, lót giày zin êm ái. Đã được gửi vệ sinh chuyên nghiệp tại trạm giày của sàn trước khi chụp ảnh.",
-            discount: 46,
-            img: "assets/images/products/giay-the-thao-nam-sneaker-de-day.png",
-          },
-          appliances: {
-            device: "Nồi Chiên Không Dầu Điện Tử Dung Tích 6.5L",
-            score: "96% (Lòng nồi nguyên lớp chống dính, chạy êm)",
-            newPrice: "3.800.000₫",
-            suggestRange: "1.800.000₫ – 2.050.000₫",
-            defaultPrice: "1.950.000",
-            oldPrice: "3.800.000",
-            name: "Nồi Chiên Không Dầu Smart Touch Like New 96%",
-            cond: "96",
-            condLabel: "Lòng nồi chống dính không trầy xước, phím cảm ứng nhạy",
-            desc: "Nồi chiên hoạt động cực êm, đối lưu nhiệt 360 độ giòn đều. Đầy đủ khay nướng phụ kiện kèm theo.",
-            discount: 48,
-            img: "assets/images/products/noi-chien-khong-dau.png",
-          },
-          watches: {
-            device: "Đồng Hồ Thông Minh Smartwatch Sapphire Edition",
-            score: "98% (Mặt kính sapphire nguyên vẹn, pin 5 ngày)",
-            newPrice: "8.990.000₫",
-            suggestRange: "4.800.000₫ – 5.200.000₫",
-            defaultPrice: "4.990.000",
-            oldPrice: "8.990.000",
-            name: "Smartwatch Sapphire Edition Thép Không Gỉ Like New 98%",
-            cond: "98",
-            condLabel: "Kính Sapphire chống trầy, đầy đủ dock sạc không dây",
-            desc: "Đồng hồ theo dõi sức khỏe và nhịp tim chính xác. Pin dùng liên tục 5-7 ngày, tặng kèm 2 bộ dây da và cao su thể thao.",
-            discount: 44,
-            img: "assets/images/products/dong-ho-thong-minh-smartwatch.png",
-          },
-        };
+        // 4. Hiệu ứng quét Laser HUD
+        function triggerLaserScan() {
+          if (!aiLaserBeam) return;
+          aiLaserBeam.classList.add("scanning");
+          setTimeout(() => {
+            aiLaserBeam.classList.remove("scanning");
+          }, 2400);
+        }
 
-        // 4. Kích hoạt quét AI
-        let currentAiTemplate = null;
+        // Nạp ảnh mẫu nhanh qua 3 nút preset
+        document.querySelectorAll(".btn-sample-img").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const key = btn.dataset.key;
+            const tpl = aiPresets[key];
+            if (!tpl) return;
+
+            // Đổi radio ngành hàng tương ứng
+            const catRadio = document.querySelector(`input[name="postCat"][value="${key}"]`);
+            if (catRadio) catRadio.checked = true;
+
+            const resolvedImg = window.resolveAssetUrl ? window.resolveAssetUrl(tpl.img) : tpl.img;
+            uploadedImages = [resolvedImg];
+            renderPreviews();
+            triggerLaserScan();
+            applyAiData(tpl);
+            Utils.toast(`Đã nạp ảnh mẫu "${tpl.device}" và chạy AI Vision Scanner!`, "success");
+          });
+        });
+
+        // 5. Kích Hoạt Quét AI
         const btnAi = document.getElementById("btnTriggerAiScan");
-        const aiCard = document.getElementById("aiResultCard");
+        const btnAiText = document.getElementById("btnAiText");
 
         if (btnAi) {
-          btnAi.addEventListener("click", function () {
-            this.disabled = true;
-            this.textContent = "AI đang xử lý hình ảnh...";
+          btnAi.addEventListener("click", () => {
+            btnAi.disabled = true;
+            if (btnAiText) btnAiText.textContent = "AI đang trích xuất đặc trưng & đối soát 12.000 giao dịch...";
+            triggerLaserScan();
 
             const catRadio = document.querySelector('input[name="postCat"]:checked');
             const catKey = catRadio ? catRadio.value : "tech";
-            currentAiTemplate = aiTemplates[catKey] || aiTemplates.tech;
+            const tpl = aiPresets[catKey] || aiPresets.tech;
 
             setTimeout(() => {
-              if (aiCard) {
-                aiCard.style.display = "block";
-                if (aiResultImg) {
-                  aiResultImg.src = uploadedImages.length ? uploadedImages[0] : (window.resolveAssetUrl ? window.resolveAssetUrl(currentAiTemplate.img) : currentAiTemplate.img);
-                }
-                document.getElementById("aiDeviceName").textContent = currentAiTemplate.device;
-                document.getElementById("aiConditionScore").textContent = currentAiTemplate.score;
-                document.getElementById("aiNewMarketPrice").textContent = currentAiTemplate.newPrice;
-                document.getElementById("aiSuggestPrice").textContent = currentAiTemplate.suggestRange;
-                document.getElementById("aiCalloutText").textContent = `Mức giá đề xuất rẻ hơn đồ mới khoảng ${currentAiTemplate.discount}%, tỷ lệ chốt đơn trong 48h đạt 94%.`;
-              }
-
-              applyAiSuggestion(currentAiTemplate);
-              Utils.toast("AI đã quét ảnh & đề xuất khung giá thành công!", "success");
-              this.disabled = false;
-              this.textContent = "Đã Quét Xong AI (Bấm để quét lại)";
-            }, 750);
+              applyAiData(tpl);
+              btnAi.disabled = false;
+              if (btnAiText) btnAiText.textContent = "AI Đã Phân Tích Xong (Bấm để quét lại)";
+              Utils.toast("AI đã quét ngoại quan & đề xuất 3 chiến lược định giá thành công!", "success");
+            }, 1200);
           });
         }
 
-        function applyAiSuggestion(tpl) {
+        function applyAiData(tpl) {
           if (!tpl) return;
+
+          // Cập nhật card chẩn đoán AI
+          document.getElementById("aiDeviceName").textContent = tpl.device;
+          document.getElementById("aiConditionScore").textContent = tpl.score;
+          document.getElementById("aiNewMarketPrice").textContent = tpl.newPrice;
+          document.getElementById("stratFastPrice").textContent = tpl.fastPrice;
+          document.getElementById("stratBalancedPrice").textContent = tpl.balancedPrice;
+          document.getElementById("stratProfitPrice").textContent = tpl.profitPrice;
+
+          document.getElementById("bdScreen").textContent = tpl.bdScreen;
+          document.getElementById("bdFrame").textContent = tpl.bdFrame;
+          document.getElementById("bdPorts").textContent = tpl.bdPorts;
+          document.getElementById("bdBattery").textContent = tpl.bdBattery;
+
+          // Điền vào form bên phải
           const txtName = document.getElementById("txtPostName");
           const txtPrice = document.getElementById("txtPostPrice");
           const txtOldPrice = document.getElementById("txtPostOldPrice");
@@ -626,69 +835,125 @@
           const txtDesc = document.getElementById("txtPostDesc");
 
           if (txtName) txtName.value = tpl.name;
-          if (txtPrice) {
-            txtPrice.value = tpl.defaultPrice;
-            updatePriceHints();
-          }
-          if (txtOldPrice) txtOldPrice.value = tpl.oldPrice;
+          if (txtPrice) txtPrice.value = tpl.defaultPrice;
+          if (txtOldPrice) txtOldPrice.value = Number(tpl.newPriceNum).toLocaleString("vi-VN");
           if (txtCondLabel) txtCondLabel.value = tpl.condLabel;
           if (txtDesc) txtDesc.value = tpl.desc;
 
           // Chọn radio độ mới
           const condRadio = document.querySelector(`input[name="postCond"][value="${tpl.cond}"]`);
           if (condRadio) condRadio.checked = true;
+
+          updateLivePreview();
         }
 
-        document.getElementById("btnApplyAiSuggestion")?.addEventListener("click", () => {
-          if (currentAiTemplate) {
-            applyAiSuggestion(currentAiTemplate);
-            Utils.toast("Đã áp dụng toàn bộ thông số gợi ý từ AI vào mẫu đăng!", "success");
-          }
+        // Chọn chiến lược giá động (Bán nhanh, Cân bằng, Lợi nhuận)
+        document.querySelectorAll(".pricing-strategy-card").forEach((card) => {
+          card.addEventListener("click", () => {
+            document.querySelectorAll(".pricing-strategy-card").forEach((c) => c.classList.remove("selected"));
+            card.classList.add("selected");
+
+            const strat = card.dataset.strat;
+            const catRadio = document.querySelector('input[name="postCat"]:checked');
+            const catKey = catRadio ? catRadio.value : "tech";
+            const tpl = aiPresets[catKey] || aiPresets.tech;
+
+            const txtPrice = document.getElementById("txtPostPrice");
+            if (txtPrice) {
+              if (strat === "fast") txtPrice.value = tpl.fastPrice.replace("₫", "").trim();
+              else if (strat === "profit") txtPrice.value = tpl.profitPrice.replace("₫", "").trim();
+              else txtPrice.value = tpl.balancedPrice.replace("₫", "").trim();
+            }
+            updateLivePreview();
+            Utils.toast(`Đã chọn chiến lược: ${strat === "fast" ? "Bán Siêu Nhanh 1-2 ngày" : strat === "profit" ? "Tối Đa Lợi Nhuận" : "Cân Bằng Đề Xuất"}!`, "info");
+          });
         });
 
-        // 5. Cập nhật gợi ý giá trực tiếp khi người dùng gõ
+        // 6. Reactive Live Preview & Real-Time Sync
+        const nameInput = document.getElementById("txtPostName");
         const priceInput = document.getElementById("txtPostPrice");
         const oldPriceInput = document.getElementById("txtPostOldPrice");
-        const priceHint = document.getElementById("priceDisplayHint");
-        const savingsHint = document.getElementById("savingsHint");
+        const locationSelect = document.getElementById("selectLocation");
 
-        function updatePriceHints() {
-          const rawPrice = Number(priceInput.value.replace(/\D/g, "")) || 0;
-          const rawOldPrice = Number(oldPriceInput.value.replace(/\D/g, "")) || 0;
+        function updateLivePreview() {
+          const rawName = nameInput ? nameInput.value.trim() : "";
+          const rawPrice = priceInput ? Number(priceInput.value.replace(/\D/g, "")) : 0;
+          const rawOldPrice = oldPriceInput ? Number(oldPriceInput.value.replace(/\D/g, "")) : 0;
+          const locationVal = locationSelect ? locationSelect.value : "Hà Nội";
+          const condRadio = document.querySelector('input[name="postCond"]:checked');
+          const condVal = condRadio ? condRadio.value : "98";
+
+          // Title
+          if (livePrevTitle) livePrevTitle.textContent = rawName || "Tên thiết bị hiển thị trên sàn";
+
+          // Location
+          if (livePrevLocation) livePrevLocation.textContent = locationVal;
+
+          // Condition Badge
+          if (livePrevCondBadge) livePrevCondBadge.textContent = `ĐỒ CŨ LIKE NEW ${condVal}%`;
+
+          // Prices
+          if (livePrevPrice) livePrevPrice.textContent = rawPrice > 0 ? Utils.formatCurrency(rawPrice) : "0₫";
+          if (livePrevOldPrice) {
+            livePrevOldPrice.textContent = rawOldPrice > 0 ? Utils.formatCurrency(rawOldPrice) : "";
+            livePrevOldPrice.style.display = rawOldPrice > rawPrice ? "inline" : "none";
+          }
+
+          // Savings & Hints
+          const priceHint = document.getElementById("priceDisplayHint");
+          const savingsHint = document.getElementById("savingsHint");
 
           if (priceHint) {
-            priceHint.textContent = rawPrice > 0 ? `Số tiền: ${Utils.formatCurrency(rawPrice)}` : "Vui lòng nhập giá bán";
+            priceHint.textContent = rawPrice > 0 ? `Số tiền: ${Utils.formatCurrency(rawPrice)}` : "Vui lòng nhập giá muốn bán";
           }
 
-          if (savingsHint && rawPrice > 0 && rawOldPrice > rawPrice) {
+          if (rawPrice > 0 && rawOldPrice > rawPrice) {
+            const diff = rawOldPrice - rawPrice;
             const pct = Math.round((1 - rawPrice / rawOldPrice) * 100);
-            savingsHint.textContent = `Dự kiến rẻ hơn đồ mới khoảng ${pct}% (${Utils.formatCurrency(rawOldPrice - rawPrice)})`;
+            if (livePrevSavingsBadge) {
+              livePrevSavingsBadge.style.display = "inline-block";
+              livePrevSavingsBadge.textContent = `Tiết kiệm ${Utils.formatCurrency(diff)} (-${pct}%)`;
+            }
+            if (savingsHint) {
+              savingsHint.textContent = `Rẻ hơn đồ mới khoảng ${pct}% (${Utils.formatCurrency(diff)})`;
+            }
+          } else {
+            if (livePrevSavingsBadge) livePrevSavingsBadge.style.display = "none";
+            if (savingsHint) savingsHint.textContent = "Nhập giá máy mới để hệ thống hiển thị % ưu đãi";
           }
         }
+
+        nameInput?.addEventListener("input", updateLivePreview);
 
         priceInput?.addEventListener("input", function () {
           const num = Number(this.value.replace(/\D/g, ""));
           if (num > 0) this.value = num.toLocaleString("vi-VN");
-          updatePriceHints();
+          updateLivePreview();
         });
 
         oldPriceInput?.addEventListener("input", function () {
           const num = Number(this.value.replace(/\D/g, ""));
           if (num > 0) this.value = num.toLocaleString("vi-VN");
-          updatePriceHints();
+          updateLivePreview();
         });
 
-        // Đổi ngành hàng thì tự cập nhật ảnh mẫu AI nếu chưa upload ảnh
+        locationSelect?.addEventListener("change", updateLivePreview);
+
+        document.querySelectorAll('input[name="postCond"]').forEach((r) => {
+          r.addEventListener("change", updateLivePreview);
+        });
+
         document.querySelectorAll('input[name="postCat"]').forEach((r) => {
           r.addEventListener("change", () => {
-            const tpl = aiTemplates[r.value];
-            if (tpl && !uploadedImages.length && aiResultImg) {
-              aiResultImg.src = window.resolveAssetUrl ? window.resolveAssetUrl(tpl.img) : tpl.img;
+            const tpl = aiPresets[r.value];
+            if (tpl && !uploadedImages.length) {
+              if (aiViewfinderImg) aiViewfinderImg.src = window.resolveAssetUrl ? window.resolveAssetUrl(tpl.img) : tpl.img;
+              if (livePrevImg) livePrevImg.src = window.resolveAssetUrl ? window.resolveAssetUrl(tpl.img) : tpl.img;
             }
           });
         });
 
-        // 6. Xử Lý Submit Form Đăng Bán
+        // 7. Xử Lý Submit Form Đăng Bán
         document.getElementById("postMasterForm").addEventListener("submit", (e) => {
           e.preventDefault();
 
@@ -698,21 +963,21 @@
             return;
           }
 
-          const nameVal = document.getElementById("txtPostName").value.trim();
+          const nameVal = nameInput ? nameInput.value.trim() : "";
           if (nameVal.length < 5) {
             Utils.toast("Tên sản phẩm quá ngắn, vui lòng nhập tối thiểu 5 ký tự!", "warning");
             return;
           }
 
-          const priceRaw = document.getElementById("txtPostPrice").value.replace(/\D/g, "");
+          const priceRaw = priceInput ? priceInput.value.replace(/\D/g, "") : "";
           const priceNum = Number(priceRaw);
           if (!priceNum || priceNum < 10000) {
             Utils.toast("Giá bán không hợp lệ (tối thiểu 10.000 VNĐ)!", "warning");
             return;
           }
 
-          const oldPriceRaw = document.getElementById("txtPostOldPrice").value.replace(/\D/g, "");
-          const oldPriceNum = Number(oldPriceRaw) || Math.round(priceNum * 1.4);
+          const oldPriceRaw = oldPriceInput ? oldPriceInput.value.replace(/\D/g, "") : "";
+          const oldPriceNum = Number(oldPriceRaw) || Math.round(priceNum * 1.35);
 
           const catRadio = document.querySelector('input[name="postCat"]:checked');
           const catKey = catRadio ? catRadio.value : "tech";
@@ -720,19 +985,17 @@
           const condRadio = document.querySelector('input[name="postCond"]:checked');
           const condNum = condRadio ? Number(condRadio.value) : 98;
 
-          const condLabelVal = document.getElementById("txtCondLabel").value.trim() || "Máy nguyên bản đã qua kiểm tra kỹ thuật";
-          const descVal = document.getElementById("txtPostDesc").value.trim() || `${nameVal}. Tình trạng ${condNum}% Likenew.`;
-          const locationVal = document.getElementById("selectLocation").value;
+          const condLabelVal = document.getElementById("txtCondLabel")?.value.trim() || "Máy nguyên bản đã qua kiểm tra kỹ thuật";
+          const descVal = document.getElementById("txtPostDesc")?.value.trim() || `${nameVal}. Tình trạng ${condNum}% Likenew.`;
+          const locationVal = locationSelect ? locationSelect.value : "Hà Nội";
 
-          // Danh sách phụ kiện
           const selectedAccs = [];
           document.querySelectorAll('input[name="postAcc"]:checked').forEach((c) => selectedAccs.push(c.value));
 
-          // Danh sách hình thức vận chuyển
           const selectedShipping = [];
           document.querySelectorAll('input[name="postShipping"]:checked').forEach((c) => selectedShipping.push(c.value));
 
-          const allowOffers = document.getElementById("chkAllowOffers").checked;
+          const allowOffers = document.getElementById("chkAllowOffers")?.checked ?? true;
 
           const sellerTitle = currentUser
             ? (isAdmin ? `${currentUser.fullName} (Toàn Quyền Admin Sàn)` : `${currentUser.fullName} (Đã eKYC CCCD)`)
@@ -776,6 +1039,9 @@
             window.location.href = "dashboard.html";
           }, 600);
         });
+
+        // Khởi tạo ban đầu với preset Tech
+        applyAiData(aiPresets.tech);
       })();
     </script>
   </body>

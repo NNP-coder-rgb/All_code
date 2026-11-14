@@ -36,7 +36,7 @@
         <div class="header-actions">
           <a class="btn btn-secondary hide-sm" href="../shop/catalog.html?type=c2c" title="Xem chợ đồ cũ">
             <span class="material-symbols-outlined icon-xs">storefront</span>
-            Xem Sàn C2C
+            Xem Chợ C2C
           </a>
           <a class="btn btn-primary" href="post_item.html">
             <span class="material-symbols-outlined icon-sm">add</span>
@@ -106,7 +106,7 @@
 
           <a class="side-link" href="../buyer/dispute.html">
             <span class="material-symbols-outlined">support_agent</span>
-            <span>Trung Tâm Khiếu Nại</span>
+            <span>Trung Tâm Khiếu Nại C2C</span>
           </a>
 
           <!-- Chỉ hiển thị link Admin nếu người dùng là Admin -->
@@ -123,6 +123,22 @@
         <!-- TAB 1: TỔNG QUAN GIAN HÀNG (OVERVIEW) -->
         <!-- ============================================================== -->
         <section class="dash-tab-pane active" id="tab-overview">
+          <!-- Thanh Nhắc Nhở Tác Vụ Cần Xử Lý Gấp -->
+          <div class="action-reminder-card" id="actionReminderCard">
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-warning" style="font-size: 28px;">notification_important</span>
+              <div>
+                <strong class="text-sm block text-white">Bạn có 2 đơn hàng cần chuẩn bị &amp; bàn giao bưu tá trước 17:00 chiều nay!</strong>
+                <span class="text-xs text-muted">Đồng thời có 2 đề nghị trả giá của khách sắp hết hạn phản hồi trong 24 giờ.</span>
+              </div>
+            </div>
+            <div class="flex gap-2">
+              <button class="btn btn-warning btn-sm" type="button" onclick="document.querySelector('[data-tab=orders]').click()">
+                Xử Lý Đơn Ngay
+              </button>
+            </div>
+          </div>
+
           <div class="dash-title-row mb-4">
             <div>
               <h1 class="page-title mb-1">Tổng Quan Hoạt Động Bán Hàng</h1>
@@ -158,7 +174,7 @@
             </div>
             <div class="stat-card" style="cursor: pointer;" onclick="document.querySelector('[data-tab=orders]').click()">
               <div class="stat-label">Đơn Hàng Cần Giao</div>
-              <div class="stat-val mono text-primary" id="overviewPendingOrders">4 Đơn</div>
+              <div class="stat-val mono text-primary" id="overviewPendingOrders">2 Đơn</div>
               <div class="stat-sub text-warning">
                 <span class="material-symbols-outlined icon-xs">alarm</span> Bưu tá hẹn lấy trong 1-2h
               </div>
@@ -169,6 +185,90 @@
               <div class="stat-sub text-success">
                 <span class="material-symbols-outlined icon-xs">grade</span> Hạng Bạch Kim Uy Tín
               </div>
+            </div>
+          </div>
+
+          <!-- BIỂU ĐỒ DOANH SỐ GMV BÁN HÀNG 7 NGÀY QUA -->
+          <div class="panel p-5 mb-5">
+            <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+              <div>
+                <h3 class="panel-title flex items-center gap-2" style="margin: 0;">
+                  <span class="material-symbols-outlined text-secondary">analytics</span>
+                  Doanh Thu Bán Hàng 7 Ngày Qua (Đơn vị: Triệu VNĐ)
+                </h3>
+                <p class="text-xs text-muted mt-0.5" style="margin: 0;">Tổng GMV tuần đạt 154.500.000₫ • 18 đơn giao thành công</p>
+              </div>
+              <span class="badge badge-success text-2xs fw-700">Tăng trưởng +34.2% YoY</span>
+            </div>
+
+            <!-- SVG Bar & Trendline Chart -->
+            <div style="width: 100%; height: 160px; position: relative;">
+              <svg viewBox="0 0 700 140" style="width: 100%; height: 100%; overflow: visible;">
+                <defs>
+                  <linearGradient id="sellerBarGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.9" />
+                    <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0.5" />
+                  </linearGradient>
+                </defs>
+                <!-- Đường kẻ mờ ngang -->
+                <line x1="40" y1="20" x2="680" y2="20" stroke="rgba(255,255,255,0.06)" stroke-dasharray="4" />
+                <line x1="40" y1="60" x2="680" y2="60" stroke="rgba(255,255,255,0.06)" stroke-dasharray="4" />
+                <line x1="40" y1="100" x2="680" y2="100" stroke="rgba(255,255,255,0.06)" stroke-dasharray="4" />
+
+                <!-- 7 Cột biểu đồ (T2 đến CN) -->
+                <!-- T2: 12.4Tr -->
+                <rect x="70" y="65" width="36" height="45" rx="6" fill="url(#sellerBarGrad)" />
+                <text x="88" y="58" font-size="10" fill="#94a3b8" text-anchor="middle" font-family="monospace">12.4M</text>
+                <text x="88" y="125" font-size="11" fill="#64748b" text-anchor="middle" font-weight="600">Thứ 2</text>
+
+                <!-- T3: 18.2Tr -->
+                <rect x="155" y="45" width="36" height="65" rx="6" fill="url(#sellerBarGrad)" />
+                <text x="173" y="38" font-size="10" fill="#94a3b8" text-anchor="middle" font-family="monospace">18.2M</text>
+                <text x="173" y="125" font-size="11" fill="#64748b" text-anchor="middle" font-weight="600">Thứ 3</text>
+
+                <!-- T4: 14.5Tr -->
+                <rect x="240" y="58" width="36" height="52" rx="6" fill="url(#sellerBarGrad)" />
+                <text x="258" y="50" font-size="10" fill="#94a3b8" text-anchor="middle" font-family="monospace">14.5M</text>
+                <text x="258" y="125" font-size="11" fill="#64748b" text-anchor="middle" font-weight="600">Thứ 4</text>
+
+                <!-- T5: 22.0Tr -->
+                <rect x="325" y="32" width="36" height="78" rx="6" fill="url(#sellerBarGrad)" />
+                <text x="343" y="25" font-size="10" fill="#22d3ee" text-anchor="middle" font-family="monospace" font-weight="bold">22.0M</text>
+                <text x="343" y="125" font-size="11" fill="#64748b" text-anchor="middle" font-weight="600">Thứ 5</text>
+
+                <!-- T6: 28.5Tr -->
+                <rect x="410" y="18" width="36" height="92" rx="6" fill="url(#sellerBarGrad)" />
+                <text x="428" y="12" font-size="10" fill="#22d3ee" text-anchor="middle" font-family="monospace" font-weight="bold">28.5M</text>
+                <text x="428" y="125" font-size="11" fill="#64748b" text-anchor="middle" font-weight="600">Thứ 6</text>
+
+                <!-- T7: 32.1Tr (Đỉnh điểm) -->
+                <rect x="495" y="10" width="36" height="100" rx="6" fill="url(#sellerBarGrad)" />
+                <text x="513" y="4" font-size="10" fill="#a855f7" text-anchor="middle" font-family="monospace" font-weight="bold">32.1M</text>
+                <text x="513" y="125" font-size="11" fill="#a855f7" text-anchor="middle" font-weight="700">Thứ 7</text>
+
+                <!-- CN: 26.8Tr -->
+                <rect x="580" y="24" width="36" height="86" rx="6" fill="url(#sellerBarGrad)" />
+                <text x="598" y="17" font-size="10" fill="#22d3ee" text-anchor="middle" font-family="monospace" font-weight="bold">26.8M</text>
+                <text x="598" y="125" font-size="11" fill="#64748b" text-anchor="middle" font-weight="600">Chủ Nhật</text>
+
+                <!-- Đường Trendline nối các đỉnh cột -->
+                <polyline
+                  points="88,65 173,45 258,58 343,32 428,18 513,10 598,24"
+                  fill="none"
+                  stroke="#f59e0b"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <!-- Chấm tròn trên đường Trendline -->
+                <circle cx="88" cy="65" r="3.5" fill="#f59e0b" stroke="#000" stroke-width="1.5" />
+                <circle cx="173" cy="45" r="3.5" fill="#f59e0b" stroke="#000" stroke-width="1.5" />
+                <circle cx="258" cy="58" r="3.5" fill="#f59e0b" stroke="#000" stroke-width="1.5" />
+                <circle cx="343" cy="32" r="3.5" fill="#f59e0b" stroke="#000" stroke-width="1.5" />
+                <circle cx="428" cy="18" r="3.5" fill="#f59e0b" stroke="#000" stroke-width="1.5" />
+                <circle cx="513" cy="10" r="4.5" fill="#ffffff" stroke="#f59e0b" stroke-width="2" />
+                <circle cx="598" cy="24" r="3.5" fill="#f59e0b" stroke="#000" stroke-width="1.5" />
+              </svg>
             </div>
           </div>
 
@@ -296,8 +396,11 @@
                 Xác nhận chuẩn bị hàng, bàn giao bưu tá và in phiếu gửi hàng chuẩn sàn HYBRID.STORE.
               </p>
             </div>
-            <div class="flex gap-2">
-              <button class="btn btn-secondary btn-sm" id="btnFilterAllOrders" type="button">Tất cả đơn</button>
+            <div class="chip-row" id="orderFilterChips">
+              <label class="chip"><input type="radio" name="orderStatusFilter" value="all" checked /> Tất cả đơn (4)</label>
+              <label class="chip"><input type="radio" name="orderStatusFilter" value="pending" /> Chờ lấy hàng (2)</label>
+              <label class="chip"><input type="radio" name="orderStatusFilter" value="delivering" /> Đang vận chuyển (1)</label>
+              <label class="chip"><input type="radio" name="orderStatusFilter" value="completed" /> Đã hoàn thành (1)</label>
             </div>
           </div>
 
@@ -359,36 +462,60 @@
             </button>
           </div>
 
+          <!-- GRID VÍ & THẺ DEBIT CARD ẢO -->
           <div class="grid grid-3 gap-4 mb-6">
-            <div class="panel p-5" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(6, 182, 212, 0.1)); border: 1px solid rgba(139, 92, 246, 0.35);">
-              <div class="text-xs text-muted mb-1">Số Dư Khả Dụng (Có thể rút ngay)</div>
-              <div class="mono text-gradient" id="walletMainBalance" style="font-size: 1.85rem; font-weight: 800;">48.250.000₫</div>
-              <div class="text-xs text-success mt-2 flex items-center gap-1">
-                <span class="material-symbols-outlined icon-xs">bolt</span> Liên kết Napas 24/7 rút 30 giây
+            <!-- Thẻ Virtual Merchant Card mô phỏng -->
+            <div class="virtual-debit-card">
+              <div class="flex justify-between items-center mb-4">
+                <span class="fw-800 tracking-wider text-xs">HYBRID MERCHANT CARD</span>
+                <span class="text-xs fw-700 text-cyan-300">NAPAS 24/7</span>
+              </div>
+              <div class="mono" style="font-size: 1.15rem; letter-spacing: 3px; margin: 16px 0;">
+                9704 2200 **** 8888
+              </div>
+              <div class="flex justify-between items-end">
+                <div>
+                  <div class="text-2xs text-muted uppercase">CHỦ TÀI KHOẢN</div>
+                  <strong class="text-xs text-white uppercase" id="cardHolderName">NGUYEN NGOC PHUC</strong>
+                </div>
+                <div style="text-align: right;">
+                  <div class="text-2xs text-muted uppercase">SỐ DƯ KHẢ DỤNG</div>
+                  <strong class="mono text-sm text-gradient" id="cardBalanceDisplay">48.250.000₫</strong>
+                </div>
               </div>
             </div>
 
-            <div class="panel p-5">
-              <div class="text-xs text-muted mb-1">Tiền Đang Tạm Giữ Ký Quỹ (Escrow)</div>
-              <div class="mono text-secondary" id="walletEscrowHolding" style="font-size: 1.85rem; font-weight: 800;">21.490.000₫</div>
-              <div class="text-xs text-muted mt-2">
-                Tự động mở khóa khi người mua xác nhận đã nhận hàng
+            <!-- Thống kê Escrow Holding -->
+            <div class="panel p-5 flex flex-col justify-between">
+              <div>
+                <div class="text-xs text-muted mb-1">Tiền Đang Tạm Giữ Ký Quỹ (Escrow)</div>
+                <div class="mono text-secondary" id="walletEscrowHolding" style="font-size: 1.85rem; font-weight: 800;">21.490.000₫</div>
+              </div>
+              <div class="text-xs text-muted mt-3">
+                <span class="material-symbols-outlined icon-xs text-secondary" style="vertical-align: middle;">lock</span>
+                Tự động mở khóa vào số dư khả dụng ngay khi người mua nhận hàng &amp; xác nhận hài lòng.
               </div>
             </div>
 
-            <div class="panel p-5">
-              <div class="text-xs text-muted mb-1">Tài Khoản Nhận Tiền Chính Chủ</div>
-              <strong class="text-white block mt-1" id="walletBankHolder">NGUYEN NGOC PHUC</strong>
-              <div class="mono text-xs text-muted mt-1" id="walletBankDetails">Techcombank • 1903 6888 8888 8</div>
-              <div class="text-xs text-success mt-2 flex items-center gap-1">
-                <span class="material-symbols-outlined icon-xs">check_circle</span> Đã liên kết tài khoản ngân hàng
+            <!-- Thống kê Tài khoản nhận tiền -->
+            <div class="panel p-5 flex flex-col justify-between">
+              <div>
+                <div class="text-xs text-muted mb-1">Tài Khoản Ngân Hàng Nhận Tiền</div>
+                <strong class="text-white block mt-1" id="walletBankHolder">NGUYEN NGOC PHUC</strong>
+                <div class="mono text-xs text-muted mt-1" id="walletBankDetails">Techcombank • 1903 6888 8888 8</div>
+              </div>
+              <div class="text-xs text-success flex items-center gap-1 mt-3">
+                <span class="material-symbols-outlined icon-xs">check_circle</span> Đã đối soát Napas liên ngân hàng
               </div>
             </div>
           </div>
 
           <!-- Lịch sử giao dịch ví -->
           <div class="panel p-5">
-            <h3 class="panel-title mb-4">Lịch Sử Biến Động Số Dư &amp; Rút Tiền</h3>
+            <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+              <h3 class="panel-title" style="margin: 0;">Lịch Sử Biến Động Số Dư &amp; Rút Tiền</h3>
+              <span class="text-xs text-muted">Hiển thị các giao dịch hoàn tất gần đây</span>
+            </div>
             <div class="table-responsive">
               <table class="table">
                 <thead>
@@ -607,6 +734,7 @@
         const kycBadgeEl = document.getElementById("sellerKycBadge");
         const adminLinkEl = document.getElementById("sidebarAdminLink");
         const walletHolderEl = document.getElementById("walletBankHolder");
+        const cardHolderEl = document.getElementById("cardHolderName");
         const modalBankInput = document.getElementById("modalBankInfoInput");
 
         if (currentUser) {
@@ -629,6 +757,7 @@
             }
           }
           if (walletHolderEl) walletHolderEl.textContent = name.toUpperCase();
+          if (cardHolderEl) cardHolderEl.textContent = name.toUpperCase();
           if (modalBankInput) {
             modalBankInput.value = `Techcombank • 1903 6888 8888 8 (${name.toUpperCase()})`;
           }
@@ -731,7 +860,6 @@
           },
         ];
 
-        // Gộp sản phẩm tự đăng với sản phẩm mẫu
         function getAllProducts() {
           const list = [
             ...sellerProducts.map((p) => ({
@@ -856,7 +984,7 @@
           {
             time: "14/11/2026 08:30",
             code: "TX-NAPAS-881240",
-            type: "Rút tiền Napas 24/7",
+            type: "Rút tiền Napas 24/7 về Techcombank",
             amount: -20000000,
             status: "Hoàn tất 100%",
             statusBadge: "badge-success",
@@ -872,7 +1000,7 @@
           {
             time: "10/11/2026 11:05",
             code: "TX-NAPAS-771923",
-            type: "Rút tiền Napas 24/7",
+            type: "Rút tiền Napas 24/7 về Techcombank",
             amount: -15000000,
             status: "Hoàn tất 100%",
             statusBadge: "badge-success",
@@ -887,7 +1015,7 @@
         function updateBalanceUI() {
           const formatted = Utils.formatCurrency(currentBalance);
           const overviewBal = document.getElementById("overviewBalance");
-          const walletBal = document.getElementById("walletMainBalance");
+          const walletBal = document.getElementById("cardBalanceDisplay");
           const modalBal = document.getElementById("modalAvailBalance");
 
           if (overviewBal) overviewBal.textContent = formatted;
@@ -1028,7 +1156,6 @@
             return;
           }
 
-          // Cập nhật trong custom list hoặc default list
           let updated = false;
           sellerProducts = sellerProducts.map((p) => {
             if (p.id === activeEditProdId) {
@@ -1085,7 +1212,6 @@
           renderProducts();
         }
 
-        // Lắng nghe tìm kiếm & bộ lọc sản phẩm
         document.getElementById("searchProductInput")?.addEventListener("input", renderProducts);
         document.getElementById("filterCatSelect")?.addEventListener("change", renderProducts);
         document.getElementById("filterStatusSelect")?.addEventListener("change", renderProducts);
@@ -1136,9 +1262,15 @@
           }
 
           // Full Orders Tbody
+          const selectedFilter = document.querySelector('input[name="orderStatusFilter"]:checked')?.value || "all";
+          const filteredOrders = sellerOrders.filter((o) => {
+            if (selectedFilter === "all") return true;
+            return o.status === selectedFilter;
+          });
+
           const ordersTbody = document.getElementById("ordersTbody");
           if (ordersTbody) {
-            ordersTbody.innerHTML = sellerOrders.map((o) => `
+            ordersTbody.innerHTML = filteredOrders.map((o) => `
               <tr>
                 <td>
                   <strong class="mono text-secondary text-sm">${o.id}</strong>
@@ -1181,7 +1313,7 @@
             `).join("");
 
             // Gắn sự kiện In phiếu
-            document.querySelectorAll(".btn-print-label").forEach((btn) => {
+            ordersTbody.querySelectorAll(".btn-print-label").forEach((btn) => {
               btn.addEventListener("click", () => {
                 const id = btn.dataset.id;
                 const order = sellerOrders.find((x) => x.id === id);
@@ -1190,7 +1322,7 @@
             });
 
             // Gắn sự kiện Bàn giao bưu tá
-            document.querySelectorAll(".btn-dispatch-shipper").forEach((btn) => {
+            ordersTbody.querySelectorAll(".btn-dispatch-shipper").forEach((btn) => {
               btn.addEventListener("click", () => {
                 const id = btn.dataset.id;
                 dispatchOrder(id);
@@ -1198,6 +1330,11 @@
             });
           }
         }
+
+        // Lọc radio đơn hàng
+        document.querySelectorAll('input[name="orderStatusFilter"]').forEach((r) => {
+          r.addEventListener("change", renderOrders);
+        });
 
         function dispatchOrder(orderId) {
           const ord = sellerOrders.find((o) => o.id === orderId);
@@ -1292,7 +1429,6 @@
             </div>
           `).join("");
 
-          // Gắn sự kiện các nút
           container.querySelectorAll(".btn-action-accept").forEach((btn) => {
             btn.addEventListener("click", () => {
               const id = btn.dataset.id;
