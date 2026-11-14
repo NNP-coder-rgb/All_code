@@ -146,24 +146,20 @@
   }
 
   /* ---------------- GIỎ HÀNG ---------------- */
-  const CART_KEY = "hv_cart_count";
-  function getCartCount() {
-    try {
-      return parseInt(localStorage.getItem(CART_KEY), 10) || 0;
-    } catch (e) {
-      return 0;
+  function syncCartBadge() {
+    if (typeof Utils !== "undefined" && Utils.Cart) {
+      Utils.Cart.syncBadge("#cartCount");
+    } else {
+      try {
+        const n = parseInt(localStorage.getItem("hv_cart_count"), 10) || 0;
+        if (dom.cartCount) {
+          dom.cartCount.textContent = n;
+          dom.cartCount.classList.toggle("hidden", n === 0);
+        }
+      } catch (e) {}
     }
   }
-  function setCartCount(n) {
-    try {
-      localStorage.setItem(CART_KEY, n);
-    } catch (e) {}
-    if (dom.cartCount) {
-      dom.cartCount.textContent = n;
-      dom.cartCount.classList.toggle("hidden", n === 0);
-    }
-  }
-  setCartCount(getCartCount());
+  syncCartBadge();
 
   /* ---------------- TIỆN ÍCH TẠO THẺ SẢN PHẨM ---------------- */
   function createProductCardHTML(p) {

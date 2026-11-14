@@ -226,10 +226,11 @@
         var statusText = options.statusText || (isAdmin ? "HỆ THỐNG ONLINE 99.99%" : "Gian Hàng Hoạt Động");
         var adminUrl = resolveUrl("pages/admin/admin_system.html", bp);
         var sellerUrl = resolveUrl("pages/seller/dashboard.html", bp);
+        var catalogC2cUrl = resolveUrl("pages/shop/catalog.html?type=c2c", bp);
         var actionBtnHtml = isAdmin
           ? '<a class="btn btn-secondary btn-sm hide-sm" href="' + sellerUrl + '"><span class="material-symbols-outlined icon-sm">store</span> Kênh Người Bán</a>' +
             '<a class="btn btn-secondary btn-sm hide-sm" href="' + homeUrl + '"><span class="material-symbols-outlined icon-sm">storefront</span> Ra Trang Chủ</a>'
-          : '<a class="btn btn-secondary btn-sm hide-sm" href="' + adminUrl + '"><span class="material-symbols-outlined icon-sm">terminal</span> Master Admin</a>' +
+          : '<a class="btn btn-secondary btn-sm hide-sm" href="' + catalogC2cUrl + '"><span class="material-symbols-outlined icon-sm">storefront</span> Xem Chợ C2C</a>' +
             '<a class="btn btn-primary btn-sm" href="' + postItemUrl + '"><span class="material-symbols-outlined icon-sm">add</span> Đăng Bán Món Mới</a>';
 
         var headerStyle = isAdmin ? ' style="border-bottom: 2px solid var(--primary-600);"' : "";

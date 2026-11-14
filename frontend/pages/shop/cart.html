@@ -23,6 +23,23 @@
     <link rel="stylesheet" href="../../css/base.css" />
     <link rel="stylesheet" href="../../css/catalog.css" />
     <link rel="stylesheet" href="../../css/master_screens.css" />
+    <style>
+      .cart-layout-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 380px;
+        gap: var(--sp-6, 24px);
+        align-items: start;
+      }
+      @media (max-width: 992px) {
+        .cart-layout-grid {
+          grid-template-columns: 1fr;
+        }
+        .cart-summary-panel {
+          position: static !important;
+          top: auto !important;
+        }
+      }
+    </style>
   </head>
   <body>
     <!-- ===== HEADER MINIMAL (Task T13) ===== -->
@@ -167,7 +184,7 @@
       </div>
 
       <!-- KHỐI 2: GIAO DIỆN 2 CỘT KHI CÓ SẢN PHẨM -->
-      <div class="grid grid-2 gap-6" id="cartLayoutView" style="grid-template-columns: minmax(0, 1fr) 380px; align-items: start;">
+      <div class="cart-layout-grid" id="cartLayoutView">
         <!-- CỘT TRÁI: DANH SÁCH KIỆN HÀNG PHÂN THEO NGUỒN GỐC -->
         <section id="cartLeftSection">
           <div id="cartItemsList">
@@ -201,7 +218,7 @@
         </section>
 
         <!-- CỘT PHẢI: TỔNG KẾT, VOUCHER & TIẾN HÀNH THANH TOÁN (STICKY) -->
-        <aside class="panel p-5" style="position: sticky; top: 90px;">
+        <aside class="panel p-5 cart-summary-panel" style="position: sticky; top: 90px;">
           <h3 class="panel-title mb-3 flex items-center gap-2">
             <span class="material-symbols-outlined text-primary">receipt_long</span>
             Tóm Tắt Đơn Hàng

@@ -25,6 +25,23 @@
     <link rel="stylesheet" href="../../css/master_screens.css" />
 
     <style>
+      /* Bố cục responsive 2 cột chống tràn / cấn khối */
+      .checkout-layout-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 390px;
+        gap: var(--sp-6, 24px);
+        align-items: start;
+      }
+      @media (max-width: 992px) {
+        .checkout-layout-grid {
+          grid-template-columns: 1fr;
+        }
+        .checkout-summary-panel {
+          position: static !important;
+          top: auto !important;
+        }
+      }
+
       /* Tùy chỉnh nâng cao cho giao diện thanh toán chuẩn TMĐT */
       .checkout-section-title {
         font-family: var(--font-head);
@@ -470,7 +487,7 @@
 
       <form id="checkoutMasterForm">
         <!-- BỐ CỤC 2 CỘT: TRÁI (THÔNG TIN & THANH TOÁN), PHẢI (KIỆN HÀNG & TỔNG KẾT) -->
-        <div class="grid grid-2 gap-6" style="grid-template-columns: minmax(0, 1fr) 390px; align-items: start;">
+        <div class="checkout-layout-grid">
           
           <!-- CỘT TRÁI: THÔNG TIN GIAO NHẬN, VẬN CHUYỂN & PHƯƠNG THỨC THANH TOÁN -->
           <div class="checkout-left-col">
@@ -853,7 +870,7 @@
           </div>
 
           <!-- CỘT PHẢI (STICKY ASIDE): KIỆN HÀNG, MÃ VOUCHER & BẢNG TỔNG KẾT -->
-          <aside class="checkout-right-col" style="position: sticky; top: 90px;">
+          <aside class="checkout-right-col checkout-summary-panel" style="position: sticky; top: 90px;">
             <div class="panel p-5">
               <div class="flex items-center justify-between mb-3 pb-2" style="border-bottom: 1px solid var(--border);">
                 <h3 class="panel-title mb-0 flex items-center gap-1.5 text-sm">
@@ -1608,7 +1625,7 @@
             // 1. Validate người nhận
             const fullName = dom.recipientName.value.trim();
             const phone = dom.recipientPhone.value.trim().replace(/\s+/g, "");
-            const address = dom.recipientAddress.value.trim();
+            let address = dom.recipientAddress.value.trim();
             const province = dom.selectProvince.value;
             const district = dom.selectDistrict.value;
             const ward = dom.selectWard.value;

@@ -2351,8 +2351,17 @@ body.light-theme .chart-axis-text {
   background: rgba(139, 92, 246, 0.06);
 }
 
+.admin-chart-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  align-items: stretch;
+}
+
 @media (max-width: 1024px) {
   .admin-dash {
+    grid-template-columns: 1fr;
+  }
+  .admin-chart-grid {
     grid-template-columns: 1fr;
   }
   .admin-sidebar {

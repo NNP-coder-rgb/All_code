@@ -1102,8 +1102,8 @@
         return true;
       }
 
-      // 3. Kiểm tra xác thực CCCD đối với người dùng thông thường
-      const requireKyc = options.requireKyc !== false;
+      // 3. Kiểm tra xác thực CCCD đối với người dùng thông thường (khi được yêu cầu tường minh)
+      const requireKyc = options.requireKyc === true;
       if (requireKyc) {
         const kycStatus = user.kycStatus || "UNVERIFIED";
 
