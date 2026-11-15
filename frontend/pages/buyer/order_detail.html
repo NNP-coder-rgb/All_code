@@ -536,6 +536,31 @@
               </div>
             </div>
 
+            <!-- THẺ HIỂN THỊ HÓA ĐƠN ĐIỆN TỬ VAT NẾU CÓ YÊU CẦU -->
+            ${
+              currentOrder.vatInvoice && currentOrder.vatInvoice.required
+                ? `
+                <div class="panel p-4 my-3" style="background: rgba(59, 130, 246, 0.05); border: 1.5px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-lg, 12px);">
+                  <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+                    <div class="flex items-center gap-2">
+                      <span class="material-symbols-outlined text-primary">receipt_long</span>
+                      <h3 class="text-sm fw-700 text-white m-0">HÓA ĐƠN ĐIỆN TỬ GIÁ TRỊ GIA TĂNG (VAT)</h3>
+                    </div>
+                    <span class="badge badge-success text-2xs"><span class="status-dot"></span> ĐÃ PHÁT HÀNH HỢP LỆ</span>
+                  </div>
+                  <div class="grid grid-2 gap-3 text-xs">
+                    <div><span class="text-muted">Đơn vị mua hàng:</span> <strong class="text-white block mt-0.5">${currentOrder.vatInvoice.companyName}</strong></div>
+                    <div><span class="text-muted">Mã số thuế (MST):</span> <strong class="mono text-white block mt-0.5">${currentOrder.vatInvoice.taxCode}</strong></div>
+                    <div><span class="text-muted">Địa chỉ cơ quan:</span> <span class="text-muted block mt-0.5">${currentOrder.vatInvoice.address}</span></div>
+                    <div><span class="text-muted">Email nhận file XML/PDF:</span> <span class="text-muted block mt-0.5">${currentOrder.vatInvoice.email}</span></div>
+                    <div><span class="text-muted">Số hóa đơn điện tử:</span> <strong class="mono text-primary block mt-0.5">${currentOrder.vatInvoice.invoiceNumber}</strong></div>
+                    <div><span class="text-muted">Ký số điện tử:</span> <span class="text-success block mt-0.5">Xác thực chứng thư số VNPT-CA</span></div>
+                  </div>
+                </div>
+              `
+                : ""
+            }
+
             <!-- STEPPER 5 BƯỚC CHI TIẾT -->
             <div class="order-full-stepper">
               <div class="stepper-step ${stepIndex >= 1 ? (stepIndex > 1 ? "done" : "active") : ""}">
@@ -597,6 +622,33 @@
                         </div>
                       </div>
                     </div>
+
+                    <!-- BẢN ĐỒ THEO DÕI SHIPPER GPS THỜI GIAN THỰC -->
+                    <div class="courier-gps-map-box my-3">
+                      <div class="gps-radar-grid"></div>
+                      <div class="gps-radar-sweep"></div>
+                      <div class="gps-route-line"></div>
+                      <div class="gps-shipper-dot" title="Shipper Nguyễn Văn Hùng">
+                        <span class="material-symbols-outlined" style="font-size: 14px;">two_wheeler</span>
+                      </div>
+                      <div class="gps-destination-dot" title="Địa chỉ nhận hàng của bạn">
+                        <span class="material-symbols-outlined" style="font-size: 14px;">home_pin</span>
+                      </div>
+                      <div class="gps-hud-overlay">
+                        <div class="flex items-center justify-between text-2xs">
+                          <span class="flex items-center gap-1 text-success">
+                            <span class="status-dot"></span> ĐỊNH VỊ GPS BƯU TÁ TRỰC TIẾP
+                          </span>
+                          <span class="mono text-white">VNPOST HỎA TỐC 2H</span>
+                        </div>
+                        <div class="flex items-center justify-between mt-1 text-xs">
+                          <div>Khoảng cách: <strong class="text-primary mono">1.8 km</strong></div>
+                          <div>Dự kiến đến: <strong class="text-warning mono">~12 phút</strong></div>
+                          <div>Tốc độ: <strong class="mono text-white">28 km/h</strong></div>
+                        </div>
+                      </div>
+                    </div>
+
                     <div class="flex items-center gap-2">
                       <button class="btn btn-secondary btn-sm" onclick="alert('Đang kết nối cuộc gọi đến bưu tá Nguyễn Văn Hùng (0981 234 567)...');">
                         <span class="material-symbols-outlined icon-xs text-success">call</span> Gọi Bưu Tá (0981 234 567)

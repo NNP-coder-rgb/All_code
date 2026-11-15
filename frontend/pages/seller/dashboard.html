@@ -745,6 +745,55 @@
       </div>
     </div>
 
+    
+    <!-- MODAL TẠO VOUCHER SHOP -->
+    <div class="modal-backdrop" id="createVoucherModal" style="display: none; align-items: center; justify-content: center; z-index: 10000;">
+      <div class="modal" role="dialog" aria-modal="true" style="max-width: 520px; width: 92%; padding: 24px; border-radius: 16px;">
+        <div class="modal-head flex items-center justify-between pb-3 mb-4" style="border-bottom: 1px solid var(--border);">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">add_card</span>
+            <h4 class="modal-title text-base fw-700 m-0">TẠO MÃ GIẢM GIÁ CHO SHOP</h4>
+          </div>
+          <button class="icon-btn" id="closeCreateVoucherBtn" type="button"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <form id="createVoucherForm">
+          <div class="grid grid-2 gap-3 mb-3">
+            <div class="form-group mb-0">
+              <label class="form-label text-xs fw-600">Mã Voucher (In hoa) <span class="text-danger">*</span></label>
+              <input type="text" class="form-control text-xs uppercase mono" id="vCode" placeholder="VD: TECH20K, VIP10" required />
+            </div>
+            <div class="form-group mb-0">
+              <label class="form-label text-xs fw-600">Loại Ưu Đãi</label>
+              <select class="form-control text-xs" id="vType">
+                <option value="fixed">Giảm số tiền cố định (VNĐ)</option>
+                <option value="percent">Giảm theo phần trăm (%)</option>
+                <option value="freeship">Hỗ trợ phí vận chuyển</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid grid-2 gap-3 mb-3">
+            <div class="form-group mb-0">
+              <label class="form-label text-xs fw-600">Mức Giảm <span class="text-danger">*</span></label>
+              <input type="number" class="form-control text-xs" id="vValue" placeholder="VD: 50000 hoặc 10" required />
+            </div>
+            <div class="form-group mb-0">
+              <label class="form-label text-xs fw-600">Đơn Tối Thiểu (VNĐ)</label>
+              <input type="number" class="form-control text-xs" id="vMinSpend" placeholder="VD: 500000" />
+            </div>
+          </div>
+          <div class="form-group mb-4">
+            <label class="form-label text-xs fw-600">Số Lượng Lượt Dùng Tối Đa</label>
+            <input type="number" class="form-control text-xs" id="vUsageLimit" placeholder="VD: 50 lượt" value="50" />
+          </div>
+          <div class="flex gap-2">
+            <button class="btn btn-secondary flex-1" id="btnCancelVoucher" type="button">Hủy</button>
+            <button class="btn btn-primary flex-1" type="submit" style="font-weight: 700;">Kích Hoạt Voucher</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
     <div class="toast-stack" id="toastStack"></div>
 
     <!-- ===== FOOTER ===== -->
@@ -1470,6 +1519,130 @@
               const offerPrice = Number(btn.dataset.offer);
               sellerOffers = sellerOffers.filter((x) => x.id !== id);
               renderOffers();
+
+        // 13. QUẢN LÝ SHOP VOUCHERS
+        const defaultShopVouchers = [
+          { code: "TECH10K", type: "fixed", value: 10000, minSpend: 200000, used: 18, limit: 50, active: true },
+          { code: "FREESHIP50", type: "freeship", value: 25000, minSpend: 500000, used: 24, limit: 100, active: true },
+          { code: "LIKENEW99", type: "percent", value: 5, minSpend: 2000000, used: 6, limit: 30, active: true },
+        ];
+
+        function getShopVouchers() {
+          try {
+            const saved = localStorage.getItem("hv_shop_vouchers");
+            if (!saved) {
+              localStorage.setItem("hv_shop_vouchers", JSON.stringify(defaultShopVouchers));
+              return defaultShopVouchers;
+            }
+            return JSON.parse(saved);
+          } catch (e) {
+            return defaultShopVouchers;
+          }
+        }
+
+        function renderShopVouchers() {
+          const vouchers = getShopVouchers();
+          const tbody = document.getElementById("shopVouchersTbody");
+          const countEl = document.getElementById("activeVouchersCount");
+          const totalUsedEl = document.getElementById("totalVoucherRedeemed");
+          
+          const activeCount = vouchers.filter(v => v.active).length;
+          const totalUsed = vouchers.reduce((acc, cur) => acc + (cur.used || 0), 0);
+          if (countEl) countEl.textContent = `${activeCount} Mã`;
+          if (totalUsedEl) totalUsedEl.textContent = `${totalUsed} Lượt`;
+
+          if (!tbody) return;
+          tbody.innerHTML = vouchers.map((v, idx) => {
+            const valLabel = v.type === "percent" ? `Giảm ${v.value}%` : v.type === "freeship" ? `Hỗ trợ ${Utils.formatCurrency(v.value)}` : `Giảm ${Utils.formatCurrency(v.value)}`;
+            return `
+              <tr>
+                <td><span class="badge badge-primary mono fw-700" style="font-size: 11px;">${v.code}</span></td>
+                <td><span class="text-xs">${v.type === "percent" ? "Phần Trăm" : v.type === "freeship" ? "Vận Chuyển" : "Tiền Mặt"}</span></td>
+                <td><strong class="text-secondary mono text-xs">${valLabel}</strong></td>
+                <td><span class="mono text-xs">${Utils.formatCurrency(v.minSpend || 0)}</span></td>
+                <td><span class="text-xs text-muted">${v.used || 0} / ${v.limit || "∞"}</span></td>
+                <td>
+                  <span class="badge ${v.active ? 'badge-success' : 'badge-secondary'} text-2xs">
+                    ${v.active ? 'Đang Chạy' : 'Tạm Dừng'}
+                  </span>
+                </td>
+                <td>
+                  <button class="btn btn-ghost btn-xs btn-toggle-v" data-index="${idx}" type="button" title="Bật/Tắt">
+                    <span class="material-symbols-outlined icon-xs">${v.active ? 'pause_circle' : 'play_circle'}</span>
+                  </button>
+                  <button class="btn btn-ghost btn-xs text-danger btn-delete-v" data-index="${idx}" type="button" title="Xóa">
+                    <span class="material-symbols-outlined icon-xs">delete</span>
+                  </button>
+                </td>
+              </tr>
+            `;
+          }).join("");
+
+          tbody.querySelectorAll(".btn-toggle-v").forEach(btn => {
+            btn.addEventListener("click", () => {
+              const i = parseInt(btn.dataset.index, 10);
+              vouchers[i].active = !vouchers[i].active;
+              localStorage.setItem("hv_shop_vouchers", JSON.stringify(vouchers));
+              renderShopVouchers();
+            });
+          });
+
+          tbody.querySelectorAll(".btn-delete-v").forEach(btn => {
+            btn.addEventListener("click", () => {
+              if (confirm("Bạn có chắc muốn xóa mã voucher này không?")) {
+                const i = parseInt(btn.dataset.index, 10);
+                vouchers.splice(i, 1);
+                localStorage.setItem("hv_shop_vouchers", JSON.stringify(vouchers));
+                renderShopVouchers();
+              }
+            });
+          });
+        }
+
+        const btnOpenCreateVoucher = document.getElementById("btnOpenCreateVoucherModal");
+        const createVoucherModalEl = document.getElementById("createVoucherModal");
+        const closeCreateVoucherBtn = document.getElementById("closeCreateVoucherBtn");
+        const btnCancelVoucher = document.getElementById("btnCancelVoucher");
+        const createVoucherForm = document.getElementById("createVoucherForm");
+
+        btnOpenCreateVoucher?.addEventListener("click", () => {
+          if (createVoucherModalEl) createVoucherModalEl.style.display = "flex";
+        });
+        closeCreateVoucherBtn?.addEventListener("click", () => {
+          if (createVoucherModalEl) createVoucherModalEl.style.display = "none";
+        });
+        btnCancelVoucher?.addEventListener("click", () => {
+          if (createVoucherModalEl) createVoucherModalEl.style.display = "none";
+        });
+        createVoucherModalEl?.addEventListener("click", (e) => {
+          if (e.target === createVoucherModalEl) createVoucherModalEl.style.display = "none";
+        });
+
+        createVoucherForm?.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const code = (document.getElementById("vCode")?.value || "").trim().toUpperCase();
+          const type = document.getElementById("vType")?.value || "fixed";
+          const value = parseInt(document.getElementById("vValue")?.value || "0", 10);
+          const minSpend = parseInt(document.getElementById("vMinSpend")?.value || "0", 10);
+          const limit = parseInt(document.getElementById("vUsageLimit")?.value || "50", 10);
+
+          if (!code || value <= 0) {
+            Utils.toast("Vui lòng điền mã hợp lệ và mức giảm lớn hơn 0", "error");
+            return;
+          }
+
+          const vouchers = getShopVouchers();
+          vouchers.unshift({ code, type, value, minSpend, used: 0, limit, active: true });
+          localStorage.setItem("hv_shop_vouchers", JSON.stringify(vouchers));
+
+          if (createVoucherModalEl) createVoucherModalEl.style.display = "none";
+          createVoucherForm.reset();
+          Utils.toast(`Đã kích hoạt thành công mã voucher ${code}!`, "success");
+          renderShopVouchers();
+        });
+
+        renderShopVouchers();
+
               Utils.toast(`Đã chấp thuận đề xuất bán với mức giá ${Utils.formatCurrency(offerPrice)}! Khách hàng có 24h để thanh toán.`, "success");
             });
           });

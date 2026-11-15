@@ -104,35 +104,38 @@
       }
     }
 
-    // Ảnh chính & Thumbnails
+    // Ảnh chính & Thumbnails - Đảm bảo chỉ hiển thị ảnh của chính sản phẩm
     const resolvedProductImg = typeof window !== "undefined" && window.resolveAssetUrl ? window.resolveAssetUrl(product.img) : product.img;
-    const images = [
-      resolvedProductImg,
-      resolvedProductImg,
-      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600",
-      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600",
-    ].filter(Boolean);
+    const images = (typeof ProductDetailData !== "undefined" && ProductDetailData.getGalleryImages)
+      ? ProductDetailData.getGalleryImages(product)
+      : [resolvedProductImg].filter(Boolean);
 
-    if (dom.mainImage) dom.mainImage.src = images[0];
+    if (dom.mainImage && images.length) dom.mainImage.src = images[0];
 
     if (dom.thumbStrip) {
-      dom.thumbStrip.innerHTML = images
-        .map(
-          (img, idx) => `
-          <div class="thumb-item ${idx === 0 ? "active" : ""}" data-img="${img}">
-            <img src="${img}" alt="Góc chụp ${idx + 1}" />
-          </div>
-        `,
-        )
-        .join("");
+      if (images.length > 1) {
+        dom.thumbStrip.style.display = "flex";
+        dom.thumbStrip.innerHTML = images
+          .map(
+            (img, idx) => `
+            <div class="thumb-item ${idx === 0 ? "active" : ""}" data-img="${img}">
+              <img src="${img}" alt="Góc chụp ${idx + 1}" />
+            </div>
+          `,
+          )
+          .join("");
 
-      $$(".thumb-item", dom.thumbStrip).forEach((item) => {
-        item.addEventListener("click", () => {
-          $$(".thumb-item", dom.thumbStrip).forEach((t) => t.classList.remove("active"));
-          item.classList.add("active");
-          if (dom.mainImage) dom.mainImage.src = item.dataset.img;
+        $$(".thumb-item", dom.thumbStrip).forEach((item) => {
+          item.addEventListener("click", () => {
+            $$(".thumb-item", dom.thumbStrip).forEach((t) => t.classList.remove("active"));
+            item.classList.add("active");
+            if (dom.mainImage) dom.mainImage.src = item.dataset.img;
+          });
         });
-      });
+      } else {
+        dom.thumbStrip.style.display = "none";
+        dom.thumbStrip.innerHTML = "";
+      }
     }
 
     // Đánh giá sao

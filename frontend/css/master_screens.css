@@ -4117,3 +4117,378 @@ body.light-theme .electronic-sign-pad {
   background: #f8fafc;
   border-color: #cbd5e1;
 }
+
+
+/* ==========================================================================
+   18. HỆ THỐNG TÍNH NĂNG TMĐT HOÀN CHỈNH (PRODUCTION-GRADE E-COMMERCE 2026)
+   ========================================================================== */
+
+/* ---------- 1. SKELETON LOADING / SHIMMER EFFECT ---------- */
+.skeleton {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 25%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.04) 75%);
+  background-size: 200% 100%;
+  animation: shimmerSkeleton 1.6s infinite;
+  border-radius: var(--radius-md, 8px);
+}
+@keyframes shimmerSkeleton {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.skeleton-text {
+  height: 14px;
+  margin-bottom: 8px;
+  width: 100%;
+}
+.skeleton-title {
+  height: 22px;
+  margin-bottom: 12px;
+  width: 60%;
+}
+.skeleton-card {
+  height: 280px;
+  border-radius: var(--radius-lg, 12px);
+}
+
+/* ---------- 2. OFFLINE STATUS BANNER ---------- */
+.offline-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(90deg, #dc2626, #b91c1c);
+  color: #ffffff;
+  padding: 8px 16px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+  animation: slideDownBanner 0.3s ease;
+}
+@keyframes slideDownBanner {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+
+/* ---------- 3. SO SÁNH SẢN PHẨM (PRODUCT COMPARISON MATRIX) ---------- */
+.compare-modal-box {
+  background: var(--bg-surface, #121224);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  border-radius: var(--radius-xl, 16px);
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+}
+.compare-grid-layout {
+  display: grid;
+  grid-template-columns: 200px 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 768px) {
+  .compare-grid-layout {
+    grid-template-columns: 1fr;
+  }
+}
+.compare-item-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1.5px solid var(--border, rgba(255, 255, 255, 0.08));
+  border-radius: var(--radius-lg, 12px);
+  padding: 16px;
+  text-align: center;
+  transition: all 0.25s ease;
+}
+.compare-item-card.mall-highlight {
+  border-color: rgba(59, 130, 246, 0.4);
+  background: linear-gradient(180deg, rgba(59, 130, 246, 0.08) 0%, transparent 100%);
+}
+.compare-item-card.used-highlight {
+  border-color: rgba(6, 182, 212, 0.4);
+  background: linear-gradient(180deg, rgba(6, 182, 212, 0.08) 0%, transparent 100%);
+}
+.compare-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 12.5px;
+}
+
+/* ---------- 4. CHAT TRỰC TIẾP VỚI NGƯỜI BÁN (BUYER-SELLER CHAT DRAWER) ---------- */
+.seller-chat-drawer {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 380px;
+  max-width: calc(100vw - 32px);
+  height: 540px;
+  max-height: calc(100vh - 80px);
+  background: var(--bg-surface, #151528);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-xl, 16px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65);
+  display: flex;
+  flex-direction: column;
+  z-index: 9999;
+  overflow: hidden;
+  transition: transform 0.3s var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1)), opacity 0.25s ease;
+}
+.seller-chat-drawer.minimized {
+  transform: translateY(120%);
+  opacity: 0;
+  pointer-events: none;
+}
+.seller-chat-header {
+  padding: 14px 18px;
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(139, 92, 246, 0.15));
+  border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.chat-product-preview-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  background: rgba(0, 0, 0, 0.25);
+  border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+  font-size: 11.5px;
+}
+
+/* ---------- 5. FORM ĐÁNH GIÁ SẢN PHẨM & CHẤM SAO (REVIEW FORM) ---------- */
+.star-rating-picker {
+  display: flex;
+  gap: 6px;
+  margin: 10px 0;
+}
+.star-pick-btn {
+  font-size: 32px;
+  color: var(--text-faint, #64748b);
+  cursor: pointer;
+  transition: transform 0.15s ease, color 0.15s ease;
+  user-select: none;
+}
+.star-pick-btn:hover,
+.star-pick-btn.selected {
+  color: #f59e0b;
+  transform: scale(1.15);
+}
+.review-filter-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.review-filter-chip {
+  padding: 6px 14px;
+  border-radius: var(--radius-pill, 999px);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+  font-size: 12px;
+  color: var(--text-muted, #94a3b8);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.review-filter-chip.active {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: #f59e0b;
+  color: #fbbf24;
+  font-weight: 700;
+}
+
+/* ---------- 6. DANH SÁCH YÊU THÍCH (WISHLIST IN PROFILE) ---------- */
+.wishlist-grid-deluxe {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+.wishlist-item-card {
+  background: var(--bg-surface, #18182e);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+  border-radius: var(--radius-lg, 12px);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+.wishlist-item-card:hover {
+  transform: translateY(-3px);
+  border-color: #a855f7;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* ---------- 7. XUẤT HÓA ĐƠN ĐIỆN TỬ VAT (E-INVOICE CHECKOUT) ---------- */
+.vat-invoice-toggle-box {
+  background: rgba(59, 130, 246, 0.04);
+  border: 1.5px solid rgba(59, 130, 246, 0.25);
+  border-radius: var(--radius-lg, 12px);
+  padding: 14px 18px;
+  margin-top: 14px;
+}
+.vat-invoice-fields {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(59, 130, 246, 0.25);
+}
+@media (max-width: 640px) {
+  .vat-invoice-fields {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- 8. BẢN ĐỒ LỘ TRÌNH SHIPPER GPS (LIVE COURIER TRACKING MAP) ---------- */
+.courier-gps-map-box {
+  width: 100%;
+  height: 240px;
+  border-radius: var(--radius-lg, 12px);
+  position: relative;
+  overflow: hidden;
+  background: #090914;
+  border: 1.5px solid rgba(6, 182, 212, 0.3);
+  margin-bottom: 16px;
+}
+.courier-gps-grid-pattern {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.6;
+}
+.courier-road-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.courier-pin-animated {
+  position: absolute;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #06b6d4, #3b82f6);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.8);
+  transform: translate(-50%, -50%);
+  animation: courierBob 2s infinite ease-in-out;
+}
+@keyframes courierBob {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -58%) scale(1.08); }
+}
+
+/* ---------- 9. IN PHIẾU GỬI HÀNG CHUẨN BƯU CỤC A6 (SHIPPING LABEL) ---------- */
+.shipping-label-a6 {
+  background: #ffffff;
+  color: #0f172a;
+  border: 2px solid #000000;
+  border-radius: 4px;
+  padding: 16px;
+  font-family: Arial, sans-serif;
+  max-width: 480px;
+  margin: 0 auto;
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .shipping-label-a6, .shipping-label-a6 * {
+    visibility: visible;
+  }
+  .shipping-label-a6 {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    border: none;
+  }
+}
+
+/* ---------- 10. TRANG 404 NOT FOUND STYLING ---------- */
+.notfound-hero-box {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px;
+}
+.glitch-404 {
+  font-size: clamp(5rem, 15vw, 9rem);
+  font-weight: 900;
+  font-family: var(--font-mono, monospace);
+  background: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 50%, #f43f5e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+  margin-bottom: 12px;
+  letter-spacing: 4px;
+}
+
+/* ---------- LIGHT THEME OVERRIDES CHO PHẦN 18 ---------- */
+[data-theme="light"] .skeleton,
+body.light-theme .skeleton {
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+}
+[data-theme="light"] .compare-modal-box,
+body.light-theme .compare-modal-box {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.1);
+}
+[data-theme="light"] .compare-item-card,
+body.light-theme .compare-item-card {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+[data-theme="light"] .compare-row,
+body.light-theme .compare-row {
+  border-color: #e2e8f0;
+}
+[data-theme="light"] .seller-chat-drawer,
+body.light-theme .seller-chat-drawer {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 15px 35px rgba(15, 23, 42, 0.15);
+}
+[data-theme="light"] .seller-chat-header,
+body.light-theme .seller-chat-header {
+  background: linear-gradient(135deg, #e0f2fe, #f3e8ff);
+}
+[data-theme="light"] .chat-product-preview-bar,
+body.light-theme .chat-product-preview-bar {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+}
+[data-theme="light"] .review-filter-chip,
+body.light-theme .review-filter-chip {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #475569;
+}
+[data-theme="light"] .wishlist-item-card,
+body.light-theme .wishlist-item-card {
+  background: #ffffff;
+  border-color: #e2e8f0;
+}
+[data-theme="light"] .vat-invoice-toggle-box,
+body.light-theme .vat-invoice-toggle-box {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+[data-theme="light"] .courier-gps-map-box,
+body.light-theme .courier-gps-map-box {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}

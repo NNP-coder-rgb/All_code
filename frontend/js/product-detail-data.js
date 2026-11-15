@@ -404,6 +404,66 @@
         </div>
       `;
     },
+
+    /**
+     * Dữ liệu ma trận so sánh trực quan giữa Bản Brand Mall (Mới 100%) và Bản Like New (98-99%)
+     */
+    getComparisonData: function (p) {
+      if (!p) return null;
+      const isMall = p.type === "mall";
+      const resolve = typeof window !== "undefined" && window.resolveAssetUrl ? window.resolveAssetUrl : (u) => u;
+
+      // Tìm sản phẩm đối chứng cùng ngành hàng (hoặc tên tương tự)
+      let counterpart = null;
+      if (typeof PRODUCTS !== "undefined" && Array.isArray(PRODUCTS)) {
+        const targetType = isMall ? "c2c" : "mall";
+        const pTokens = (p.name || "").toLowerCase().split(/\s+/).filter((w) => w.length > 2);
+        counterpart = PRODUCTS.find((x) => x.type === targetType && x.category === p.category && pTokens.some((t) => (x.name || "").toLowerCase().includes(t)));
+        if (!counterpart) {
+          counterpart = PRODUCTS.find((x) => x.type === targetType && x.category === p.category && x.id !== p.id);
+        }
+      }
+
+      const mallProd = isMall ? p : counterpart;
+      const usedProd = isMall ? counterpart : p;
+
+      const mallPrice = mallProd ? (mallProd.price || 0) : (p.price ? Math.round(p.price * 1.35) : 10000000);
+      const usedPrice = usedProd ? (usedProd.price || 0) : (p.price ? Math.round(p.price * 0.68) : 6500000);
+      const savings = Math.max(0, mallPrice - usedPrice);
+      const savingsPercent = mallPrice > 0 ? Math.round((savings / mallPrice) * 100) : 32;
+
+      return {
+        mall: {
+          id: mallProd ? mallProd.id : "",
+          name: mallProd ? mallProd.name : (p.name + " (Mới 100%)"),
+          price: mallPrice,
+          img: mallProd ? resolve(mallProd.img) : resolve(p.img),
+          condition: "Mới 100% Nguyên Seal Hộp",
+          warranty: "12 - 24 tháng chính hãng tại TTBH ủy quyền",
+          testing: "Tiêu chuẩn xuất xưởng Factory QC quốc tế",
+          battery: "100% dung lượng xuất xưởng • 0 lần sạc",
+          trial: "Đổi mới 7 ngày nếu có lỗi phần cứng",
+          invoice: "Hóa đơn điện tử VAT 8-10% trong 24h",
+          link: mallProd ? `product_new.html?id=${mallProd.id}` : "#",
+        },
+        used: {
+          id: usedProd ? usedProd.id : "",
+          name: usedProd ? usedProd.name : (p.name + " (Like New 99%)"),
+          price: usedPrice,
+          img: usedProd ? resolve(usedProd.img) : resolve(p.img),
+          condition: `Like New ${(usedProd && usedProd.cond) ? usedProd.cond : 98}% Ngoại quan đẹp như mới`,
+          warranty: "06 tháng phần cứng tại Trạm Kỹ thuật Sàn",
+          testing: "15 bước kiểm định nghiêm ngặt tại Trạm Lab + Tem vỡ độc quyền",
+          battery: "Pin zin đo kiểm thực tế >= 95% hiệu năng đỉnh",
+          trial: "Escrow Napas giữ tiền 48 giờ thử nghiệm tại nhà",
+          invoice: "Hợp đồng giao dịch C2C bảo vệ pháp lý bởi Sàn",
+          link: usedProd ? `product_used.html?id=${usedProd.id}` : "#",
+        },
+        savingsAmount: savings,
+        savingsPercent: savingsPercent,
+        currentIsMall: isMall,
+      };
+    },
   };
 
   global.ProductDetailData = ProductDetailData;

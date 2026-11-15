@@ -24,6 +24,7 @@
   const STORAGE_KEYS = {
     THEME: "hv_theme",
     CART: "hv_cart",
+    WISHLIST: "hv_wishlist_items",
   };
 
   /**
@@ -46,7 +47,7 @@
         }
       }
 
-      const badges = document.querySelectorAll(".cart-badge, [data-cart-badge], .badge-cart-count");
+      const badges = document.querySelectorAll(".cart-badge, [data-cart-badge], .badge-cart-count, #cartCount, .badge-counter#cartCount");
       badges.forEach((b) => {
         b.textContent = count > 99 ? "99+" : count;
         if (count > 0) {
@@ -152,8 +153,46 @@
         syncCartBadge();
       } else if (e.key === STORAGE_KEYS.THEME && e.newValue) {
         document.documentElement.setAttribute("data-theme", e.newValue);
+      } else if (e.key === STORAGE_KEYS.WISHLIST) {
+        window.dispatchEvent(new CustomEvent("wishlist:updated", { detail: { storageEvent: true } }));
       }
     });
+  }
+
+  /**
+   * Quản lý trạng thái kết nối mạng (Online / Offline status banner)
+   */
+  function setupNetworkStatusListener() {
+    if (typeof window === "undefined" || typeof document === "undefined") return;
+
+    let banner = document.getElementById("offlineStatusBanner");
+
+    function showOfflineBanner() {
+      if (!banner) {
+        banner = document.createElement("div");
+        banner.id = "offlineStatusBanner";
+        banner.className = "offline-banner";
+        banner.innerHTML = '<span class="material-symbols-outlined icon-xs">cloud_off</span> Bạn đang ngoại tuyến. Dữ liệu giỏ hàng và danh sách đã được lưu trên thiết bị.';
+        document.body.prepend(banner);
+      }
+      banner.style.display = "flex";
+    }
+
+    function hideOfflineBanner() {
+      if (banner) {
+        banner.style.display = "none";
+      }
+      if (window.Utils && typeof window.Utils.toast === "function") {
+        window.Utils.toast("Đã khôi phục kết nối internet!", "success");
+      }
+    }
+
+    window.addEventListener("offline", showOfflineBanner);
+    window.addEventListener("online", hideOfflineBanner);
+
+    if (typeof navigator !== "undefined" && navigator.onLine === false) {
+      showOfflineBanner();
+    }
   }
 
   /**
@@ -192,6 +231,7 @@
     setupKeyboardShortcuts();
     setupStorageListener();
     setupBackToTop();
+    setupNetworkStatusListener();
   }
 
   // Tự động chạy khi nạp trên trình duyệt

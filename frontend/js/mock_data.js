@@ -1944,6 +1944,7 @@ const PRODUCTS = [
     off: 5,
     buy: "Mua Ngay",
     img: IMG.camera_osmo_pocket3_stand,
+    images: [IMG.camera_osmo_pocket3_stand, IMG.camera_osmo_pocket3_action, IMG.camera_osmo_pocket_selfie],
   },
   {
     id: "cm6",
@@ -2529,6 +2530,7 @@ const PRODUCTS = [
     off: 12,
     buy: "Mua Ngay",
     img: IMG.audio_kz_iem,
+    images: [IMG.audio_kz_iem, IMG.audio_kz_pair],
   },
   {
     id: "au14",

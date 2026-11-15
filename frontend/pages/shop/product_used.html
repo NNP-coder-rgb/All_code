@@ -170,8 +170,15 @@
         <!-- Cột phải: Thông tin, Độ mới, Giá & Trả giá -->
         <div>
           <div class="flex items-center gap-2 mb-2 flex-wrap">
-            <span class="badge badge-secondary badge-dot">NGƯỜI BÁN ĐÃ XÁC MINH</span>
-            <span class="text-xs text-muted" id="sellerMeta">Người bán: Nguyễn Văn A (Đã eKYC CCCD • 18 lượt bán)</span>
+            <div class="flex items-center justify-between gap-2 w-full flex-wrap mb-1">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="badge badge-secondary badge-dot">NGƯỜI BÁN ĐÃ XÁC MINH</span>
+                <span class="text-xs text-muted" id="sellerMeta">Người bán: Nguyễn Văn A (Đã eKYC CCCD • 18 lượt bán)</span>
+              </div>
+              <button class="btn btn-outline btn-xs" id="btnOpenSellerChat" type="button" style="border-radius: 99px; gap: 4px; border-color: var(--primary, #8b5cf6); color: var(--primary-light, #c084fc); font-weight: 700;">
+                <span class="material-symbols-outlined icon-xs">forum</span> Chat Với Người Bán
+              </button>
+            </div>
           </div>
 
           <h1 class="page-title mb-2" id="prodTitle" style="font-size: 1.95rem; line-height: 1.3;">Tên Sản Phẩm Cũ</h1>
@@ -259,7 +266,22 @@
               <strong>Ký quỹ Escrow 48 Giờ:</strong> Tiền được giữ an toàn trên sàn trong suốt thời gian bạn trải nghiệm.
             </div>
           </div>
+
+          <!-- Banner So Sánh Đồ Cũ Like New vs Đồ Mới 100% -->
+          <div class="panel p-3.5 mt-4 flex items-center justify-between gap-3 flex-wrap" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(139, 92, 246, 0.08)); border: 1.5px solid rgba(59, 130, 246, 0.25); border-radius: var(--radius-lg, 12px);">
+            <div class="flex items-center gap-2.5">
+              <span class="material-symbols-outlined text-primary icon-md" style="color: #3b82f6; font-size: 26px;">balance</span>
+              <div>
+                <div class="text-xs fw-700 text-text">Muốn biết đồ Like New tiết kiệm bao nhiêu so với mua mới?</div>
+                <div class="text-2xs text-muted" id="compareSavingsHint">Xem bảng đối chiếu giá trị thực, bảo hành hãng vs bảo hành trạm Lab sàn</div>
+              </div>
+            </div>
+            <button class="btn btn-outline btn-sm" id="btnOpenCompareModal" type="button" style="border-color: #3b82f6; color: #3b82f6; font-weight: 700; white-space: nowrap;">
+              <span class="material-symbols-outlined icon-xs">compare_arrows</span> So Sánh Với Hàng Mới
+            </button>
+          </div>
         </div>
+      </div>
       </div>
 
       <!-- ===== KHỐI TABS CHI TIẾT SẢN PHẨM ===== -->
@@ -332,10 +354,21 @@
                 <div class="reviews-summary-score" id="reviewSummaryScore">4.9</div>
                 <div class="stars-container mb-2" style="color: var(--warning, #f59e0b); font-size: 1.2rem;">★★★★★</div>
                 <div class="text-xs text-muted fw-600 mb-3" id="reviewSummaryText">Dựa trên 168 đánh giá giao dịch C2C</div>
-                <span class="badge badge-success text-2xs">99.2% ĐÁNH GIÁ TÍCH CỰC</span>
+                <span class="badge badge-success text-2xs block mb-3">99.2% ĐÁNH GIÁ TÍCH CỰC</span>
+                <button class="btn btn-primary btn-sm w-full" id="btnOpenReviewModal" type="button" style="font-weight: 700;">
+                  <span class="material-symbols-outlined icon-xs">rate_review</span> Viết Đánh Giá
+                </button>
               </div>
-              <div class="reviews-list" id="reviewsListContainer">
-                <!-- Render động -->
+              <div class="reviews-content-wrapper" style="min-width: 0;">
+                <div class="review-filter-chips mb-3 flex items-center gap-2 flex-wrap">
+                  <button class="review-filter-chip active" data-rating-filter="all" type="button">Tất Cả (<span id="countReviewAll">3</span>)</button>
+                  <button class="review-filter-chip" data-rating-filter="5" type="button">5 Sao ★ (<span id="countReview5">2</span>)</button>
+                  <button class="review-filter-chip" data-rating-filter="4" type="button">4 Sao ★ (<span id="countReview4">1</span>)</button>
+                  <button class="review-filter-chip" data-rating-filter="photo" type="button"><span class="material-symbols-outlined icon-xs">photo_camera</span> Có Ảnh / Video</button>
+                </div>
+                <div class="reviews-list" id="reviewsListContainer">
+                  <!-- Render động -->
+                </div>
               </div>
             </div>
           </div>
@@ -452,6 +485,138 @@
       <img id="lightboxImg" src="" alt="Ảnh sản phẩm phóng to" />
     </div>
 
+    
+    <!-- Modal So Sánh Sản Phẩm (Product Comparison Matrix) -->
+    <div class="modal-backdrop" id="productCompareModal" style="display: none; align-items: center; justify-content: center; z-index: 10000;">
+      <div class="modal compare-modal-box" role="dialog" aria-modal="true" style="max-width: 840px; width: 92%; max-height: 90vh; overflow-y: auto; padding: 24px;">
+        <div class="modal-head flex items-center justify-between pb-3 mb-4" style="border-bottom: 1px solid var(--border);">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary icon-md">balance</span>
+            <h3 class="modal-title text-base fw-700 m-0">ĐỐI CHIẾU GIÁ TRỊ: ĐỒ CŨ LIKE NEW VS BRAND MALL (MỚI 100%)</h3>
+          </div>
+          <button class="icon-btn" id="closeCompareModalBtn" type="button" aria-label="Đóng"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <div class="modal-body" id="compareModalBody">
+          <!-- Render động ma trận so sánh -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Viết Đánh Giá Sản Phẩm (Review Submission Form) -->
+    <div class="modal-backdrop" id="reviewSubmitModal" style="display: none; align-items: center; justify-content: center; z-index: 10000;">
+      <div class="modal" role="dialog" aria-modal="true" style="max-width: 520px; width: 92%; padding: 24px; border-radius: 16px;">
+        <div class="modal-head flex items-center justify-between pb-3 mb-4" style="border-bottom: 1px solid var(--border);">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-warning icon-md">star</span>
+            <h3 class="modal-title text-base fw-700 m-0">ĐÁNH GIÁ SẢN PHẨM LIKE NEW</h3>
+          </div>
+          <button class="icon-btn" id="closeReviewModalBtn" type="button" aria-label="Đóng"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <form id="reviewSubmitForm">
+          <div class="form-group mb-4 text-center">
+            <label class="form-label text-xs fw-700 block mb-2">MỨC ĐỘ HÀI LÒNG CỦA BẠN:</label>
+            <div class="star-rating-picker justify-center" id="starRatingPicker">
+              <button type="button" class="star-picker-btn active" data-value="1">★</button>
+              <button type="button" class="star-picker-btn active" data-value="2">★</button>
+              <button type="button" class="star-picker-btn active" data-value="3">★</button>
+              <button type="button" class="star-picker-btn active" data-value="4">★</button>
+              <button type="button" class="star-picker-btn active" data-value="5">★</button>
+            </div>
+            <div class="text-xs text-warning fw-700 mt-2" id="starPickerLabel">5.0 ★ Máy đẹp như mới, test chuẩn Lab!</div>
+          </div>
+          <div class="form-group mb-3">
+            <label class="form-label text-xs fw-700">TÊN CỦA BẠN (HOẶC BIỆT DANH):</label>
+            <input type="text" class="form-control text-xs" id="reviewAuthorName" placeholder="VD: Quốc Huy (Đã mua Like New)" required />
+          </div>
+          <div class="form-group mb-3">
+            <label class="form-label text-xs fw-700">NHẬN XÉT CHI TIẾT:</label>
+            <textarea class="form-control text-xs" id="reviewCommentText" rows="3" placeholder="Chia sẻ cảm nhận về ngoại quan, độ nhạy pin, quy trình đồng kiểm cùng bưu tá..." required></textarea>
+          </div>
+          <div class="form-group mb-4">
+            <label class="form-label text-xs fw-700">ĐÍNH KÈM ẢNH ĐẬP HỘP / REVIEW (TÙY CHỌN):</label>
+            <input type="text" class="form-control text-xs" id="reviewPhotoUrl" placeholder="Dán link ảnh chụp máy hoặc test góc cạnh" />
+          </div>
+          <div class="flex gap-2">
+            <button class="btn btn-secondary flex-1" id="btnCancelReview" type="button">Hủy</button>
+            <button class="btn btn-primary flex-1" type="submit" style="font-weight: 700;">Gửi Đánh Giá Ngay</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Khung Chat Trực Tiếp Với Người Bán (Direct Buyer-Seller Chat Drawer) -->
+    <div class="seller-chat-drawer minimized" id="sellerChatDrawer" aria-hidden="true">
+      <div class="seller-chat-header flex items-center justify-between p-3" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(6, 182, 212, 0.15)); border-bottom: 1px solid var(--border);">
+        <div class="flex items-center gap-2.5">
+          <div class="relative">
+            <div class="avatar" style="width: 38px; height: 38px; border-radius: 50%; background: var(--primary, #8b5cf6); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff;">
+              <span id="chatSellerAvatar">S</span>
+            </div>
+            <span style="position: absolute; bottom: 0; right: 0; width: 10px; height: 10px; background: #22c55e; border: 2px solid #0f172a; border-radius: 50%;"></span>
+          </div>
+          <div>
+            <strong class="text-xs text-text block line-clamp-1" id="chatSellerName">Người Bán C2C</strong>
+            <span class="text-2xs text-success flex items-center gap-1">
+              <span class="material-symbols-outlined icon-xs">check_circle</span> Đã xác thực eKYC CCCD • Trực tuyến
+            </span>
+          </div>
+        </div>
+        <div class="flex items-center gap-1">
+          <button class="icon-btn text-muted" id="btnMinimizeChat" type="button" title="Thu nhỏ"><span class="material-symbols-outlined">remove</span></button>
+          <button class="icon-btn text-muted" id="btnCloseChat" type="button" title="Đóng chat"><span class="material-symbols-outlined">close</span></button>
+        </div>
+      </div>
+
+      <!-- Mini Product Preview Bar -->
+      <div class="chat-product-preview-bar p-2.5 flex items-center justify-between gap-2" style="background: rgba(255, 255, 255, 0.03); border-bottom: 1px solid var(--border);">
+        <div class="flex items-center gap-2 min-w-0">
+          <img src="" id="chatProdThumb" alt="Product" style="width: 36px; height: 36px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border);" />
+          <div class="min-w-0">
+            <div class="text-2xs fw-700 text-text truncate" id="chatProdTitle">Sản phẩm đang trao đổi</div>
+            <div class="text-2xs text-secondary mono" id="chatProdPrice">0₫</div>
+          </div>
+        </div>
+        <button class="btn btn-outline btn-xs" id="btnSendProductCard" type="button" style="white-space: nowrap; font-size: 10.5px; padding: 4px 8px;">
+          <span class="material-symbols-outlined icon-xs">send</span> Gửi Thẻ
+        </button>
+      </div>
+
+      <!-- Quick Inquiry Chips -->
+      <div class="quick-inquiry-bar p-2 flex gap-1.5 overflow-x-auto" style="border-bottom: 1px solid rgba(255, 255, 255, 0.05); background: rgba(0,0,0,0.1);">
+        <button class="btn btn-secondary btn-2xs quick-chat-chip" type="button" data-msg="Máy còn đầy đủ phụ kiện sạc cáp zin không shop?">Phụ kiện zin?</button>
+        <button class="btn btn-secondary btn-2xs quick-chat-chip" type="button" data-msg="Pin đo thực tế còn được bao nhiêu % thế bạn?">Tình trạng pin?</button>
+        <button class="btn btn-secondary btn-2xs quick-chat-chip" type="button" data-msg="Sàn có hỗ trợ đồng kiểm mở hộp cùng shipper không?">Đồng kiểm 100%?</button>
+        <button class="btn btn-secondary btn-2xs quick-chat-chip" type="button" data-msg="Mình ở gần có thể qua xem máy trực tiếp được không?">Xem trực tiếp?</button>
+      </div>
+
+      <!-- Messages Body -->
+      <div class="seller-chat-messages p-3 flex-1 overflow-y-auto" id="sellerChatMessages" style="display: flex; flex-direction: column; gap: 10px; max-height: 310px;">
+        <div class="text-center my-2">
+          <span class="text-2xs text-muted" style="background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 99px;">
+            🔒 Đang kích hoạt mã hóa bảo mật & Quỹ ký quỹ Escrow 48H
+          </span>
+        </div>
+        <!-- Tin nhắn mở đầu từ người bán -->
+        <div class="seller-chat-bubble seller-msg" style="align-self: flex-start; max-width: 82%; background: rgba(255,255,255,0.06); padding: 10px 12px; border-radius: 12px 12px 12px 2px; font-size: 12px; border: 1px solid var(--border);">
+          Chào bạn! Mình là người bán sản phẩm này. Máy đã được test kỹ 15 bước tại phòng Lab của sàn. Bạn cần hỏi thêm chi tiết nào cứ nhắn mình nhé! 😊
+          <div class="text-3xs text-muted mt-1 text-right">Vừa xong</div>
+        </div>
+      </div>
+
+      <!-- Typing Indicator -->
+      <div id="sellerTypingIndicator" style="display: none; padding: 4px 14px; font-size: 11px; color: var(--text-muted);">
+        <span class="typing-dots">Người bán đang soạn tin<span>.</span><span>.</span><span>.</span></span>
+      </div>
+
+      <!-- Chat Footer -->
+      <form class="seller-chat-footer p-2.5 flex items-center gap-2" id="sellerChatForm" style="border-top: 1px solid var(--border); background: var(--bg-surface);">
+        <input type="text" class="form-control text-xs flex-1" id="chatMessageInput" placeholder="Nhắn tin với người bán..." autocomplete="off" />
+        <button class="btn btn-primary btn-sm" type="submit" style="padding: 8px 12px;">
+          <span class="material-symbols-outlined icon-xs">send</span>
+        </button>
+      </form>
+    </div>
+
     <div class="toast-stack" id="toastStack"></div>
 
     <script src="../../js/popup.js"></script>
@@ -524,7 +689,7 @@
 
         const thumbStrip = document.getElementById("thumbStrip");
         if (thumbStrip) {
-          if (galleryImgs.length > 0) {
+          if (galleryImgs.length > 1) {
             thumbStrip.style.display = "flex";
             thumbStrip.innerHTML = galleryImgs
               .map(
