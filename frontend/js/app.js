@@ -22,7 +22,7 @@
   "use strict";
 
   const STORAGE_KEYS = {
-    THEME: "hv_theme",
+    THEME: "hybrid_theme",
     CART: "hv_cart",
     WISHLIST: "hv_wishlist_items",
   };
@@ -71,13 +71,38 @@
    * Chuyển đổi Theme Sáng / Tối
    */
   function toggleTheme(forcedTheme) {
+    if (typeof window !== "undefined" && window.Utils && window.Utils.Theme) {
+      if (forcedTheme) {
+        return window.Utils.Theme.set(forcedTheme);
+      }
+      return window.Utils.Theme.toggle(true);
+    }
     if (typeof document === "undefined") return;
     const currentTheme = document.documentElement.getAttribute("data-theme") || "dark";
     const nextTheme = forcedTheme || (currentTheme === "dark" ? "light" : "dark");
     document.documentElement.setAttribute("data-theme", nextTheme);
+    document.documentElement.classList.toggle("light-theme", nextTheme === "light");
+    if (document.body) {
+      document.body.classList.toggle("light-theme", nextTheme === "light");
+    }
     try {
       localStorage.setItem(STORAGE_KEYS.THEME, nextTheme);
     } catch (e) {}
+
+    // Cập nhật icon trên các nút theme
+    const buttons = document.querySelectorAll(".theme-toggle-btn, #themeToggleBtn");
+    buttons.forEach((btn) => {
+      const icon = btn.querySelector(".material-symbols-outlined, .theme-toggle-icon");
+      if (icon) {
+        icon.textContent = nextTheme === "light" ? "dark_mode" : "light_mode";
+      }
+      btn.setAttribute(
+        "title",
+        nextTheme === "light"
+          ? "Chuyển sang giao diện Tối (Midnight Cyber)"
+          : "Chuyển sang giao diện Sáng (Nền trắng)"
+      );
+    });
 
     // Thông báo nếu có toast
     if (typeof window !== "undefined" && window.Utils && typeof window.Utils.toast === "function") {
@@ -95,11 +120,17 @@
    * Khởi tạo Theme từ localStorage
    */
   function initTheme() {
+    if (typeof window !== "undefined" && window.Utils && window.Utils.Theme) {
+      window.Utils.Theme.init();
+      return;
+    }
     if (typeof document === "undefined" || typeof localStorage === "undefined") return;
     try {
-      const saved = localStorage.getItem(STORAGE_KEYS.THEME);
-      if (saved) {
-        document.documentElement.setAttribute("data-theme", saved);
+      const saved = localStorage.getItem(STORAGE_KEYS.THEME) || localStorage.getItem("hv_theme") || "dark";
+      document.documentElement.setAttribute("data-theme", saved);
+      document.documentElement.classList.toggle("light-theme", saved === "light");
+      if (document.body) {
+        document.body.classList.toggle("light-theme", saved === "light");
       }
     } catch (e) {}
   }
@@ -151,8 +182,16 @@
     window.addEventListener("storage", function (e) {
       if (e.key === STORAGE_KEYS.CART) {
         syncCartBadge();
-      } else if (e.key === STORAGE_KEYS.THEME && e.newValue) {
-        document.documentElement.setAttribute("data-theme", e.newValue);
+      } else if ((e.key === STORAGE_KEYS.THEME || e.key === "hybrid_theme" || e.key === "hv_theme") && e.newValue) {
+        if (typeof window !== "undefined" && window.Utils && window.Utils.Theme) {
+          window.Utils.Theme.apply(e.newValue);
+        } else {
+          document.documentElement.setAttribute("data-theme", e.newValue);
+          document.documentElement.classList.toggle("light-theme", e.newValue === "light");
+          if (document.body) {
+            document.body.classList.toggle("light-theme", e.newValue === "light");
+          }
+        }
       } else if (e.key === STORAGE_KEYS.WISHLIST) {
         window.dispatchEvent(new CustomEvent("wishlist:updated", { detail: { storageEvent: true } }));
       }

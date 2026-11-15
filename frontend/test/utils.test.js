@@ -532,6 +532,73 @@ function runAdditionalTests() {
     assert.strictEqual(Utils.Theme.get(), "dark");
   });
 
+  it("Theme.apply đồng bộ class light-theme, data-theme và icon nút bấm", () => {
+    let rootClasses = new Set();
+    let bodyClasses = new Set();
+    let rootAttrs = {};
+    let iconContent = "light_mode";
+    let btnAttrs = {};
+
+    global.document = {
+      documentElement: {
+        setAttribute: (k, v) => {
+          rootAttrs[k] = v;
+        },
+        getAttribute: (k) => rootAttrs[k] || null,
+        classList: {
+          toggle: (cls, force) => {
+            if (force) rootClasses.add(cls);
+            else rootClasses.delete(cls);
+          },
+          contains: (cls) => rootClasses.has(cls),
+        },
+      },
+      body: {
+        classList: {
+          toggle: (cls, force) => {
+            if (force) bodyClasses.add(cls);
+            else bodyClasses.delete(cls);
+          },
+          contains: (cls) => bodyClasses.has(cls),
+        },
+      },
+      querySelectorAll: (sel) => {
+        if (sel.includes("themeToggleBtn")) {
+          return [
+            {
+              setAttribute: (k, v) => {
+                btnAttrs[k] = v;
+              },
+              querySelector: (sub) => ({
+                set textContent(val) {
+                  iconContent = val;
+                },
+                get textContent() {
+                  return iconContent;
+                },
+              }),
+            },
+          ];
+        }
+        return [];
+      },
+    };
+
+    // Áp dụng chế độ Sáng (light)
+    Utils.Theme.apply("light");
+    assert.strictEqual(rootAttrs["data-theme"], "light", "data-theme phải là 'light'");
+    assert.strictEqual(rootClasses.has("light-theme"), true, "html phải có class light-theme");
+    assert.strictEqual(bodyClasses.has("light-theme"), true, "body phải có class light-theme");
+    assert.strictEqual(iconContent, "dark_mode", "Icon nút bấm phải là dark_mode khi đang ở chế độ sáng");
+
+    // Áp dụng chế độ Tối (dark)
+    Utils.Theme.apply("dark");
+    assert.strictEqual(rootAttrs["data-theme"], "dark", "data-theme phải là 'dark'");
+    assert.strictEqual(rootClasses.has("light-theme"), false, "html không còn class light-theme");
+    assert.strictEqual(bodyClasses.has("light-theme"), false, "body không còn class light-theme");
+    assert.strictEqual(iconContent, "light_mode", "Icon nút bấm phải là light_mode khi đang ở chế độ tối");
+  });
+
   /* ---------------- 15. KIỂM THỬ WISHLIST & VIETNAM LOCATIONS ---------------- */
   console.log("\n--- 15. Kiểm thử Wishlist (Danh sách yêu thích) & VietnamLocations ---");
   it("Thêm, kiểm tra, xóa và đếm sản phẩm trong Wishlist", () => {

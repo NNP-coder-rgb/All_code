@@ -1364,10 +1364,30 @@
       return mode;
     },
 
-    toggle() {
+    toggle(showNotification = true) {
       const current = this.get();
       const next = current === "light" ? "dark" : "light";
-      return this.set(next);
+      const result = this.set(next);
+      if (showNotification && typeof document !== "undefined") {
+        const toastFn =
+          typeof toast === "function"
+            ? toast
+            : typeof Toast !== "undefined" && typeof Toast.show === "function"
+              ? Toast.show
+              : null;
+        if (toastFn) {
+          toastFn({
+            title: next === "light" ? "Giao diện Sáng" : "Giao diện Tối",
+            message:
+              next === "light"
+                ? "Đã chuyển sang giao diện nền trắng hiện đại"
+                : "Đã chuyển sang giao diện Midnight Cyber Violet",
+            type: "info",
+            duration: 2000,
+          });
+        }
+      }
+      return result;
     },
 
     apply(theme) {
@@ -1410,23 +1430,14 @@
       const theme = this.get();
       this.apply(theme);
 
-      // Lắng nghe sự kiện click nút chuyển đổi giao diện
+      // Lắng nghe sự kiện click nút chuyển đổi giao diện (Event Delegation)
       document.addEventListener("click", (e) => {
         const btn = e.target.closest(".theme-toggle-btn, #themeToggleBtn");
         if (btn) {
+          // Nếu nút đã được gán sự kiện trực tiếp bởi components.js, bỏ qua để tránh gọi đúp
+          if (btn.dataset.bound === "true") return;
           e.preventDefault();
-          const newTheme = Theme.toggle();
-          if (typeof toast === "function") {
-            toast({
-              title: newTheme === "light" ? "Giao diện Sáng" : "Giao diện Tối",
-              message:
-                newTheme === "light"
-                  ? "Đã chuyển sang giao diện nền trắng hiện đại"
-                  : "Đã chuyển sang giao diện Midnight Cyber Violet",
-              type: "info",
-              duration: 2000,
-            });
-          }
+          Theme.toggle(true);
         }
       });
     },

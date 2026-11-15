@@ -253,6 +253,179 @@ it("LiveChat: Sinh widget hỗ trợ trực tuyến 24/7 và phản hồi thông
   assert(replyWarr.includes("Bảo hành"), "Trả lời chính sách bảo hành");
 });
 
+/* ---------------- 8. KIỂM THỬ THEME TOGGLE VÀ CHỐNG DOUBLE-TOGGLE ---------------- */
+console.log("\n--- 8. KIỂM THỬ THEME TOGGLE VÀ CHỐNG GỌI ĐÚP (DOUBLE TOGGLE) ---");
+
+it("Header.bindEvents gắn sự kiện click cho #themeToggleBtn, chặn stopPropagation và chuyển đổi giao diện chính xác", () => {
+  let localStorageStore = { hybrid_theme: "dark" };
+  global.localStorage = {
+    getItem: (k) => localStorageStore[k] || null,
+    setItem: (k, v) => {
+      localStorageStore[k] = String(v);
+    },
+  };
+
+  const listeners = {};
+  const mockButton = {
+    id: "themeToggleBtn",
+    dataset: {},
+    attributes: {},
+    style: {},
+    classList: {
+      remove: function () {},
+      add: function () {},
+      toggle: function () {},
+    },
+    setAttribute: function (k, v) {
+      this.attributes[k] = v;
+    },
+    getAttribute: function (k) {
+      return this.attributes[k];
+    },
+    querySelector: function () {
+      return { textContent: "light_mode" };
+    },
+    addEventListener: function (evt, fn) {
+      listeners[evt] = listeners[evt] || [];
+      listeners[evt].push(fn);
+    },
+  };
+
+  const docListeners = {};
+  global.document = {
+    createElement: function (tag) {
+      return {
+        tag: tag,
+        style: {},
+        classList: { add: function () {}, remove: function () {}, toggle: function () {} },
+        setAttribute: function () {},
+        appendChild: function () {},
+        querySelector: function () {
+          return { addEventListener: function () {}, classList: { add: function () {} } };
+        },
+        innerHTML: "",
+      };
+    },
+    getElementById: function (id) {
+      if (id === "themeToggleBtn") return mockButton;
+      return null;
+    },
+    querySelectorAll: function (selector) {
+      if (selector && selector.includes("themeToggleBtn")) return [mockButton];
+      return [];
+    },
+    documentElement: {
+      setAttribute: function (k, v) {
+        this[k] = v;
+      },
+      getAttribute: function (k) {
+        return this[k] || "dark";
+      },
+      classList: {
+        toggle: function () {},
+      },
+    },
+    body: {
+      appendChild: function () {},
+      classList: {
+        toggle: function () {},
+        contains: function () {
+          return false;
+        },
+      },
+    },
+    addEventListener: function (evt, fn) {
+      docListeners[evt] = docListeners[evt] || [];
+      docListeners[evt].push(fn);
+    },
+  };
+
+  // Khởi tạo Theme trong utils
+  Utils.Theme.set("dark");
+  assert.strictEqual(Utils.Theme.get(), "dark");
+
+  // Gắn sự kiện qua Components.Header.bindEvents
+  Components.Header.bindEvents();
+  assert.strictEqual(mockButton.dataset.bound, "true", "Nút phải được đánh dấu dataset.bound = 'true'");
+  assert(listeners.click && listeners.click.length > 0, "Nút phải có click event listener");
+
+  // Giả lập click lần 1: Dark -> Light
+  let stoppedPropagation = false;
+  let preventedDefault = false;
+  const mockEvent1 = {
+    preventDefault: () => {
+      preventedDefault = true;
+    },
+    stopPropagation: () => {
+      stoppedPropagation = true;
+    },
+  };
+  listeners.click[0](mockEvent1);
+
+  assert.strictEqual(preventedDefault, true, "Phải gọi e.preventDefault()");
+  assert.strictEqual(stoppedPropagation, true, "Phải gọi e.stopPropagation() để không bubble lên document");
+  assert.strictEqual(Utils.Theme.get(), "light", "Sau click 1, theme phải là 'light'");
+  assert.strictEqual(global.localStorage.getItem("hybrid_theme"), "light", "Storage phải lưu 'light'");
+
+  // Giả lập click lần 2: Light -> Dark
+  const mockEvent2 = {
+    preventDefault: () => {},
+    stopPropagation: () => {},
+  };
+  listeners.click[0](mockEvent2);
+  assert.strictEqual(Utils.Theme.get(), "dark", "Sau click 2, theme phải là 'dark'");
+  assert.strictEqual(global.localStorage.getItem("hybrid_theme"), "dark", "Storage phải lưu 'dark'");
+});
+
+it("Sự kiện click nổi bọt lên document bị chặn gọi đúp nếu nút đã gắn dataset.bound = 'true'", () => {
+  let localStorageStore = { hybrid_theme: "light" };
+  global.localStorage = {
+    getItem: (k) => localStorageStore[k] || null,
+    setItem: (k, v) => {
+      localStorageStore[k] = String(v);
+    },
+  };
+
+  const mockBoundBtn = {
+    id: "themeToggleBtn",
+    dataset: { bound: "true" },
+    classList: { contains: () => false },
+    closest: function (sel) {
+      if (sel.includes("themeToggleBtn")) return this;
+      return null;
+    },
+  };
+
+  Utils.Theme.set("light");
+  assert.strictEqual(Utils.Theme.get(), "light");
+
+  // Giả lập sự kiện nổi bọt lên document click listener trong utils.js
+  // Nếu không có 'if (btn.dataset.bound === "true") return;' thì theme sẽ bị đổi sang dark
+  let clickHandlers = [];
+  const origDocAddListener = global.document.addEventListener;
+  global.document.addEventListener = function (evt, fn) {
+    if (evt === "click") clickHandlers.push(fn);
+  };
+
+  Utils.Theme.init();
+
+  // Kích hoạt handler
+  assert(clickHandlers.length > 0, "Phải có click handler trong utils.js");
+  const docClickEvent = {
+    target: mockBoundBtn,
+    preventDefault: () => {},
+  };
+  clickHandlers[clickHandlers.length - 1](docClickEvent);
+
+  // Theme vẫn phải giữ nguyên là 'light', không bị đổi sang 'dark'
+  assert.strictEqual(
+    Utils.Theme.get(),
+    "light",
+    "Theme phải giữ nguyên 'light', không bị toggle đúp do click nổi bọt"
+  );
+  assert.strictEqual(global.localStorage.getItem("hybrid_theme"), "light");
+});
+
 console.log("\n========================================================");
 console.log(`KẾT QUẢ KIỂM THỬ: ${passed} / ${passed + failed} PASS`);
 console.log("========================================================\n");

@@ -353,20 +353,58 @@
       var themeBtn = document.getElementById("themeToggleBtn");
       if (themeBtn && !themeBtn.dataset.bound) {
         themeBtn.dataset.bound = "true";
-        themeBtn.addEventListener("click", function () {
+        themeBtn.addEventListener("click", function (e) {
+          if (e) {
+            e.preventDefault();
+            if (typeof e.stopPropagation === "function") {
+              e.stopPropagation();
+            }
+          }
           if (UtilsRef && UtilsRef.Theme && typeof UtilsRef.Theme.toggle === "function") {
-            UtilsRef.Theme.toggle();
+            UtilsRef.Theme.toggle(true);
+          } else if (typeof window !== "undefined" && window.Utils && window.Utils.Theme) {
+            window.Utils.Theme.toggle(true);
           } else {
-            var isLight = document.body.classList.contains("light-theme") ||
+            var isLight =
+              document.body.classList.contains("light-theme") ||
               document.documentElement.getAttribute("data-theme") === "light";
             var nextTheme = isLight ? "dark" : "light";
             document.body.classList.toggle("light-theme", nextTheme === "light");
+            document.documentElement.classList.toggle("light-theme", nextTheme === "light");
             document.documentElement.setAttribute("data-theme", nextTheme);
-            try { localStorage.setItem("hybrid_theme", nextTheme); } catch (e) {}
-            var icon = themeBtn.querySelector(".theme-toggle-icon");
+            try {
+              localStorage.setItem("hybrid_theme", nextTheme);
+            } catch (err) {}
+            var icon = themeBtn.querySelector(".theme-toggle-icon, .material-symbols-outlined");
             if (icon) icon.textContent = nextTheme === "light" ? "dark_mode" : "light_mode";
+            themeBtn.setAttribute(
+              "title",
+              nextTheme === "light"
+                ? "Chuyển sang giao diện Tối (Midnight Cyber)"
+                : "Chuyển sang giao diện Sáng (Nền trắng)"
+            );
           }
         });
+      }
+
+      // Đảm bảo icon và tooltip của themeBtn phản ánh đúng theme hiện tại ngay khi gắn event
+      if (themeBtn) {
+        var activeTheme = "dark";
+        if (UtilsRef && UtilsRef.Theme && typeof UtilsRef.Theme.get === "function") {
+          activeTheme = UtilsRef.Theme.get();
+        } else {
+          try {
+            activeTheme = localStorage.getItem("hybrid_theme") || "dark";
+          } catch (err) {}
+        }
+        var currentIcon = themeBtn.querySelector(".theme-toggle-icon, .material-symbols-outlined");
+        if (currentIcon) currentIcon.textContent = activeTheme === "light" ? "dark_mode" : "light_mode";
+        themeBtn.setAttribute(
+          "title",
+          activeTheme === "light"
+            ? "Chuyển sang giao diện Tối (Midnight Cyber)"
+            : "Chuyển sang giao diện Sáng (Nền trắng)"
+        );
       }
 
       // 2. Đồng bộ giỏ hàng Cart Badge
