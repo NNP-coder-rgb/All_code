@@ -451,8 +451,8 @@
    * Đăng ký Progressive Web App (PWA) Service Worker
    */
   function setupServiceWorker() {
-    if (typeof window === "undefined" || !("serviceWorker" in navigator)) return;
-    if (window.location.protocol.startsWith("http")) {
+    if (typeof window === "undefined" || typeof navigator === "undefined" || !("serviceWorker" in navigator)) return;
+    if (window.location && window.location.protocol && window.location.protocol.startsWith("http")) {
       window.addEventListener("load", () => {
         navigator.serviceWorker
           .register("./sw.js")
