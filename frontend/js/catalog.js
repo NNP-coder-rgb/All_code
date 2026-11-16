@@ -1233,34 +1233,6 @@
     if (dom.clearAllBtn) {
       dom.clearAllBtn.addEventListener('click', resetAllFilters);
     }
-
-    // Toggle wishlist
-    document.addEventListener('click', (e) => {
-      const heartBtn = e.target.closest('[data-action="wishlist"]');
-      if (!heartBtn) return;
-      e.preventDefault();
-      e.stopPropagation();
-
-      const id = heartBtn.dataset.id;
-      let wishlist = [];
-      try {
-        wishlist = JSON.parse(localStorage.getItem('hybrid_wishlist') || '[]');
-      } catch (err) { wishlist = []; }
-
-      const idx = wishlist.indexOf(id);
-      if (idx >= 0) {
-        wishlist.splice(idx, 1);
-        heartBtn.classList.remove('active');
-        Utils.toast('Đã bỏ sản phẩm khỏi danh sách yêu thích', 'info');
-      } else {
-        wishlist.push(id);
-        heartBtn.classList.add('active');
-        Utils.toast('Đã lưu sản phẩm vào danh sách yêu thích!', 'success');
-      }
-      try {
-        localStorage.setItem('hybrid_wishlist', JSON.stringify(wishlist));
-      } catch (err) {}
-    });
   }
 
   setupAvatar();
