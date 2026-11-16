@@ -4931,7 +4931,318 @@ body.light-theme .product-card:hover {
   border-radius: var(--radius-sm);
 }
 
-/* 14. CHUẨN TRUY CẬP (ACCESSIBILITY: PREFERS-REDUCED-MOTION) */
+/* =====================================================================
+   SENIOR MOTION UPGRADE: BUTTER-SMOOTH ANIMATIONS & MICRO-PHYSICS
+   ===================================================================== */
+
+/* 14. HỆ THỐNG XUẤT HIỆN KHI CUỘN TRANG (SCROLL REVEAL ENGINE) */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-on-scroll.reveal-scale {
+  transform: scale(0.94) translateY(14px);
+}
+
+.reveal-on-scroll.reveal-left {
+  transform: translateX(-24px);
+}
+
+.reveal-on-scroll.reveal-right {
+  transform: translateX(24px);
+}
+
+.reveal-on-scroll.is-revealed,
+.is-revealed {
+  opacity: 1 !important;
+  transform: translate(0, 0) scale(1) !important;
+}
+
+/* Hiệu ứng trễ so le (Staggered Children Transitions) */
+.stagger-grid > *,
+.product-grid > .product-card,
+.cat-jump-grid > .cat-jump,
+.grid-3 > .panel,
+.mini-stats > .mini-stat {
+  transition-delay: calc(var(--reveal-index, 0) * 0.045s);
+}
+
+/* 15. HIỆU ỨNG TƯƠNG TÁC THẺ SẢN PHẨM & TIA PHẢN QUANG (PRODUCT CARD SHEEN) */
+.product-card {
+  position: relative;
+  overflow: hidden;
+  will-change: transform, box-shadow;
+}
+
+/* Tia sáng lướt qua khi rê chuột vào thẻ sản phẩm */
+.product-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.06) 45%,
+    rgba(255, 255, 255, 0.12) 50%,
+    transparent 55%
+  );
+  transform: skewX(-22deg);
+  transition: left 0.75s ease;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.product-card:hover::before {
+  left: 150%;
+}
+
+.product-card:hover {
+  transform: translateY(-7px) !important;
+  box-shadow:
+    0 20px 42px -8px rgba(0, 0, 0, 0.55),
+    0 0 26px rgba(124, 58, 237, 0.22) !important;
+  border-color: rgba(139, 92, 246, 0.65) !important;
+}
+
+[data-theme="light"] .product-card:hover,
+body.light-theme .product-card:hover {
+  box-shadow:
+    0 18px 36px -6px rgba(15, 23, 42, 0.12),
+    0 0 0 1.5px var(--primary-500) !important;
+}
+
+/* 16. NÚT BẤM CẢM ỨNG & TIA SÁNG LƯỚT QUA (BUTTON TACTILE & SHINE) */
+.btn-primary,
+.btn-danger {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before,
+.btn-danger::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.22) 50%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+
+.btn-primary:hover::before,
+.btn-danger:hover::before {
+  left: 140%;
+}
+
+.tactile-press,
+.btn:active,
+.icon-btn:active {
+  transform: translateY(1px) scale(0.96) !important;
+  transition-duration: 0.08s !important;
+}
+
+/* 17. HIỆU ỨNG THÊM VÀO GIỎ HÀNG & HẠT BAY (CART BOUNCE & FLYING DOT) */
+@keyframes cartBadgeBounce {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.48) rotate(-9deg); }
+  50% { transform: scale(0.88) rotate(5deg); }
+  75% { transform: scale(1.18) rotate(-2deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.badge-bounce,
+.cart-badge.badge-bounce,
+#cartCount.badge-bounce {
+  animation: cartBadgeBounce 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+.flying-cart-dot {
+  position: fixed;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--primary-400);
+  box-shadow: 0 0 14px var(--primary-300);
+  pointer-events: none;
+  z-index: 99999;
+  transition: transform 0.65s cubic-bezier(0.2, 0.8, 0.2, 1),
+              opacity 0.65s ease;
+}
+
+/* 18. DÒNG CHẢY GRADIENT ĐỘNG & MẠCH XUNG (DYNAMIC FLOW GRADIENTS & PULSES) */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.headline-gradient,
+.hero-highlight,
+.brand-mark,
+.badge-limited {
+  background-size: 200% 200% !important;
+  animation: gradientShift 6s ease infinite !important;
+}
+
+@keyframes boltPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 3px rgba(249, 115, 22, 0.4));
+  }
+  50% {
+    transform: scale(1.16) rotate(-6deg);
+    filter: drop-shadow(0 0 12px rgba(249, 115, 22, 0.95));
+  }
+}
+
+.icon-box.tone-tertiary .material-symbols-outlined {
+  display: inline-block;
+  animation: boltPulse 2.4s infinite ease-in-out;
+}
+
+@keyframes unitTick {
+  0% { transform: translateY(-4px) scale(1.1); color: var(--primary-300); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+.countdown-unit.tick {
+  animation: unitTick 0.32s var(--ease-bounce);
+}
+
+/* 19. THANH HEADER KÍNH MỜ NÂNG ĐỘ CAO KHI CUỘN (HEADER GLASSMORPHISM ELEVATION) */
+.site-header,
+.dash-topbar {
+  transition: padding 0.3s ease,
+              background 0.3s ease,
+              backdrop-filter 0.3s ease,
+              box-shadow 0.3s ease,
+              border-color 0.3s ease;
+}
+
+.site-header.scrolled,
+.dash-topbar.scrolled {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+  background: rgba(13, 13, 26, 0.9) !important;
+  backdrop-filter: blur(18px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(180%) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.38) !important;
+  border-bottom-color: rgba(139, 92, 246, 0.28) !important;
+}
+
+[data-theme="light"] .site-header.scrolled,
+body.light-theme .site-header.scrolled,
+[data-theme="light"] .dash-topbar.scrolled,
+body.light-theme .dash-topbar.scrolled {
+  background: rgba(255, 255, 255, 0.92) !important;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08) !important;
+  border-bottom-color: var(--border) !important;
+}
+
+/* 20. TẢI ẢNH MƯỢT MÀ KHÔNG CHỚP GIẬT (IMAGE SMOOTH FADE-IN) */
+img.smooth-fade {
+  opacity: 0;
+  filter: blur(4px);
+  transition: opacity 0.4s ease, filter 0.4s ease, transform 0.55s var(--ease-spring) !important;
+}
+
+img.smooth-fade.loaded {
+  opacity: 1 !important;
+  filter: blur(0) !important;
+}
+
+/* 21. THANH ĐIỀU HƯỚNG GẠCH CHÂN CHẠY MƯỢT (NAV LINK HOVER UNDERLINE SLIDE) */
+.site-nav a,
+.nav-link {
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.site-nav a::after,
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--primary-400);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 2px;
+}
+
+.site-nav a:hover::after,
+.nav-link:hover::after,
+.site-nav a.active::after,
+.nav-link.active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* 22. KHỐI CAM KẾT & PANEL HOVER SPRING */
+.panel.tone-primary,
+.panel.tone-secondary,
+.panel.tone-success,
+.panel.tone-tertiary {
+  transition: transform 0.3s var(--ease-spring),
+              box-shadow 0.3s var(--ease-spring),
+              border-color 0.28s ease !important;
+}
+
+.panel.tone-primary:hover,
+.panel.tone-secondary:hover,
+.panel.tone-success:hover,
+.panel.tone-tertiary:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.28);
+}
+
+.panel:hover .icon-box {
+  transform: scale(1.12) rotate(4deg);
+  transition: transform 0.32s var(--ease-bounce) !important;
+}
+
+.icon-box {
+  transition: transform 0.3s var(--ease-spring) !important;
+}
+
+/* 23. CHUYỂN ĐỔI CHẾ ĐỘ SÁNG / TỐI KHÔNG BỊ GIẬT MÀU (SMOOTH THEME DISSOLVE) */
+body,
+.site-header,
+.dash-topbar,
+.panel,
+.card,
+.modal,
+.drawer-cart,
+.dropdown,
+.input,
+.select,
+.textarea,
+.table-card {
+  transition: background-color 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+              color 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 24. CHUẨN TRUY CẬP (ACCESSIBILITY: PREFERS-REDUCED-MOTION) */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
