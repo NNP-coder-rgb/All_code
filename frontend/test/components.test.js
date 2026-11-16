@@ -199,6 +199,15 @@ it("DrawerCart: Sinh mã HTML giỏ hàng trượt với backdrop, thanh freeshi
   assert(html.includes("Freeship"), "Phải có thông điệp freeship");
 });
 
+it("DrawerWishlist: Sinh mã HTML danh sách yêu thích trượt với backdrop và liên kết quản lý", () => {
+  assert.ok(Components.DrawerWishlist, "Phải có Components.DrawerWishlist");
+  const html = Components.DrawerWishlist.createHTML({ basePath: "" });
+  assert(html.includes('id="drawerWishlist"'), "Phải có aside id='drawerWishlist'");
+  assert(html.includes('id="drawerWishlistBackdrop"'), "Phải có backdrop id='drawerWishlistBackdrop'");
+  assert(html.includes('id="drawerWishlistBody"'), "Phải có body id='drawerWishlistBody'");
+  assert(html.includes("Quản Lý Tất Cả Trong Hồ Sơ"), "Có nút liên kết đến Hồ sơ cá nhân");
+});
+
 it("AutocompleteSearch: Tạo dropdown với tìm kiếm gần đây, xu hướng và kết quả gợi ý trực tiếp", () => {
   assert.ok(Components.AutocompleteSearch, "Phải có Components.AutocompleteSearch");
 

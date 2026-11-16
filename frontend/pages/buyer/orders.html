@@ -2095,6 +2095,27 @@
                 targetOrder.reviewComment = document.getElementById("reviewComment") ? document.getElementById("reviewComment").value.trim() : "";
                 targetOrder.completedAt = new Date().toISOString();
                 saveOrders(allOrders);
+
+                // Đồng bộ đánh giá ngược về trang chi tiết sản phẩm
+                try {
+                  const curUser = (typeof Auth !== "undefined" && Auth.current()) ? Auth.current() : { fullName: "Khách hàng đã mua" };
+                  (targetOrder.items || []).forEach((it) => {
+                    const storageKey = "hv_user_reviews_" + it.id;
+                    const existing = JSON.parse(localStorage.getItem(storageKey) || "[]");
+                    existing.unshift({
+                      name: curUser.fullName || "Khách hàng đã xác thực",
+                      avatar: curUser.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100",
+                      rating: selectedStars,
+                      date: "Đã mua hàng • Vừa xong",
+                      comment: targetOrder.reviewComment || "Sản phẩm dùng rất ưng ý, đúng mô tả và đồng kiểm cùng bưu tá trước khi nhận hàng!",
+                      tag: "ĐÃ MUA HÀNG",
+                      verified: true,
+                    });
+                    localStorage.setItem(storageKey, JSON.stringify(existing));
+                  });
+                } catch (revErr) {
+                  console.warn("Lỗi lưu đánh giá sản phẩm:", revErr);
+                }
               }
 
               // Cộng điểm VIP vào tài khoản

@@ -448,6 +448,20 @@
   }
 
   /**
+   * Đăng ký Progressive Web App (PWA) Service Worker
+   */
+  function setupServiceWorker() {
+    if (typeof window === "undefined" || !("serviceWorker" in navigator)) return;
+    if (window.location.protocol.startsWith("http")) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("./sw.js")
+          .catch(() => {});
+      });
+    }
+  }
+
+  /**
    * Khởi động toàn bộ ứng dụng khi DOM đã sẵn sàng
    */
   function init() {
@@ -463,6 +477,7 @@
     setupCartAnimation();
     setupImageSmoothFade();
     setupTactileButtons();
+    setupServiceWorker();
   }
 
   // Tự động chạy khi nạp trên trình duyệt

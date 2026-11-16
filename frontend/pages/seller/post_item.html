@@ -695,10 +695,20 @@
 
           if (dropzoneText) dropzoneText.textContent = "Đang tối ưu & nén ảnh...";
 
+          let totalSaved = 0;
           for (const file of filesToProcess) {
             try {
-              const compressedData = await compressImage(file);
-              uploadedImages.push(compressedData);
+              let res;
+              if (typeof Utils !== "undefined" && typeof Utils.compressImage === "function") {
+                res = await Utils.compressImage(file, { maxWidth: 960, maxHeight: 960, quality: 0.75 });
+              } else {
+                const dataUrl = await compressImage(file, 960, 0.75);
+                res = { dataUrl, originalSize: file.size, compressedSize: Math.round(dataUrl.length * 0.75) };
+              }
+              uploadedImages.push(res.dataUrl);
+              if (res.originalSize && res.compressedSize) {
+                totalSaved += Math.max(0, res.originalSize - res.compressedSize);
+              }
             } catch (err) {
               console.error("Lỗi nén ảnh:", err);
             }
@@ -706,7 +716,9 @@
 
           renderPreviews();
           triggerLaserScan();
-          Utils.toast(`Đã thêm thành công ${filesToProcess.length} ảnh sản phẩm!`, "success");
+          const savedKb = Math.round(totalSaved / 1024);
+          const savedMsg = savedKb > 0 ? ` (Tối ưu giảm ~${savedKb} KB bộ nhớ)` : "";
+          Utils.toast(`Đã thêm thành công ${filesToProcess.length} ảnh sản phẩm!${savedMsg}`, "success");
         }
 
         function renderPreviews() {
@@ -1032,7 +1044,16 @@
             sellerProducts.unshift(newProduct);
             localStorage.setItem("hv_seller_products", JSON.stringify(sellerProducts));
           } catch (err) {
-            console.error("Lỗi lưu sản phẩm:", err);
+            console.warn("Lỗi lưu sản phẩm vào LocalStorage, kích hoạt chế độ nén dự phòng:", err);
+            try {
+              // Dự phòng tràn bộ nhớ: chỉ giữ 1 ảnh bìa chính và tối đa 10 sản phẩm
+              newProduct.images = [newProduct.img];
+              let sellerProducts = JSON.parse(localStorage.getItem("hv_seller_products") || "[]").slice(0, 8);
+              sellerProducts.unshift(newProduct);
+              localStorage.setItem("hv_seller_products", JSON.stringify(sellerProducts));
+            } catch (fallbackErr) {
+              console.error("Không thể lưu sản phẩm:", fallbackErr);
+            }
           }
 
           Utils.toast("Đang đồng bộ món hàng lên gian hàng Sàn C2C...", "info");

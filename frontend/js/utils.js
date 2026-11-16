@@ -516,6 +516,21 @@
      ========================================================================= */
 
   /**
+   * Loại bỏ dấu tiếng Việt để phục vụ tìm kiếm không dấu
+   * @param {string} str
+   * @returns {string}
+   */
+  function removeVietnameseTones(str) {
+    if (!str || typeof str !== "string") return "";
+    return str
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/đ/g, "d")
+      .replace(/Đ/g, "D")
+      .toLowerCase();
+  }
+
+  /**
    * Lọc danh sách sản phẩm theo nhiều điều kiện đồng thời
    * @param {Array<object>} list - Mảng sản phẩm cần lọc
    * @param {object} criteria - Điều kiện lọc:
@@ -562,7 +577,18 @@
         const cleanFull = fullText.replace(/['’\-_.]/g, "");
         const cleanKw = keyword.replace(/['’\-_.]/g, "");
 
-        if (!fullText.includes(keyword) && !cleanFull.includes(cleanKw)) return false;
+        const fullTextNoTone = removeVietnameseTones(fullText);
+        const kwNoTone = removeVietnameseTones(keyword);
+        const cleanFullNoTone = removeVietnameseTones(cleanFull);
+        const cleanKwNoTone = removeVietnameseTones(cleanKw);
+
+        const isMatch =
+          fullText.includes(keyword) ||
+          cleanFull.includes(cleanKw) ||
+          fullTextNoTone.includes(kwNoTone) ||
+          cleanFullNoTone.includes(cleanKwNoTone);
+
+        if (!isMatch) return false;
       }
 
       // 2. Danh mục (category)
@@ -1639,7 +1665,74 @@
   };
 
   /* =========================================================================
-     13. XUẤT RA TOÀN CỤC VÀ MODULE (CHO NODE.JS / TRÌNH DUYỆT)
+     13. BỘ NÉN ẢNH PHÍA CLIENT (Client-side Canvas Image Compressor)
+     ========================================================================= */
+  function compressImage(file, options = {}) {
+    const maxWidth = options.maxWidth || 1200;
+    const maxHeight = options.maxHeight || 1200;
+    const quality = options.quality !== undefined ? options.quality : 0.78;
+
+    return new Promise((resolve, reject) => {
+      if (!file) {
+        return reject(new Error("File không hợp lệ"));
+      }
+      if (typeof window === "undefined" || typeof document === "undefined" || typeof FileReader === "undefined") {
+        return resolve({
+          dataUrl: "",
+          originalSize: file.size || 0,
+          compressedSize: 0,
+          ratio: 0,
+        });
+      }
+      const originalSize = file.size || 0;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxWidth || height > maxHeight) {
+            const aspect = width / height;
+            if (aspect > 1) {
+              width = maxWidth;
+              height = Math.round(maxWidth / aspect);
+            } else {
+              height = maxHeight;
+              width = Math.round(maxHeight * aspect);
+            }
+          }
+
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, width, height);
+
+          const dataUrl = canvas.toDataURL("image/jpeg", quality);
+          const base64Len = dataUrl.length - (dataUrl.indexOf(",") + 1);
+          const compressedSize = Math.round((base64Len * 3) / 4);
+          const ratio = originalSize > 0 ? Math.round((1 - compressedSize / originalSize) * 100) : 0;
+
+          resolve({
+            dataUrl,
+            width,
+            height,
+            originalSize,
+            compressedSize,
+            ratio: Math.max(0, ratio),
+          });
+        };
+        img.onerror = () => reject(new Error("Không thể nạp hình ảnh"));
+        img.src = e.target.result;
+      };
+      reader.onerror = () => reject(new Error("Lỗi khi đọc file"));
+      reader.readAsDataURL(file);
+    });
+  }
+
+  /* =========================================================================
+     14. XUẤT RA TOÀN CỤC VÀ MODULE (CHO NODE.JS / TRÌNH DUYỆT)
      ========================================================================= */
 
   function escapeHtml(str) {
@@ -1674,6 +1767,8 @@
     getUsedDiscountPercent,
     Wishlist,
     VietnamLocations,
+    removeVietnameseTones,
+    compressImage,
   };
 
   const $ = (sel, root) => (root || document).querySelector(sel);
@@ -1711,6 +1806,8 @@
     window.getUsedDiscountPercent = getUsedDiscountPercent;
     window.Wishlist = Wishlist;
     window.VietnamLocations = VietnamLocations;
+    window.removeVietnameseTones = removeVietnameseTones;
+    window.compressImage = compressImage;
 
     // Tự động khởi tạo Theme & Giỏ hàng khi trang tải xong (nếu chạy trong trình duyệt)
     if (typeof document !== "undefined") {

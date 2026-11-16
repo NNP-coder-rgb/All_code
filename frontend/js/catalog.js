@@ -1235,6 +1235,191 @@
     }
   }
 
+  /* ---------------- QUẢN LÝ SO SÁNH SẢN PHẨM (COMPARE SYSTEM) ---------------- */
+  let compareList = [];
+
+  function setupCompareSystem() {
+    const dock = document.getElementById("compareDockBar");
+    const countText = document.getElementById("compareCountText");
+    const thumbsContainer = document.getElementById("compareDockThumbs");
+    const btnOpen = document.getElementById("btnOpenCompareModal");
+    const btnClear = document.getElementById("btnClearCompare");
+    const modal = document.getElementById("compareMatrixModal");
+    const modalBody = document.getElementById("compareMatrixBody");
+    const btnClose = document.getElementById("btnCloseCompareModal");
+    const btnCloseFoot = document.getElementById("btnCloseCompareFoot");
+
+    function updateCompareUI() {
+      if (!dock || !countText || !thumbsContainer) return;
+      const count = compareList.length;
+      countText.textContent = count;
+
+      if (count === 0) {
+        dock.classList.remove("active");
+        thumbsContainer.innerHTML = "";
+      } else {
+        dock.classList.add("active");
+        let html = "";
+        for (let i = 0; i < 3; i++) {
+          const item = compareList[i];
+          if (item) {
+            const imgSrc = (typeof window !== "undefined" && window.resolveAssetUrl ? window.resolveAssetUrl(item.img) : item.img) || "";
+            html += `
+              <div class="compare-dock-thumb" title="${Utils.escapeHtml(item.name)}">
+                <img src="${imgSrc}" alt="${Utils.escapeHtml(item.name)}" />
+                <button type="button" class="remove-thumb-btn" data-remove-compare="${item.id}">✕</button>
+              </div>`;
+          } else {
+            html += `<div class="compare-dock-empty-slot">+</div>`;
+          }
+        }
+        thumbsContainer.innerHTML = html;
+      }
+
+      document.querySelectorAll('[data-action="compare"]').forEach((btn) => {
+        const id = btn.getAttribute("data-id");
+        const isSelected = compareList.some((p) => String(p.id) === String(id));
+        btn.classList.toggle("active", isSelected);
+      });
+    }
+
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest('[data-action="compare"]');
+      if (btn) {
+        e.preventDefault();
+        e.stopPropagation();
+        const id = btn.getAttribute("data-id");
+        const idx = compareList.findIndex((p) => String(p.id) === String(id));
+
+        if (idx !== -1) {
+          compareList.splice(idx, 1);
+          Utils.toast("Đã bỏ sản phẩm khỏi bảng so sánh.", "info");
+        } else {
+          if (compareList.length >= 3) {
+            Utils.toast("Bạn chỉ có thể so sánh tối đa 3 sản phẩm cùng lúc!", "warning");
+            return;
+          }
+          const allProds = typeof PRODUCTS !== "undefined" ? PRODUCTS : [];
+          const found = allProds.find((p) => String(p.id) === String(id));
+          if (found) {
+            compareList.push(found);
+            Utils.toast(`Đã thêm "${found.short || found.name}" vào bảng so sánh!`, "success");
+          }
+        }
+        updateCompareUI();
+        return;
+      }
+
+      const removeThumb = e.target.closest("[data-remove-compare]");
+      if (removeThumb) {
+        e.preventDefault();
+        const remId = removeThumb.getAttribute("data-remove-compare");
+        compareList = compareList.filter((p) => String(p.id) !== String(remId));
+        updateCompareUI();
+        return;
+      }
+    });
+
+    if (btnClear) {
+      btnClear.addEventListener("click", () => {
+        compareList = [];
+        updateCompareUI();
+        Utils.toast("Đã xóa tất cả sản phẩm trong bảng so sánh.", "info");
+      });
+    }
+
+    if (btnOpen && modal && modalBody) {
+      btnOpen.addEventListener("click", () => {
+        if (compareList.length < 2) {
+          Utils.toast("Vui lòng chọn ít nhất 2 sản phẩm để so sánh đối chiếu!", "warning");
+          return;
+        }
+
+        modalBody.innerHTML = `
+          <div style="overflow-x: auto;">
+            <table class="compare-matrix-table">
+              <thead>
+                <tr>
+                  <th style="width: 140px;">Tiêu Chí</th>
+                  ${compareList.map((p) => `
+                    <th style="text-align: center; min-width: 200px;">
+                      <img src="${(typeof window !== "undefined" && window.resolveAssetUrl ? window.resolveAssetUrl(p.img) : p.img) || ""}" style="width: 90px; height: 90px; object-fit: cover; border-radius: 8px; margin: 0 auto 8px; display: block; border: 1px solid var(--border);" alt="${Utils.escapeHtml(p.name)}" />
+                      <div class="text-xs fw-700 line-clamp-2" style="color: var(--text);">${Utils.escapeHtml(p.name)}</div>
+                    </th>
+                  `).join("")}
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>Phân Khúc</th>
+                  ${compareList.map((p) => `
+                    <td style="text-align: center;">
+                      ${p.type === "mall" ? '<span class="badge badge-mall">HÀNG MỚI MALL 100%</span>' : `<span class="badge badge-c2c">ĐỒ CŨ ${p.cond || 99}% MỚI</span>`}
+                    </td>
+                  `).join("")}
+                </tr>
+                <tr>
+                  <th>Giá Bán</th>
+                  ${compareList.map((p) => `
+                    <td style="text-align: center;">
+                      <strong class="mono text-primary" style="font-size: 15px;">${Utils.formatCurrency(p.price)}</strong>
+                      ${p.oldPrice ? `<div class="mono text-muted text-xs line-through">${Utils.formatCurrency(p.oldPrice)}</div>` : ""}
+                    </td>
+                  `).join("")}
+                </tr>
+                <tr>
+                  <th>Tình Trạng</th>
+                  ${compareList.map((p) => `
+                    <td>
+                      ${p.type === "mall" ? "Nguyên hộp, nguyên seal chưa kích hoạt" : `Máy Like New ${p.cond || 99}%, không cấn móp, linh kiện nguyên bản`}
+                    </td>
+                  `).join("")}
+                </tr>
+                <tr>
+                  <th>Bảo Hành</th>
+                  ${compareList.map((p) => `
+                    <td>
+                      ${p.type === "mall" ? "Bảo hành 12-24 tháng chính hãng tại trung tâm ủy quyền" : "Bảo hành 6 tháng kỹ thuật Hybrid + Đổi trả 7 ngày"}
+                    </td>
+                  `).join("")}
+                </tr>
+                <tr>
+                  <th>Đồng Kiểm</th>
+                  ${compareList.map((p) => `
+                    <td>
+                      <span class="text-success fw-600">✓ Đồng kiểm ngoại quan &amp; thử nguồn</span><br/>
+                      <small class="text-muted">${p.type === "mall" ? "Hỏa tốc 2 giờ tại HN & HCM" : "Giao hàng tiêu chuẩn 1-2 ngày"}</small>
+                    </td>
+                  `).join("")}
+                </tr>
+                <tr>
+                  <th>Chi Tiết</th>
+                  ${compareList.map((p) => `
+                    <td style="text-align: center;">
+                      <a href="${p.type === "mall" ? `product_new.html?id=${p.id}` : `product_used.html?id=${p.id}`}" class="btn btn-primary btn-xs is-full">
+                        <span class="material-symbols-outlined icon-2xs">visibility</span> Xem Sản Phẩm
+                      </a>
+                    </td>
+                  `).join("")}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        `;
+        modal.style.display = "flex";
+      });
+    }
+
+    [btnClose, btnCloseFoot].forEach((btn) => {
+      if (btn) btn.addEventListener("click", () => (modal.style.display = "none"));
+    });
+    if (modal) {
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) modal.style.display = "none";
+      });
+    }
+  }
+
   setupAvatar();
   initTypeTabCounts();
   applyType(initialType, false);
@@ -1246,6 +1431,7 @@
   setupMobileFilter();
   setupViewMode();
   setupCatalogExtras();
+  setupCompareSystem();
   render();
   enableHorizontalDrag($(".subnav .container"));
   if (typeof Utils !== "undefined" && Utils.Cart) {

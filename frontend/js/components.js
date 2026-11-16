@@ -307,6 +307,10 @@
         '<button class="icon-btn theme-toggle-btn" id="themeToggleBtn" type="button" aria-label="Chuyển chế độ sáng / tối" title="Chuyển sang giao diện Sáng">' +
         '<span class="material-symbols-outlined theme-toggle-icon">light_mode</span>' +
         "</button>" +
+        '<button class="icon-btn" id="headerWishlistBtn" data-action="open-drawer-wishlist" type="button" aria-label="Danh sách yêu thích" title="Sản phẩm đã lưu">' +
+        '<span class="material-symbols-outlined">favorite</span>' +
+        '<span class="badge badge-counter" id="wishlistCount" style="display: none;">0</span>' +
+        "</button>" +
         '<button class="icon-btn" id="headerNotifBtn" type="button" aria-label="Thông báo" title="Thông báo hệ thống">' +
         '<span class="material-symbols-outlined">notifications</span>' +
         '<span class="badge badge-counter" id="notifBadge">3</span>' +
@@ -410,6 +414,23 @@
       // 2. Đồng bộ giỏ hàng Cart Badge
       if (UtilsRef && UtilsRef.Cart && typeof UtilsRef.Cart.syncBadge === "function") {
         UtilsRef.Cart.syncBadge();
+      }
+
+      // 2b. Đồng bộ số lượng Wishlist Badge
+      function syncWishlistBadge() {
+        var wishBadge = document.getElementById("wishlistCount");
+        if (wishBadge) {
+          var count = (UtilsRef && UtilsRef.Wishlist && typeof UtilsRef.Wishlist.count === "function")
+            ? UtilsRef.Wishlist.count()
+            : 0;
+          wishBadge.textContent = count;
+          wishBadge.style.display = count > 0 ? "inline-flex" : "none";
+        }
+      }
+      syncWishlistBadge();
+      if (typeof window !== "undefined" && typeof window.addEventListener === "function" && !window.__wishlistBadgeBound) {
+        window.__wishlistBadgeBound = true;
+        window.addEventListener("wishlist:updated", syncWishlistBadge);
       }
 
       // 3. Sidebar Toggle cho Dashboard
@@ -666,6 +687,9 @@
           '<button class="' + favClass + '" type="button" data-action="wishlist" data-id="' + escapeHtml(p.id) + '" aria-label="Yêu thích" title="Lưu vào danh sách yêu thích">' +
           '<span class="material-symbols-outlined">' + favIcon + '</span>' +
           "</button>" +
+          '<button class="product-compare-btn" type="button" data-action="compare" data-id="' + escapeHtml(p.id) + '" aria-label="So sánh" title="So sánh sản phẩm">' +
+          '<span class="material-symbols-outlined">balance</span>' +
+          "</button>" +
           (p.tag ? '<span class="media-tag">' + escapeHtml(p.tag) + "</span>" : "") +
           "</div>" +
           '<div class="product-body">' +
@@ -717,6 +741,9 @@
         "</div>" +
         '<button class="' + favClass + '" type="button" data-action="wishlist" data-id="' + escapeHtml(p.id) + '" aria-label="Yêu thích" title="Lưu vào danh sách yêu thích">' +
         '<span class="material-symbols-outlined">' + favIcon + '</span>' +
+        "</button>" +
+        '<button class="product-compare-btn" type="button" data-action="compare" data-id="' + escapeHtml(p.id) + '" aria-label="So sánh" title="So sánh sản phẩm">' +
+        '<span class="material-symbols-outlined">balance</span>' +
         "</button>" +
         (p.tag ? '<span class="media-tag">' + escapeHtml(p.tag) + "</span>" : "") +
         "</div>" +
@@ -1039,8 +1066,182 @@
       if (!window.__drawerCartEscBound) {
         window.__drawerCartEscBound = true;
         document.addEventListener("keydown", function (e) {
-          if (e.key === "Escape") DrawerCart.close();
+          if (e.key === "Escape") {
+            DrawerCart.close();
+            if (typeof DrawerWishlist !== "undefined" && typeof DrawerWishlist.close === "function") {
+              DrawerWishlist.close();
+            }
+          }
         });
+      }
+    }
+  };
+
+  /* =========================================================================
+     TASK: SLIDE-OVER DRAWER WISHLIST (DANH SÁCH YÊU THÍCH TRƯỢT TỪ BÊN PHẢI)
+     ========================================================================= */
+  var DrawerWishlist = {
+    createHTML: function (options) {
+      options = options || {};
+      var bp = detectBasePath(options.basePath);
+      var profileWishlistUrl = resolveUrl("pages/account/profile.html#sectionWishlist", bp);
+
+      return (
+        '<div class="drawer-cart-backdrop" id="drawerWishlistBackdrop" data-action="close-drawer-wishlist"></div>' +
+        '<aside class="drawer-cart" id="drawerWishlist" role="dialog" aria-modal="true" aria-label="Danh sách yêu thích">' +
+        '  <div class="drawer-cart-header">' +
+        '    <div class="drawer-cart-title">' +
+        '      <span class="material-symbols-outlined text-danger">favorite</span>' +
+        '      <h3>Sản Phẩm Đã Lưu (<span id="drawerWishlistItemCount">0</span>)</h3>' +
+        '    </div>' +
+        '    <button class="drawer-cart-close" id="drawerWishlistClose" type="button" data-action="close-drawer-wishlist" aria-label="Đóng">' +
+        '      <span class="material-symbols-outlined">close</span>' +
+        '    </button>' +
+        '  </div>' +
+        '  <div class="drawer-cart-body" id="drawerWishlistBody">' +
+        '    <!-- Render danh sách yêu thích qua DrawerWishlist.update() -->' +
+        '  </div>' +
+        '  <div class="drawer-cart-footer" id="drawerWishlistFooter" style="padding: 16px 20px; border-top: 1px solid var(--border); background: var(--bg-card);">' +
+        '    <a class="btn btn-secondary is-full" href="' + profileWishlistUrl + '">' +
+        '      <span class="material-symbols-outlined icon-xs">list_alt</span> Quản Lý Tất Cả Trong Hồ Sơ' +
+        '    </a>' +
+        '  </div>' +
+        '</aside>'
+      );
+    },
+
+    render: function (target, options) {
+      if (typeof document === "undefined") return;
+      var el = typeof target === "string" ? document.querySelector(target) : target;
+      var html = DrawerWishlist.createHTML(options);
+      if (!el) {
+        document.body.insertAdjacentHTML("beforeend", html);
+      } else {
+        el.innerHTML = html;
+      }
+      DrawerWishlist.bindEvents();
+      DrawerWishlist.update();
+    },
+
+    open: function () {
+      if (typeof document === "undefined") return;
+      var drawer = document.getElementById("drawerWishlist");
+      var backdrop = document.getElementById("drawerWishlistBackdrop");
+      if (!drawer) {
+        DrawerWishlist.render();
+        drawer = document.getElementById("drawerWishlist");
+        backdrop = document.getElementById("drawerWishlistBackdrop");
+      }
+      DrawerWishlist.update();
+      if (drawer) drawer.classList.add("active");
+      if (backdrop) backdrop.classList.add("active");
+      document.body.style.overflow = "hidden";
+    },
+
+    close: function () {
+      if (typeof document === "undefined") return;
+      var drawer = document.getElementById("drawerWishlist");
+      var backdrop = document.getElementById("drawerWishlistBackdrop");
+      if (drawer) drawer.classList.remove("active");
+      if (backdrop) backdrop.classList.remove("active");
+      document.body.style.overflow = "";
+    },
+
+    toggle: function () {
+      var drawer = document.getElementById("drawerWishlist");
+      if (drawer && drawer.classList.contains("active")) {
+        DrawerWishlist.close();
+      } else {
+        DrawerWishlist.open();
+      }
+    },
+
+    update: function () {
+      if (typeof document === "undefined") return;
+      var body = document.getElementById("drawerWishlistBody");
+      var countEl = document.getElementById("drawerWishlistItemCount");
+      var headerBadge = document.getElementById("wishlistCount");
+
+      var itemIds = (UtilsRef && UtilsRef.Wishlist && typeof UtilsRef.Wishlist.getItems === "function")
+        ? UtilsRef.Wishlist.getItems()
+        : [];
+      var allProds = (typeof window !== "undefined" && window.PRODUCTS) ? window.PRODUCTS : [];
+      var wishProds = allProds.filter(function (p) {
+        return itemIds.some(function (id) { return String(id) === String(p.id); });
+      });
+
+      var count = wishProds.length;
+      if (countEl) countEl.textContent = count;
+      if (headerBadge) {
+        headerBadge.textContent = count;
+        headerBadge.style.display = count > 0 ? "inline-flex" : "none";
+      }
+
+      if (!body) return;
+
+      if (count === 0) {
+        body.innerHTML = (
+          '<div class="drawer-empty-state text-center py-6">' +
+          '  <span class="material-symbols-outlined text-danger mb-2" style="font-size: 48px; opacity: 0.6;">favorite_border</span>' +
+          '  <h4 class="text-sm fw-700 mb-1">Chưa có sản phẩm yêu thích</h4>' +
+          '  <p class="text-xs text-muted mb-4">Hãy bấm vào biểu tượng trái tim trên các thẻ sản phẩm để lưu lại xem sau nhé!</p>' +
+          '  <button class="btn btn-secondary btn-sm" type="button" data-action="close-drawer-wishlist">Tiếp Tục Khám Phá</button>' +
+          '</div>'
+        );
+        return;
+      }
+
+      var bp = detectBasePath();
+      body.innerHTML = wishProds.map(function (p) {
+        var isMall = p.type === "mall";
+        var detailUrl = isMall
+          ? resolveUrl("pages/shop/product_new.html?id=" + encodeURIComponent(p.id), bp)
+          : resolveUrl("pages/shop/product_used.html?id=" + encodeURIComponent(p.id), bp);
+        var badgeHtml = isMall
+          ? '<span class="badge badge-mall text-2xs">HÀNG MỚI 100%</span>'
+          : '<span class="badge badge-c2c text-2xs">' + escapeHtml(p.condition || "LIKE NEW") + '</span>';
+        var imgUrl = p.img || (p.images && p.images[0]) || "";
+        if (typeof window !== "undefined" && typeof window.resolveAssetUrl === "function") {
+          imgUrl = window.resolveAssetUrl(imgUrl);
+        }
+
+        return (
+          '<div class="drawer-cart-item" data-id="' + escapeHtml(p.id) + '">' +
+          '  <a href="' + detailUrl + '" style="width: 60px; height: 60px; border-radius: var(--radius-sm); overflow: hidden; flex-shrink: 0; background: var(--bg-card); display: block;">' +
+          '    <img src="' + escapeHtml(imgUrl) + '" alt="' + escapeHtml(p.name) + '" style="width: 100%; height: 100%; object-fit: cover;" />' +
+          '  </a>' +
+          '  <div style="flex: 1; min-width: 0;">' +
+          '    <div class="mb-1">' + badgeHtml + '</div>' +
+          '    <h5 style="font-size: 13px; font-weight: 600; margin: 0 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' +
+          '      <a href="' + detailUrl + '" class="text-hover-primary">' + escapeHtml(p.name) + '</a>' +
+          '    </h5>' +
+          '    <div class="mono text-primary fw-700 text-xs">' + formatMoney(p.price) + '</div>' +
+          '    <div class="mt-2 flex items-center gap-2">' +
+          '      <button class="btn btn-primary btn-xs" type="button" data-action="wishlist-to-cart" data-id="' + escapeHtml(p.id) + '">' +
+          '        <span class="material-symbols-outlined icon-2xs">shopping_bag</span> Thêm Vào Giỏ' +
+          '      </button>' +
+          '      <button class="btn btn-ghost btn-xs text-danger" type="button" data-action="wishlist-remove" data-id="' + escapeHtml(p.id) + '" title="Bỏ thích">' +
+          '        <span class="material-symbols-outlined icon-2xs">delete</span>' +
+          '      </button>' +
+          '    </div>' +
+          '  </div>' +
+          '</div>'
+        );
+      }).join("");
+    },
+
+    bindEvents: function () {
+      if (typeof document === "undefined") return;
+      var closeBtn = document.getElementById("drawerWishlistClose");
+      if (closeBtn && !closeBtn.dataset.bound) {
+        closeBtn.dataset.bound = "true";
+        closeBtn.addEventListener("click", DrawerWishlist.close);
+      }
+
+      var backdrop = document.getElementById("drawerWishlistBackdrop");
+      if (backdrop && !backdrop.dataset.bound) {
+        backdrop.dataset.bound = "true";
+        backdrop.addEventListener("click", DrawerWishlist.close);
       }
     }
   };
@@ -1145,11 +1346,22 @@
       // Khi người dùng đã gõ từ khóa: Tìm kiếm sản phẩm trực tiếp từ PRODUCTS
       var prods = (typeof window !== "undefined" && window.PRODUCTS) ? window.PRODUCTS : [];
       var lowerQ = q.toLowerCase();
+      var noToneQ = (UtilsRef && typeof UtilsRef.removeVietnameseTones === "function")
+        ? UtilsRef.removeVietnameseTones(lowerQ)
+        : lowerQ;
+
       var matches = prods.filter(function (p) {
         var name = (p.name || "").toLowerCase();
         var cat = (p.category || "").toLowerCase();
         var sub = (p.sub || "").toLowerCase();
-        return name.indexOf(lowerQ) !== -1 || cat.indexOf(lowerQ) !== -1 || sub.indexOf(lowerQ) !== -1;
+        if (name.indexOf(lowerQ) !== -1 || cat.indexOf(lowerQ) !== -1 || sub.indexOf(lowerQ) !== -1) return true;
+        if (UtilsRef && typeof UtilsRef.removeVietnameseTones === "function") {
+          var nameNoTone = UtilsRef.removeVietnameseTones(name);
+          var catNoTone = UtilsRef.removeVietnameseTones(cat);
+          var subNoTone = UtilsRef.removeVietnameseTones(sub);
+          return nameNoTone.indexOf(noToneQ) !== -1 || catNoTone.indexOf(noToneQ) !== -1 || subNoTone.indexOf(noToneQ) !== -1;
+        }
+        return false;
       }).slice(0, 5);
 
       var catalogUrl = resolveUrl("pages/shop/catalog.html?q=" + encodeURIComponent(q), bp);
@@ -1702,6 +1914,7 @@
     Breadcrumb: Breadcrumb,
     ProductCard: ProductCard,
     DrawerCart: DrawerCart,
+    DrawerWishlist: DrawerWishlist,
     AutocompleteSearch: AutocompleteSearch,
     MobileBottomNav: MobileBottomNav,
     NotificationCenter: NotificationCenter,
@@ -1760,6 +1973,15 @@
         document.body.appendChild(drawerContainer);
       }
       DrawerCart.bindEvents();
+
+      // 4b. Khởi tạo Drawer Wishlist (nếu chưa có trong DOM)
+      if (!document.getElementById("drawerWishlist")) {
+        var wishContainer = document.createElement("div");
+        wishContainer.id = "drawerWishlistWrapper";
+        wishContainer.innerHTML = DrawerWishlist.createHTML();
+        document.body.appendChild(wishContainer);
+      }
+      DrawerWishlist.bindEvents();
 
       // 5. Khởi tạo Autocomplete Search
       AutocompleteSearch.bindEvents();
@@ -1826,6 +2048,61 @@
           if (openCartBtn) {
             e.preventDefault();
             DrawerCart.open();
+            return;
+          }
+
+          // C1. Mở Slide-over Drawer Wishlist
+          var openWishlistBtn = e.target.closest('[data-action="open-drawer-wishlist"], #headerWishlistBtn');
+          if (openWishlistBtn) {
+            e.preventDefault();
+            DrawerWishlist.open();
+            return;
+          }
+
+          // C2. Đóng Slide-over Drawer Wishlist
+          var closeWishlistBtn = e.target.closest('[data-action="close-drawer-wishlist"]');
+          if (closeWishlistBtn) {
+            e.preventDefault();
+            DrawerWishlist.close();
+            return;
+          }
+
+          // C3. Chuyển từ Wishlist sang Giỏ hàng
+          var wishToCartBtn = e.target.closest('[data-action="wishlist-to-cart"]');
+          if (wishToCartBtn) {
+            e.preventDefault();
+            var wid = wishToCartBtn.getAttribute("data-id");
+            var prods = (typeof window !== "undefined" && window.PRODUCTS) ? window.PRODUCTS : [];
+            var targetP = prods.find(function (p) { return String(p.id) === String(wid); });
+            if (targetP && UtilsRef && UtilsRef.Cart) {
+              UtilsRef.Cart.add(targetP, 1);
+              DrawerWishlist.update();
+              if (typeof UtilsRef.toast === "function") {
+                UtilsRef.toast({
+                  title: "Đã thêm vào giỏ hàng",
+                  message: "Sản phẩm " + targetP.name + " đã được thêm vào giỏ hàng!",
+                  type: "success"
+                });
+              }
+            }
+            return;
+          }
+
+          // C4. Xóa sản phẩm khỏi Wishlist Drawer
+          var wishRemoveBtn = e.target.closest('[data-action="wishlist-remove"]');
+          if (wishRemoveBtn) {
+            e.preventDefault();
+            var rid = wishRemoveBtn.getAttribute("data-id");
+            if (UtilsRef && UtilsRef.Wishlist) {
+              UtilsRef.Wishlist.toggle(rid);
+              DrawerWishlist.update();
+              var allSame = document.querySelectorAll('[data-action="wishlist"][data-id="' + rid + '"]');
+              allSame.forEach(function (b) {
+                b.classList.remove("active");
+                var icon = b.querySelector(".material-symbols-outlined");
+                if (icon) icon.textContent = "favorite_border";
+              });
+            }
             return;
           }
         });
