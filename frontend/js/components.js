@@ -156,6 +156,8 @@
       var profileUrl = resolveUrl("pages/account/profile.html", bp);
       var loginUrl = resolveUrl("pages/account/auth_login.html", bp);
       var registerUrl = resolveUrl("pages/account/auth_register.html", bp);
+      var sellerUrl = resolveUrl("pages/seller/dashboard.html", bp);
+      var adminUrl = resolveUrl("pages/admin/admin_system.html", bp);
 
       // Lấy thông tin user hiện tại nếu có
       var user = options.currentUser;
@@ -273,6 +275,29 @@
       var searchQuery = options.searchQuery || "";
       var badgeMarketplace = options.badgeText || "v3.2";
 
+      var isSeller = user && (user.role === "seller" || user.role === "SELLER");
+      var isAdminUser = user && (user.role === "admin" || user.role === "ADMIN");
+
+      var roleShortcutHtml = "";
+      if (isAdminUser) {
+        roleShortcutHtml =
+          '<a class="btn btn-secondary btn-sm hide-sm" id="btnHeaderAdminPortal" href="' + adminUrl + '" title="Vào Cổng Quản Trị Master Admin">' +
+          '<span class="material-symbols-outlined icon-sm text-primary">terminal</span>' +
+          '<span class="hide-md">Quản Trị</span>' +
+          "</a>";
+      } else if (isSeller) {
+        roleShortcutHtml =
+          '<a class="btn btn-secondary btn-sm" id="btnHeaderSellerCenter" href="' + sellerUrl + '" title="Vào Kênh Quản Lý Gian Hàng">' +
+          '<span class="material-symbols-outlined icon-sm text-warning">storefront</span>' +
+          '<span class="hide-sm">Kênh Người Bán</span>' +
+          "</a>";
+      }
+
+      var avatarTitle = user
+        ? (user.fullName || user.name || "Tài khoản") +
+          (isAdminUser ? " (Quản Trị)" : isSeller ? " (Người Bán)" : "")
+        : "Tài khoản";
+
       return (
         '<header class="site-header site-header--marketplace" id="siteHeader">' +
         '<div class="container">' +
@@ -296,6 +321,7 @@
         '<div class="search-dropdown" id="searchDropdown" style="display: none;"></div>' +
         "</div>" +
         '<div class="header-actions">' +
+        roleShortcutHtml +
         '<div class="wallet-pill hide-sm">' +
         '<span class="material-symbols-outlined text-secondary">account_balance_wallet</span>' +
         "<div><small>Giao hàng toàn quốc</small><strong>Miễn Phí 0₫</strong></div>" +
@@ -319,7 +345,7 @@
         '<span class="material-symbols-outlined">shopping_bag</span>' +
         '<span class="badge badge-counter" id="cartCount">0</span>' +
         "</a>" +
-        '<a class="avatar" id="avatarBtn" href="' + profileUrl + '" aria-label="Tài khoản" title="' + (user ? escapeHtml(user.fullName || user.name) : "Tài khoản") + '">' +
+        '<a class="avatar" id="avatarBtn" href="' + profileUrl + '" aria-label="Tài khoản" title="' + escapeHtml(avatarTitle) + '">' +
         '<span class="material-symbols-outlined">person</span>' +
         "</a>" +
         "</div>" +

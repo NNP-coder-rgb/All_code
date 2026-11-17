@@ -1,6 +1,41 @@
 // login.js — xử lý đăng nhập mật khẩu, đăng nhập Google, SMS OTP và khôi phục mật khẩu
 (function () {
-  const HOME_PAGE = window.location.pathname.includes("/pages/") ? "../../index.html" : "index.html";
+  const isSubpage = typeof window !== "undefined" && window.location.pathname.includes("/pages/");
+  const HOME_PAGE = isSubpage ? "../../index.html" : "index.html";
+  const SELLER_PAGE = isSubpage ? "../seller/dashboard.html" : "pages/seller/dashboard.html";
+  const ADMIN_PAGE = isSubpage ? "../admin/admin_system.html" : "pages/admin/admin_system.html";
+
+  // Hàm xác định đích đến mặc định theo vai trò tài khoản (Role-based Navigation)
+  function getRoleDefaultTarget(user, selectedRole) {
+    const roleVal = ((user && user.role) || selectedRole || "buyer").toLowerCase();
+    if (roleVal === "seller") return SELLER_PAGE;
+    if (roleVal === "admin") return ADMIN_PAGE;
+    return HOME_PAGE;
+  }
+
+  // Hàm lấy nhãn nút xác nhận trên popup thông báo
+  function getConfirmButtonLabel(explicitTarget, user, selectedRole) {
+    if (explicitTarget && explicitTarget !== HOME_PAGE && explicitTarget !== SELLER_PAGE && explicitTarget !== ADMIN_PAGE) {
+      return "Tiếp tục";
+    }
+    const roleVal = ((user && user.role) || selectedRole || "buyer").toLowerCase();
+    if (roleVal === "seller") return "Vào Kênh Người Bán";
+    if (roleVal === "admin") return "Vào Cổng Quản Trị";
+    return "Vào trang chủ";
+  }
+
+  // Thông điệp chào mừng tương ứng theo vai trò
+  function getWelcomeMessage(user, selectedRole) {
+    const name = (user && (user.fullName || user.username)) || "bạn";
+    const roleVal = ((user && user.role) || selectedRole || "buyer").toLowerCase();
+    if (roleVal === "seller") {
+      return `Chào mừng Người Bán ${name} quay lại Kênh Quản Lý Gian Hàng!`;
+    }
+    if (roleVal === "admin") {
+      return `Chào mừng Quản trị viên ${name} quay lại Master Admin Portal!`;
+    }
+    return `Chào mừng ${name} quay lại mua sắm tại Hybrid Store.`;
+  }
 
   // Elements: Form đăng nhập mật khẩu
   const form = document.getElementById("vaultLoginForm");
@@ -89,13 +124,14 @@
 
   const initialRedirect = getRedirectTarget();
 
-  // Đã đăng nhập rồi thì chuyển hướng về trang trước hoặc trang chủ
+  // Đã đăng nhập rồi thì chuyển hướng về trang trước hoặc trang tương ứng theo vai trò
   if (typeof Auth !== "undefined" && Auth.current()) {
+    const cur = Auth.current();
     if (initialRedirect) {
       sessionStorage.removeItem("hv_redirect_after_login");
       window.location.href = initialRedirect;
     } else {
-      window.location.href = HOME_PAGE;
+      window.location.href = getRoleDefaultTarget(cur);
     }
     return;
   }
@@ -166,13 +202,68 @@
     seller: "ĐĂNG NHẬP NGƯỜI BÁN",
   };
   let role = "buyer";
-  if (btnText) btnText.textContent = BTN_LABEL.buyer;
+
+  // Đọc role từ URL query (ví dụ ?role=seller khi bấm từ nút "Kênh Người Bán" hoặc sau đăng ký)
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    const queryRole = urlParams.get("role");
+    if (queryRole === "seller" || queryRole === "buyer") {
+      role = queryRole;
+    }
+  } catch (e) {}
+
+  const roleDestText = document.getElementById("roleDestinationText");
+  function updateRoleDestHint(currentRole) {
+    if (!roleDestText) return;
+    const r = String(currentRole || "buyer").toLowerCase();
+    if (r === "seller") {
+      roleDestText.innerHTML = 'Sau khi đăng nhập sẽ vào: <strong class="text-warning">Kênh Quản Lý Gian Hàng (Seller Dashboard)</strong>';
+    } else if (r === "admin") {
+      roleDestText.innerHTML = 'Sau khi đăng nhập sẽ vào: <strong class="text-primary">Master Admin Command Portal</strong>';
+    } else {
+      roleDestText.innerHTML = 'Sau khi đăng nhập sẽ vào: <strong class="text-secondary">Trang Chủ Mua Sắm (Marketplace)</strong>';
+    }
+  }
+
+  if (btnText) btnText.textContent = BTN_LABEL[role] || BTN_LABEL.buyer;
+  updateRoleDestHint(role);
   roleBtns.forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.role === role);
     btn.addEventListener("click", () => {
       roleBtns.forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
       role = btn.dataset.role;
       if (btnText) btnText.textContent = BTN_LABEL[role];
+      updateRoleDestHint(role);
+    });
+  });
+
+  // Gắn sự kiện cho các chip tài khoản kiểm thử nhanh (Demo Accounts)
+  const demoChips = document.querySelectorAll("#demoAccountsChips [data-demo-id]");
+  demoChips.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      const demoRole = chip.dataset.demoRole;
+      const demoId = chip.dataset.demoId;
+      const demoPwd = chip.dataset.demoPwd;
+
+      // Chuyển tab sang Mật khẩu nếu đang ở OTP
+      if (tabLoginPassword && tabLoginPassword.click) {
+        tabLoginPassword.click();
+      }
+
+      // Kích hoạt vai trò tương ứng nếu có nút role
+      if (demoRole === "seller" || demoRole === "buyer") {
+        role = demoRole;
+        roleBtns.forEach((b) => b.classList.toggle("active", b.dataset.role === role));
+        if (btnText) btnText.textContent = BTN_LABEL[role];
+        updateRoleDestHint(role);
+      } else if (demoRole === "admin") {
+        updateRoleDestHint("admin");
+      }
+
+      if (idInput) idInput.value = demoId;
+      if (pwd) pwd.value = demoPwd;
+      if (submitBtn) submitBtn.focus();
     });
   });
 
@@ -261,24 +352,27 @@
       }
 
       const targetAfterLogin = getRedirectTarget();
+      const destination = targetAfterLogin || getRoleDefaultTarget(res.user, role);
+      const confirmLabel = getConfirmButtonLabel(targetAfterLogin, res.user, role);
 
       if (typeof showPopup === "function") {
         showPopup({
           type: "success",
           title: "Đăng nhập thành công!",
-          message: "Chào mừng " + res.user.fullName + " quay lại.",
-          confirmText: targetAfterLogin ? "Tiếp tục" : "Vào trang chủ",
+          message: getWelcomeMessage(res.user, role),
+          confirmText: confirmLabel,
           onConfirm: () => {
             if (targetAfterLogin) {
               sessionStorage.removeItem("hv_redirect_after_login");
-              window.location.href = targetAfterLogin;
-            } else {
-              window.location.href = HOME_PAGE;
             }
+            window.location.href = destination;
           },
         });
       } else {
-        window.location.href = targetAfterLogin || HOME_PAGE;
+        if (targetAfterLogin) {
+          sessionStorage.removeItem("hv_redirect_after_login");
+        }
+        window.location.href = destination;
       }
     }, 600);
   });
@@ -392,24 +486,33 @@
   function handleGoogleLoginSuccess(userSession) {
     hideModal(googleAuthModal);
     const targetAfterLogin = getRedirectTarget();
+    const destination = targetAfterLogin || getRoleDefaultTarget(userSession, role);
+    const confirmLabel = getConfirmButtonLabel(targetAfterLogin, userSession, role);
 
     if (typeof showPopup === "function") {
       showPopup({
         type: "success",
         title: "Đăng nhập Google thành công!",
-        message: "Đã đồng bộ tài khoản Google trên thiết bị này: " + userSession.fullName + " (" + userSession.email + ")!",
-        confirmText: targetAfterLogin ? "Tiếp tục" : "Vào trang chủ",
+        message:
+          "Đã đồng bộ tài khoản Google trên thiết bị này: " +
+          userSession.fullName +
+          " (" +
+          userSession.email +
+          ")! " +
+          getWelcomeMessage(userSession, role),
+        confirmText: confirmLabel,
         onConfirm: () => {
           if (targetAfterLogin) {
             sessionStorage.removeItem("hv_redirect_after_login");
-            window.location.href = targetAfterLogin;
-          } else {
-            window.location.href = HOME_PAGE;
           }
+          window.location.href = destination;
         },
       });
     } else {
-      window.location.href = targetAfterLogin || HOME_PAGE;
+      if (targetAfterLogin) {
+        sessionStorage.removeItem("hv_redirect_after_login");
+      }
+      window.location.href = destination;
     }
   }
 
@@ -662,24 +765,31 @@
         }
 
         const targetAfterLogin = getRedirectTarget();
+        const destination = targetAfterLogin || getRoleDefaultTarget(res.user, role);
+        const confirmLabel = getConfirmButtonLabel(targetAfterLogin, res.user, role);
 
         if (typeof showPopup === "function") {
           showPopup({
             type: "success",
             title: "Đăng nhập thành công!",
-            message: "Xác thực SĐT " + res.user.phone + " thành công. Chào mừng " + res.user.fullName + "!",
-            confirmText: targetAfterLogin ? "Tiếp tục" : "Vào trang chủ",
+            message:
+              "Xác thực SĐT " +
+              res.user.phone +
+              " thành công. " +
+              getWelcomeMessage(res.user, role),
+            confirmText: confirmLabel,
             onConfirm: () => {
               if (targetAfterLogin) {
                 sessionStorage.removeItem("hv_redirect_after_login");
-                window.location.href = targetAfterLogin;
-              } else {
-                window.location.href = HOME_PAGE;
               }
+              window.location.href = destination;
             },
           });
         } else {
-          window.location.href = targetAfterLogin || HOME_PAGE;
+          if (targetAfterLogin) {
+            sessionStorage.removeItem("hv_redirect_after_login");
+          }
+          window.location.href = destination;
         }
       }, 500);
     });

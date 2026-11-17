@@ -492,6 +492,73 @@
             </div>
           </section>
 
+          <!-- THẺ ĐẶC BIỆT DÀNH RIÊNG CHO NGƯỜI BÁN: CỔNG ĐIỀU HÀNH KÊNH NGƯỜI BÁN (SELLER CENTER) -->
+          <section class="panel p-5 mb-5" id="sectionSellerDossier" style="display: none; border-color: rgba(245, 158, 11, 0.45); box-shadow: 0 4px 24px rgba(245, 158, 11, 0.12); background: radial-gradient(circle at top right, rgba(245, 158, 11, 0.07), transparent 70%);">
+            <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-warning" style="font-size: 28px;">storefront</span>
+                <div>
+                  <h3 class="panel-title flex items-center gap-2">
+                    2. Cổng Quản Lý Gian Hàng &amp; Kênh Người Bán
+                    <span class="badge badge-warning">SELLER CENTER</span>
+                  </h3>
+                  <div class="text-xs text-muted">QUẢN LÝ GIAN HÀNG C2C // THEO DÕI ĐƠN HÀNG // ĐĂNG BÁN // PHẢN HỒI TRẢ GIÁ</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="badge badge-success"><span class="material-symbols-outlined icon-xs">store</span> GIAN HÀNG ĐANG HOẠT ĐỘNG</span>
+              </div>
+            </div>
+
+            <!-- Khối banner chuyển tiếp sang Kênh Người Bán -->
+            <div class="panel p-4" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(15, 23, 42, 0.7)); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: var(--radius-lg);">
+              <div class="flex items-center justify-between mb-3 flex-wrap gap-3">
+                <div style="max-width: 620px;">
+                  <h4 class="text-sm fw-700 text-warning flex items-center gap-2 mb-1" style="font-size: 15px;">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    BẢNG ĐIỀU KHIỂN KÊNH QUẢN LÝ GIAN HÀNG (SELLER DASHBOARD)
+                  </h4>
+                  <p class="text-xs text-muted mb-0" style="line-height: 1.5;">
+                    Truy cập trung tâm quản lý bán hàng chuyên nghiệp: Xử lý đơn hàng chờ bàn giao bưu tá, quản lý danh sách sản phẩm đang bán, đăng bán sản phẩm mới, xét duyệt trả giá của khách và quản lý ví tiền ký quỹ Napas 24/7.
+                  </p>
+                </div>
+                <a href="../seller/dashboard.html" class="btn btn-warning btn-md flex items-center gap-2" style="font-weight: 700; box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35); white-space: nowrap;">
+                  <span class="material-symbols-outlined icon-sm">storefront</span>
+                  <span>VÀO KÊNH NGƯỜI BÁN NGAY</span>
+                  <span class="material-symbols-outlined icon-sm">arrow_forward</span>
+                </a>
+              </div>
+
+              <!-- Lưới 4 lối tắt chuyển nhanh vào các tính năng người bán -->
+              <div class="text-2xs fw-700 text-warning mb-2 mt-4 flex items-center gap-1">
+                <span class="material-symbols-outlined icon-xs">near_me</span>
+                LỐI TẮT TRUY CẬP TRỰC TIẾP TỪNG TÁC VỤ GIAN HÀNG:
+              </div>
+              <div class="grid grid-4 gap-2 text-center">
+                <a href="../seller/dashboard.html" class="admin-quick-card" title="Xem tổng quan doanh thu và đơn hàng cần bàn giao">
+                  <span class="material-symbols-outlined text-warning">analytics</span>
+                  <strong>1. Tổng Quan Shop</strong>
+                  <small>Doanh thu &amp; đơn mới</small>
+                </a>
+                <a href="../seller/dashboard.html#orders" class="admin-quick-card" title="Theo dõi và đóng gói đơn hàng">
+                  <span class="material-symbols-outlined text-success">local_shipping</span>
+                  <strong>2. Quản Lý Đơn</strong>
+                  <small>Đóng gói &amp; giao bưu tá</small>
+                </a>
+                <a href="../seller/post_item.html" class="admin-quick-card" title="Đăng tải món đồ cũ tuyển chọn mới lên sàn">
+                  <span class="material-symbols-outlined text-primary">add_circle</span>
+                  <strong>3. Đăng Bán Món Mới</strong>
+                  <small>Nén ảnh &amp; phân loại</small>
+                </a>
+                <a href="../seller/dashboard.html#offers" class="admin-quick-card" title="Thương lượng và chốt giá đề nghị với khách mua">
+                  <span class="material-symbols-outlined text-secondary">handshake</span>
+                  <strong>4. Trả Giá C2C</strong>
+                  <small>Đề xuất từ người mua</small>
+                </a>
+              </div>
+            </div>
+          </section>
+
           <!-- THẺ 2: ĐỊNH DANH CCCD GẮN CHIP (ICAO 9303) -->
           <section class="panel p-5 mb-5" id="sectionCccd">
             <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
@@ -1273,6 +1340,7 @@
 
           // Cập nhật trạng thái hiển thị
           const secAdmin = document.getElementById("sectionAdminDossier");
+          const secSeller = document.getElementById("sectionSellerDossier");
           const secCccd = document.getElementById("sectionCccd");
           const secBank = document.getElementById("sectionBank");
           const secAddress = document.getElementById("sectionAddress");
@@ -1283,6 +1351,7 @@
           if (isAdminUser) {
             // ĐẶC QUYỀN ROOT ADMIN: Ẩn hoàn toàn các phần CCCD, Ngân hàng, Sổ địa chỉ
             if (secAdmin) secAdmin.style.display = "block";
+            if (secSeller) secSeller.style.display = "none";
             if (secCccd) secCccd.style.display = "none";
             if (secBank) secBank.style.display = "none";
             if (secAddress) secAddress.style.display = "none";
@@ -1395,14 +1464,36 @@
             document.getElementById("avatarBadgeIcon").innerHTML = `<span class="material-symbols-outlined icon-sm text-primary">admin_panel_settings</span>`;
           } else {
             // NGƯỜI DÙNG THÔNG THƯỜNG (BUYER / SELLER)
+            const isSellerUser = u.role === "seller" || u.role === "SELLER";
             if (secAdmin) secAdmin.style.display = "none";
+            if (secSeller) secSeller.style.display = isSellerUser ? "block" : "none";
             if (secCccd) secCccd.style.display = "block";
             if (secBank) secBank.style.display = "block";
             if (secAddress) secAddress.style.display = "block";
 
-            // Menu cho người dùng thông thường (TUYỆT ĐỐI KHÔNG HIỂN THỊ LINK MASTER ADMIN)
+            // Menu cho người dùng thông thường
             if (navMenu) {
+              const sellerMenuItem = isSellerUser
+                ? `
+                <a class="profile-menu-item text-warning fw-700" href="../seller/dashboard.html" style="text-decoration: none;">
+                  <span class="flex items-center gap-2">
+                    <span class="material-symbols-outlined icon-sm">storefront</span>
+                    Kênh Quản Lý Gian Hàng (Shop)
+                  </span>
+                  <span class="material-symbols-outlined icon-xs">arrow_forward</span>
+                </a>
+                <button class="profile-menu-item" type="button" onclick="document.getElementById('sectionSellerDossier').scrollIntoView({behavior:'smooth'})">
+                  <span class="flex items-center gap-2">
+                    <span class="material-symbols-outlined icon-sm text-warning">dashboard</span>
+                    Lối Tắt Kênh Bán Hàng
+                  </span>
+                  <span class="material-symbols-outlined icon-xs">chevron_right</span>
+                </button>
+                `
+                : "";
+
               navMenu.innerHTML = `
+                ${sellerMenuItem}
                 <button class="profile-menu-item active" type="button" onclick="document.getElementById('sectionPersonalInfo').scrollIntoView({behavior:'smooth'})">
                   <span class="flex items-center gap-2">
                     <span class="material-symbols-outlined icon-sm">person</span>

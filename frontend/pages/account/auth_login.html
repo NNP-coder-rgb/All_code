@@ -85,16 +85,23 @@
 
             <!-- Vai trò đăng nhập -->
             <div class="form-group">
-              <span class="form-label">Vai trò đăng nhập</span>
+              <div class="flex items-center justify-between mb-1">
+                <span class="form-label" style="margin-bottom: 0;">Vai trò đăng nhập</span>
+                <span class="text-xs text-muted">Tự động chuyển vào đúng không gian</span>
+              </div>
               <div class="segmented is-full" id="roleSelector">
-                <button type="button" class="active" data-role="buyer">
+                <button type="button" class="active" data-role="buyer" title="Đăng nhập dành cho Khách hàng mua sắm">
                   <span class="material-symbols-outlined icon-sm">shopping_cart</span>
                   Người Mua (Buyer)
                 </button>
-                <button type="button" data-role="seller">
+                <button type="button" data-role="seller" title="Đăng nhập vào Kênh Quản Lý Gian Hàng &amp; Bán Hàng">
                   <span class="material-symbols-outlined icon-sm">storefront</span>
                   Người Bán (Seller)
                 </button>
+              </div>
+              <div class="text-2xs text-muted mt-1 flex items-center gap-1" id="roleDestinationHint">
+                <span class="material-symbols-outlined icon-xs text-secondary">info</span>
+                <span id="roleDestinationText">Sau khi đăng nhập sẽ vào: <strong class="text-secondary">Trang Chủ Mua Sắm (Marketplace)</strong></span>
               </div>
             </div>
 
@@ -274,6 +281,30 @@
                 <span class="material-symbols-outlined icon-sm">arrow_forward</span>
               </button>
             </form>
+
+            <!-- Hộp tài khoản mẫu kiểm thử nhanh (Demo One-Click Accounts) -->
+            <div class="demo-accounts-box" style="margin-top: 20px; padding: 12px 14px; background: rgba(255,255,255,0.03); border: 1px dashed var(--border, rgba(255,255,255,0.14)); border-radius: var(--radius-md, 8px);">
+              <div class="flex items-center justify-between gap-1 mb-2">
+                <span class="text-2xs fw-700 text-muted uppercase flex items-center gap-1">
+                  <span class="material-symbols-outlined icon-xs text-secondary">smart_toy</span>
+                  Tài khoản kiểm thử nhanh (Click để tự điền):
+                </span>
+              </div>
+              <div class="flex flex-wrap gap-2" id="demoAccountsChips">
+                <button type="button" class="btn btn-xs btn-secondary flex items-center gap-1" data-demo-role="seller" data-demo-id="binh@sneakers.vn" data-demo-pwd="password123" title="Click để tự điền Người Bán và vào Kênh Quản Lý Shop">
+                  <span class="material-symbols-outlined icon-xs text-warning">storefront</span>
+                  <span><strong>Người Bán:</strong> binh@sneakers.vn</span>
+                </button>
+                <button type="button" class="btn btn-xs btn-secondary flex items-center gap-1" data-demo-role="buyer" data-demo-id="phuc@hybrid.store" data-demo-pwd="password123" title="Click để tự điền Người Mua và vào Trang Chủ / Mua Sắm">
+                  <span class="material-symbols-outlined icon-xs text-info">shopping_cart</span>
+                  <span><strong>Người Mua:</strong> phuc@hybrid.store</span>
+                </button>
+                <button type="button" class="btn btn-xs btn-secondary flex items-center gap-1" data-demo-role="admin" data-demo-id="admin@hybrid.store" data-demo-pwd="admin123" title="Click để tự điền Quản Trị Viên và vào Master Admin Portal">
+                  <span class="material-symbols-outlined icon-xs text-primary">terminal</span>
+                  <span><strong>Admin:</strong> admin@hybrid.store</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
