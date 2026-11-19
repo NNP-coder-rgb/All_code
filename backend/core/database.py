@@ -64,6 +64,8 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 # 3. Khai báo Declarative Base cho toàn bộ Models
 Base = declarative_base()
 
+DB_PATH = settings.sqlite_fallback_url if settings.USE_SQLITE_FALLBACK else settings.database_url
+
 
 # 4. Dependency Dependency Injection cho FastAPI Endpoints
 def get_db() -> Generator[Session, None, None]:

@@ -1,16 +1,20 @@
 """
-routers/user_router.py — API Endpoints Quản Lý Người Dùng (Luồng CRUD Mẫu Chuẩn)
-Tuân thủ nguyên tắc: Nhận request -> Validate qua schemas -> Gọi services -> Trả response chuẩn & HTTP Status Code.
+routers/user_router.py — API Endpoints Quản Lý Người Dùng, Sổ Địa Chỉ & Tài Khoản Ngân Hàng
 """
 
-from typing import Optional, Annotated
+from typing import Optional, List, Annotated
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
 from core.database import get_db
 from schemas.common import BaseResponse, PaginatedResponse
-from schemas.user import UserCreate, UserUpdate, UserResponse
+from schemas.user import (
+    UserCreate, UserUpdate, UserResponse,
+    UserAddressCreate, UserAddressResponse,
+    BankAccountCreate, BankAccountResponse
+)
 from services.user_service import user_service
+from models.user import UserAddress, BankAccount
 
 router = APIRouter(prefix="/users", tags=["Users (Quản lý người dùng)"])
 
@@ -18,8 +22,7 @@ router = APIRouter(prefix="/users", tags=["Users (Quản lý người dùng)"])
 @router.get(
     "/",
     response_model=PaginatedResponse[UserResponse],
-    summary="Lấy danh sách người dùng có phân trang",
-    description="Truy vấn danh sách người dùng hệ thống kèm bộ lọc vai trò (role) và từ khóa tìm kiếm (search)."
+    summary="Lấy danh sách người dùng có phân trang"
 )
 def get_users(
     page: Annotated[int, Query(ge=1, description="Số thứ tự trang")] = 1,
@@ -43,10 +46,7 @@ def get_users(
 @router.get(
     "/{user_id}",
     response_model=BaseResponse[UserResponse],
-    summary="Lấy thông tin chi tiết một người dùng",
-    responses={
-        404: {"description": "Không tìm thấy người dùng với ID đã cung cấp"}
-    }
+    summary="Lấy thông tin chi tiết một người dùng"
 )
 def get_user_by_id(user_id: int, db: Session = Depends(get_db)):
     user = user_service.get_by_id(db, user_id=user_id)
@@ -66,27 +66,19 @@ def get_user_by_id(user_id: int, db: Session = Depends(get_db)):
     "/",
     response_model=BaseResponse[UserResponse],
     status_code=status.HTTP_201_CREATED,
-    summary="Tạo mới một người dùng",
-    responses={
-        400: {"description": "Email hoặc số điện thoại đã tồn tại trên hệ thống"}
-    }
+    summary="Tạo mới một người dùng"
 )
 def create_user(user_in: UserCreate, db: Session = Depends(get_db)):
-    # 1. Kiểm tra trùng lặp Email
     if user_service.get_by_email(db, email=user_in.email):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Địa chỉ email '{user_in.email}' đã được đăng ký trên hệ thống"
+            detail=f"Địa chỉ email '{user_in.email}' đã được đăng ký"
         )
-
-    # 2. Kiểm tra trùng lặp Số điện thoại
     if user_service.get_by_phone(db, phone=user_in.phone):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Số điện thoại '{user_in.phone}' đã được đăng ký tài khoản"
+            detail=f"Số điện thoại '{user_in.phone}' đã được đăng ký"
         )
-
-    # 3. Gọi service thực hiện lưu vào CSDL
     new_user = user_service.create_user(db, user_in=user_in)
     return BaseResponse[UserResponse](
         success=True,
@@ -98,10 +90,7 @@ def create_user(user_in: UserCreate, db: Session = Depends(get_db)):
 @router.put(
     "/{user_id}",
     response_model=BaseResponse[UserResponse],
-    summary="Cập nhật thông tin người dùng",
-    responses={
-        404: {"description": "Không tìm thấy người dùng cần cập nhật"}
-    }
+    summary="Cập nhật thông tin người dùng"
 )
 def update_user(user_id: int, user_in: UserUpdate, db: Session = Depends(get_db)):
     updated_user = user_service.update_user(db, user_id=user_id, user_in=user_in)
@@ -120,10 +109,7 @@ def update_user(user_id: int, user_in: UserUpdate, db: Session = Depends(get_db)
 @router.delete(
     "/{user_id}",
     response_model=BaseResponse[dict],
-    summary="Xóa người dùng khỏi hệ thống",
-    responses={
-        404: {"description": "Không tìm thấy người dùng cần xóa"}
-    }
+    summary="Xóa người dùng khỏi hệ thống"
 )
 def delete_user(user_id: int, db: Session = Depends(get_db)):
     success = user_service.delete_user(db, user_id=user_id)
@@ -137,3 +123,97 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
         message=f"Đã xóa thành công người dùng có mã ID: {user_id}",
         data={"deleted_user_id": user_id}
     )
+
+
+# --- SỔ ĐỊA CHỈ GIAO HÀNG (ADDRESS BOOK) ---
+@router.get(
+    "/{user_id}/addresses",
+    response_model=BaseResponse[List[UserAddressResponse]],
+    summary="Lấy danh sách địa chỉ giao hàng của người dùng"
+)
+def get_user_addresses(user_id: int, db: Session = Depends(get_db)):
+    addresses = db.query(UserAddress).filter(UserAddress.user_id == user_id).order_by(UserAddress.is_default.desc()).all()
+    return BaseResponse[List[UserAddressResponse]](
+        success=True,
+        message="Lấy danh sách địa chỉ giao hàng thành công",
+        data=addresses
+    )
+
+
+@router.post(
+    "/{user_id}/addresses",
+    response_model=BaseResponse[UserAddressResponse],
+    status_code=status.HTTP_201_CREATED,
+    summary="Thêm địa chỉ giao hàng mới"
+)
+def add_user_address(user_id: int, addr_in: UserAddressCreate, db: Session = Depends(get_db)):
+    user = user_service.get_by_id(db, user_id)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Không tìm thấy người dùng")
+    addr = user_service.add_address(db, user_id, addr_in)
+    return BaseResponse[UserAddressResponse](
+        success=True,
+        message="Thêm địa chỉ giao hàng thành công",
+        data=addr
+    )
+
+
+@router.delete(
+    "/addresses/{address_id}",
+    response_model=BaseResponse[dict],
+    summary="Xóa địa chỉ giao hàng"
+)
+def delete_user_address(address_id: int, db: Session = Depends(get_db)):
+    addr = db.query(UserAddress).filter(UserAddress.id == address_id).first()
+    if not addr:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Không tìm thấy địa chỉ")
+    db.delete(addr)
+    db.commit()
+    return BaseResponse[dict](success=True, message="Xóa địa chỉ thành công", data={"deleted_address_id": address_id})
+
+
+# --- TÀI KHOẢN NGÂN HÀNG LIÊN KẾT (BANK ACCOUNTS) ---
+@router.get(
+    "/{user_id}/bank-accounts",
+    response_model=BaseResponse[List[BankAccountResponse]],
+    summary="Lấy danh sách tài khoản ngân hàng liên kết"
+)
+def get_user_bank_accounts(user_id: int, db: Session = Depends(get_db)):
+    accounts = db.query(BankAccount).filter(BankAccount.user_id == user_id).order_by(BankAccount.is_default.desc()).all()
+    return BaseResponse[List[BankAccountResponse]](
+        success=True,
+        message="Lấy danh sách tài khoản ngân hàng thành công",
+        data=accounts
+    )
+
+
+@router.post(
+    "/{user_id}/bank-accounts",
+    response_model=BaseResponse[BankAccountResponse],
+    status_code=status.HTTP_201_CREATED,
+    summary="Liên kết tài khoản ngân hàng mới"
+)
+def add_user_bank_account(user_id: int, bank_in: BankAccountCreate, db: Session = Depends(get_db)):
+    user = user_service.get_by_id(db, user_id)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Không tìm thấy người dùng")
+    bank = user_service.add_bank_account(db, user_id, bank_in)
+    return BaseResponse[BankAccountResponse](
+        success=True,
+        message="Liên kết tài khoản ngân hàng thành công",
+        data=bank
+    )
+
+
+@router.delete(
+    "/bank-accounts/{account_id}",
+    response_model=BaseResponse[dict],
+    summary="Hủy liên kết tài khoản ngân hàng"
+)
+def delete_user_bank_account(account_id: int, db: Session = Depends(get_db)):
+    bank = db.query(BankAccount).filter(BankAccount.id == account_id).first()
+    if not bank:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Không tìm thấy tài khoản ngân hàng")
+    db.delete(bank)
+    db.commit()
+    return BaseResponse[dict](success=True, message="Đã hủy liên kết tài khoản ngân hàng", data={"deleted_account_id": account_id})

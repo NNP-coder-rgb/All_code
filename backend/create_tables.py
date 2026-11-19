@@ -13,8 +13,8 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 if CURRENT_DIR not in sys.path:
     sys.path.insert(0, CURRENT_DIR)
 
-from app.database import engine, Base, DB_PATH
-import app.models  # Nạp toàn bộ 23 Models
+from core.database import engine, Base, DB_PATH
+import models  # Nạp toàn bộ 23 Models
 
 def main():
     print("=" * 68)
