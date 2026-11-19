@@ -82,7 +82,10 @@
           confirmText: "Đăng xuất",
           onConfirm: () => {
             if (typeof Auth !== "undefined") Auth.logout();
-            window.location.href = "login.html";
+            Utils.toast("Đã đăng xuất tài khoản.", "info");
+            setTimeout(() => {
+              window.location.href = "../account/auth_login.html";
+            }, 300);
           },
         });
       });
