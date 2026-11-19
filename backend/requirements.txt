@@ -1,3 +1,13 @@
-# Backend Requirements - Hybrid Store E-Commerce System
-SQLAlchemy>=2.0.0
-pydantic>=2.0.0
+# Core Framework
+fastapi>=0.110.0
+uvicorn[standard]>=0.28.0
+
+# Database & ORM
+sqlalchemy>=2.0.0
+pymysql>=1.1.0
+cryptography>=42.0.0
+
+# Configuration & Validation
+pydantic>=2.6.0
+pydantic-settings>=2.2.0
+python-dotenv>=1.0.0
