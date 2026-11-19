@@ -46,3 +46,7 @@ backend/database/*.sqlite3
 # OS
 .DS_Store
 Thumbs.db
+
+# Tools
+tools/
+*.exe
