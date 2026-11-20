@@ -110,6 +110,7 @@ if os.path.isdir(FRONTEND_DIR):
             app.mount(f"/{sub}", StaticFiles(directory=sub_path), name=sub)
 
     @app.get("/", include_in_schema=False)
+    @app.get("/index.html", include_in_schema=False)
     def serve_frontend_root():
         index_file = os.path.join(FRONTEND_DIR, "index.html")
         if os.path.isfile(index_file):
@@ -120,6 +121,43 @@ if os.path.isdir(FRONTEND_DIR):
             "redoc": "/redoc",
             "api_v1": settings.API_V1_STR
         }
+
+    @app.get("/manifest.json", include_in_schema=False)
+    def serve_manifest():
+        manifest_file = os.path.join(FRONTEND_DIR, "manifest.json")
+        if os.path.isfile(manifest_file):
+            return FileResponse(manifest_file, media_type="application/json")
+        return JSONResponse(status_code=404, content={"detail": "Not Found"})
+
+    @app.get("/sw.js", include_in_schema=False)
+    def serve_sw():
+        sw_file = os.path.join(FRONTEND_DIR, "sw.js")
+        if os.path.isfile(sw_file):
+            return FileResponse(sw_file, media_type="application/javascript")
+        return JSONResponse(status_code=404, content={"detail": "Not Found"})
+
+    @app.get("/{filename:path}", include_in_schema=False)
+    def serve_frontend_fallback(filename: str):
+        # 1. Tránh ghi đè các endpoint API hoặc tài liệu Swagger
+        if filename.startswith(("api/", "docs", "redoc", "openapi.json")):
+            return JSONResponse(status_code=404, content={"detail": "Not Found"})
+
+        # 2. Kiểm tra nếu file tồn tại trực tiếp trong thư mục frontend
+        file_path = os.path.join(FRONTEND_DIR, filename)
+        if os.path.isfile(file_path):
+            return FileResponse(file_path)
+
+        # 3. Thử tìm file .html tương ứng
+        html_file = os.path.join(FRONTEND_DIR, f"{filename}.html")
+        if os.path.isfile(html_file):
+            return FileResponse(html_file)
+
+        # 4. Fallback về index.html cho SPA hoặc liên kết gốc
+        index_file = os.path.join(FRONTEND_DIR, "index.html")
+        if os.path.isfile(index_file):
+            return FileResponse(index_file)
+
+        return JSONResponse(status_code=404, content={"detail": "Not Found"})
 else:
     @app.get("/", include_in_schema=False)
     def root():
