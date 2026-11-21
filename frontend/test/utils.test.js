@@ -632,6 +632,37 @@ function runAdditionalTests() {
     assert.strictEqual(Utils.Wishlist.count(), 1);
   });
 
+  it("Phân lập danh sách yêu thích (Wishlist) độc lập giữa Người Mua và Người Bán", () => {
+    let store = {};
+    global.localStorage = {
+      getItem: (k) => store[k] || null,
+      setItem: (k, v) => { store[k] = String(v); },
+      removeItem: (k) => { delete store[k]; },
+    };
+
+    // 1. Giả lập Người Mua đăng nhập
+    global.localStorage.setItem("hv_current_user", JSON.stringify({ id: "buyer-01", role: "buyer" }));
+    Utils.Wishlist.refresh();
+    Utils.Wishlist.toggle("prod-buyer-watch");
+    assert.strictEqual(Utils.Wishlist.has("prod-buyer-watch"), true, "Người mua đã thích sản phẩm đồng hồ");
+
+    // 2. Giả lập Người Bán đăng nhập
+    global.localStorage.setItem("hv_current_user", JSON.stringify({ id: "seller-01", role: "seller" }));
+    Utils.Wishlist.refresh();
+    // Người bán KHÔNG được chứa sản phẩm mà Người Mua thích
+    assert.strictEqual(Utils.Wishlist.has("prod-buyer-watch"), false, "Người bán không bị lẫn sản phẩm yêu thích của người mua");
+
+    // 3. Người bán thích sản phẩm khác (máy ảnh)
+    Utils.Wishlist.toggle("prod-seller-camera");
+    assert.strictEqual(Utils.Wishlist.has("prod-seller-camera"), true, "Người bán thích máy ảnh");
+
+    // 4. Quay lại Người Mua kiểm tra
+    global.localStorage.setItem("hv_current_user", JSON.stringify({ id: "buyer-01", role: "buyer" }));
+    Utils.Wishlist.refresh();
+    assert.strictEqual(Utils.Wishlist.has("prod-buyer-watch"), true, "Người mua vẫn giữ nguyên sản phẩm của mình");
+    assert.strictEqual(Utils.Wishlist.has("prod-seller-camera"), false, "Người mua không bị lẫn sản phẩm của người bán");
+  });
+
   it("Truy vấn Tỉnh/Thành, Quận/Huyện, Phường/Xã từ VietnamLocations", () => {
     assert.ok(Utils.VietnamLocations, "Có module Utils.VietnamLocations");
     const provinces = Utils.VietnamLocations.getProvinces();

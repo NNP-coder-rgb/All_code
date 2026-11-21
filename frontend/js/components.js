@@ -442,7 +442,7 @@
         UtilsRef.Cart.syncBadge();
       }
 
-      // 2b. Đồng bộ số lượng Wishlist Badge
+      // 2b. Đồng bộ số lượng Wishlist Badge & Drawer Wishlist
       function syncWishlistBadge() {
         var wishBadge = document.getElementById("wishlistCount");
         if (wishBadge) {
@@ -451,6 +451,9 @@
             : 0;
           wishBadge.textContent = count;
           wishBadge.style.display = count > 0 ? "inline-flex" : "none";
+        }
+        if (typeof DrawerWishlist !== "undefined" && typeof DrawerWishlist.update === "function") {
+          DrawerWishlist.update();
         }
       }
       syncWishlistBadge();

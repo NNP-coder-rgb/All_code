@@ -192,7 +192,7 @@
             document.body.classList.toggle("light-theme", e.newValue === "light");
           }
         }
-      } else if (e.key === STORAGE_KEYS.WISHLIST) {
+      } else if (e.key && (e.key === STORAGE_KEYS.WISHLIST || e.key.indexOf("hv_wishlist_") === 0)) {
         window.dispatchEvent(new CustomEvent("wishlist:updated", { detail: { storageEvent: true } }));
       }
     });

@@ -429,6 +429,9 @@
       try {
         localStorage.setItem(CURRENT_KEY, JSON.stringify(session));
       } catch (e) {}
+      if (typeof Utils !== "undefined" && Utils.Wishlist && typeof Utils.Wishlist.refresh === "function") {
+        Utils.Wishlist.refresh();
+      }
       return { ok: true, user: session };
     },
 
@@ -537,6 +540,9 @@
       try {
         localStorage.setItem(CURRENT_KEY, JSON.stringify(session));
       } catch (e) {}
+      if (typeof Utils !== "undefined" && Utils.Wishlist && typeof Utils.Wishlist.refresh === "function") {
+        Utils.Wishlist.refresh();
+      }
       return { ok: true, user: session };
     },
 
@@ -612,6 +618,9 @@
       try {
         localStorage.setItem(CURRENT_KEY, JSON.stringify(session));
       } catch (e) {}
+      if (typeof Utils !== "undefined" && Utils.Wishlist && typeof Utils.Wishlist.refresh === "function") {
+        Utils.Wishlist.refresh();
+      }
       return { ok: true, user: session };
     },
 
@@ -743,6 +752,9 @@
       try {
         localStorage.removeItem(CURRENT_KEY);
       } catch (e) {}
+      if (typeof Utils !== "undefined" && Utils.Wishlist && typeof Utils.Wishlist.refresh === "function") {
+        Utils.Wishlist.refresh();
+      }
     },
 
     // Kiểm tra xem người dùng có phải là Quản Trị Viên (Admin) hay không

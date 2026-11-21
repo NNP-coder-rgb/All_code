@@ -382,6 +382,10 @@
         return;
       }
 
+      if (typeof Utils !== "undefined" && Utils.Wishlist && typeof Utils.Wishlist.refresh === "function") {
+        Utils.Wishlist.refresh();
+      }
+
       const targetAfterLogin = getRedirectTarget();
       const destination = targetAfterLogin || getRoleDefaultTarget(res.user, role);
       const confirmLabel = getConfirmButtonLabel(targetAfterLogin, res.user, role);
@@ -795,7 +799,11 @@
           return;
         }
 
-        const targetAfterLogin = getRedirectTarget();
+        if (typeof Utils !== "undefined" && Utils.Wishlist && typeof Utils.Wishlist.refresh === "function") {
+        Utils.Wishlist.refresh();
+      }
+
+      const targetAfterLogin = getRedirectTarget();
         const destination = targetAfterLogin || getRoleDefaultTarget(res.user, role);
         const confirmLabel = getConfirmButtonLabel(targetAfterLogin, res.user, role);
 

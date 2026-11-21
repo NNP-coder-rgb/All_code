@@ -2430,14 +2430,6 @@
           const menuCount = document.getElementById("menuWishlistCount");
           if (!container) return;
 
-          const items = typeof Wishlist !== "undefined" ? Wishlist.getItems() : [];
-          const allProds = typeof PRODUCTS !== "undefined" ? PRODUCTS : [];
-          // Nếu chưa có items nào được thả tim, tạo sẵn 2 items mẫu (m1, u1) để người dùng xem giao diện
-          if (items.length === 0 && typeof Wishlist !== "undefined" && !localStorage.getItem("hv_wishlist_initialized")) {
-            Wishlist.toggle("m1");
-            Wishlist.toggle("u1");
-            try { localStorage.setItem("hv_wishlist_initialized", "true"); } catch(e) {}
-          }
           const currentItems = typeof Wishlist !== "undefined" ? Wishlist.getItems() : [];
           const wishProds = allProds.filter(p => currentItems.some(id => String(id) === String(p.id)));
 
