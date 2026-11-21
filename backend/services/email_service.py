@@ -41,6 +41,15 @@ class EmailService:
                 email_id = resp_json.get("id", "unknown")
                 print(f"✅ [EmailService - Resend] Đã gửi email thành công tới {to_email} (ID: {email_id})")
                 return True, f"Mã xác thực đã được gửi trực tiếp đến hộp thư {to_email} qua Resend."
+        except urllib.error.HTTPError as e:
+            try:
+                err_body = e.read().decode("utf-8")
+                err_json = json.loads(err_body)
+                msg = err_json.get("message") or err_body
+            except Exception:
+                msg = str(e)
+            print(f"❌ [EmailService - Resend HTTPError] {msg}")
+            return False, f"Lỗi cổng gửi Email Resend: {msg}"
         except Exception as e:
             print(f"❌ [EmailService - Resend Error] {e}")
             return False, f"Lỗi cổng gửi Email Resend: {str(e)}"
