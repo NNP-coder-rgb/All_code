@@ -81,19 +81,6 @@
     avatarBtn.textContent = initials;
     avatarBtn.title = user.fullName;
   }
-  if (avatarBtn) {
-    avatarBtn.addEventListener("click", (e) => {
-      if (!user) {
-        window.location.href = "pages/account/auth_login.html";
-        return;
-      }
-      e.stopPropagation();
-      const dropdown = $("#userAccountDropdown");
-      if (dropdown) {
-        dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
-      }
-    });
-  }
 
   /* ---------------- Tìm kiếm tương tác trang chủ ---------------- */
   const searchInput = $("#homeSearchInput");

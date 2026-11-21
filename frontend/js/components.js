@@ -1989,16 +1989,19 @@
 
       return (
         '<div class="user-account-dropdown" id="userAccountDropdown" style="display: none;">' +
-        '  <div class="user-dropdown-header">' +
+        '  <a href="' + profileUrl + '" class="user-dropdown-header" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 12px; cursor: pointer;" title="Bấm để vào Hồ Sơ Cá Nhân">' +
         '    <div class="user-dropdown-avatar">' + escapeHtml(initials) + '</div>' +
         '    <div class="user-dropdown-info">' +
-        '      <div class="user-name" title="' + escapeHtml(fullName) + '">' + escapeHtml(fullName) + '</div>' +
+        '      <div class="user-name flex items-center justify-between" title="' + escapeHtml(fullName) + '">' +
+        '        <span>' + escapeHtml(fullName) + '</span>' +
+        '        <span class="material-symbols-outlined icon-xs text-muted">arrow_forward</span>' +
+        '      </div>' +
         '      <div class="user-contact text-2xs text-muted mono">' + escapeHtml(contact) + '</div>' +
         '      <div class="user-role-wrap mt-1">' +
         '        <span class="badge ' + roleBadgeClass + '">' + roleLabel + '</span>' +
         '      </div>' +
         '    </div>' +
-        '  </div>' +
+        '  </a>' +
         '  <div class="user-dropdown-divider"></div>' +
         '  <ul class="user-dropdown-menu">' +
         '    <li>' +
@@ -2085,9 +2088,18 @@
       // Kiểm tra hoặc chèn container dropdown
       var dropdown = document.getElementById("userAccountDropdown");
       if (!dropdown) {
-        var container = btn.parentElement;
+        var wrapper = btn.closest(".header-user-wrapper");
+        if (!wrapper && btn.parentElement) {
+          wrapper = document.createElement("div");
+          wrapper.className = "header-user-wrapper";
+          wrapper.style.position = "relative";
+          wrapper.style.display = "inline-flex";
+          wrapper.style.alignItems = "center";
+          btn.parentNode.insertBefore(wrapper, btn);
+          wrapper.appendChild(btn);
+        }
+        var container = wrapper || btn.parentElement;
         if (container) {
-          container.style.position = "relative";
           var temp = document.createElement("div");
           temp.innerHTML = UserAccountDropdown.createHTML(curUser, bp);
           var dropdownNode = temp.firstElementChild;
