@@ -36,8 +36,8 @@
     />
 
     <!-- base.css trước, CSS riêng của trang sau -->
-    <link rel="stylesheet" href="../../css/base.css?v=20261121_v4" />
-    <link rel="stylesheet" href="../../css/login.css?v=20261121_v4" />
+    <link rel="stylesheet" href="../../css/base.css?v=20261122_v8" />
+    <link rel="stylesheet" href="../../css/login.css?v=20261122_v8" />
   </head>
   <body>
     <!-- ===== HEADER ===== -->
@@ -85,15 +85,15 @@
 
           <div class="panel login-card">
             <div class="card-head">
-              <span class="panel-title">
-                <span class="brand-mark" style="width: 28px; height: 28px; border-radius: 8px;">
-                  <span class="material-symbols-outlined" style="font-size: 16px; border-radius: 7px;">token</span>
+              <span class="panel-title flex items-center gap-2">
+                <span class="brand-mark" style="width: 30px; height: 30px; border-radius: 9px; display: inline-flex; align-items: center; justify-content: center;">
+                  <span class="material-symbols-outlined" style="font-size: 17px;">lock</span>
                 </span>
-                Đăng Nhập Tài Khoản
+                <span style="font-size: 15px; font-weight: 700; letter-spacing: 0.02em;">Đăng Nhập Tài Khoản</span>
               </span>
-              <a href="auth_register.html">
-                Đăng ký mới
-                <span class="material-symbols-outlined icon-sm">arrow_forward</span>
+              <a href="auth_register.html" class="auth-card-head-link flex items-center gap-1 text-xs fw-600">
+                <span>Đăng ký mới</span>
+                <span class="material-symbols-outlined icon-xs">arrow_forward</span>
               </a>
             </div>
 
@@ -117,7 +117,7 @@
             </div>
 
             <!-- Vai trò đăng nhập -->
-            <div class="form-group">
+            <div class="form-group mb-3">
               <div class="flex items-center justify-between mb-1">
                 <span class="form-label" style="margin-bottom: 0;">Vai trò đăng nhập</span>
                 <span class="text-xs text-muted">Tự động chuyển vào đúng không gian</span>
@@ -140,32 +140,32 @@
 
             <!-- Nút Đăng nhập Google thật (Chuyển hướng trực tiếp accounts.google.com) -->
             <div class="google-auth-wrapper">
-              <button type="button" class="btn-social-google" id="btnGoogleLogin">
+              <button type="button" class="btn-social-google" id="btnGoogleLogin" title="Đăng nhập một chạm an toàn bằng tài khoản Google">
                 <svg viewBox="0 0 24 24" width="20" height="20">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                   <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                   <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
                   <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
                 </svg>
-                <span id="googleLoginBtnText">Đăng nhập bằng tài khoản Google</span>
+                <span id="googleLoginBtnText">Tiếp tục với Google</span>
               </button>
-              <div class="google-hint-row" id="googleHintRow" style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+              <div class="google-hint-row" id="googleHintRow" style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; padding: 0 4px;">
                 <span class="text-2xs text-muted flex items-center gap-1">
-                  <span class="material-symbols-outlined icon-xs text-success">verified_user</span>
-                  <span id="googleAccountStatus">Chuyển sang trang xác minh danh tính Google</span>
+                  <span class="material-symbols-outlined icon-xs text-success" style="font-size: 14px;">verified_user</span>
+                  <span id="googleAccountStatus">Bảo mật chuẩn Google Identity Services</span>
                 </span>
-                <button type="button" class="btn-text-link text-2xs" id="btnConfigGoogleClient" title="Cài đặt Google OAuth 2.0 Client ID">
-                  Cấu hình Client ID
+                <button type="button" class="btn-text-link text-2xs" id="btnConfigGoogleClient" title="Cài đặt Google OAuth 2.0 Client ID" style="opacity: 0.6; font-size: 11px;">
+                  <span class="material-symbols-outlined icon-xs" style="font-size: 13px;">settings</span> Client ID
                 </button>
               </div>
             </div>
 
-            <div class="or-divider">HOẶC ĐĂNG NHẬP VỚI</div>
+            <div class="or-divider">HOẶC TIẾP TỤC VỚI</div>
 
             <!-- Tab chuyển đổi: Mật khẩu vs Số điện thoại OTP -->
             <div class="login-method-nav">
               <button type="button" class="login-method-btn active" id="tabLoginPassword" data-target="vaultLoginForm">
-                <span class="material-symbols-outlined icon-xs">key</span> Mật Khẩu (Email/SĐT)
+                <span class="material-symbols-outlined icon-xs">mail</span> Email &amp; Mật Khẩu
               </button>
               <button type="button" class="login-method-btn" id="tabLoginPhone" data-target="phoneOtpLoginForm">
                 <span class="material-symbols-outlined icon-xs">sms</span> Số Điện Thoại (OTP)
@@ -177,14 +177,14 @@
               <div class="form-group">
                 <label class="form-label" for="identifier">Email hoặc Số điện thoại</label>
                 <div class="input-group">
-                  <span class="icon-left material-symbols-outlined">alternate_email</span>
+                  <span class="icon-left material-symbols-outlined">person</span>
                   <input
                     class="input"
                     id="identifier"
                     name="identifier"
                     type="text"
                     required
-                    placeholder="ban@domain.vn hoặc 098..."
+                    placeholder="name@example.com hoặc 09..."
                     autocomplete="username"
                   />
                 </div>
@@ -194,17 +194,17 @@
               <div class="form-group">
                 <label class="form-label" for="vaultKey">
                   <span>Mật khẩu</span>
-                  <a href="javascript:void(0)" id="linkForgotPassword">Quên mật khẩu?</a>
+                  <a href="javascript:void(0)" id="linkForgotPassword" class="hover-underline text-secondary text-xs">Quên mật khẩu?</a>
                 </label>
                 <div class="input-group has-right">
-                  <span class="icon-left material-symbols-outlined">password</span>
+                  <span class="icon-left material-symbols-outlined">lock</span>
                   <input
                     class="input mono"
                     id="vaultKey"
                     name="vaultKey"
                     type="password"
                     required
-                    placeholder="••••••••••••••••"
+                    placeholder="Nhập mật khẩu của bạn"
                     autocomplete="current-password"
                   />
                   <button
@@ -317,28 +317,13 @@
               </button>
             </form>
 
-            <!-- Hộp tài khoản mẫu kiểm thử nhanh (Demo One-Click Accounts) -->
-            <div class="demo-accounts-box" style="margin-top: 20px; padding: 12px 14px; background: rgba(255,255,255,0.03); border: 1px dashed var(--border, rgba(255,255,255,0.14)); border-radius: var(--radius-md, 8px);">
-              <div class="flex items-center justify-between gap-1 mb-2">
-                <span class="text-2xs fw-700 text-muted uppercase flex items-center gap-1">
-                  <span class="material-symbols-outlined icon-xs text-secondary">smart_toy</span>
-                  Tài khoản kiểm thử nhanh (Click để tự điền):
-                </span>
-              </div>
-              <div class="flex flex-wrap gap-2" id="demoAccountsChips">
-                <button type="button" class="btn btn-xs btn-secondary flex items-center gap-1" data-demo-role="seller" data-demo-id="binh@sneakers.vn" data-demo-pwd="password123" title="Click để tự điền Người Bán và vào Kênh Quản Lý Shop">
-                  <span class="material-symbols-outlined icon-xs text-warning">storefront</span>
-                  <span><strong>Người Bán:</strong> binh@sneakers.vn</span>
-                </button>
-                <button type="button" class="btn btn-xs btn-secondary flex items-center gap-1" data-demo-role="buyer" data-demo-id="phuc@hybrid.store" data-demo-pwd="password123" title="Click để tự điền Người Mua và vào Trang Chủ / Mua Sắm">
-                  <span class="material-symbols-outlined icon-xs text-info">shopping_cart</span>
-                  <span><strong>Người Mua:</strong> phuc@hybrid.store</span>
-                </button>
-                <button type="button" class="btn btn-xs btn-secondary flex items-center gap-1" data-demo-role="admin" data-demo-id="admin@hybrid.store" data-demo-pwd="admin123" title="Click để tự điền Quản Trị Viên và vào Master Admin Portal">
-                  <span class="material-symbols-outlined icon-xs text-primary">terminal</span>
-                  <span><strong>Admin:</strong> admin@hybrid.store</span>
-                </button>
-              </div>
+            <!-- Chuyển hướng sang đăng ký tài khoản mới -->
+            <div class="auth-switch-prompt" style="margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border, rgba(255,255,255,0.1)); text-align: center;">
+              <span class="text-xs text-muted">Bạn chưa có tài khoản HYBRID.STORE?</span>
+              <a href="auth_register.html" class="text-xs fw-700 text-secondary hover-underline" style="margin-left: 6px; display: inline-flex; align-items: center; gap: 3px;">
+                Đăng ký ngay
+                <span class="material-symbols-outlined icon-xs" style="font-size: 14px;">arrow_forward</span>
+              </a>
             </div>
           </div>
         </div>
@@ -377,14 +362,14 @@
             Khi bấm nút <strong>Đăng nhập bằng tài khoản Google</strong>, hệ thống sẽ chuyển hướng bạn trực tiếp sang cổng xác minh danh tính chính thức của Google (<strong>accounts.google.com</strong>) để bạn đăng nhập an toàn.
           </p>
 
-          <!-- Hộp thông báo giải thích lỗi 401: invalid_client -->
-          <div class="panel p-3 mb-3" style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 8px;">
-            <div class="flex items-center gap-2 text-warning fw-700 text-xs mb-1">
-              <span class="material-symbols-outlined icon-xs">info</span>
-              <span>Lưu ý về Google OAuth (Tránh lỗi 401: invalid_client):</span>
+          <!-- Hộp thông báo giải thích Google OAuth -->
+          <div class="panel p-3 mb-3" style="background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px;">
+            <div class="flex items-center gap-2 text-secondary fw-700 text-xs mb-1">
+              <span class="material-symbols-outlined icon-xs">verified_user</span>
+              <span>Cổng Xác Thực Google Identity Services:</span>
             </div>
             <div class="text-2xs text-muted" style="line-height: 1.5;">
-              Google yêu cầu mỗi website phải có một <strong>OAuth Client ID</strong> hợp lệ được đăng ký trên Google Cloud Console gắn với tên miền của bạn. Nếu bạn chưa có Client ID thật, bạn có thể bấm nút <strong>"Đăng Nhập Thử Nghiệm Ngay"</strong> bên dưới để vào hệ thống ngay lập tức với tài khoản Google.
+              Hệ thống kết nối trực tiếp đến Google Cloud Platform thông qua OAuth 2.0 Client ID. Người dùng sẽ đăng nhập bằng tài khoản Google thật và được điều hướng an toàn trở lại gian hàng.
             </div>
           </div>
 
@@ -419,9 +404,6 @@
           <div class="modal-foot p-0 flex justify-between gap-2 flex-wrap items-center">
             <button class="btn btn-secondary btn-sm" type="button" id="btnCancelGoogleConfig">Đóng</button>
             <div class="flex items-center gap-2 flex-wrap">
-              <button class="btn btn-outlined btn-sm" type="button" id="btnQuickDemoGoogleLogin" style="border-color: var(--secondary); color: var(--secondary);">
-                <span class="material-symbols-outlined icon-xs">bolt</span> Đăng Nhập Thử Nghiệm Ngay
-              </button>
               <button class="btn btn-primary btn-sm" type="button" id="btnSaveGoogleConfig">
                 <span class="material-symbols-outlined icon-xs">save</span> Lưu Client ID
               </button>
@@ -559,12 +541,12 @@
     </div>
 
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="../../js/popup.js?v=20261121_v4"></script>
-    <script src="../../js/api.js?v=20261121_v4"></script>
-    <script src="../../js/auth.js?v=20261121_v4"></script>
-    <script src="../../js/utils.js?v=20261121_v4"></script>
-    <script src="../../js/components.js?v=20261121_v4"></script>
-    <script src="../../js/app.js?v=20261121_v4"></script>
-    <script src="../../js/login.js?v=20261121_v4"></script>
+    <script src="../../js/popup.js?v=20261122_v8"></script>
+    <script src="../../js/api.js?v=20261122_v8"></script>
+    <script src="../../js/auth.js?v=20261122_v8"></script>
+    <script src="../../js/utils.js?v=20261122_v8"></script>
+    <script src="../../js/components.js?v=20261122_v8"></script>
+    <script src="../../js/app.js?v=20261122_v8"></script>
+    <script src="../../js/login.js?v=20261122_v8"></script>
   </body>
 </html>

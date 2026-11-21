@@ -292,35 +292,6 @@
     });
   });
 
-  // Gắn sự kiện cho các chip tài khoản kiểm thử nhanh (Demo Accounts)
-  const demoChips = document.querySelectorAll("#demoAccountsChips [data-demo-id]");
-  demoChips.forEach((chip) => {
-    chip.addEventListener("click", () => {
-      const demoRole = chip.dataset.demoRole;
-      const demoId = chip.dataset.demoId;
-      const demoPwd = chip.dataset.demoPwd;
-
-      // Chuyển tab sang Mật khẩu nếu đang ở OTP
-      if (tabLoginPassword && tabLoginPassword.click) {
-        tabLoginPassword.click();
-      }
-
-      // Kích hoạt vai trò tương ứng nếu có nút role
-      if (demoRole === "seller" || demoRole === "buyer") {
-        role = demoRole;
-        roleBtns.forEach((b) => b.classList.toggle("active", b.dataset.role === role));
-        if (btnText) btnText.textContent = BTN_LABEL[role];
-        updateRoleDestHint(role);
-      } else if (demoRole === "admin") {
-        updateRoleDestHint("admin");
-      }
-
-      if (idInput) idInput.value = demoId;
-      if (pwd) pwd.value = demoPwd;
-      if (submitBtn) submitBtn.focus();
-    });
-  });
-
   // =========================================================================
   // 1. CHUYỂN TAB ĐĂNG NHẬP: MẬT KHẨU vs SỐ ĐIỆN THOẠI OTP
   // =========================================================================
@@ -809,39 +780,6 @@
         message: "Cấu hình Google OAuth 2.0 đã được cập nhật thành công.",
       });
       hideModal(googleAuthModal);
-    });
-  }
-
-  const btnQuickDemoGoogleLogin = document.getElementById("btnQuickDemoGoogleLogin");
-  if (btnQuickDemoGoogleLogin) {
-    btnQuickDemoGoogleLogin.addEventListener("click", () => {
-      const browserAcc = (typeof Auth !== "undefined" && typeof Auth.getBrowserGoogleAccount === "function")
-        ? Auth.getBrowserGoogleAccount()
-        : null;
-      const email = (browserAcc && browserAcc.email) || "nguyenphuc230607@gmail.com";
-      const name = (browserAcc && browserAcc.name) || "Nguyễn Ngọc Phúc";
-      const sessionUser = {
-        id: "g_user_" + Date.now().toString(36),
-        fullName: name,
-        username: email.split("@")[0],
-        email: email,
-        phone: "0901234567",
-        role: role,
-        avatar: "assets/images/avatars/default-avatar.svg",
-        membershipTitle: "VIP MEMBER",
-        kycStatus: "VERIFIED",
-        authProvider: "google",
-        loginAt: new Date().toISOString(),
-      };
-      if (typeof Auth !== "undefined" && typeof Auth.loginWithGoogle === "function") {
-        Auth.loginWithGoogle({
-          email: email,
-          name: name,
-          avatar: sessionUser.avatar,
-          role: role,
-        });
-      }
-      handleGoogleLoginSuccess(sessionUser);
     });
   }
 
