@@ -1409,6 +1409,7 @@
 
             const now = new Date();
             const timeStr = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+            const safeText = typeof Utils !== "undefined" && typeof Utils.escapeHtml === "function" ? Utils.escapeHtml(text) : text;
 
             // Tin nhắn của Bạn
             const userHtml = `
@@ -1419,7 +1420,7 @@
                     <strong class="text-white">Bạn</strong>
                     <span class="text-white" style="opacity: 0.8;">${timeStr}</span>
                   </div>
-                  <div>${text}</div>
+                  <div>${safeText}</div>
                 </div>
               </div>
             `;

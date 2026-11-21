@@ -382,8 +382,12 @@
         return;
       }
 
-      if (typeof Utils !== "undefined" && Utils.Wishlist && typeof Utils.Wishlist.refresh === "function") {
-        Utils.Wishlist.refresh();
+      if (typeof Utils !== "undefined") {
+        if (Utils.Wishlist && typeof Utils.Wishlist.refresh === "function") Utils.Wishlist.refresh();
+        if (Utils.Cart) {
+          if (typeof Utils.Cart.migrateGuestCart === "function") Utils.Cart.migrateGuestCart();
+          if (typeof Utils.Cart.syncBadge === "function") Utils.Cart.syncBadge();
+        }
       }
 
       const targetAfterLogin = getRedirectTarget();
@@ -799,8 +803,12 @@
           return;
         }
 
-        if (typeof Utils !== "undefined" && Utils.Wishlist && typeof Utils.Wishlist.refresh === "function") {
-        Utils.Wishlist.refresh();
+        if (typeof Utils !== "undefined") {
+        if (Utils.Wishlist && typeof Utils.Wishlist.refresh === "function") Utils.Wishlist.refresh();
+        if (Utils.Cart) {
+          if (typeof Utils.Cart.migrateGuestCart === "function") Utils.Cart.migrateGuestCart();
+          if (typeof Utils.Cart.syncBadge === "function") Utils.Cart.syncBadge();
+        }
       }
 
       const targetAfterLogin = getRedirectTarget();

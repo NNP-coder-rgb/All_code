@@ -1772,9 +1772,12 @@
               else if (state.paymentMethod === "CARD") paymentLabel = "Thẻ Quốc Tế (Visa/Mastercard)";
               else if (state.paymentMethod === "EWALLET") paymentLabel = "Ví điện tử MoMo / ZaloPay";
 
+              const buyerUser = (typeof Auth !== "undefined" && typeof Auth.current === "function") ? Auth.current() : null;
               const newOrder = {
                 id: state.orderCode,
                 orderCode: state.orderCode,
+                buyerId: buyerUser ? buyerUser.id : "guest",
+                buyerEmail: buyerUser ? buyerUser.email : "",
                 createdAt: new Date().toISOString(),
               vatInvoice: (document.getElementById("vatInvoiceCheck")?.checked) ? {
                 required: true,

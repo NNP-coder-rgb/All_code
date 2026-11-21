@@ -798,26 +798,71 @@
   }
 
   /* =========================================================================
-     6. QUẢN LÝ GIỎ HÀNG (Cart) - Task [FE] T12
+     6. QUẢN LÝ GIỎ HÀNG (Cart) — TÁCH BIỆT DỮ LIỆU RIÊNG CHO TỪNG TÀI KHOẢN
      ========================================================================= */
-  const CART_STORAGE_KEY = "hv_cart_items";
-
   const Cart = {
+    // 1. Xác định Storage Key riêng theo tài khoản đăng nhập (User-scoped Storage Key)
+    getStorageKey() {
+      let user = null;
+      try {
+        if (typeof Auth !== "undefined" && typeof Auth.current === "function") {
+          user = Auth.current();
+        } else if (typeof localStorage !== "undefined") {
+          user = JSON.parse(localStorage.getItem("hv_current_user") || "null");
+        }
+      } catch (e) {}
+
+      if (user && (user.id || user.email || user.username)) {
+        const uId = String(user.id || user.email || user.username).toLowerCase().replace(/[^a-z0-9_-]/g, "_");
+        return "hv_cart_user_" + uId;
+      }
+      return "hv_cart_guest";
+    },
+
     getItems() {
       if (typeof localStorage === "undefined") return [];
       try {
-        return JSON.parse(localStorage.getItem(CART_STORAGE_KEY)) || [];
+        const key = Cart.getStorageKey();
+        return JSON.parse(localStorage.getItem(key)) || [];
       } catch (e) {
         return [];
       }
     },
+
     saveItems(items) {
       if (typeof localStorage === "undefined") return;
-      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+      const key = Cart.getStorageKey();
+      try {
+        localStorage.setItem(key, JSON.stringify(items));
+      } catch (e) {}
       if (typeof window !== "undefined") {
-        window.dispatchEvent(new CustomEvent("cart:updated", { detail: { items } }));
+        window.dispatchEvent(new CustomEvent("cart:updated", { detail: { items, key } }));
         Cart.syncBadge();
       }
+    },
+
+    migrateGuestCart() {
+      if (typeof localStorage === "undefined") return;
+      try {
+        const guestItems = JSON.parse(localStorage.getItem("hv_cart_guest") || "[]");
+        if (guestItems.length > 0) {
+          const userKey = Cart.getStorageKey();
+          if (userKey !== "hv_cart_guest") {
+            const userItems = JSON.parse(localStorage.getItem(userKey) || "[]");
+            guestItems.forEach((g) => {
+              const existing = userItems.find((u) => u.id === g.id && u.variant === g.variant);
+              if (existing) {
+                existing.qty = Math.min(99, (existing.qty || 1) + (g.qty || 1));
+              } else {
+                userItems.push(g);
+              }
+            });
+            localStorage.setItem(userKey, JSON.stringify(userItems));
+            localStorage.removeItem("hv_cart_guest");
+            Cart.syncBadge();
+          }
+        }
+      } catch (e) {}
     },
     addItem(product, qty = 1, variant = null) {
       if (!product || !product.id) return false;

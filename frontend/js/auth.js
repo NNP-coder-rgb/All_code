@@ -429,8 +429,12 @@
       try {
         localStorage.setItem(CURRENT_KEY, JSON.stringify(session));
       } catch (e) {}
-      if (typeof Utils !== "undefined" && Utils.Wishlist && typeof Utils.Wishlist.refresh === "function") {
-        Utils.Wishlist.refresh();
+      if (typeof Utils !== "undefined") {
+        if (Utils.Wishlist && typeof Utils.Wishlist.refresh === "function") Utils.Wishlist.refresh();
+        if (Utils.Cart) {
+          if (typeof Utils.Cart.migrateGuestCart === "function") Utils.Cart.migrateGuestCart();
+          if (typeof Utils.Cart.syncBadge === "function") Utils.Cart.syncBadge();
+        }
       }
       return { ok: true, user: session };
     },
@@ -540,8 +544,12 @@
       try {
         localStorage.setItem(CURRENT_KEY, JSON.stringify(session));
       } catch (e) {}
-      if (typeof Utils !== "undefined" && Utils.Wishlist && typeof Utils.Wishlist.refresh === "function") {
-        Utils.Wishlist.refresh();
+      if (typeof Utils !== "undefined") {
+        if (Utils.Wishlist && typeof Utils.Wishlist.refresh === "function") Utils.Wishlist.refresh();
+        if (Utils.Cart) {
+          if (typeof Utils.Cart.migrateGuestCart === "function") Utils.Cart.migrateGuestCart();
+          if (typeof Utils.Cart.syncBadge === "function") Utils.Cart.syncBadge();
+        }
       }
       return { ok: true, user: session };
     },
@@ -618,8 +626,12 @@
       try {
         localStorage.setItem(CURRENT_KEY, JSON.stringify(session));
       } catch (e) {}
-      if (typeof Utils !== "undefined" && Utils.Wishlist && typeof Utils.Wishlist.refresh === "function") {
-        Utils.Wishlist.refresh();
+      if (typeof Utils !== "undefined") {
+        if (Utils.Wishlist && typeof Utils.Wishlist.refresh === "function") Utils.Wishlist.refresh();
+        if (Utils.Cart) {
+          if (typeof Utils.Cart.migrateGuestCart === "function") Utils.Cart.migrateGuestCart();
+          if (typeof Utils.Cart.syncBadge === "function") Utils.Cart.syncBadge();
+        }
       }
       return { ok: true, user: session };
     },
@@ -752,8 +764,9 @@
       try {
         localStorage.removeItem(CURRENT_KEY);
       } catch (e) {}
-      if (typeof Utils !== "undefined" && Utils.Wishlist && typeof Utils.Wishlist.refresh === "function") {
-        Utils.Wishlist.refresh();
+      if (typeof Utils !== "undefined") {
+        if (Utils.Wishlist && typeof Utils.Wishlist.refresh === "function") Utils.Wishlist.refresh();
+        if (Utils.Cart && typeof Utils.Cart.syncBadge === "function") Utils.Cart.syncBadge();
       }
     },
 

@@ -361,6 +361,36 @@ function runAdditionalTests() {
     assert.strictEqual(Utils.Cart.getSubtotal(), 0);
   });
 
+  it("Phân lập giỏ hàng (Cart) độc lập giữa các tài khoản người dùng & gộp giỏ hàng khách", () => {
+    let store = {};
+    global.localStorage = {
+      getItem: (k) => store[k] || null,
+      setItem: (k, v) => { store[k] = String(v); },
+      removeItem: (k) => { delete store[k]; },
+    };
+
+    // 1. Khách vãng lai thêm món vào giỏ
+    Utils.Cart.addItem({ id: "prod-guest-item", name: "Ốp Lưng", price: 150000 }, 1);
+    assert.strictEqual(Utils.Cart.getCount(), 1, "Giỏ hàng khách có 1 món");
+
+    // 2. Người Mua đăng nhập -> giỏ hàng khách tự động gộp vào tài khoản
+    global.localStorage.setItem("hv_current_user", JSON.stringify({ id: "buyer-01", role: "buyer" }));
+    Utils.Cart.migrateGuestCart();
+    assert.strictEqual(Utils.Cart.getCount(), 1, "Người mua nhận lại món của khách vãng lai");
+
+    // 3. Người Mua thêm món thứ 2
+    Utils.Cart.addItem({ id: "prod-buyer-phone", name: "Điện thoại", price: 20000000 }, 1);
+    assert.strictEqual(Utils.Cart.getCount(), 2, "Người mua có 2 món trong giỏ");
+
+    // 4. Người Bán đăng nhập -> giỏ hàng người bán độc lập và rỗng
+    global.localStorage.setItem("hv_current_user", JSON.stringify({ id: "seller-01", role: "seller" }));
+    assert.strictEqual(Utils.Cart.getCount(), 0, "Giỏ hàng người bán ban đầu rỗng, không lẫn món của người mua");
+
+    // 5. Quay lại Người Mua -> giỏ hàng người mua vẫn nguyên vẹn 2 món
+    global.localStorage.setItem("hv_current_user", JSON.stringify({ id: "buyer-01", role: "buyer" }));
+    assert.strictEqual(Utils.Cart.getCount(), 2, "Giỏ hàng người mua được bảo toàn nguyên vẹn");
+  });
+
   /* ---------------- 11. Auth - Đăng nhập giả (T12) ---------------- */
   console.log("\n--- 11. Kiểm thử Auth Đăng nhập giả & Phiên người dùng (T12) ---");
   it("Đăng nhập giả với tài khoản buyer và seller", () => {
