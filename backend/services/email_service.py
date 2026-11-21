@@ -1,9 +1,12 @@
 """
-services/email_service.py — Dịch Vụ Gửi Email Thật Qua Cổng SMTP (Gmail, SendGrid, Outlook, Mailgun)
-Sử dụng thư viện chuẩn smtplib và email.mime của Python (không yêu cầu cài thêm package ngoài).
+services/email_service.py — Dịch Vụ Gửi Email Thật Qua Cổng REST API (Resend HTTPS Port 443) hoặc SMTP
+Hỗ trợ Resend API (cổng 443 không bị chặn bởi Render Free) và SMTP truyền thống.
+Sử dụng thư viện chuẩn urllib.request, smtplib và email.mime của Python.
 """
 
+import json
 import smtplib
+import urllib.request
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from typing import Tuple
@@ -13,8 +16,34 @@ from core.config import settings
 class EmailService:
     @staticmethod
     def is_configured() -> bool:
-        """Kiểm tra xem hệ thống đã được cấu hình tài khoản gửi Email SMTP hay chưa."""
-        return bool(settings.SMTP_USER and settings.SMTP_PASSWORD)
+        """Kiểm tra xem hệ thống đã được cấu hình Cổng gửi Email (Resend API hoặc SMTP) hay chưa."""
+        return bool(settings.RESEND_API_KEY or (settings.SMTP_USER and settings.SMTP_PASSWORD))
+
+    @classmethod
+    def _send_via_resend(cls, to_email: str, subject: str, html_content: str, text_content: str) -> Tuple[bool, str]:
+        """Gửi email thật qua Resend REST API (cổng 443 HTTPS - không bao giờ bị Render chặn)."""
+        try:
+            url = "https://api.resend.com/emails"
+            payload = {
+                "from": settings.EMAIL_FROM or "HYBRID.STORE Security <onboarding@resend.dev>",
+                "to": [to_email],
+                "subject": subject,
+                "html": html_content,
+                "text": text_content
+            }
+            data = json.dumps(payload).encode("utf-8")
+            req = urllib.request.Request(url, data=data, method="POST")
+            req.add_header("Authorization", f"Bearer {settings.RESEND_API_KEY}")
+            req.add_header("Content-Type", "application/json")
+
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                resp_json = json.loads(resp.read().decode("utf-8"))
+                email_id = resp_json.get("id", "unknown")
+                print(f"✅ [EmailService - Resend] Đã gửi email thành công tới {to_email} (ID: {email_id})")
+                return True, f"Mã xác thực đã được gửi trực tiếp đến hộp thư {to_email} qua Resend."
+        except Exception as e:
+            print(f"❌ [EmailService - Resend Error] {e}")
+            return False, f"Lỗi cổng gửi Email Resend: {str(e)}"
 
     @classmethod
     def send_otp_email(cls, to_email: str, otp_code: str, user_name: str = "Quý khách") -> Tuple[bool, str]:
@@ -23,6 +52,7 @@ class EmailService:
         """
         clean_email = to_email.strip().lower()
         subject = f"[HYBRID.STORE] Mã xác thực khôi phục tài khoản: {otp_code}"
+        text_content = f"Kính gửi {user_name}, Mã xác thực khôi phục tài khoản HYBRID.STORE của bạn là: {otp_code}. Hiệu lực 5 phút."
 
         html_content = f"""
         <!DOCTYPE html>
@@ -73,21 +103,26 @@ class EmailService:
         """
 
         if not cls.is_configured():
-            print(f"[EmailService Warning] Chưa cấu hình SMTP_USER và SMTP_PASSWORD trong .env. Mã OTP cho {clean_email} là {otp_code}")
-            return False, "Chưa cấu hình tài khoản gửi Email SMTP (Gmail App Password) trên máy chủ."
+            print(f"[EmailService Warning] Chưa cấu hình RESEND_API_KEY hoặc SMTP_USER/PASSWORD trong .env. Mã OTP cho {clean_email} là {otp_code}")
+            return False, "Chưa cấu hình Cổng gửi Email (RESEND_API_KEY hoặc Gmail App Password) trên máy chủ Render."
 
+        # Ưu tiên gửi qua Resend API nếu có (cổng 443 HTTPS không bao giờ bị chặn)
+        if settings.RESEND_API_KEY:
+            return cls._send_via_resend(clean_email, subject, html_content, text_content)
+
+        # Fallback gửi qua SMTP
         try:
             msg = MIMEMultipart("alternative")
             msg["Subject"] = subject
             msg["From"] = settings.EMAIL_FROM or settings.SMTP_USER
             msg["To"] = clean_email
 
-            text_part = MIMEText(f"Kính gửi {user_name}, Mã xác thực khôi phục tài khoản HYBRID.STORE của bạn là: {otp_code}. Hiệu lực 5 phút.", "plain", "utf-8")
+            text_part = MIMEText(text_content, "plain", "utf-8")
             html_part = MIMEText(html_content, "html", "utf-8")
             msg.attach(text_part)
             msg.attach(html_part)
 
-            server = smtplib.SMTP(settings.SMTP_SERVER, settings.SMTP_PORT, timeout=12)
+            server = smtplib.SMTP(settings.SMTP_SERVER, settings.SMTP_PORT, timeout=5)
             server.ehlo()
             server.starttls()
             server.ehlo()
@@ -95,11 +130,11 @@ class EmailService:
             server.sendmail(settings.SMTP_USER, clean_email, msg.as_string())
             server.quit()
 
-            print(f"✅ [EmailService] Đã gửi mã OTP thành công tới email {clean_email}")
+            print(f"✅ [EmailService - SMTP] Đã gửi mã OTP thành công tới email {clean_email}")
             return True, f"Mã xác thực đã được gửi trực tiếp đến hộp thư {clean_email}."
         except Exception as e:
             print(f"❌ [EmailService Error] Không thể gửi email qua SMTP: {e}")
-            return False, f"Lỗi gửi email qua máy chủ SMTP: {str(e)}"
+            return False, f"Lỗi máy chủ gửi email SMTP: {str(e)}"
 
     @classmethod
     def send_new_password_email(cls, to_email: str, new_password: str, user_name: str = "Quý khách") -> Tuple[bool, str]:
@@ -153,9 +188,15 @@ class EmailService:
         </html>
         """
 
+        text_content = f"Kính gửi {user_name}, Mật khẩu mới của bạn trên HYBRID.STORE là: {new_password}. Vui lòng đăng nhập và đổi mật khẩu trong cài đặt."
+
         if not cls.is_configured():
-            print(f"[EmailService Warning] Chưa cấu hình SMTP_USER và SMTP_PASSWORD. Mật khẩu mới cho {clean_email} là {new_password}")
-            return False, "Chưa cấu hình tài khoản gửi Email SMTP trên máy chủ."
+            print(f"[EmailService Warning] Chưa cấu hình RESEND_API_KEY hoặc SMTP. Mật khẩu mới cho {clean_email} là {new_password}")
+            return False, "Chưa cấu hình Cổng gửi Email (RESEND_API_KEY hoặc Gmail App Password) trên máy chủ."
+
+        # Ưu tiên gửi qua Resend API nếu có
+        if settings.RESEND_API_KEY:
+            return cls._send_via_resend(clean_email, subject, html_content, text_content)
 
         try:
             msg = MIMEMultipart("alternative")
@@ -163,12 +204,12 @@ class EmailService:
             msg["From"] = settings.EMAIL_FROM or settings.SMTP_USER
             msg["To"] = clean_email
 
-            text_part = MIMEText(f"Kính gửi {user_name}, Mật khẩu mới của bạn trên HYBRID.STORE là: {new_password}. Vui lòng đăng nhập và đổi mật khẩu trong cài đặt.", "plain", "utf-8")
+            text_part = MIMEText(text_content, "plain", "utf-8")
             html_part = MIMEText(html_content, "html", "utf-8")
             msg.attach(text_part)
             msg.attach(html_part)
 
-            server = smtplib.SMTP(settings.SMTP_SERVER, settings.SMTP_PORT, timeout=12)
+            server = smtplib.SMTP(settings.SMTP_SERVER, settings.SMTP_PORT, timeout=5)
             server.ehlo()
             server.starttls()
             server.ehlo()
@@ -176,7 +217,7 @@ class EmailService:
             server.sendmail(settings.SMTP_USER, clean_email, msg.as_string())
             server.quit()
 
-            print(f"✅ [EmailService] Đã gửi mật khẩu mới thành công tới email {clean_email}")
+            print(f"✅ [EmailService - SMTP] Đã gửi mật khẩu mới thành công tới email {clean_email}")
             return True, f"Mật khẩu mới đã được gửi trực tiếp đến hộp thư {clean_email}."
         except Exception as e:
             print(f"❌ [EmailService Error] Không thể gửi mật khẩu mới qua SMTP: {e}")

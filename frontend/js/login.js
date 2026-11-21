@@ -860,19 +860,15 @@
         let sentOk = false;
         let maskedPhone = cleanPhone.slice(0, 3) + "****" + cleanPhone.slice(-3);
         let errorMsg = "";
-        let isRealSms = false;
-        let testOtpCode = "";
 
-        // 1. Gửi qua Backend SMS Gateway thật (Twilio / eSMS)
+        // Gửi qua Backend SMS Gateway thật (Twilio / eSMS)
         if (typeof API !== "undefined" && API.Auth && API.Auth.sendPhoneOtpSms) {
           try {
             const apiRes = await API.Auth.sendPhoneOtpSms(cleanPhone);
             if (apiRes && apiRes.success) {
               sentOk = true;
-              if (apiRes.data) {
-                if (apiRes.data.masked_phone) maskedPhone = apiRes.data.masked_phone;
-                isRealSms = !!apiRes.data.sms_dispatched;
-                if (apiRes.data.test_otp) testOtpCode = apiRes.data.test_otp;
+              if (apiRes.data && apiRes.data.masked_phone) {
+                maskedPhone = apiRes.data.masked_phone;
               }
             } else if (apiRes && apiRes.message) {
               errorMsg = apiRes.message;
@@ -883,64 +879,31 @@
           }
         }
 
-        // 2. Dự phòng Auth cục bộ nếu backend offline
-        if (!sentOk && typeof Auth !== "undefined" && Auth.sendPhoneOtp) {
-          const localRes = Auth.sendPhoneOtp(cleanPhone);
-          if (localRes.ok) {
-            sentOk = true;
-            maskedPhone = localRes.maskedPhone;
-            testOtpCode = localRes.code;
-          } else {
-            errorMsg = localRes.error;
-          }
-        }
-
-        // Nếu thất bại hoàn toàn
+        // Nếu chưa cấu hình hoặc gửi thất bại -> Báo lỗi bảo vệ hệ thống, tuyệt đối không in mã ra màn hình
         if (!sentOk) {
           btnSendPhoneOtp.disabled = false;
           btnSendPhoneOtp.innerHTML = `<span class="material-symbols-outlined icon-xs">send</span> Nhận Mã OTP`;
+          const displayErr = errorMsg || "Hệ thống chưa kết nối Cổng SMS viễn thông (eSMS hoặc Twilio). Vui lòng cấu hình biến môi trường trên Render hoặc sử dụng Đăng nhập Google / Mật khẩu.";
           if (phoneInputError) {
-            phoneInputError.textContent = errorMsg || "Chưa thể gửi mã OTP lúc này. Vui lòng thử lại sau.";
+            phoneInputError.textContent = displayErr;
           }
           if (typeof notify === "function") {
             notify({
               type: "error",
               title: "Chưa Thể Gửi SMS OTP",
-              message: errorMsg || "Chưa thể gửi mã OTP lúc này.",
+              message: displayErr,
             });
           }
           return;
         }
 
-        // Gửi thành công
+        // Gửi SMS thành công trực tiếp vào SIM điện thoại
         if (secureSmsNotice && secureSmsNoticeText) {
           secureSmsNotice.style.display = "flex";
-          if (isRealSms) {
-            secureSmsNoticeText.innerHTML = `Mã OTP 6 số bảo mật đã được gửi trực tiếp đến SIM điện thoại <strong class="text-secondary">${escapeSafeHtml(maskedPhone)}</strong>. Vui lòng mở tin nhắn SMS trên điện thoại của bạn để lấy mã (hiệu lực 3 phút).`;
-          } else {
-            secureSmsNoticeText.innerHTML = `
-              <div>Mã xác thực OTP bảo mật đã được tạo cho số <strong class="text-secondary">${escapeSafeHtml(maskedPhone)}</strong> (hiệu lực 3 phút).</div>
-              <div class="mt-2 flex items-center gap-2">
-                <button type="button" class="btn btn-secondary btn-xs" id="btnRevealOtpTest" style="font-size: 11px; padding: 4px 10px; border-radius: 6px;">
-                  <span class="material-symbols-outlined icon-xs">visibility</span> Bấm để xem mã OTP (Chế độ Tester)
-                </button>
-                <span id="revealedOtpBox" class="mono" style="display: none; font-weight: 700; font-size: 15px; letter-spacing: 3px; color: #38bdf8; background: rgba(56, 189, 248, 0.2); padding: 2px 10px; border-radius: 6px; border: 1px dashed #38bdf8;">${escapeSafeHtml(testOtpCode || "123456")}</span>
-              </div>
-              <div class="text-3xs text-muted mt-1">💡 Chế độ Tester: Khi bạn kết nối Cổng SMS viễn thông (eSMS/Twilio) trên Render, tin nhắn sẽ gửi thẳng vào SIM điện thoại và nút xem này sẽ tự động biến mất.</div>
-            `;
-
-            const btnRev = document.getElementById("btnRevealOtpTest");
-            const boxRev = document.getElementById("revealedOtpBox");
-            if (btnRev && boxRev) {
-              btnRev.addEventListener("click", () => {
-                boxRev.style.display = "inline-block";
-                btnRev.style.display = "none";
-              });
-            }
-          }
+          secureSmsNoticeText.innerHTML = `Mã OTP 6 số bảo mật đã được gửi trực tiếp qua mạng viễn thông tới SIM điện thoại <strong class="text-secondary">${escapeSafeHtml(maskedPhone)}</strong>. Vui lòng mở tin nhắn SMS trên điện thoại của bạn để lấy mã (hiệu lực 3 phút).`;
         }
 
-        // Tuyệt đối không tự động điền sẵn vào ô nhập để tester trải nghiệm gõ phím chuẩn
+        // Ô nhập mã OTP để trống hoàn toàn để người dùng tự tay nhập mã nhận được từ SIM
         if (phoneOtpCode) {
           phoneOtpCode.value = "";
           phoneOtpCode.focus();
@@ -948,10 +911,8 @@
 
         notify({
           type: "success",
-          title: isRealSms ? "Đã Gửi Tin Nhắn SMS OTP" : "Đã Tạo Mã OTP Xác Thực",
-          message: isRealSms
-            ? `Mã OTP bảo mật đã được gửi trực tiếp đến số điện thoại ${maskedPhone}. Vui lòng kiểm tra tin nhắn SMS.`
-            : `Đã tạo phiên xác thực cho ${maskedPhone}. Bấm 'Bấm để xem mã OTP (Chế độ Tester)' để lấy mã kiểm thử.`,
+          title: "Đã Gửi Tin Nhắn SMS OTP",
+          message: `Mã OTP bảo mật đã được gửi trực tiếp đến SIM điện thoại ${maskedPhone}. Vui lòng mở tin nhắn SMS trên máy để lấy mã.`,
         });
 
         startPhoneOtpCooldown(60);
@@ -1264,36 +1225,13 @@
       resetVerifiedEmail = res.email;
 
       if (forgotMaskedEmailText) {
-        if (res.isRealEmail) {
-          forgotMaskedEmailText.textContent = res.maskedEmail || res.email;
-        } else {
-          forgotMaskedEmailText.innerHTML = `
-            ${escapeSafeHtml(res.maskedEmail || res.email)}
-            <div class="mt-2 flex items-center gap-2">
-              <button type="button" class="btn btn-secondary btn-xs" id="btnRevealEmailOtpTest" style="font-size: 11px; padding: 3px 8px; border-radius: 6px;">
-                <span class="material-symbols-outlined icon-xs">visibility</span> Bấm để xem mã OTP (Chế độ Tester)
-              </button>
-              <span id="revealedEmailOtpBox" class="mono" style="display: none; font-weight: 700; font-size: 15px; letter-spacing: 3px; color: #38bdf8; background: rgba(56, 189, 248, 0.2); padding: 2px 8px; border-radius: 4px; border: 1px dashed #38bdf8;">${escapeSafeHtml(res.testOtp || "123456")}</span>
-            </div>
-            <div class="text-3xs text-muted mt-1">💡 Máy chủ Render Free chặn cổng SMTP 587. Bấm nút trên để lấy mã OTP kiểm thử.</div>
-          `;
-          setTimeout(() => {
-            const btn = document.getElementById("btnRevealEmailOtpTest");
-            const box = document.getElementById("revealedEmailOtpBox");
-            if (btn && box) {
-              btn.addEventListener("click", () => {
-                box.style.display = "inline-block";
-                btn.style.display = "none";
-              });
-            }
-          }, 50);
-        }
+        forgotMaskedEmailText.textContent = res.maskedEmail || res.email;
       }
 
       notify({
         type: "success",
         title: "Đã Gửi Mã OTP Đến Email",
-        message: `Mã xác thực OTP đã được gửi trực tiếp đến hộp thư ${res.maskedEmail || res.email}. Vui lòng kiểm tra hòm thư.`,
+        message: `Mã xác thực OTP đã được gửi trực tiếp đến hộp thư ${res.maskedEmail || res.email}. Vui lòng mở hòm thư để lấy mã.`,
       });
 
       setForgotStep(2);

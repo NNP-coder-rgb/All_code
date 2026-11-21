@@ -216,30 +216,25 @@ def request_forgot_password(body: ForgotPasswordRequest, db: Session = Depends(g
         "user_id": user.id
     }
 
-    # Gửi email thật qua SMTP (Gmail/SendGrid/...)
+    # Gửi email thật qua Resend API (HTTPS port 443) hoặc SMTP
     email_ok, email_msg = email_service.send_otp_email(email, otp, user.full_name)
 
     masked = mask_email(email)
-    res_data = {
-        "email": email,
-        "masked_email": masked,
-        "expires_in_seconds": 300,
-        "email_dispatched": email_ok
-    }
     if not email_ok:
-        res_data["test_mode"] = True
-        res_data["test_otp"] = otp
-
-    msg = (
-        f"Mã xác thực OTP đã được gửi trực tiếp tới hòm thư {masked}."
-        if email_ok
-        else f"Máy chủ Render Free chặn gửi SMTP ra ngoài. Đã kích hoạt chế độ thử nghiệm an toàn cho {masked}."
-    )
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=email_msg or "Chưa thể gửi email xác thực: Render Free chặn cổng SMTP 587. Vui lòng cấu hình biến RESEND_API_KEY trên Render Dashboard để gửi email thật qua cổng HTTPS 443."
+        )
 
     return BaseResponse[dict](
         success=True,
-        message=msg,
-        data=res_data
+        message=f"Mã xác thực OTP bảo mật đã được gửi trực tiếp tới hòm thư {masked}. Vui lòng mở email để lấy mã.",
+        data={
+            "email": email,
+            "masked_email": masked,
+            "expires_in_seconds": 300,
+            "email_dispatched": True
+        }
     )
 
 
@@ -398,26 +393,21 @@ def send_phone_otp_sms(body: PhoneOtpRequest):
     sms_ok, sms_msg = sms_service.send_otp_sms(phone, otp)
 
     masked = mask_phone(phone)
-    res_data = {
-        "phone": phone,
-        "masked_phone": masked,
-        "expires_in_seconds": 180,
-        "sms_dispatched": sms_ok
-    }
     if not sms_ok:
-        res_data["test_mode"] = True
-        res_data["test_otp"] = otp
-
-    msg = (
-        f"Mã OTP bảo mật 6 chữ số đã được gửi trực tiếp đến SIM điện thoại {masked}."
-        if sms_ok
-        else f"Chưa kết nối Cổng SMS viễn thông. Đã tạo phiên xác thực thử nghiệm cho {masked}."
-    )
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=sms_msg or "Hệ thống chưa kết nối Cổng SMS viễn thông (eSMS hoặc Twilio). Vui lòng cấu hình tài khoản gửi SMS trong Environment trên Render Dashboard."
+        )
 
     return BaseResponse[dict](
         success=True,
-        message=msg,
-        data=res_data
+        message=f"Mã OTP bảo mật 6 chữ số đã được gửi trực tiếp đến SIM điện thoại {masked}. Vui lòng mở tin nhắn SMS trên điện thoại của bạn.",
+        data={
+            "phone": phone,
+            "masked_phone": masked,
+            "expires_in_seconds": 180,
+            "sms_dispatched": True
+        }
     )
 
 
