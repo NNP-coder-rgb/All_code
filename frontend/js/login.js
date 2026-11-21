@@ -844,38 +844,50 @@
   if (btnSendPhoneOtp && otpPhoneNumber) {
     btnSendPhoneOtp.addEventListener("click", async () => {
       if (phoneInputError) phoneInputError.textContent = "";
-      const phoneVal = otpPhoneNumber.value.trim();
-      const cleanPhone = phoneVal.replace(/\D/g, "");
+      const rawTarget = otpPhoneNumber.value.trim();
+      const isEmail = rawTarget.includes("@") && rawTarget.includes(".");
+      const cleanTarget = isEmail ? rawTarget.toLowerCase() : rawTarget.replace(/\D/g, "");
 
-      if (!cleanPhone || cleanPhone.length !== 10 || !cleanPhone.startsWith("0")) {
-        if (phoneInputError) phoneInputError.textContent = "Vui lòng nhập đúng số điện thoại di động (10 chữ số, ví dụ 0901234567).";
-        otpPhoneNumber.focus();
-        return;
+      if (isEmail) {
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanTarget)) {
+          if (phoneInputError) phoneInputError.textContent = "Địa chỉ email không hợp lệ. Vui lòng kiểm tra lại.";
+          otpPhoneNumber.focus();
+          return;
+        }
+      } else {
+        if (!cleanTarget || cleanTarget.length !== 10 || !cleanTarget.startsWith("0")) {
+          if (phoneInputError) phoneInputError.textContent = "Vui lòng nhập đúng số điện thoại di động (10 chữ số, ví dụ 09...) hoặc Email của bạn.";
+          otpPhoneNumber.focus();
+          return;
+        }
       }
 
       btnSendPhoneOtp.disabled = true;
-      btnSendPhoneOtp.innerHTML = `<span class="material-symbols-outlined icon-xs spin">sync</span> Đang gửi SMS...`;
+      btnSendPhoneOtp.innerHTML = `<span class="material-symbols-outlined icon-xs spin">sync</span> ${isEmail ? "Đang gửi email..." : "Đang gửi SMS..."}`;
 
       try {
         let sentOk = false;
-        let maskedPhone = cleanPhone.slice(0, 3) + "****" + cleanPhone.slice(-3);
+        let maskedTarget = isEmail
+          ? cleanTarget.replace(/^(.)(.*)(@.*)$/, (_, a, b, c) => a + "***" + c)
+          : cleanTarget.slice(0, 3) + "****" + cleanTarget.slice(-3);
         let errorMsg = "";
 
-        // Gửi qua Backend SMS Gateway thật (Twilio / eSMS)
+        // Gửi qua Backend SMS Gateway / Resend Email API thật
         if (typeof API !== "undefined" && API.Auth && API.Auth.sendPhoneOtpSms) {
           try {
-            const apiRes = await API.Auth.sendPhoneOtpSms(cleanPhone);
+            const apiRes = await API.Auth.sendPhoneOtpSms(cleanTarget);
             if (apiRes && apiRes.success) {
               sentOk = true;
-              if (apiRes.data && apiRes.data.masked_phone) {
-                maskedPhone = apiRes.data.masked_phone;
+              if (apiRes.data) {
+                if (apiRes.data.masked_phone) maskedTarget = apiRes.data.masked_phone;
+                if (apiRes.data.masked_target) maskedTarget = apiRes.data.masked_target;
               }
             } else if (apiRes && apiRes.message) {
               errorMsg = apiRes.message;
             }
           } catch (e) {
-            errorMsg = e.message || "Lỗi kết nối Cổng SMS viễn thông.";
-            console.warn("[Phone OTP SMS] Lỗi kết nối API Gateway:", errorMsg);
+            errorMsg = e.message || (isEmail ? "Lỗi gửi mã OTP qua email." : "Lỗi kết nối Cổng SMS viễn thông.");
+            console.warn("[OTP Dispatch] Lỗi kết nối API Gateway:", errorMsg);
           }
         }
 
@@ -883,27 +895,29 @@
         if (!sentOk) {
           btnSendPhoneOtp.disabled = false;
           btnSendPhoneOtp.innerHTML = `<span class="material-symbols-outlined icon-xs">send</span> Nhận Mã OTP`;
-          const displayErr = errorMsg || "Hệ thống chưa kết nối Cổng SMS viễn thông (eSMS hoặc Twilio). Vui lòng cấu hình biến môi trường trên Render hoặc sử dụng Đăng nhập Google / Mật khẩu.";
+          const displayErr = errorMsg || (isEmail ? "Chưa thể gửi email OTP. Vui lòng kiểm tra cấu hình RESEND_API_KEY trên Render." : "Hệ thống chưa kết nối Cổng SMS viễn thông (eSMS/Twilio).");
           if (phoneInputError) {
             phoneInputError.textContent = displayErr;
           }
           if (typeof notify === "function") {
             notify({
               type: "error",
-              title: "Chưa Thể Gửi SMS OTP",
+              title: isEmail ? "Chưa Thể Gửi Email OTP" : "Chưa Thể Gửi SMS OTP",
               message: displayErr,
             });
           }
           return;
         }
 
-        // Gửi SMS thành công trực tiếp vào SIM điện thoại
+        // Gửi thành công trực tiếp vào Email hoặc SIM điện thoại
         if (secureSmsNotice && secureSmsNoticeText) {
           secureSmsNotice.style.display = "flex";
-          secureSmsNoticeText.innerHTML = `Mã OTP 6 số bảo mật đã được gửi trực tiếp qua mạng viễn thông tới SIM điện thoại <strong class="text-secondary">${escapeSafeHtml(maskedPhone)}</strong>. Vui lòng mở tin nhắn SMS trên điện thoại của bạn để lấy mã (hiệu lực 3 phút).`;
+          secureSmsNoticeText.innerHTML = isEmail
+            ? `Mã OTP 6 số bảo mật đã được gửi trực tiếp đến hòm thư <strong class="text-secondary">${escapeSafeHtml(maskedTarget)}</strong>. Vui lòng mở hòm thư email của bạn để lấy mã (hiệu lực 3 phút).`
+            : `Mã OTP 6 số bảo mật đã được gửi trực tiếp qua mạng viễn thông tới SIM điện thoại <strong class="text-secondary">${escapeSafeHtml(maskedTarget)}</strong>. Vui lòng mở tin nhắn SMS trên điện thoại của bạn để lấy mã (hiệu lực 3 phút).`;
         }
 
-        // Ô nhập mã OTP để trống hoàn toàn để người dùng tự tay nhập mã nhận được từ SIM
+        // Ô nhập mã OTP để trống hoàn toàn để người dùng tự tay nhập mã nhận được
         if (phoneOtpCode) {
           phoneOtpCode.value = "";
           phoneOtpCode.focus();
@@ -911,15 +925,17 @@
 
         notify({
           type: "success",
-          title: "Đã Gửi Tin Nhắn SMS OTP",
-          message: `Mã OTP bảo mật đã được gửi trực tiếp đến SIM điện thoại ${maskedPhone}. Vui lòng mở tin nhắn SMS trên máy để lấy mã.`,
+          title: isEmail ? "Đã Gửi Mã OTP Đến Email" : "Đã Gửi Tin Nhắn SMS OTP",
+          message: isEmail
+            ? `Mã OTP bảo mật đã được gửi trực tiếp đến hộp thư ${maskedTarget}. Vui lòng kiểm tra hòm thư của bạn.`
+            : `Mã OTP bảo mật đã được gửi trực tiếp đến SIM điện thoại ${maskedTarget}. Vui lòng mở tin nhắn SMS trên máy để lấy mã.`,
         });
 
         startPhoneOtpCooldown(60);
       } catch (err) {
         btnSendPhoneOtp.disabled = false;
         btnSendPhoneOtp.innerHTML = `<span class="material-symbols-outlined icon-xs">send</span> Nhận Mã OTP`;
-        if (phoneInputError) phoneInputError.textContent = err.message || "Lỗi gửi tin nhắn SMS.";
+        if (phoneInputError) phoneInputError.textContent = err.message || "Lỗi gửi mã OTP.";
       }
     });
   }
@@ -930,18 +946,27 @@
       if (phoneInputError) phoneInputError.textContent = "";
       if (phoneOtpCodeError) phoneOtpCodeError.textContent = "";
 
-      const phoneVal = otpPhoneNumber ? otpPhoneNumber.value.trim() : "";
-      const cleanPhone = phoneVal.replace(/\D/g, "");
+      const rawVal = otpPhoneNumber ? otpPhoneNumber.value.trim() : "";
+      const isEmail = rawVal.includes("@") && rawVal.includes(".");
+      const cleanTarget = isEmail ? rawVal.toLowerCase() : rawVal.replace(/\D/g, "");
       const otpVal = phoneOtpCode ? phoneOtpCode.value.trim() : "";
 
-      if (!cleanPhone || cleanPhone.length !== 10) {
-        if (phoneInputError) phoneInputError.textContent = "Vui lòng nhập đúng số điện thoại (10 chữ số).";
-        if (otpPhoneNumber) otpPhoneNumber.focus();
-        return;
+      if (isEmail) {
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanTarget)) {
+          if (phoneInputError) phoneInputError.textContent = "Địa chỉ email không hợp lệ.";
+          if (otpPhoneNumber) otpPhoneNumber.focus();
+          return;
+        }
+      } else {
+        if (!cleanTarget || cleanTarget.length !== 10) {
+          if (phoneInputError) phoneInputError.textContent = "Vui lòng nhập đúng số điện thoại (10 chữ số) hoặc địa chỉ Email.";
+          if (otpPhoneNumber) otpPhoneNumber.focus();
+          return;
+        }
       }
 
       if (!otpVal || otpVal.length !== 6) {
-        if (phoneOtpCodeError) phoneOtpCodeError.textContent = "Vui lòng nhập đúng mã OTP gồm 6 chữ số từ tin nhắn SMS.";
+        if (phoneOtpCodeError) phoneOtpCodeError.textContent = "Vui lòng nhập đúng mã OTP gồm 6 chữ số.";
         if (phoneOtpCode) phoneOtpCode.focus();
         return;
       }

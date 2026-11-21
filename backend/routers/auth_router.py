@@ -190,10 +190,15 @@ def request_forgot_password(body: ForgotPasswordRequest, db: Session = Depends(g
     email = body.email.strip().lower()
     user = auth_service.get_by_email(db, email=email)
     if not user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Không tìm thấy tài khoản nào liên kết với email này. Vui lòng kiểm tra lại."
+        user_in = UserCreate(
+            email=email,
+            phone="09" + f"{secrets.randbelow(90000000) + 10000000:08d}",
+            full_name=email.split("@")[0],
+            username=email.split("@")[0],
+            role="buyer",
+            password="temporary_otp_auth_pwd"
         )
+        user = auth_service.create_user(db, user_in=user_in)
 
     # Kiểm tra giới hạn thời gian gửi (cooldown 60s)
     now = time.time()
@@ -356,55 +361,75 @@ def reset_and_issue_new_password(body: ForgotPasswordReset, db: Session = Depend
 
 
 # ==============================================================
-# GỬI MÃ OTP TRỰC TIẾP VÀO SỐ ĐIỆN THOẠI (SMS GATEWAY THẬT)
+# GỬI MÃ OTP TRỰC TIẾP VÀO SỐ ĐIỆN THOẠI (SMS) HOẶC EMAIL THẬT
 # ==============================================================
 @router.post(
     "/otp/send-phone",
     response_model=BaseResponse[dict],
-    summary="Gửi mã OTP trực tiếp vào số điện thoại thật qua Cổng SMS viễn thông"
+    summary="Gửi mã OTP trực tiếp vào số điện thoại thật hoặc Email thật"
 )
 def send_phone_otp_sms(body: PhoneOtpRequest):
-    phone = "".join([c for c in body.phone if c.isdigit()])
-    if len(phone) != 10 or not phone.startswith("0"):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Số điện thoại không hợp lệ (phải gồm đúng 10 chữ số bắt đầu bằng số 0)."
-        )
+    raw_input = body.phone.strip()
+    is_email = "@" in raw_input and "." in raw_input
+
+    if is_email:
+        clean_target = raw_input.lower()
+        key = clean_target
+    else:
+        clean_target = "".join([c for c in raw_input if c.isdigit()])
+        if len(clean_target) != 10 or not clean_target.startswith("0"):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Vui lòng nhập số điện thoại hợp lệ (10 số) hoặc địa chỉ Email chính xác."
+            )
+        key = clean_target
 
     now = time.time()
-    existing = _PHONE_OTP_STORE.get(phone)
+    existing = _PHONE_OTP_STORE.get(key)
     if existing and now - existing.get("requested_at", 0) < 60:
         remain = int(60 - (now - existing["requested_at"]))
         raise HTTPException(
             status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-            detail=f"Vui lòng đợi {remain} giây trước khi yêu cầu gửi lại SMS."
+            detail=f"Vui lòng đợi {remain} giây trước khi yêu cầu gửi lại mã."
         )
 
     # Sinh mã OTP 6 chữ số an toàn
     otp = f"{secrets.randbelow(900000) + 100000:06d}"
-    _PHONE_OTP_STORE[phone] = {
+    _PHONE_OTP_STORE[key] = {
         "otp": otp,
         "requested_at": now,
         "expires_at": now + 180,  # 3 phút
-        "attempts": 0
+        "attempts": 0,
+        "is_email": is_email
     }
 
-    # Chuyển tiếp mã OTP trực tiếp vào SIM di động qua Cổng SMS viễn thông (Twilio / eSMS)
-    sms_ok, sms_msg = sms_service.send_otp_sms(phone, otp)
-
-    masked = mask_phone(phone)
-    if not sms_ok:
-        raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail=sms_msg or "Hệ thống chưa kết nối Cổng SMS viễn thông (eSMS hoặc Twilio). Vui lòng cấu hình tài khoản gửi SMS trong Environment trên Render Dashboard."
-        )
+    if is_email:
+        email_ok, email_msg = email_service.send_otp_email(clean_target, otp, "Quý khách")
+        masked = mask_email(clean_target)
+        if not email_ok:
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail=email_msg or "Chưa thể gửi email. Vui lòng cấu hình RESEND_API_KEY trên Render Dashboard."
+            )
+        msg = f"Mã OTP bảo mật 6 chữ số đã được gửi trực tiếp đến hộp thư {masked}. Vui lòng mở email để lấy mã."
+    else:
+        sms_ok, sms_msg = sms_service.send_otp_sms(clean_target, otp)
+        masked = mask_phone(clean_target)
+        if not sms_ok:
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail=sms_msg or "Hệ thống chưa kết nối Cổng SMS viễn thông (eSMS hoặc Twilio). Vui lòng cấu hình tài khoản gửi SMS trong Environment trên Render Dashboard."
+            )
+        msg = f"Mã OTP bảo mật 6 chữ số đã được gửi trực tiếp đến SIM điện thoại {masked}. Vui lòng mở tin nhắn SMS trên điện thoại của bạn."
 
     return BaseResponse[dict](
         success=True,
-        message=f"Mã OTP bảo mật 6 chữ số đã được gửi trực tiếp đến SIM điện thoại {masked}. Vui lòng mở tin nhắn SMS trên điện thoại của bạn.",
+        message=msg,
         data={
-            "phone": phone,
+            "phone": clean_target,
+            "target": clean_target,
             "masked_phone": masked,
+            "is_email": is_email,
             "expires_in_seconds": 180,
             "sms_dispatched": True
         }
@@ -414,29 +439,31 @@ def send_phone_otp_sms(body: PhoneOtpRequest):
 @router.post(
     "/otp/login-phone",
     response_model=BaseResponse[dict],
-    summary="Đăng nhập bằng số điện thoại và mã OTP nhận từ tin nhắn SMS"
+    summary="Đăng nhập bằng số điện thoại hoặc Email và mã OTP bảo mật"
 )
 def login_phone_otp(body: PhoneOtpVerify, db: Session = Depends(get_db)):
-    phone = "".join([c for c in body.phone if c.isdigit()])
+    raw_input = body.phone.strip()
+    is_email = "@" in raw_input and "." in raw_input
+    key = raw_input.lower() if is_email else "".join([c for c in raw_input if c.isdigit()])
     clean_otp = body.otp.strip()
 
-    record = _PHONE_OTP_STORE.get(phone)
+    record = _PHONE_OTP_STORE.get(key)
     if not record:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Không tìm thấy yêu cầu gửi OTP cho số điện thoại này. Vui lòng bấm 'Nhận Mã OTP' trước."
+            detail="Không tìm thấy yêu cầu gửi OTP. Vui lòng bấm 'Nhận Mã OTP' trước."
         )
 
     now = time.time()
     if now > record["expires_at"]:
-        _PHONE_OTP_STORE.pop(phone, None)
+        _PHONE_OTP_STORE.pop(key, None)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Mã OTP đã hết hạn (chỉ có hiệu lực trong 3 phút). Vui lòng yêu cầu mã mới."
         )
 
     if record["attempts"] >= 3:
-        _PHONE_OTP_STORE.pop(phone, None)
+        _PHONE_OTP_STORE.pop(key, None)
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Mã OTP đã bị khóa do nhập sai quá 3 lần. Vui lòng yêu cầu mã mới."
@@ -451,28 +478,41 @@ def login_phone_otp(body: PhoneOtpVerify, db: Session = Depends(get_db)):
         )
 
     # Đăng nhập thành công -> Xóa mã OTP đã dùng
-    _PHONE_OTP_STORE.pop(phone, None)
+    _PHONE_OTP_STORE.pop(key, None)
 
-    # Tìm hoặc tạo tài khoản người dùng theo số điện thoại
-    user = auth_service.get_by_phone(db, phone=phone)
-    if not user:
-        user_in = UserCreate(
-            email=f"{phone}@hybrid.vn",
-            phone=phone,
-            full_name=f"Khách Hàng {phone[-4:]}",
-            username=f"user_{phone[-4:]}",
-            role=body.role or "buyer",
-            password="phone_otp_auth_session"
-        )
-        user = auth_service.create_user(db, user_in=user_in)
+    # Tìm hoặc tạo tài khoản người dùng theo Email hoặc Số điện thoại
+    if is_email:
+        user = auth_service.get_by_email(db, email=key)
+        if not user:
+            user_in = UserCreate(
+                email=key,
+                phone="09" + f"{secrets.randbelow(90000000) + 10000000:08d}",
+                full_name=key.split("@")[0],
+                username=key.split("@")[0],
+                role=body.role or "buyer",
+                password="email_otp_auth_session"
+            )
+            user = auth_service.create_user(db, user_in=user_in)
+    else:
+        user = auth_service.get_by_phone(db, phone=key)
+        if not user:
+            user_in = UserCreate(
+                email=f"{key}@hybrid.vn",
+                phone=key,
+                full_name=f"Khách Hàng {key[-4:]}",
+                username=f"user_{key[-4:]}",
+                role=body.role or "buyer",
+                password="phone_otp_auth_session"
+            )
+            user = auth_service.create_user(db, user_in=user_in)
 
     user_data = UserResponse.model_validate(user).model_dump()
     return BaseResponse[dict](
         success=True,
-        message="Xác thực OTP số điện thoại thành công!",
+        message="Xác thực OTP thành công! Đang chuyển hướng...",
         data={
             "user": user_data,
-            "access_token": f"bearer_phone_{user.id}_session_2026",
+            "access_token": f"bearer_{'email' if is_email else 'phone'}_{user.id}_session_2026",
             "token_type": "bearer"
         }
     )

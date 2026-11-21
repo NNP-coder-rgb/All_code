@@ -116,7 +116,21 @@ def seed():
             loyalty_points=1850
         )
 
-        db.add_all([admin, inspector, seller_techzone, seller_minh, buyer_tuan])
+        user_phuc = User(
+            email="nguyenphuc230607@gmail.com",
+            phone="0912345679",
+            password_hash="phuc123456",
+            full_name="Nguyễn Phúc",
+            username="nguyenphuc",
+            role="buyer",
+            avatar_url="assets/images/products/dong-ho-thong-minh-smartwatch.png",
+            membership_title="VIP BUYER",
+            bio="Tài khoản kiểm thử chính chủ HYBRID.STORE",
+            is_active=True,
+            loyalty_points=2000
+        )
+
+        db.add_all([admin, inspector, seller_techzone, seller_minh, buyer_tuan, user_phuc])
         db.flush()
 
         # eKYC cho Seller Minh
