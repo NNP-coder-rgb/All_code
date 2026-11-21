@@ -330,13 +330,44 @@
     submitIcon.classList.add("spin");
     btnText.textContent = "ĐANG ĐĂNG NHẬP...";
 
-    setTimeout(() => {
+    setTimeout(async () => {
       submitBtn.disabled = false;
       submitIcon.classList.remove("spin");
       submitIcon.textContent = "lock_open";
       btnText.textContent = oldText;
 
-      const res = Auth.login(idInput.value, pwd.value, role);
+      let res;
+      // 1. Thử gọi API Backend FastAPI nếu có
+      if (typeof API !== "undefined" && API.Auth) {
+        try {
+          const apiRes = await API.Auth.login(idInput.value.trim(), pwd.value);
+          if (apiRes && apiRes.success && apiRes.data) {
+            const u = apiRes.data.user;
+            res = {
+              ok: true,
+              user: {
+                id: u.id,
+                fullName: u.full_name,
+                username: u.username,
+                email: u.email,
+                phone: u.phone,
+                role: u.role,
+                avatar: u.avatar_url || "assets/images/avatars/default-avatar.svg",
+                membershipTitle: u.membership_title || "VIP MEMBER",
+                kycStatus: u.is_verified ? "VERIFIED" : "UNVERIFIED"
+              }
+            };
+            localStorage.setItem("hv_current_user", JSON.stringify(res.user));
+          }
+        } catch (apiErr) {
+          console.warn("[Login] API Backend thông báo:", apiErr.message);
+        }
+      }
+
+      // 2. Dự phòng cục bộ nếu Backend offline
+      if (!res) {
+        res = Auth.login(idInput.value, pwd.value, role);
+      }
       if (!res.ok) {
         if (typeof showPopup === "function") {
           showPopup({

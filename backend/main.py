@@ -98,10 +98,13 @@ def health_check():
 
 
 # ==============================================================
-# TÍCH HỢP & PHỤC VỤ GIAO DIỆN FRONTEND TĨNH (NẾU CÓ)
+# TÍCH HỢP & PHỤC VỤ GIAO DIỆN FRONTEND TĨNH & FILE TẢI LÊN
 # ==============================================================
 ROOT_DIR = os.path.dirname(CURRENT_DIR)
 FRONTEND_DIR = os.path.join(ROOT_DIR, "frontend")
+UPLOADS_DIR = os.path.join(CURRENT_DIR, "uploads")
+os.makedirs(UPLOADS_DIR, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=UPLOADS_DIR), name="uploads")
 
 if os.path.isdir(FRONTEND_DIR):
     for sub in ["assets", "css", "js", "pages", "components"]:
