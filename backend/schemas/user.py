@@ -23,6 +23,21 @@ class UserLogin(BaseModel):
     password: str = Field(..., description="Mật khẩu tài khoản")
 
 
+class ForgotPasswordRequest(BaseModel):
+    email: str = Field(..., description="Email nhận mã xác thực đặt lại mật khẩu")
+
+
+class ForgotPasswordVerify(BaseModel):
+    email: str = Field(..., description="Email tài khoản")
+    otp: str = Field(..., min_length=6, max_length=6, description="Mã OTP 6 chữ số")
+
+
+class ForgotPasswordReset(BaseModel):
+    email: str = Field(..., description="Email tài khoản")
+    otp: str = Field(..., min_length=6, max_length=6, description="Mã OTP 6 chữ số")
+    new_password: Optional[str] = Field(default=None, description="Mật khẩu mới (tùy chọn, nếu không nhập hệ thống sẽ tự sinh)")
+
+
 class UserCreate(UserBase):
     password: str = Field(..., min_length=6, max_length=50, description="Mật khẩu khởi tạo tài khoản")
 

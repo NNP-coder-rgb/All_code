@@ -529,6 +529,166 @@
   border-radius: 4px;
 }
 
+/* Thông báo SMS OTP bảo mật */
+.secure-sms-notice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(6, 182, 212, 0.08);
+  border: 1px solid rgba(6, 182, 212, 0.35);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--sp-3);
+  animation: fadeIn var(--t-fast);
+}
+
+/* GIS Google Modal Picker */
+.google-accounts-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: var(--sp-3);
+}
+.google-account-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  color: var(--text);
+  transition: all var(--t-fast);
+}
+.google-account-row:hover {
+  background: rgba(66, 133, 244, 0.12);
+  border-color: rgba(66, 133, 244, 0.5);
+  transform: translateX(3px);
+}
+.google-avatar-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 13px;
+  color: #fff;
+  background: #4285F4;
+  flex-shrink: 0;
+  box-shadow: 0 0 10px rgba(66, 133, 244, 0.35);
+}
+.google-other-acc-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 14px;
+  background: transparent;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+  cursor: pointer;
+  transition: all var(--t-fast);
+}
+.google-other-acc-btn:hover {
+  color: var(--text);
+  border-color: rgba(66, 133, 244, 0.5);
+  background: rgba(66, 133, 244, 0.05);
+}
+.google-privacy-disclaimer {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-faint);
+  line-height: 1.5;
+  margin-top: var(--sp-3);
+  padding-top: var(--sp-2);
+  border-top: 1px solid var(--border);
+}
+
+/* Wizard Steps trong Modal Quên Mật Khẩu */
+.forgot-wizard-steps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+.forgot-step-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+.forgot-step-item.active {
+  color: var(--secondary-400);
+}
+.forgot-step-item .step-num {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.08);
+}
+.forgot-step-item.active .step-num {
+  background: var(--secondary-400);
+  color: #000;
+}
+.forgot-step-divider {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+  margin: 0 8px;
+}
+.secure-email-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(6, 182, 212, 0.08);
+  border: 1px solid rgba(6, 182, 212, 0.35);
+  border-radius: var(--radius-md);
+}
+
+/* Thẻ hiển thị mật khẩu mới an toàn */
+.new-password-display-box {
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+.password-highlight-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #020617;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  border-radius: var(--radius-sm);
+}
+.password-code {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #34d399;
+}
+
+
 /* Danh sách tài khoản Google trong modal */
 .google-account-list {
   display: flex;

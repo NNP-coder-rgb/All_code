@@ -93,6 +93,17 @@ class AuthService:
         return user
 
     @staticmethod
+    def reset_password_by_email(db: Session, email: str, new_password: str) -> Optional[User]:
+        clean_email = email.strip().lower()
+        user = db.query(User).filter(User.email == clean_email).first()
+        if not user:
+            return None
+        user.password_hash = hash_password(new_password)
+        db.commit()
+        db.refresh(user)
+        return user
+
+    @staticmethod
     def delete_user(db: Session, user_id: int) -> bool:
         user = db.query(User).filter(User.id == user_id).first()
         if not user:

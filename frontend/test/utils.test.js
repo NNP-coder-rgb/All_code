@@ -709,6 +709,152 @@ function runAdditionalTests() {
     assert(wards.includes("Phường Đại Mỗ"), "Bao gồm Phường Đại Mỗ");
   });
 
+  /* ---------------- 16. Bảo mật Auth: SMS OTP, Google GIS & Quên Mật Khẩu Qua Email ---------------- */
+  console.log("\n--- 16. Kiểm thử Bảo mật Xác thực Auth: SMS OTP, Google GIS & Quên Mật Khẩu Qua Email ---");
+  it("Bảo mật SMS OTP: Kiểm tra số điện thoại, Cooldown 60s, giới hạn số lần thử và che mờ SĐT", () => {
+    let storage = {};
+    let sessionStore = {};
+    global.localStorage = {
+      getItem: (k) => storage[k] || null,
+      setItem: (k, v) => { storage[k] = String(v); },
+      removeItem: (k) => { delete storage[k]; },
+    };
+    global.sessionStorage = {
+      getItem: (k) => sessionStore[k] || null,
+      setItem: (k, v) => { sessionStore[k] = String(v); },
+      removeItem: (k) => { delete sessionStore[k]; },
+    };
+
+    const AuthModule = require("../js/auth.js");
+
+    // 1. Số điện thoại không hợp lệ
+    const invalidRes = AuthModule.sendPhoneOtp("12345");
+    assert.strictEqual(invalidRes.ok, false);
+    assert.ok(invalidRes.error.includes("không hợp lệ"));
+
+    // 2. Gửi OTP thành công cho SĐT 10 số
+    const phone = "0901234567";
+    const res = AuthModule.sendPhoneOtp(phone);
+    assert.strictEqual(res.ok, true);
+    assert.strictEqual(res.maskedPhone, "090****567");
+    assert.strictEqual(res.expiresInSeconds, 180);
+    assert.ok(res.otp.length === 6);
+
+    // Kiểm tra tin nhắn SMS mô phỏng đã được tạo an toàn
+    const smsLog = AuthModule.getSimulatedSms(phone);
+    assert.ok(smsLog.includes("Mã xác thực OTP"));
+    assert.ok(smsLog.includes(res.otp));
+
+    // 3. Cooldown 60s: Gửi lại ngay lập tức bị từ chối
+    const cooldownRes = AuthModule.sendPhoneOtp(phone);
+    assert.strictEqual(cooldownRes.ok, false);
+    assert.ok(cooldownRes.error.includes("Vui lòng đợi"));
+
+    // 4. Nhập sai OTP bị trừ lượt thử (Tối đa 3 lần)
+    const wrong1 = AuthModule.loginWithPhone(phone, "000000");
+    assert.strictEqual(wrong1.ok, false);
+    assert.ok(wrong1.error.includes("2 lần thử"));
+
+    const wrong2 = AuthModule.loginWithPhone(phone, "000000");
+    assert.strictEqual(wrong2.ok, false);
+    assert.ok(wrong2.error.includes("1 lần thử"));
+
+    const wrong3 = AuthModule.loginWithPhone(phone, "000000");
+    assert.strictEqual(wrong3.ok, false);
+    assert.ok(wrong3.error.includes("quá 3 lần"));
+
+    // 5. Sau khi bị hủy do sai 3 lần, mã OTP cũ bị vô hiệu hóa
+    const wrongAfterLock = AuthModule.loginWithPhone(phone, res.otp);
+    assert.strictEqual(wrongAfterLock.ok, false);
+  });
+
+  it("Đăng nhập Google chuẩn Google Identity Services (GIS): Chọn tài khoản mẫu và đăng nhập 1-chạm", () => {
+    let storage = {};
+    global.localStorage = {
+      getItem: (k) => storage[k] || null,
+      setItem: (k, v) => { storage[k] = String(v); },
+      removeItem: (k) => { delete storage[k]; },
+    };
+
+    const AuthModule = require("../js/auth.js");
+
+    // 1. Danh sách tài khoản Google mẫu chuẩn GIS
+    const sampleAccounts = AuthModule.getSampleGoogleAccounts();
+    assert.ok(Array.isArray(sampleAccounts) && sampleAccounts.length >= 3);
+    assert.ok(sampleAccounts.some((a) => a.email === "phuc@hybrid.store"));
+    assert.ok(sampleAccounts.some((a) => a.email === "binh@sneakers.vn"));
+
+    // 2. Đăng nhập bằng tài khoản Google
+    const loginRes = AuthModule.loginWithGoogle({
+      email: "tuan.le@gmail.com",
+      name: "Lê Minh Tuấn",
+      avatar: "LT",
+      role: "buyer",
+    });
+
+    assert.strictEqual(loginRes.ok, true);
+    assert.strictEqual(loginRes.user.email, "tuan.le@gmail.com");
+    assert.strictEqual(loginRes.user.fullName, "Lê Minh Tuấn");
+    assert.strictEqual(loginRes.user.role, "buyer");
+  });
+
+  it("Quy trình Quên Mật Khẩu qua Email: Xác minh Email chính chủ và cấp phát mật khẩu mới an toàn", () => {
+    let storage = {};
+    let sessionStore = {};
+    global.localStorage = {
+      getItem: (k) => storage[k] || null,
+      setItem: (k, v) => { storage[k] = String(v); },
+      removeItem: (k) => { delete storage[k]; },
+    };
+    global.sessionStorage = {
+      getItem: (k) => sessionStore[k] || null,
+      setItem: (k, v) => { sessionStore[k] = String(v); },
+      removeItem: (k) => { delete sessionStore[k]; },
+    };
+
+    const AuthModule = require("../js/auth.js");
+
+    // 1. Kiểm tra Email không tồn tại trong hệ thống
+    const notFound = AuthModule.sendPasswordResetEmail("nguoi.la@gmail.com");
+    assert.strictEqual(notFound.ok, false);
+    assert.ok(notFound.error.includes("Không tìm thấy tài khoản"));
+
+    // 2. Gửi mã OTP xác minh đến Email hợp lệ
+    const targetEmail = "phuc@hybrid.store";
+    const sendRes = AuthModule.sendPasswordResetEmail(targetEmail);
+    assert.strictEqual(sendRes.ok, true);
+    assert.strictEqual(sendRes.maskedEmail, "p***c@hybrid.store");
+    assert.strictEqual(sendRes.expiresInSeconds, 300);
+    assert.ok(sendRes.otp.length === 6);
+
+    // Kiểm tra nội dung email được mô phỏng gửi đi
+    const emailMsg = AuthModule.getLastResetEmail(targetEmail);
+    assert.ok(emailMsg.includes("Mã xác nhận khôi phục"));
+    assert.ok(emailMsg.includes(sendRes.otp));
+
+    // 3. Nhập sai OTP xác minh Email
+    const verifyWrong = AuthModule.verifyEmailResetOtp(targetEmail, "999999");
+    assert.strictEqual(verifyWrong.ok, false);
+    assert.ok(verifyWrong.error.includes("2 lần thử"));
+
+    // 4. Nhập đúng mã OTP xác minh
+    const verifyOk = AuthModule.verifyEmailResetOtp(targetEmail, sendRes.otp);
+    assert.strictEqual(verifyOk.ok, true);
+    assert.ok(verifyOk.message.includes("thành công"));
+
+    // 5. Cấp mật khẩu mới ngẫu nhiên và gửi trực tiếp về email
+    const issueRes = AuthModule.generateAndSendNewPassword(targetEmail);
+    assert.strictEqual(issueRes.ok, true);
+    assert.ok(issueRes.newPassword.startsWith("Hyb#"));
+    assert.ok(issueRes.newPassword.endsWith("@2026"));
+    assert.strictEqual(issueRes.email, targetEmail);
+
+    // 6. Đăng nhập ngay lập tức bằng mật khẩu mới vừa cấp
+    const loginWithNew = AuthModule.login(targetEmail, issueRes.newPassword, "buyer");
+    assert.strictEqual(loginWithNew.ok, true);
+    assert.strictEqual(loginWithNew.user.email, targetEmail);
+  });
+
   finish();
 }
 

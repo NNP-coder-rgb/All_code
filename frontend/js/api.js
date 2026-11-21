@@ -98,6 +98,28 @@
       return await request(`/auth/ekyc?user_id=${userId}`);
     },
 
+    // Khôi phục mật khẩu qua Email bảo mật & Cấp mật khẩu mới
+    async requestPasswordReset(email) {
+      return await request("/auth/forgot-password/request", {
+        method: "POST",
+        body: JSON.stringify({ email })
+      });
+    },
+
+    async verifyPasswordResetOtp(email, otp) {
+      return await request("/auth/forgot-password/verify", {
+        method: "POST",
+        body: JSON.stringify({ email, otp })
+      });
+    },
+
+    async resetPasswordAndSendNew(email, otp, newPassword = null) {
+      return await request("/auth/forgot-password/reset", {
+        method: "POST",
+        body: JSON.stringify({ email, otp, new_password: newPassword })
+      });
+    },
+
     async getAddresses(userId) {
       return await request(`/users/${userId}/addresses`);
     },
