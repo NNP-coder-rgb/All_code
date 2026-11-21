@@ -74,6 +74,19 @@ app.add_middleware(
 )
 
 
+# Middleware chống cache trình duyệt cho file HTML, JS, CSS
+@app.middleware("http")
+async def add_cache_control_header(request: Request, call_next):
+    response = await call_next(request)
+    path = request.url.path
+    if path.endswith((".html", ".js", ".css")) or path in ["/", "/index.html"]:
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
+    return response
+
+
+
 # ==============================================================
 # ĐĂNG KÝ CÁC ROUTERS VỚI TIỀN TỐ /api/v1
 # ==============================================================
