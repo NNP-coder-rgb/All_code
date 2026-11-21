@@ -36,8 +36,8 @@
     />
 
     <!-- base.css trước, CSS riêng của trang sau -->
-    <link rel="stylesheet" href="../../css/base.css?v=20261121_v2" />
-    <link rel="stylesheet" href="../../css/login.css?v=20261121_v2" />
+    <link rel="stylesheet" href="../../css/base.css?v=20261121_v4" />
+    <link rel="stylesheet" href="../../css/login.css?v=20261121_v4" />
   </head>
   <body>
     <!-- ===== HEADER ===== -->
@@ -95,6 +95,25 @@
                 Đăng ký mới
                 <span class="material-symbols-outlined icon-sm">arrow_forward</span>
               </a>
+            </div>
+
+            <!-- Thông báo khi tài khoản đã đăng nhập sẵn -->
+            <div class="panel p-3 mb-3 already-logged-in-box" id="alreadyLoggedInNotice" style="display: none; background: rgba(56, 189, 248, 0.08); border: 1.5px solid rgba(56, 189, 248, 0.35); border-radius: 12px;">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="material-symbols-outlined text-secondary" style="font-size: 28px;">account_circle</span>
+                <div class="flex-1">
+                  <div class="text-xs fw-700 text-white" id="loggedInUserName">Đang đăng nhập</div>
+                  <div class="text-2xs text-muted mono" id="loggedInUserInfo">user@example.com</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 mt-2">
+                <a href="../../index.html" class="btn btn-secondary btn-sm flex-1 text-center" id="btnLoggedInGoHome">
+                  <span class="material-symbols-outlined icon-xs">home</span> Vào Mua Sắm
+                </a>
+                <button type="button" class="btn btn-danger btn-sm flex-1 flex items-center justify-center gap-1" id="btnLoggedInLogoutNow">
+                  <span class="material-symbols-outlined icon-xs">logout</span> Đăng Xuất Ngay
+                </button>
+              </div>
             </div>
 
             <!-- Vai trò đăng nhập -->
@@ -524,12 +543,12 @@
     </div>
 
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="../../js/popup.js?v=20261121_v3"></script>
-    <script src="../../js/api.js?v=20261121_v3"></script>
-    <script src="../../js/auth.js?v=20261121_v3"></script>
-    <script src="../../js/utils.js?v=20261121_v3"></script>
-    <script src="../../js/components.js?v=20261121_v3"></script>
-    <script src="../../js/app.js?v=20261121_v3"></script>
-    <script src="../../js/login.js?v=20261121_v3"></script>
+    <script src="../../js/popup.js?v=20261121_v4"></script>
+    <script src="../../js/api.js?v=20261121_v4"></script>
+    <script src="../../js/auth.js?v=20261121_v4"></script>
+    <script src="../../js/utils.js?v=20261121_v4"></script>
+    <script src="../../js/components.js?v=20261121_v4"></script>
+    <script src="../../js/app.js?v=20261121_v4"></script>
+    <script src="../../js/login.js?v=20261121_v4"></script>
   </body>
 </html>

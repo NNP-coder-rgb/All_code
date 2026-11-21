@@ -120,12 +120,16 @@
       avatarBtn.textContent = initials;
       avatarBtn.title = user.fullName;
     }
-    avatarBtn.addEventListener("click", () => {
+    avatarBtn.addEventListener("click", (e) => {
       if (!user) {
         window.location.href = "../account/auth_login.html";
         return;
       }
-      window.location.href = "../account/profile.html";
+      e.stopPropagation();
+      const dropdown = $("#userAccountDropdown");
+      if (dropdown) {
+        dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+      }
     });
 
     const btnHeaderPost = $("#btnHeaderPost");

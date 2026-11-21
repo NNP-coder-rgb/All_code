@@ -70,7 +70,7 @@
   /* ---------------- Tài khoản ---------------- */
   const user = typeof Auth !== "undefined" && typeof Auth.current === "function" ? Auth.current() : null;
   const avatarBtn = $("#avatarBtn");
-  if (user) {
+  if (user && avatarBtn) {
     const initials = user.fullName
       .trim()
       .split(/\s+/)
@@ -81,13 +81,19 @@
     avatarBtn.textContent = initials;
     avatarBtn.title = user.fullName;
   }
-  avatarBtn.addEventListener("click", () => {
-    if (!user) {
-      window.location.href = "pages/account/auth_login.html";
-      return;
-    }
-    window.location.href = "pages/account/profile.html";
-  });
+  if (avatarBtn) {
+    avatarBtn.addEventListener("click", (e) => {
+      if (!user) {
+        window.location.href = "pages/account/auth_login.html";
+        return;
+      }
+      e.stopPropagation();
+      const dropdown = $("#userAccountDropdown");
+      if (dropdown) {
+        dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+      }
+    });
+  }
 
   /* ---------------- Tìm kiếm tương tác trang chủ ---------------- */
   const searchInput = $("#homeSearchInput");

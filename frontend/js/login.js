@@ -129,16 +129,65 @@
 
   const initialRedirect = getRedirectTarget();
 
-  // Đã đăng nhập rồi thì chuyển hướng về trang trước hoặc trang tương ứng theo vai trò
-  if (typeof Auth !== "undefined" && Auth.current()) {
-    const cur = Auth.current();
-    if (initialRedirect) {
-      sessionStorage.removeItem("hv_redirect_after_login");
-      window.location.href = initialRedirect;
-    } else {
-      window.location.href = getRoleDefaultTarget(cur);
+  // 1. Kiểm tra tham số cưỡng chế đăng xuất qua URL (?action=logout hoặc ?logout=true)
+  const urlParams = new URLSearchParams(window.location.search);
+  const isForcedLogout = urlParams.get("action") === "logout" || urlParams.get("logout") === "true";
+  if (isForcedLogout) {
+    if (typeof Auth !== "undefined" && typeof Auth.logout === "function") {
+      Auth.logout();
     }
-    return;
+    try {
+      localStorage.removeItem("hv_current_user");
+      localStorage.removeItem("hv_access_token");
+      localStorage.removeItem("hybrid_current_user");
+      localStorage.removeItem("hybrid_access_token");
+      localStorage.removeItem("hv_browser_google_account");
+      sessionStorage.clear();
+    } catch (e) {}
+    try {
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } catch (e) {}
+    if (typeof Utils !== "undefined" && typeof Utils.toast === "function") {
+      Utils.toast("Bạn đã đăng xuất tài khoản thành công.", "info");
+    }
+  }
+
+  // 2. Nếu đã đăng nhập sẵn: Hiển thị banner thông báo và tùy chọn Đăng Xuất thay vì ép buộc chuyển trang gây kẹt
+  if (!isForcedLogout && typeof Auth !== "undefined" && Auth.current()) {
+    const cur = Auth.current();
+    const alreadyNotice = document.getElementById("alreadyLoggedInNotice");
+    if (alreadyNotice) {
+      alreadyNotice.style.display = "block";
+      const nameEl = document.getElementById("loggedInUserName");
+      const infoEl = document.getElementById("loggedInUserInfo");
+      const btnGoHome = document.getElementById("btnLoggedInGoHome");
+      if (nameEl) nameEl.textContent = cur.fullName || cur.name || "Người dùng";
+      if (infoEl) {
+        infoEl.textContent = (cur.email || cur.phone || "") + " • Vai trò: " + (cur.role || "Buyer");
+      }
+      if (btnGoHome) {
+        btnGoHome.href = initialRedirect || getRoleDefaultTarget(cur);
+      }
+      const btnLogoutNow = document.getElementById("btnLoggedInLogoutNow");
+      if (btnLogoutNow && !btnLogoutNow.dataset.bound) {
+        btnLogoutNow.dataset.bound = "true";
+        btnLogoutNow.addEventListener("click", function () {
+          Auth.logout();
+          try {
+            localStorage.removeItem("hv_current_user");
+            localStorage.removeItem("hv_access_token");
+            localStorage.removeItem("hybrid_current_user");
+            localStorage.removeItem("hybrid_access_token");
+            localStorage.removeItem("hv_browser_google_account");
+            sessionStorage.clear();
+          } catch (e) {}
+          alreadyNotice.style.display = "none";
+          if (typeof Utils !== "undefined" && typeof Utils.toast === "function") {
+            Utils.toast("Đã đăng xuất thành công. Bạn có thể đăng nhập tài khoản khác.", "info");
+          }
+        });
+      }
+    }
   }
 
   // Helper mở/đóng modal an toàn

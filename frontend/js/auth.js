@@ -1072,11 +1072,22 @@
     logout() {
       try {
         localStorage.removeItem(CURRENT_KEY);
+        localStorage.removeItem("hv_access_token");
+        localStorage.removeItem("hybrid_current_user");
+        localStorage.removeItem("hybrid_access_token");
+        localStorage.removeItem("hv_browser_google_account");
+        sessionStorage.clear();
       } catch (e) {}
       if (typeof Utils !== "undefined") {
         if (Utils.Wishlist && typeof Utils.Wishlist.refresh === "function") Utils.Wishlist.refresh();
         if (Utils.Cart && typeof Utils.Cart.syncBadge === "function") Utils.Cart.syncBadge();
       }
+      try {
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new CustomEvent("auth:logout"));
+          window.dispatchEvent(new CustomEvent("auth:changed", { detail: { user: null } }));
+        }
+      } catch (e) {}
     },
 
     // Kiểm tra xem người dùng có phải là Quản Trị Viên (Admin) hay không

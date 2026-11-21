@@ -1091,11 +1091,23 @@
     },
     mockLogout() {
       if (typeof localStorage !== "undefined") {
-        localStorage.removeItem(AUTH_STORAGE_KEY);
+        try {
+          localStorage.removeItem(AUTH_STORAGE_KEY);
+          localStorage.removeItem("hv_access_token");
+          localStorage.removeItem("hybrid_current_user");
+          localStorage.removeItem("hybrid_access_token");
+          localStorage.removeItem("hv_browser_google_account");
+        } catch (e) {}
+      }
+      if (typeof sessionStorage !== "undefined") {
+        try { sessionStorage.clear(); } catch (e) {}
       }
       if (typeof window !== "undefined") {
         window.dispatchEvent(
           new CustomEvent("auth:changed", { detail: { user: null } }),
+        );
+        window.dispatchEvent(
+          new CustomEvent("auth:logout"),
         );
       }
       return true;

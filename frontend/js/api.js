@@ -178,8 +178,14 @@
     },
 
     logout() {
-      localStorage.removeItem(TOKEN_KEY);
-      localStorage.removeItem("hybrid_current_user");
+      try {
+        localStorage.removeItem(TOKEN_KEY);
+        localStorage.removeItem("hv_access_token");
+        localStorage.removeItem("hybrid_current_user");
+        localStorage.removeItem("hv_current_user");
+        localStorage.removeItem("hv_browser_google_account");
+        sessionStorage.clear();
+      } catch (e) {}
     }
   };
 
