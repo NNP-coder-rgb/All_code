@@ -220,15 +220,20 @@ def request_forgot_password(body: ForgotPasswordRequest, db: Session = Depends(g
     email_ok, email_msg = email_service.send_otp_email(email, otp, user.full_name)
 
     masked = mask_email(email)
+    if not email_ok:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=email_msg or "Hệ thống chưa kết nối tài khoản gửi Email SMTP (Gmail App Password). Vui lòng cấu hình biến môi trường SMTP_USER và SMTP_PASSWORD trên Render Dashboard."
+        )
+
     return BaseResponse[dict](
         success=True,
-        message=f"Mã xác thực đã được gửi trực tiếp tới hòm thư {masked}. Mã có hiệu lực trong 5 phút.",
+        message=f"Mã xác thực OTP đã được gửi trực tiếp tới hòm thư {masked}. Vui lòng kiểm tra hộp thư đến (Inbox) hoặc Thư rác (Spam).",
         data={
             "email": email,
             "masked_email": masked,
             "expires_in_seconds": 300,
-            "email_dispatched": email_ok,
-            "dispatch_detail": email_msg
+            "email_dispatched": True
         }
     )
 
@@ -332,15 +337,19 @@ def reset_and_issue_new_password(body: ForgotPasswordReset, db: Session = Depend
     _EMAIL_RESET_STORE.pop(email, None)
 
     masked = mask_email(email)
+    if not email_ok:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=email_msg or "Không thể gửi email chứa mật khẩu mới. Vui lòng cấu hình tài khoản gửi Email trên Render Dashboard."
+        )
+
     return BaseResponse[dict](
         success=True,
-        message=f"Mật khẩu mới đã được khởi tạo và gửi thành công tới hòm thư {masked}.",
+        message=f"Mật khẩu mới đã được khởi tạo và gửi trực tiếp an toàn tới hòm thư {masked}. Vui lòng mở email để lấy mật khẩu đăng nhập.",
         data={
             "email": email,
             "masked_email": masked,
-            "new_password": new_pwd,
-            "email_dispatched": email_ok,
-            "dispatch_detail": email_msg,
+            "email_dispatched": True,
             "login_ready": True
         }
     )
@@ -384,21 +393,21 @@ def send_phone_otp_sms(body: PhoneOtpRequest):
     sms_ok, sms_msg = sms_service.send_otp_sms(phone, otp)
 
     masked = mask_phone(phone)
-    res_data = {
-        "phone": phone,
-        "masked_phone": masked,
-        "expires_in_seconds": 180,
-        "sms_dispatched": sms_ok,
-        "dispatch_detail": sms_msg
-    }
     if not sms_ok:
-        res_data["dev_otp"] = otp
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=sms_msg or "Hệ thống chưa kết nối Cổng SMS viễn thông (Twilio/eSMS). Vui lòng cấu hình tài khoản gửi SMS trong Environment trên Render Dashboard."
+        )
 
-    msg = f"Mã OTP đã được gửi đến số điện thoại {masked}. Mã có hiệu lực trong 3 phút." if sms_ok else f"Chưa cấu hình Cổng SMS viễn thông. Mã OTP xác thực là: {otp}"
     return BaseResponse[dict](
         success=True,
-        message=msg,
-        data=res_data
+        message=f"Mã OTP bảo mật 6 chữ số đã được gửi trực tiếp đến số điện thoại {masked}. Vui lòng mở tin nhắn SMS trên điện thoại của bạn.",
+        data={
+            "phone": phone,
+            "masked_phone": masked,
+            "expires_in_seconds": 180,
+            "sms_dispatched": True
+        }
     )
 
 

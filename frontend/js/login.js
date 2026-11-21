@@ -859,8 +859,7 @@
       try {
         let sentOk = false;
         let maskedPhone = cleanPhone.slice(0, 3) + "****" + cleanPhone.slice(-3);
-        let devOtp = null;
-        let isRealSmsSent = false;
+        let errorMsg = "";
 
         // 1. Gửi qua Backend SMS Gateway thật (Twilio / eSMS)
         if (typeof API !== "undefined" && API.Auth && API.Auth.sendPhoneOtpSms) {
@@ -868,64 +867,54 @@
             const apiRes = await API.Auth.sendPhoneOtpSms(cleanPhone);
             if (apiRes && apiRes.success) {
               sentOk = true;
-              if (apiRes.data) {
-                if (apiRes.data.masked_phone) maskedPhone = apiRes.data.masked_phone;
-                isRealSmsSent = !!apiRes.data.sms_dispatched;
-                if (apiRes.data.dev_otp) devOtp = apiRes.data.dev_otp;
+              if (apiRes.data && apiRes.data.masked_phone) {
+                maskedPhone = apiRes.data.masked_phone;
               }
+            } else if (apiRes && apiRes.message) {
+              errorMsg = apiRes.message;
             }
           } catch (e) {
-            console.warn("[Phone OTP SMS] Lỗi kết nối API Gateway, chuyển dự phòng:", e.message);
+            errorMsg = e.message || "Lỗi kết nối Cổng SMS viễn thông.";
+            console.warn("[Phone OTP SMS] Lỗi kết nối API Gateway:", errorMsg);
           }
         }
 
-        // 2. Dự phòng Auth cục bộ nếu backend offline
-        if (!sentOk && typeof Auth !== "undefined" && Auth.sendPhoneOtp) {
-          const localRes = Auth.sendPhoneOtp(cleanPhone);
-          if (localRes.ok) {
-            sentOk = true;
-            maskedPhone = localRes.maskedPhone;
-            devOtp = localRes.code;
-          } else {
-            if (phoneInputError) phoneInputError.textContent = localRes.error;
-            btnSendPhoneOtp.disabled = false;
-            btnSendPhoneOtp.innerHTML = `<span class="material-symbols-outlined icon-xs">send</span> Nhận Mã OTP`;
-            return;
+        // Nếu gửi qua API thất bại
+        if (!sentOk) {
+          btnSendPhoneOtp.disabled = false;
+          btnSendPhoneOtp.innerHTML = `<span class="material-symbols-outlined icon-xs">send</span> Nhận Mã OTP`;
+          if (phoneInputError) {
+            phoneInputError.textContent = errorMsg || "Hệ thống chưa kết nối Cổng SMS (Twilio/eSMS). Vui lòng cấu hình biến môi trường trên Render.";
           }
+          if (typeof notify === "function") {
+            notify({
+              type: "error",
+              title: "Chưa Thể Gửi SMS OTP",
+              message: errorMsg || "Hệ thống chưa kết nối Cổng SMS viễn thông (Twilio/eSMS). Vui lòng cấu hình trên Render.",
+            });
+          }
+          return;
         }
 
-        if (sentOk) {
-          if (secureSmsNotice && secureSmsNoticeText) {
-            secureSmsNotice.style.display = "flex";
-            if (isRealSmsSent) {
-              secureSmsNoticeText.innerHTML = `Mã OTP 6 số đã được gửi trực tiếp đến SIM điện thoại <strong class="text-secondary">${escapeSafeHtml(maskedPhone)}</strong> qua Cổng viễn thông. Vui lòng mở tin nhắn SMS trên điện thoại của bạn để lấy mã (hiệu lực 3 phút).`;
-            } else {
-              secureSmsNoticeText.innerHTML = `
-                <div class="mb-1 text-secondary fw-700">Mã xác thực OTP: <span class="mono" style="font-size: 16px; letter-spacing: 2px; color: #fff; background: rgba(56, 189, 248, 0.25); padding: 2px 8px; border-radius: 4px;">${devOtp || "123456"}</span></div>
-                <div class="text-3xs text-muted">Hệ thống chưa kết nối Cổng SMS viễn thông trả phí (Twilio/eSMS). Mã OTP được tạo tự động và điền sẵn bên dưới để bạn đăng nhập ngay!</div>
-              `;
-            }
-          }
-
-          if (devOtp && phoneOtpCode) {
-            phoneOtpCode.value = devOtp;
-          }
-
-          notify({
-            type: "success",
-            title: isRealSmsSent ? "Đã Gửi Tin Nhắn SMS OTP" : "Mã OTP Xác Thực",
-            message: isRealSmsSent
-              ? `Mã OTP đã được gửi đến số thuê bao ${maskedPhone}. Vui lòng mở ứng dụng Tin nhắn (SMS) trên điện thoại để lấy mã.`
-              : `Mã OTP của bạn là: ${devOtp}. Hệ thống đã tự động điền sẵn vào ô mã để bạn đăng nhập ngay!`,
-          });
-
-          startPhoneOtpCooldown(60);
-          if (phoneOtpCode) {
-            phoneOtpCode.focus();
-          }
-        } else {
-          throw new Error("Không thể gửi tin nhắn SMS lúc này. Vui lòng thử lại sau.");
+        // Gửi SMS thành công qua Gateway viễn thông
+        if (secureSmsNotice && secureSmsNoticeText) {
+          secureSmsNotice.style.display = "flex";
+          secureSmsNoticeText.innerHTML = `Mã OTP 6 số bảo mật đã được gửi trực tiếp đến SIM điện thoại <strong class="text-secondary">${escapeSafeHtml(maskedPhone)}</strong>. Vui lòng mở tin nhắn SMS trên điện thoại của bạn để lấy mã (hiệu lực 3 phút).`;
         }
+
+        // Tuyệt đối không in mã và không điền sẵn vào ô nhập để đảm bảo an toàn
+        if (phoneOtpCode) {
+          phoneOtpCode.value = "";
+          phoneOtpCode.focus();
+        }
+
+        notify({
+          type: "success",
+          title: "Đã Gửi Tin Nhắn SMS OTP",
+          message: `Mã OTP bảo mật đã được gửi trực tiếp đến số điện thoại ${maskedPhone}. Vui lòng mở tin nhắn SMS để lấy mã.`,
+        });
+
+        startPhoneOtpCooldown(60);
       } catch (err) {
         btnSendPhoneOtp.disabled = false;
         btnSendPhoneOtp.innerHTML = `<span class="material-symbols-outlined icon-xs">send</span> Nhận Mã OTP`;
@@ -1176,6 +1165,7 @@
     try {
       let res = null;
       // 1. Gửi qua Backend SMTP thật (Gmail / SendGrid)
+      let errorMsg = "";
       if (typeof API !== "undefined" && API.Auth && API.Auth.requestPasswordReset) {
         try {
           const apiRes = await API.Auth.requestPasswordReset(emailVal);
@@ -1185,15 +1175,13 @@
               email: apiRes.data.email,
               maskedEmail: apiRes.data.masked_email,
             };
+          } else if (apiRes && apiRes.message) {
+            errorMsg = apiRes.message;
           }
         } catch (e) {
-          console.warn("[Forgot-Password] API SMTP fallback:", e.message);
+          errorMsg = e.message || "Lỗi kết nối máy chủ gửi Email SMTP.";
+          console.warn("[Forgot-Password] API SMTP Error:", errorMsg);
         }
-      }
-
-      // 2. Dự phòng Auth cục bộ nếu backend offline
-      if (!res && typeof Auth !== "undefined" && Auth.sendPasswordResetEmail) {
-        res = Auth.sendPasswordResetEmail(emailVal);
       }
 
       if (btnSendForgotOtp) {
@@ -1202,7 +1190,16 @@
       }
 
       if (!res || !res.ok) {
-        if (forgotStep1Error) forgotStep1Error.textContent = (res && res.error) || "Không thể gửi email lúc này.";
+        if (forgotStep1Error) {
+          forgotStep1Error.textContent = errorMsg || "Hệ thống chưa kết nối máy chủ gửi Email SMTP (Gmail App Password). Vui lòng cấu hình biến môi trường trên Render.";
+        }
+        if (typeof notify === "function") {
+          notify({
+            type: "error",
+            title: "Chưa Thể Gửi Email OTP",
+            message: errorMsg || "Hệ thống chưa kết nối máy chủ gửi Email SMTP. Vui lòng cấu hình SMTP_USER và SMTP_PASSWORD trên Render.",
+          });
+        }
         return;
       }
 
@@ -1260,21 +1257,22 @@
       btnResendForgotOtp.disabled = true;
 
       let res = null;
+      let resendError = "";
       if (typeof API !== "undefined" && API.Auth && API.Auth.requestPasswordReset) {
         try {
           const apiRes = await API.Auth.requestPasswordReset(resetVerifiedEmail);
           if (apiRes && apiRes.success && apiRes.data) {
             res = { ok: true, maskedEmail: apiRes.data.masked_email };
+          } else if (apiRes && apiRes.message) {
+            resendError = apiRes.message;
           }
-        } catch (e) {}
-      }
-
-      if (!res && typeof Auth !== "undefined" && Auth.sendPasswordResetEmail) {
-        res = Auth.sendPasswordResetEmail(resetVerifiedEmail);
+        } catch (e) {
+          resendError = e.message || "Lỗi gửi lại mã OTP qua email.";
+        }
       }
 
       if (!res || !res.ok) {
-        if (forgotStep2Error) forgotStep2Error.textContent = (res && res.error) || "Không thể gửi lại mã lúc này.";
+        if (forgotStep2Error) forgotStep2Error.textContent = resendError || "Không thể gửi lại mã lúc này. Vui lòng kiểm tra cấu hình SMTP trên Render.";
         btnResendForgotOtp.disabled = false;
         return;
       }
