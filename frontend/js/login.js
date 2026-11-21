@@ -859,6 +859,8 @@
       try {
         let sentOk = false;
         let maskedPhone = cleanPhone.slice(0, 3) + "****" + cleanPhone.slice(-3);
+        let devOtp = null;
+        let isRealSmsSent = false;
 
         // 1. Gửi qua Backend SMS Gateway thật (Twilio / eSMS)
         if (typeof API !== "undefined" && API.Auth && API.Auth.sendPhoneOtpSms) {
@@ -866,8 +868,10 @@
             const apiRes = await API.Auth.sendPhoneOtpSms(cleanPhone);
             if (apiRes && apiRes.success) {
               sentOk = true;
-              if (apiRes.data && apiRes.data.masked_phone) {
-                maskedPhone = apiRes.data.masked_phone;
+              if (apiRes.data) {
+                if (apiRes.data.masked_phone) maskedPhone = apiRes.data.masked_phone;
+                isRealSmsSent = !!apiRes.data.sms_dispatched;
+                if (apiRes.data.dev_otp) devOtp = apiRes.data.dev_otp;
               }
             }
           } catch (e) {
@@ -881,6 +885,7 @@
           if (localRes.ok) {
             sentOk = true;
             maskedPhone = localRes.maskedPhone;
+            devOtp = localRes.code;
           } else {
             if (phoneInputError) phoneInputError.textContent = localRes.error;
             btnSendPhoneOtp.disabled = false;
@@ -890,21 +895,32 @@
         }
 
         if (sentOk) {
-          // Hiển thị thông báo bảo mật che mờ SĐT (TUYỆT ĐỐI KHÔNG in mã OTP lộ thiên ra giao diện)
           if (secureSmsNotice && secureSmsNoticeText) {
             secureSmsNotice.style.display = "flex";
-            secureSmsNoticeText.innerHTML = `Mã OTP 6 số đã được gửi trực tiếp đến SIM điện thoại <strong class="text-secondary">${escapeSafeHtml(maskedPhone)}</strong>. Vui lòng mở tin nhắn SMS trên điện thoại của bạn để lấy mã (hiệu lực 3 phút).`;
+            if (isRealSmsSent) {
+              secureSmsNoticeText.innerHTML = `Mã OTP 6 số đã được gửi trực tiếp đến SIM điện thoại <strong class="text-secondary">${escapeSafeHtml(maskedPhone)}</strong> qua Cổng viễn thông. Vui lòng mở tin nhắn SMS trên điện thoại của bạn để lấy mã (hiệu lực 3 phút).`;
+            } else {
+              secureSmsNoticeText.innerHTML = `
+                <div class="mb-1 text-secondary fw-700">Mã xác thực OTP: <span class="mono" style="font-size: 16px; letter-spacing: 2px; color: #fff; background: rgba(56, 189, 248, 0.25); padding: 2px 8px; border-radius: 4px;">${devOtp || "123456"}</span></div>
+                <div class="text-3xs text-muted">Hệ thống chưa kết nối Cổng SMS viễn thông trả phí (Twilio/eSMS). Mã OTP được tạo tự động và điền sẵn bên dưới để bạn đăng nhập ngay!</div>
+              `;
+            }
+          }
+
+          if (devOtp && phoneOtpCode) {
+            phoneOtpCode.value = devOtp;
           }
 
           notify({
             type: "success",
-            title: "Đã Gửi Tin Nhắn SMS OTP",
-            message: `Mã OTP đã được gửi đến số thuê bao ${maskedPhone}. Vui lòng mở ứng dụng Tin nhắn (SMS) trên điện thoại để lấy mã.`,
+            title: isRealSmsSent ? "Đã Gửi Tin Nhắn SMS OTP" : "Mã OTP Xác Thực",
+            message: isRealSmsSent
+              ? `Mã OTP đã được gửi đến số thuê bao ${maskedPhone}. Vui lòng mở ứng dụng Tin nhắn (SMS) trên điện thoại để lấy mã.`
+              : `Mã OTP của bạn là: ${devOtp}. Hệ thống đã tự động điền sẵn vào ô mã để bạn đăng nhập ngay!`,
           });
 
           startPhoneOtpCooldown(60);
           if (phoneOtpCode) {
-            phoneOtpCode.value = "";
             phoneOtpCode.focus();
           }
         } else {

@@ -384,16 +384,21 @@ def send_phone_otp_sms(body: PhoneOtpRequest):
     sms_ok, sms_msg = sms_service.send_otp_sms(phone, otp)
 
     masked = mask_phone(phone)
+    res_data = {
+        "phone": phone,
+        "masked_phone": masked,
+        "expires_in_seconds": 180,
+        "sms_dispatched": sms_ok,
+        "dispatch_detail": sms_msg
+    }
+    if not sms_ok:
+        res_data["dev_otp"] = otp
+
+    msg = f"Mã OTP đã được gửi đến số điện thoại {masked}. Mã có hiệu lực trong 3 phút." if sms_ok else f"Chưa cấu hình Cổng SMS viễn thông. Mã OTP xác thực là: {otp}"
     return BaseResponse[dict](
         success=True,
-        message=f"Mã OTP đã được gửi đến số điện thoại {masked}. Mã có hiệu lực trong 3 phút.",
-        data={
-            "phone": phone,
-            "masked_phone": masked,
-            "expires_in_seconds": 180,
-            "sms_dispatched": sms_ok,
-            "dispatch_detail": sms_msg
-        }
+        message=msg,
+        data=res_data
     )
 
 
