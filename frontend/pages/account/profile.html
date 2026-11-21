@@ -20,9 +20,9 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
     />
-    <link rel="stylesheet" href="../../css/base.css" />
-    <link rel="stylesheet" href="../../css/catalog.css" />
-    <link rel="stylesheet" href="../../css/master_screens.css" />
+    <link rel="stylesheet" href="../../css/base.css?v=20261122_v6" />
+    <link rel="stylesheet" href="../../css/catalog.css?v=20261122_v6" />
+    <link rel="stylesheet" href="../../css/master_screens.css?v=20261122_v6" />
   </head>
   <body class="dash-page">
     <!-- ===== HEADER ===== -->
@@ -46,7 +46,17 @@
           >
             <span class="material-symbols-outlined theme-toggle-icon">light_mode</span>
           </button>
-          <button class="avatar active" id="headerAvatarBtn" type="button" title="Tài khoản">
+          <button
+            class="btn btn-danger btn-sm flex items-center gap-1 shadow-sm"
+            id="btnHeaderLogout"
+            type="button"
+            title="Đăng xuất tài khoản"
+            style="background: linear-gradient(135deg, #ef4444, #dc2626); color: #ffffff; border: none; font-weight: 600; padding: 6px 14px; border-radius: 8px; box-shadow: 0 2px 8px rgba(239, 68, 68, 0.35); cursor: pointer;"
+          >
+            <span class="material-symbols-outlined icon-xs">logout</span>
+            <span class="hide-sm">Đăng Xuất</span>
+          </button>
+          <button class="avatar active" id="headerAvatarBtn" type="button" title="Hồ sơ tài khoản cá nhân">
             <span class="material-symbols-outlined">person</span>
           </button>
         </div>
@@ -82,8 +92,20 @@
             Quản lý thông tin tài khoản, xác thực Căn cước công dân gắn chip và sổ địa chỉ giao nhận hàng.
           </p>
         </div>
-        <div class="flex items-center gap-2" id="topStatusBadges">
-          <!-- Render động trạng thái -->
+        <div class="flex items-center gap-2 flex-wrap" id="topProfileActions">
+          <div class="flex items-center gap-2" id="topStatusBadges">
+            <!-- Render động trạng thái -->
+          </div>
+          <button
+            class="btn btn-danger btn-sm flex items-center gap-1 shadow-sm"
+            id="btnTopLogout"
+            type="button"
+            title="Đăng xuất khỏi tài khoản này"
+            style="background: linear-gradient(135deg, #ef4444, #dc2626); color: #ffffff; border: none; font-weight: 700; padding: 8px 16px; border-radius: 8px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); cursor: pointer;"
+          >
+            <span class="material-symbols-outlined icon-xs">logout</span>
+            <span>Đăng Xuất</span>
+          </button>
         </div>
       </div>
 
@@ -251,8 +273,14 @@
               </button>
             </nav>
             <div class="mt-3 pt-3 border-top">
-              <button class="btn btn-outlined btn-sm is-full text-danger" id="btnLogoutAction" type="button">
-                <span class="material-symbols-outlined icon-xs">logout</span> Đăng Xuất Tài Khoản
+              <button
+                class="btn btn-danger btn-sm is-full flex items-center justify-center gap-2 shadow-sm"
+                id="btnLogoutAction"
+                type="button"
+                style="background: linear-gradient(135deg, #ef4444, #dc2626); color: #ffffff; border: none; font-weight: 700; padding: 11px 16px; border-radius: 8px; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.38); cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease;"
+              >
+                <span class="material-symbols-outlined icon-xs">logout</span>
+                <span>ĐĂNG XUẤT TÀI KHOẢN</span>
               </button>
             </div>
           </div>
@@ -1169,11 +1197,11 @@
 
     <div class="toast-stack" id="toastStack"></div>
 
-    <script src="../../js/popup.js"></script>
-    <script src="../../js/api.js"></script>
-    <script src="../../js/auth.js"></script>
-    <script src="../../js/mock_data.js"></script>
-    <script src="../../js/utils.js"></script>
+    <script src="../../js/popup.js?v=20261122_v6"></script>
+    <script src="../../js/api.js?v=20261122_v6"></script>
+    <script src="../../js/auth.js?v=20261122_v6"></script>
+    <script src="../../js/mock_data.js?v=20261122_v6"></script>
+    <script src="../../js/utils.js?v=20261122_v6"></script>
     <script>
       (function () {
         const $ = (sel, root) => (root || document).querySelector(sel);
@@ -2532,23 +2560,50 @@
           }, 50);
         });
 
-        document.getElementById("btnLogoutAction").addEventListener("click", () => {
+        // 6b. Xử lý Đăng Xuất toàn diện cho tất cả các nút Đăng Xuất trên trang Profile
+        function executeProfileLogout() {
           Utils.confirm(
             {
-              title: "Đăng Xuất",
-              message: "Bạn có chắc chắn muốn đăng xuất tài khoản?",
-              confirmText: "Đăng Xuất",
+              title: "Đăng Xuất Tài Khoản",
+              message: "Bạn có chắc chắn muốn đăng xuất tài khoản khỏi hệ thống HYBRID.STORE?",
+              confirmText: "Đăng Xuất Ngay",
               cancelText: "Ở lại",
             },
             () => {
-              Auth.logout();
-              Utils.toast("Đã đăng xuất thành công.", "info");
+              if (typeof Auth !== "undefined" && typeof Auth.logout === "function") {
+                Auth.logout();
+              }
+              try {
+                localStorage.removeItem("hv_current_user");
+                localStorage.removeItem("hv_access_token");
+                localStorage.removeItem("hybrid_current_user");
+                localStorage.removeItem("hybrid_access_token");
+                localStorage.removeItem("hv_browser_google_account");
+                sessionStorage.clear();
+              } catch (e) {}
+
+              if (typeof Utils !== "undefined" && typeof Utils.toast === "function") {
+                Utils.toast("Đã đăng xuất tài khoản thành công.", "info");
+              }
               setTimeout(() => {
-                window.location.href = "auth_login.html";
-              }, 300);
+                window.location.href = "auth_login.html?action=logout";
+              }, 250);
             }
           );
+        }
+
+        ["btnLogoutAction", "btnTopLogout", "btnHeaderLogout"].forEach((id) => {
+          const btn = document.getElementById(id);
+          if (btn) btn.addEventListener("click", executeProfileLogout);
         });
+
+        // Bấm vào biểu tượng avatar trên header profile sẽ cuộn mượt lên đầu trang
+        const headerAvatar = document.getElementById("headerAvatarBtn");
+        if (headerAvatar) {
+          headerAvatar.addEventListener("click", () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          });
+        }
 
         // 7. Xử lý đóng modal KYC & hủy bỏ an toàn
         function closeKycModal() {

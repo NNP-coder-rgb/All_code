@@ -2083,7 +2083,7 @@
       if (!btn.querySelector(".material-symbols-outlined") && btn.textContent.trim().length <= 2) {
         btn.textContent = initials;
       }
-      btn.title = curUser.fullName || curUser.name || "Tài khoản";
+      btn.title = (curUser.fullName || curUser.name || "Tài khoản") + " (Nhấp để mở menu tài khoản, nhấp đúp để vào hồ sơ)";
 
       // Kiểm tra hoặc chèn container dropdown
       var dropdown = document.getElementById("userAccountDropdown");
@@ -2122,6 +2122,15 @@
             var isShown = dropdown.style.display === "block";
             dropdown.style.display = isShown ? "none" : "block";
           }
+        });
+      }
+
+      if (!btn.dataset.avatarDblClickBound) {
+        btn.dataset.avatarDblClickBound = "true";
+        btn.addEventListener("dblclick", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = profileUrl;
         });
       }
 
