@@ -374,8 +374,19 @@
         </div>
         <div class="modal-body">
           <p class="text-xs text-muted mb-3" style="line-height: 1.6;">
-            Khi bấm nút <strong>Đăng nhập bằng tài khoản Google</strong>, hệ thống sẽ chuyển hướng bạn trực tiếp sang cổng xác minh danh tính chính thức của Google (<strong>accounts.google.com</strong>) để bạn nhập mật khẩu / xác thực 2 lớp bảo mật (2FA).
+            Khi bấm nút <strong>Đăng nhập bằng tài khoản Google</strong>, hệ thống sẽ chuyển hướng bạn trực tiếp sang cổng xác minh danh tính chính thức của Google (<strong>accounts.google.com</strong>) để bạn đăng nhập an toàn.
           </p>
+
+          <!-- Hộp thông báo giải thích lỗi 401: invalid_client -->
+          <div class="panel p-3 mb-3" style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 8px;">
+            <div class="flex items-center gap-2 text-warning fw-700 text-xs mb-1">
+              <span class="material-symbols-outlined icon-xs">info</span>
+              <span>Lưu ý về Google OAuth (Tránh lỗi 401: invalid_client):</span>
+            </div>
+            <div class="text-2xs text-muted" style="line-height: 1.5;">
+              Google yêu cầu mỗi website phải có một <strong>OAuth Client ID</strong> hợp lệ được đăng ký trên Google Cloud Console gắn với tên miền của bạn. Nếu bạn chưa có Client ID thật, bạn có thể bấm nút <strong>"Đăng Nhập Thử Nghiệm Ngay"</strong> bên dưới để vào hệ thống ngay lập tức với tài khoản Google.
+            </div>
+          </div>
 
           <div class="form-group mb-3">
             <label class="form-label text-xs" for="inputGoogleClientId">Google Client ID (OAuth 2.0):</label>
@@ -405,14 +416,19 @@
             </span>
           </div>
 
-          <div class="modal-foot p-0 flex justify-end gap-2 flex-wrap">
+          <div class="modal-foot p-0 flex justify-between gap-2 flex-wrap items-center">
             <button class="btn btn-secondary btn-sm" type="button" id="btnCancelGoogleConfig">Đóng</button>
-            <button class="btn btn-primary btn-sm" type="button" id="btnSaveGoogleConfig">
-              <span class="material-symbols-outlined icon-xs">save</span> Lưu Cấu Hình
-            </button>
-            <button class="btn btn-cta btn-sm" type="button" id="btnTestGoogleRedirect">
-              <span class="material-symbols-outlined icon-xs">open_in_new</span> Chuyển Hướng Xác Minh Ngay
-            </button>
+            <div class="flex items-center gap-2 flex-wrap">
+              <button class="btn btn-outlined btn-sm" type="button" id="btnQuickDemoGoogleLogin" style="border-color: var(--secondary); color: var(--secondary);">
+                <span class="material-symbols-outlined icon-xs">bolt</span> Đăng Nhập Thử Nghiệm Ngay
+              </button>
+              <button class="btn btn-primary btn-sm" type="button" id="btnSaveGoogleConfig">
+                <span class="material-symbols-outlined icon-xs">save</span> Lưu Client ID
+              </button>
+              <button class="btn btn-cta btn-sm" type="button" id="btnTestGoogleRedirect">
+                <span class="material-symbols-outlined icon-xs">open_in_new</span> Vào Google Thật
+              </button>
+            </div>
           </div>
         </div>
       </div>

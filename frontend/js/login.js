@@ -518,6 +518,34 @@
     const clientId = await getEffectiveGoogleClientId();
     const redirectUri = getGoogleRedirectUri();
 
+    // Kiểm tra xem Client ID đã được cấu hình hợp lệ trên Google Cloud chưa
+    const isConfigured = clientId &&
+      !clientId.includes("hybridstore.apps.googleusercontent.com") &&
+      !clientId.includes("your-client-id") &&
+      clientId.endsWith(".apps.googleusercontent.com");
+
+    if (!isConfigured) {
+      if (btnGoogleLogin) {
+        btnGoogleLogin.disabled = false;
+        if (googleLoginBtnText) {
+          googleLoginBtnText.textContent = "Đăng nhập bằng tài khoản Google";
+        }
+      }
+      if (displayRedirectUri) {
+        displayRedirectUri.value = redirectUri;
+      }
+      if (inputGoogleClientId) {
+        inputGoogleClientId.value = clientId.includes("hybridstore") ? "" : clientId;
+      }
+      showModal(googleAuthModal);
+      notify({
+        type: "warning",
+        title: "Cần Cấu Hình Google Client ID",
+        message: "Hệ thống cần Google Client ID thật từ Google Cloud Console để Google không báo lỗi 401. Bạn có thể nhập Client ID hoặc bấm 'Đăng Nhập Thử Nghiệm Ngay'.",
+      });
+      return;
+    }
+
     if (btnGoogleLogin) {
       btnGoogleLogin.disabled = true;
       if (googleLoginBtnText) {
@@ -781,6 +809,39 @@
         message: "Cấu hình Google OAuth 2.0 đã được cập nhật thành công.",
       });
       hideModal(googleAuthModal);
+    });
+  }
+
+  const btnQuickDemoGoogleLogin = document.getElementById("btnQuickDemoGoogleLogin");
+  if (btnQuickDemoGoogleLogin) {
+    btnQuickDemoGoogleLogin.addEventListener("click", () => {
+      const browserAcc = (typeof Auth !== "undefined" && typeof Auth.getBrowserGoogleAccount === "function")
+        ? Auth.getBrowserGoogleAccount()
+        : null;
+      const email = (browserAcc && browserAcc.email) || "nguyenphuc230607@gmail.com";
+      const name = (browserAcc && browserAcc.name) || "Nguyễn Ngọc Phúc";
+      const sessionUser = {
+        id: "g_user_" + Date.now().toString(36),
+        fullName: name,
+        username: email.split("@")[0],
+        email: email,
+        phone: "0901234567",
+        role: role,
+        avatar: "assets/images/avatars/default-avatar.svg",
+        membershipTitle: "VIP MEMBER",
+        kycStatus: "VERIFIED",
+        authProvider: "google",
+        loginAt: new Date().toISOString(),
+      };
+      if (typeof Auth !== "undefined" && typeof Auth.loginWithGoogle === "function") {
+        Auth.loginWithGoogle({
+          email: email,
+          name: name,
+          avatar: sessionUser.avatar,
+          role: role,
+        });
+      }
+      handleGoogleLoginSuccess(sessionUser);
     });
   }
 
