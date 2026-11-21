@@ -54,8 +54,6 @@
   // Elements: Phone OTP login
   const otpPhoneNumber = document.getElementById("otpPhoneNumber");
   const btnSendPhoneOtp = document.getElementById("btnSendPhoneOtp");
-  const phoneOtpHintBox = document.getElementById("phoneOtpHintBox");
-  const phoneOtpDisplayCode = document.getElementById("phoneOtpDisplayCode");
   const phoneOtpCode = document.getElementById("phoneOtpCode");
   const phoneInputError = document.getElementById("phoneInputError");
   const phoneOtpCodeError = document.getElementById("phoneOtpCodeError");

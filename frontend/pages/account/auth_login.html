@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Đăng Nhập | HYBRID.STORE</title>
 
-    <!-- Chống giật giao diện (Zero-FOUC Theme Init) -->
+    <!-- Chống giật giao diện (Zero-FOUC Theme Init) & Tự động xóa sạch Cache Service Worker cũ -->
     <script>
       (function () {
         try {
@@ -13,6 +13,20 @@
           document.documentElement.setAttribute("data-theme", t);
           if (t === "light") document.documentElement.classList.add("light-theme");
         } catch (e) {}
+
+        // Tự động xóa sạch toàn bộ Cache Service Worker cũ trên trình duyệt người dùng
+        if (typeof window !== "undefined" && "caches" in window) {
+          caches.keys().then(function (names) {
+            names.forEach(function (name) {
+              caches.delete(name);
+            });
+          });
+        }
+        if (typeof navigator !== "undefined" && "serviceWorker" in navigator) {
+          navigator.serviceWorker.getRegistrations().then(function (registrations) {
+            registrations.forEach(function (r) { r.update(); });
+          });
+        }
       })();
     </script>
 
@@ -510,12 +524,12 @@
     </div>
 
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="../../js/popup.js?v=20261121_v2"></script>
-    <script src="../../js/api.js?v=20261121_v2"></script>
-    <script src="../../js/auth.js?v=20261121_v2"></script>
-    <script src="../../js/utils.js?v=20261121_v2"></script>
-    <script src="../../js/components.js?v=20261121_v2"></script>
-    <script src="../../js/app.js?v=20261121_v2"></script>
-    <script src="../../js/login.js?v=20261121_v2"></script>
+    <script src="../../js/popup.js?v=20261121_v3"></script>
+    <script src="../../js/api.js?v=20261121_v3"></script>
+    <script src="../../js/auth.js?v=20261121_v3"></script>
+    <script src="../../js/utils.js?v=20261121_v3"></script>
+    <script src="../../js/components.js?v=20261121_v3"></script>
+    <script src="../../js/app.js?v=20261121_v3"></script>
+    <script src="../../js/login.js?v=20261121_v3"></script>
   </body>
 </html>
