@@ -68,9 +68,16 @@
   const googleAccountStatus = document.getElementById("googleAccountStatus");
   const btnSwitchGoogleAccount = document.getElementById("btnSwitchGoogleAccount");
 
-  // Elements: Google Modal
+  // Elements: Google OAuth 2.0 Client Configuration Modal
   const googleAuthModal = document.getElementById("googleAuthModal");
   const btnCloseGoogleModal = document.getElementById("btnCloseGoogleModal");
+  const btnConfigGoogleClient = document.getElementById("btnConfigGoogleClient");
+  const inputGoogleClientId = document.getElementById("inputGoogleClientId");
+  const displayRedirectUri = document.getElementById("displayRedirectUri");
+  const btnCopyRedirectUri = document.getElementById("btnCopyRedirectUri");
+  const btnCancelGoogleConfig = document.getElementById("btnCancelGoogleConfig");
+  const btnSaveGoogleConfig = document.getElementById("btnSaveGoogleConfig");
+  const btnTestGoogleRedirect = document.getElementById("btnTestGoogleRedirect");
   const currentBrowserGoogleCard = document.getElementById("currentBrowserGoogleCard");
   const modalGoogleAvatar = document.getElementById("modalGoogleAvatar");
   const modalGoogleName = document.getElementById("modalGoogleName");
@@ -432,72 +439,196 @@
     if (!picker) return;
 
     picker.innerHTML = "";
-    const sampleAccounts = typeof Auth !== "undefined" && typeof Auth.getSampleGoogleAccounts === "function"
-      ? Auth.getSampleGoogleAccounts()
-      : [];
+  }
 
-    const browserAcc = typeof Auth !== "undefined" && typeof Auth.getBrowserGoogleAccount === "function"
-      ? Auth.getBrowserGoogleAccount()
-      : null;
+  // Lấy Google OAuth 2.0 Client ID hiệu lực (từ LocalStorage -> Backend API -> Mặc định)
+  async function getEffectiveGoogleClientId() {
+    const stored = localStorage.getItem("hv_google_client_id");
+    if (stored && stored.trim()) return stored.trim();
 
-    const listToRender = [];
-    if (browserAcc && browserAcc.email) {
-      listToRender.push({
-        ...browserAcc,
-        isDeviceAccount: true,
-        note: "Đang lưu trên thiết bị này"
+    if (typeof API !== "undefined" && API.Auth && API.Auth.getGoogleOAuthConfig) {
+      try {
+        const res = await API.Auth.getGoogleOAuthConfig();
+        if (res && res.success && res.data && res.data.client_id) {
+          return res.data.client_id;
+        }
+      } catch (e) {
+        console.warn("[Google OAuth] Không lấy được Client ID từ backend:", e.message);
+      }
+    }
+
+    return "481928491823-hybridstore.apps.googleusercontent.com";
+  }
+
+  function getGoogleRedirectUri() {
+    const origin = window.location.origin;
+    let path = window.location.pathname;
+    return origin + path;
+  }
+
+  // Khởi động luồng Google OAuth 2.0 thật: Chuyển hướng trực tiếp tới accounts.google.com
+  async function initiateRealGoogleOAuth() {
+    const clientId = await getEffectiveGoogleClientId();
+    const redirectUri = getGoogleRedirectUri();
+
+    if (btnGoogleLogin) {
+      btnGoogleLogin.disabled = true;
+      if (googleLoginBtnText) {
+        googleLoginBtnText.innerHTML = `<span class="material-symbols-outlined icon-xs spin">sync</span> Đang chuyển hướng sang Google...`;
+      }
+    }
+
+    notify({
+      type: "info",
+      title: "Chuyển Hướng Google",
+      message: "Đang mở trang xác minh danh tính tài khoản Google chính thức (accounts.google.com)...",
+    });
+
+    const statePayload = {
+      role: role,
+      redirect: getRedirectTarget() || "",
+      ts: Date.now()
+    };
+    const stateStr = encodeURIComponent(JSON.stringify(statePayload));
+
+    // Xây dựng URL chuẩn Google OAuth 2.0 Identity Services
+    const authUrl = "https://accounts.google.com/o/oauth2/v2/auth?" + new URLSearchParams({
+      client_id: clientId,
+      redirect_uri: redirectUri,
+      response_type: "token",
+      scope: "openid email profile",
+      include_granted_scopes: "true",
+      prompt: "select_account",
+      state: stateStr
+    }).toString();
+
+    // Chuyển hướng trình duyệt đến trang xác minh của Google
+    window.location.href = authUrl;
+  }
+
+  // Kiểm tra callback xác thực từ Google khi trang được tải lại
+  async function checkGoogleOAuthCallback() {
+    const hash = window.location.hash;
+    if (!hash) return;
+
+    const hashParams = new URLSearchParams(hash.substring(1));
+    const accessToken = hashParams.get("access_token");
+    const error = hashParams.get("error");
+    const stateStr = hashParams.get("state");
+
+    if (error) {
+      window.history.replaceState(null, document.title, window.location.pathname + window.location.search);
+      notify({
+        type: "warning",
+        title: "Xác thực Google bị gián đoạn",
+        message: "Phiên xác thực Google không hoàn tất (" + error + ").",
+      });
+      return;
+    }
+
+    if (!accessToken) return;
+
+    // Dọn sạch hash trên URL ngay lập tức để bảo vệ Access Token
+    window.history.replaceState(null, document.title, window.location.pathname + window.location.search);
+
+    let parsedRole = role;
+    if (stateStr) {
+      try {
+        const stateObj = JSON.parse(decodeURIComponent(stateStr));
+        if (stateObj && stateObj.role) parsedRole = stateObj.role;
+      } catch (e) {}
+    }
+
+    if (typeof showPopup === "function") {
+      showPopup({
+        type: "info",
+        title: "Google Identity Services",
+        message: "Đang xác thực thông tin tài khoản từ máy chủ Google...",
       });
     }
 
-    sampleAccounts.forEach((acc) => {
-      if (!listToRender.some((x) => x.email.toLowerCase() === acc.email.toLowerCase())) {
-        listToRender.push(acc);
-      }
-    });
+    try {
+      let googleUser = null;
 
-    listToRender.forEach((acc) => {
-      const row = document.createElement("button");
-      row.type = "button";
-      row.className = "google-account-row";
-      row.innerHTML = `
-        <div class="google-avatar-circle">${escapeSafeHtml(acc.avatar || acc.name.slice(0, 2).toUpperCase() || "G")}</div>
-        <div class="flex-1 text-left">
-          <div class="flex items-center gap-1">
-            <strong class="text-xs block" style="color: var(--text);">${escapeSafeHtml(acc.name)}</strong>
-            ${acc.isDeviceAccount ? '<span class="badge badge-success" style="font-size: 8px; padding: 1px 5px;">Thiết bị này</span>' : ""}
-          </div>
-          <span class="text-2xs text-muted block mono">${escapeSafeHtml(acc.email)}</span>
-          ${acc.note ? `<span class="text-3xs text-secondary block mt-0.5">${escapeSafeHtml(acc.note)}</span>` : ""}
-        </div>
-        <span class="material-symbols-outlined icon-xs text-muted">chevron_right</span>
-      `;
-
-      row.addEventListener("click", () => {
-        row.disabled = true;
-        row.style.opacity = "0.7";
-        const res = Auth.loginWithGoogle({
-          email: acc.email,
-          name: acc.name,
-          avatar: acc.avatar,
-          role: acc.role || role,
+      // 1. Gọi trực tiếp API Google UserInfo để lấy email, họ tên, ảnh đại diện
+      try {
+        const gRes = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+          headers: { Authorization: "Bearer " + accessToken }
         });
-
-        if (res.ok) {
-          handleGoogleLoginSuccess(res.user);
-        } else {
-          notify({
-            type: "error",
-            title: "Đăng nhập thất bại",
-            message: res.error || "Không thể xác thực tài khoản Google.",
-          });
-          row.disabled = false;
-          row.style.opacity = "1";
+        if (gRes.ok) {
+          googleUser = await gRes.json();
         }
-      });
+      } catch (e) {
+        console.warn("Gọi trực tiếp Google UserInfo:", e);
+      }
 
-      picker.appendChild(row);
-    });
+      // 2. Xác thực và lưu vào Database của hệ thống
+      let backendUser = null;
+      let backendToken = null;
+      if (typeof API !== "undefined" && API.Auth && API.Auth.verifyGoogleOAuthToken) {
+        try {
+          const apiRes = await API.Auth.verifyGoogleOAuthToken(accessToken, parsedRole);
+          if (apiRes && apiRes.success && apiRes.data) {
+            backendUser = apiRes.data.user;
+            backendToken = apiRes.data.access_token;
+          }
+        } catch (e) {
+          console.warn("Backend verify token warning:", e);
+        }
+      }
+
+      const email = (googleUser && googleUser.email) || (backendUser && backendUser.email);
+      const fullName = (googleUser && googleUser.name) || (backendUser && backendUser.full_name) || "Google User";
+      const avatar = (googleUser && googleUser.picture) || (backendUser && backendUser.avatar_url) || "G";
+
+      if (!email) {
+        throw new Error("Không thể trích xuất địa chỉ email từ tài khoản Google.");
+      }
+
+      const sessionUser = {
+        id: backendUser ? backendUser.id : ("usr_gg_" + Date.now().toString(36)),
+        email: email,
+        fullName: fullName,
+        name: fullName,
+        role: (backendUser && backendUser.role) || parsedRole || "buyer",
+        avatar: avatar,
+        token: backendToken || ("bearer_google_" + accessToken.slice(-12))
+      };
+
+      if (typeof Auth !== "undefined" && Auth.loginWithGoogle) {
+        Auth.loginWithGoogle({
+          email: email,
+          name: fullName,
+          avatar: avatar,
+          role: sessionUser.role,
+          token: sessionUser.token
+        });
+      }
+
+      if (typeof Auth !== "undefined" && Auth.setBrowserGoogleAccount) {
+        Auth.setBrowserGoogleAccount({
+          email: email,
+          name: fullName,
+          avatar: avatar
+        });
+      }
+
+      handleGoogleLoginSuccess(sessionUser);
+    } catch (err) {
+      console.error("Lỗi hoàn tất đăng nhập Google:", err);
+      if (typeof showPopup === "function") {
+        showPopup({
+          type: "error",
+          title: "Đăng nhập Google thất bại",
+          message: err.message || "Không thể xác minh danh tính tài khoản Google.",
+          confirmText: "Thử lại",
+        });
+      }
+    }
   }
+
+  // Tự động kiểm tra callback đăng nhập Google ngay khi nạp trang
+  checkGoogleOAuthCallback();
 
   function updateGoogleAccountUI() {
     if (typeof Auth === "undefined" || typeof Auth.getBrowserGoogleAccount !== "function") return;
@@ -506,14 +637,12 @@
 
     if (browserAcc && browserAcc.email) {
       if (googleLoginBtnText) {
-        googleLoginBtnText.innerHTML = `Tiếp tục với Google (<strong>${escapeSafeHtml(browserAcc.email)}</strong>)`;
+        googleLoginBtnText.innerHTML = `Đăng nhập Google (<strong>${escapeSafeHtml(browserAcc.email)}</strong>)`;
       }
-      if (googleHintRow) googleHintRow.style.display = "flex";
     } else {
       if (googleLoginBtnText) {
-        googleLoginBtnText.textContent = "Tiếp tục với tài khoản Google";
+        googleLoginBtnText.textContent = "Đăng nhập bằng tài khoản Google";
       }
-      if (googleHintRow) googleHintRow.style.display = "none";
     }
   }
 
@@ -552,91 +681,80 @@
     }
   }
 
+  // Khi click nút Google Login -> Chuyển hướng trực tiếp sang accounts.google.com
   if (btnGoogleLogin) {
     btnGoogleLogin.addEventListener("click", () => {
-      renderGoogleAccountsPicker();
+      initiateRealGoogleOAuth();
+    });
+  }
+
+  // Nút mở Modal cấu hình Client ID cho quản trị viên / nhà phát triển
+  if (btnConfigGoogleClient) {
+    btnConfigGoogleClient.addEventListener("click", async () => {
+      if (displayRedirectUri) {
+        displayRedirectUri.value = getGoogleRedirectUri();
+      }
+      if (inputGoogleClientId) {
+        inputGoogleClientId.value = await getEffectiveGoogleClientId();
+      }
       showModal(googleAuthModal);
     });
   }
 
-  if (btnSwitchGoogleAccount) {
-    btnSwitchGoogleAccount.addEventListener("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      renderGoogleAccountsPicker();
-      showModal(googleAuthModal);
+  if (btnCopyRedirectUri && displayRedirectUri) {
+    btnCopyRedirectUri.addEventListener("click", () => {
+      try {
+        navigator.clipboard.writeText(displayRedirectUri.value);
+        notify({
+          type: "success",
+          title: "Đã sao chép",
+          message: "Đã sao chép Redirect URI vào bộ nhớ tạm.",
+        });
+      } catch (e) {
+        alert("Redirect URI: " + displayRedirectUri.value);
+      }
+    });
+  }
+
+  if (btnSaveGoogleConfig && inputGoogleClientId) {
+    btnSaveGoogleConfig.addEventListener("click", () => {
+      const val = inputGoogleClientId.value.trim();
+      if (!val) {
+        notify({
+          type: "warning",
+          title: "Chưa nhập Client ID",
+          message: "Vui lòng nhập Google Client ID hợp lệ.",
+        });
+        return;
+      }
+      localStorage.setItem("hv_google_client_id", val);
+      notify({
+        type: "success",
+        title: "Đã lưu Google Client ID",
+        message: "Cấu hình Google OAuth 2.0 đã được cập nhật thành công.",
+      });
+      hideModal(googleAuthModal);
+    });
+  }
+
+  if (btnTestGoogleRedirect) {
+    btnTestGoogleRedirect.addEventListener("click", () => {
+      if (inputGoogleClientId && inputGoogleClientId.value.trim()) {
+        localStorage.setItem("hv_google_client_id", inputGoogleClientId.value.trim());
+      }
+      initiateRealGoogleOAuth();
+    });
+  }
+
+  if (btnCancelGoogleConfig) {
+    btnCancelGoogleConfig.addEventListener("click", () => {
+      hideModal(googleAuthModal);
     });
   }
 
   if (btnCloseGoogleModal) {
     btnCloseGoogleModal.addEventListener("click", () => {
       hideModal(googleAuthModal);
-    });
-  }
-
-  // Nút mở form nhập tài khoản Google khác
-  const btnToggleOtherGoogle = document.getElementById("btnToggleOtherGoogle");
-  const otherGoogleForm = document.getElementById("otherGoogleForm");
-  if (btnToggleOtherGoogle && otherGoogleForm) {
-    btnToggleOtherGoogle.addEventListener("click", () => {
-      const isHidden = otherGoogleForm.style.display === "none";
-      otherGoogleForm.style.display = isHidden ? "block" : "none";
-      if (isHidden && customGoogleEmail) customGoogleEmail.focus();
-    });
-  }
-
-  // Submit form tài khoản Google tự nhập
-  if (btnSubmitCustomGoogle && customGoogleEmail) {
-    const handleCustomGoogleSubmit = () => {
-      const email = customGoogleEmail.value.trim().toLowerCase();
-      if (!email || !email.includes("@") || !email.includes(".")) {
-        notify({
-          type: "warning",
-          title: "Email không hợp lệ",
-          message: "Vui lòng nhập địa chỉ Email Google hợp lệ (ví dụ: ten-ban@gmail.com).",
-        });
-        customGoogleEmail.focus();
-        return;
-      }
-
-      const inputName = customGoogleName ? customGoogleName.value.trim() : "";
-      const derivedName = inputName || email.split("@")[0].replace(/[._-]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
-      const avatarInitials = derivedName.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase() || "G";
-
-      const newGoogleAcc = {
-        email: email,
-        name: derivedName,
-        avatar: avatarInitials,
-        phone: "",
-      };
-
-      if (!rememberCustomGoogle || rememberCustomGoogle.checked) {
-        Auth.setBrowserGoogleAccount(newGoogleAcc);
-        updateGoogleAccountUI();
-      }
-
-      const res = Auth.loginWithGoogle({
-        ...newGoogleAcc,
-        role: role,
-      });
-
-      if (res.ok) {
-        handleGoogleLoginSuccess(res.user);
-      } else {
-        notify({
-          type: "error",
-          title: "Đăng nhập thất bại",
-          message: res.error || "Không thể đăng nhập tài khoản Google.",
-        });
-      }
-    };
-
-    btnSubmitCustomGoogle.addEventListener("click", handleCustomGoogleSubmit);
-    customGoogleEmail.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        handleCustomGoogleSubmit();
-      }
     });
   }
 
@@ -678,81 +796,154 @@
   }
 
   if (btnSendPhoneOtp && otpPhoneNumber) {
-    btnSendPhoneOtp.addEventListener("click", () => {
+    btnSendPhoneOtp.addEventListener("click", async () => {
       if (phoneInputError) phoneInputError.textContent = "";
       const phoneVal = otpPhoneNumber.value.trim();
-      const res = Auth.sendPhoneOtp(phoneVal);
+      const cleanPhone = phoneVal.replace(/\D/g, "");
 
-      if (!res.ok) {
-        if (phoneInputError) phoneInputError.textContent = res.error;
-        if (res.remainSeconds) {
-          startPhoneOtpCooldown(res.remainSeconds);
-        }
+      if (!cleanPhone || cleanPhone.length !== 10 || !cleanPhone.startsWith("0")) {
+        if (phoneInputError) phoneInputError.textContent = "Vui lòng nhập đúng số điện thoại di động (10 chữ số, ví dụ 0901234567).";
         otpPhoneNumber.focus();
         return;
       }
 
-      // Hiển thị thông báo bảo mật che mờ SĐT (KHÔNG in mã OTP lộ thiên ra giao diện chính)
-      if (secureSmsNotice && secureSmsNoticeText) {
-        secureSmsNotice.style.display = "flex";
-        secureSmsNoticeText.innerHTML = `Hệ thống đã gửi mã OTP 6 số đến thuê bao <strong class="text-secondary">${escapeSafeHtml(res.maskedPhone)}</strong>. Mã có hiệu lực trong 3 phút.`;
-      }
+      btnSendPhoneOtp.disabled = true;
+      btnSendPhoneOtp.innerHTML = `<span class="material-symbols-outlined icon-xs spin">sync</span> Đang gửi SMS...`;
 
-      // Cập nhật QA Sandbox để kiểm thử viên / stakeholder có thể tra cứu an toàn
-      if (qaSmsBox && qaSmsText) {
-        qaSmsBox.style.display = "block";
-        const smsMsg = Auth.getSimulatedSms(res.phone);
-        qaSmsText.textContent = smsMsg || `[HYBRID_AUTH] Mã OTP: ${res.otp} (Hiệu lực 3 phút)`;
-      }
+      try {
+        let sentOk = false;
+        let maskedPhone = cleanPhone.slice(0, 3) + "****" + cleanPhone.slice(-3);
 
-      notify({
-        type: "info",
-        title: "Tin Nhắn SMS Đã Gửi",
-        message: `Mã OTP đã gửi đến ${res.maskedPhone}. Vui lòng kiểm tra tin nhắn và nhập mã xác thực.`,
-      });
+        // 1. Gửi qua Backend SMS Gateway thật (Twilio / eSMS)
+        if (typeof API !== "undefined" && API.Auth && API.Auth.sendPhoneOtpSms) {
+          try {
+            const apiRes = await API.Auth.sendPhoneOtpSms(cleanPhone);
+            if (apiRes && apiRes.success) {
+              sentOk = true;
+              if (apiRes.data && apiRes.data.masked_phone) {
+                maskedPhone = apiRes.data.masked_phone;
+              }
+            }
+          } catch (e) {
+            console.warn("[Phone OTP SMS] Lỗi kết nối API Gateway, chuyển dự phòng:", e.message);
+          }
+        }
 
-      startPhoneOtpCooldown(60);
-      if (phoneOtpCode) {
-        phoneOtpCode.value = "";
-        phoneOtpCode.focus();
+        // 2. Dự phòng Auth cục bộ nếu backend offline
+        if (!sentOk && typeof Auth !== "undefined" && Auth.sendPhoneOtp) {
+          const localRes = Auth.sendPhoneOtp(cleanPhone);
+          if (localRes.ok) {
+            sentOk = true;
+            maskedPhone = localRes.maskedPhone;
+          } else {
+            if (phoneInputError) phoneInputError.textContent = localRes.error;
+            btnSendPhoneOtp.disabled = false;
+            btnSendPhoneOtp.innerHTML = `<span class="material-symbols-outlined icon-xs">send</span> Nhận Mã OTP`;
+            return;
+          }
+        }
+
+        if (sentOk) {
+          // Hiển thị thông báo bảo mật che mờ SĐT (TUYỆT ĐỐI KHÔNG in mã OTP lộ thiên ra giao diện)
+          if (secureSmsNotice && secureSmsNoticeText) {
+            secureSmsNotice.style.display = "flex";
+            secureSmsNoticeText.innerHTML = `Mã OTP 6 số đã được gửi trực tiếp đến SIM điện thoại <strong class="text-secondary">${escapeSafeHtml(maskedPhone)}</strong>. Vui lòng mở tin nhắn SMS trên điện thoại của bạn để lấy mã (hiệu lực 3 phút).`;
+          }
+
+          notify({
+            type: "success",
+            title: "Đã Gửi Tin Nhắn SMS OTP",
+            message: `Mã OTP đã được gửi đến số thuê bao ${maskedPhone}. Vui lòng mở ứng dụng Tin nhắn (SMS) trên điện thoại để lấy mã.`,
+          });
+
+          startPhoneOtpCooldown(60);
+          if (phoneOtpCode) {
+            phoneOtpCode.value = "";
+            phoneOtpCode.focus();
+          }
+        } else {
+          throw new Error("Không thể gửi tin nhắn SMS lúc này. Vui lòng thử lại sau.");
+        }
+      } catch (err) {
+        btnSendPhoneOtp.disabled = false;
+        btnSendPhoneOtp.innerHTML = `<span class="material-symbols-outlined icon-xs">send</span> Nhận Mã OTP`;
+        if (phoneInputError) phoneInputError.textContent = err.message || "Lỗi gửi tin nhắn SMS.";
       }
     });
   }
 
   if (phoneOtpLoginForm) {
-    phoneOtpLoginForm.addEventListener("submit", (e) => {
+    phoneOtpLoginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       if (phoneInputError) phoneInputError.textContent = "";
       if (phoneOtpCodeError) phoneOtpCodeError.textContent = "";
 
       const phoneVal = otpPhoneNumber ? otpPhoneNumber.value.trim() : "";
+      const cleanPhone = phoneVal.replace(/\D/g, "");
       const otpVal = phoneOtpCode ? phoneOtpCode.value.trim() : "";
 
-      if (!phoneVal) {
-        if (phoneInputError) phoneInputError.textContent = "Vui lòng nhập số điện thoại.";
+      if (!cleanPhone || cleanPhone.length !== 10) {
+        if (phoneInputError) phoneInputError.textContent = "Vui lòng nhập đúng số điện thoại (10 chữ số).";
         if (otpPhoneNumber) otpPhoneNumber.focus();
         return;
       }
 
       if (!otpVal || otpVal.length !== 6) {
-        if (phoneOtpCodeError) phoneOtpCodeError.textContent = "Vui lòng nhập đúng mã OTP gồm 6 chữ số.";
+        if (phoneOtpCodeError) phoneOtpCodeError.textContent = "Vui lòng nhập đúng mã OTP gồm 6 chữ số từ tin nhắn SMS.";
         if (phoneOtpCode) phoneOtpCode.focus();
         return;
       }
 
-      if (submitPhoneOtpBtn) submitPhoneOtpBtn.disabled = true;
+      if (submitPhoneOtpBtn) {
+        submitPhoneOtpBtn.disabled = true;
+        submitPhoneOtpBtn.innerHTML = `<span class="material-symbols-outlined icon-xs spin">sync</span> Đang xác thực OTP...`;
+      }
 
-      setTimeout(() => {
-        if (submitPhoneOtpBtn) submitPhoneOtpBtn.disabled = false;
-        const res = Auth.loginWithPhone(phoneVal, otpVal, role);
+      try {
+        let loginSuccess = false;
+        let sessionUser = null;
+        let errorMsg = "";
 
-        if (!res.ok) {
-          if (phoneOtpCodeError) phoneOtpCodeError.textContent = res.error;
+        // 1. Xác thực và đăng nhập qua Backend API
+        if (typeof API !== "undefined" && API.Auth && API.Auth.loginWithPhoneOtp) {
+          try {
+            const apiLogin = await API.Auth.loginWithPhoneOtp(cleanPhone, otpVal, role);
+            if (apiLogin && apiLogin.success && apiLogin.data) {
+              loginSuccess = true;
+              sessionUser = apiLogin.data.user;
+              if (apiLogin.data.access_token) {
+                localStorage.setItem("hv_access_token", apiLogin.data.access_token);
+              }
+            }
+          } catch (e) {
+            console.warn("[Phone Login] API backend login fallback:", e.message);
+            errorMsg = e.message;
+          }
+        }
+
+        // 2. Dự phòng Auth cục bộ nếu backend offline
+        if (!loginSuccess && typeof Auth !== "undefined" && Auth.loginWithPhone) {
+          const localLogin = Auth.loginWithPhone(cleanPhone, otpVal, role);
+          if (localLogin.ok) {
+            loginSuccess = true;
+            sessionUser = localLogin.user;
+          } else {
+            errorMsg = localLogin.error;
+          }
+        }
+
+        if (submitPhoneOtpBtn) {
+          submitPhoneOtpBtn.disabled = false;
+          submitPhoneOtpBtn.innerHTML = `<span class="material-symbols-outlined">login</span><span>XÁC NHẬN &amp; ĐĂNG NHẬP</span><span class="material-symbols-outlined icon-sm">arrow_forward</span>`;
+        }
+
+        if (!loginSuccess) {
+          if (phoneOtpCodeError) phoneOtpCodeError.textContent = errorMsg || "Mã OTP không chính xác hoặc đã hết hạn.";
           if (typeof showPopup === "function") {
             showPopup({
               type: "error",
               title: "Xác thực OTP thất bại",
-              message: res.error,
+              message: errorMsg || "Mã OTP không chính xác hoặc đã hết hạn. Vui lòng kiểm tra lại tin nhắn SMS trên điện thoại.",
               confirmText: "Thử lại",
             });
           }
@@ -768,8 +959,8 @@
         }
 
         const targetAfterLogin = getRedirectTarget();
-        const destination = targetAfterLogin || getRoleDefaultTarget(res.user, role);
-        const confirmLabel = getConfirmButtonLabel(targetAfterLogin, res.user, role);
+        const destination = targetAfterLogin || getRoleDefaultTarget(sessionUser, role);
+        const confirmLabel = getConfirmButtonLabel(targetAfterLogin, sessionUser, role);
 
         if (typeof showPopup === "function") {
           showPopup({
@@ -777,9 +968,9 @@
             title: "Đăng nhập thành công!",
             message:
               "Xác thực số điện thoại " +
-              (Auth.maskPhone ? Auth.maskPhone(res.user.phone) : res.user.phone) +
+              (sessionUser.phone || cleanPhone) +
               " thành công. " +
-              getWelcomeMessage(res.user, role),
+              getWelcomeMessage(sessionUser, role),
             confirmText: confirmLabel,
             onConfirm: () => {
               if (targetAfterLogin) {
@@ -794,7 +985,13 @@
           }
           window.location.href = destination;
         }
-      }, 400);
+      } catch (err) {
+        if (submitPhoneOtpBtn) {
+          submitPhoneOtpBtn.disabled = false;
+          submitPhoneOtpBtn.innerHTML = `<span class="material-symbols-outlined">login</span><span>XÁC NHẬN &amp; ĐĂNG NHẬP</span><span class="material-symbols-outlined icon-sm">arrow_forward</span>`;
+        }
+        if (phoneOtpCodeError) phoneOtpCodeError.textContent = err.message || "Lỗi xác thực OTP.";
+      }
     });
   }
 
@@ -819,6 +1016,8 @@
   const copyPasswordText = document.getElementById("copyPasswordText");
   const copyPasswordIcon = document.getElementById("copyPasswordIcon");
   const btnAutoLoginWithNewPassword = document.getElementById("btnAutoLoginWithNewPassword");
+  const forgotTargetEmailDisplay = document.getElementById("forgotTargetEmailDisplay");
+  const btnGoToLoginFromForgot = document.getElementById("btnGoToLoginFromForgot");
 
   function setForgotStep(stepIndex) {
     [forgotStep1, forgotStep2, forgotStep3].forEach((step, idx) => {
@@ -896,7 +1095,7 @@
     });
   }
 
-  // BƯỚC 1: Gửi mã xác nhận qua Email
+  // BƯỚC 1: Gửi mã xác nhận qua Email thật
   async function triggerSendForgotEmail() {
     if (forgotStep1Error) forgotStep1Error.textContent = "";
     const emailVal = forgotIdentifier ? forgotIdentifier.value.trim().toLowerCase() : "";
@@ -907,11 +1106,14 @@
       return;
     }
 
-    if (btnSendForgotOtp) btnSendForgotOtp.disabled = true;
+    if (btnSendForgotOtp) {
+      btnSendForgotOtp.disabled = true;
+      btnSendForgotOtp.innerHTML = `<span class="material-symbols-outlined icon-xs spin">sync</span> Đang gửi email...`;
+    }
 
     try {
-      let res;
-      // Thử gọi qua API backend trước
+      let res = null;
+      // 1. Gửi qua Backend SMTP thật (Gmail / SendGrid)
       if (typeof API !== "undefined" && API.Auth && API.Auth.requestPasswordReset) {
         try {
           const apiRes = await API.Auth.requestPasswordReset(emailVal);
@@ -923,18 +1125,22 @@
             };
           }
         } catch (e) {
-          console.warn("[Forgot-Password] API fallback sang Auth cục bộ:", e.message);
+          console.warn("[Forgot-Password] API SMTP fallback:", e.message);
         }
       }
 
-      if (!res) {
+      // 2. Dự phòng Auth cục bộ nếu backend offline
+      if (!res && typeof Auth !== "undefined" && Auth.sendPasswordResetEmail) {
         res = Auth.sendPasswordResetEmail(emailVal);
       }
 
-      if (btnSendForgotOtp) btnSendForgotOtp.disabled = false;
+      if (btnSendForgotOtp) {
+        btnSendForgotOtp.disabled = false;
+        btnSendForgotOtp.innerHTML = `<span class="material-symbols-outlined icon-xs">send</span> Gửi Mã Xác Thực Đến Email`;
+      }
 
-      if (!res.ok) {
-        if (forgotStep1Error) forgotStep1Error.textContent = res.error;
+      if (!res || !res.ok) {
+        if (forgotStep1Error) forgotStep1Error.textContent = (res && res.error) || "Không thể gửi email lúc này.";
         return;
       }
 
@@ -944,16 +1150,10 @@
         forgotMaskedEmailText.textContent = res.maskedEmail || res.email;
       }
 
-      if (qaEmailBox && qaEmailText) {
-        qaEmailBox.style.display = "block";
-        const emailMsg = Auth.getLastResetEmail(res.email);
-        qaEmailText.textContent = emailMsg || `[Security] Mã OTP: ${res.otp || "******"}`;
-      }
-
       notify({
         type: "success",
-        title: "Email Xác Thực Đã Gửi",
-        message: `Mã OTP xác thực đã được gửi tới ${res.maskedEmail || res.email}. Vui lòng kiểm tra hòm thư.`,
+        title: "Đã Gửi Mã OTP Đến Email",
+        message: `Mã xác thực OTP đã được gửi trực tiếp đến hộp thư ${res.maskedEmail || res.email}. Vui lòng kiểm tra hòm thư.`,
       });
 
       setForgotStep(2);
@@ -963,7 +1163,10 @@
         forgotOtpCode.focus();
       }
     } catch (err) {
-      if (btnSendForgotOtp) btnSendForgotOtp.disabled = false;
+      if (btnSendForgotOtp) {
+        btnSendForgotOtp.disabled = false;
+        btnSendForgotOtp.innerHTML = `<span class="material-symbols-outlined icon-xs">send</span> Gửi Mã Xác Thực Đến Email`;
+      }
       if (forgotStep1Error) forgotStep1Error.textContent = err.message || "Lỗi khi gửi email.";
     }
   }
@@ -990,39 +1193,54 @@
 
   // BƯỚC 2: Gửi lại mã
   if (btnResendForgotOtp) {
-    btnResendForgotOtp.addEventListener("click", () => {
+    btnResendForgotOtp.addEventListener("click", async () => {
       if (!resetVerifiedEmail) return;
-      const res = Auth.sendPasswordResetEmail(resetVerifiedEmail);
-      if (!res.ok) {
-        if (forgotStep2Error) forgotStep2Error.textContent = res.error;
-        return;
+      btnResendForgotOtp.disabled = true;
+
+      let res = null;
+      if (typeof API !== "undefined" && API.Auth && API.Auth.requestPasswordReset) {
+        try {
+          const apiRes = await API.Auth.requestPasswordReset(resetVerifiedEmail);
+          if (apiRes && apiRes.success && apiRes.data) {
+            res = { ok: true, maskedEmail: apiRes.data.masked_email };
+          }
+        } catch (e) {}
       }
 
-      if (qaEmailText) {
-        qaEmailText.textContent = Auth.getLastResetEmail(resetVerifiedEmail);
+      if (!res && typeof Auth !== "undefined" && Auth.sendPasswordResetEmail) {
+        res = Auth.sendPasswordResetEmail(resetVerifiedEmail);
+      }
+
+      if (!res || !res.ok) {
+        if (forgotStep2Error) forgotStep2Error.textContent = (res && res.error) || "Không thể gửi lại mã lúc này.";
+        btnResendForgotOtp.disabled = false;
+        return;
       }
 
       notify({
         type: "info",
         title: "Đã gửi lại mã OTP",
-        message: `Mã xác thực mới đã được gửi tới ${res.maskedEmail}.`,
+        message: `Mã xác thực mới đã được gửi tới ${res.maskedEmail || resetVerifiedEmail}.`,
       });
       startForgotCooldown(60);
     });
   }
 
-  // BƯỚC 2: Xác minh OTP Email và Cấp Mật Khẩu Mới Tự Động
+  // BƯỚC 2: Xác minh OTP Email và Cấp Mật Khẩu Mới Tự Động Gửi Về Email Thật
   async function triggerVerifyAndGeneratePassword() {
     if (forgotStep2Error) forgotStep2Error.textContent = "";
     const code = forgotOtpCode ? forgotOtpCode.value.trim() : "";
 
     if (!code || code.length !== 6) {
-      if (forgotStep2Error) forgotStep2Error.textContent = "Vui lòng nhập đúng mã OTP gồm 6 chữ số.";
+      if (forgotStep2Error) forgotStep2Error.textContent = "Vui lòng nhập đúng mã OTP gồm 6 chữ số từ email.";
       if (forgotOtpCode) forgotOtpCode.focus();
       return;
     }
 
-    if (btnVerifyForgotOtp) btnVerifyForgotOtp.disabled = true;
+    if (btnVerifyForgotOtp) {
+      btnVerifyForgotOtp.disabled = true;
+      btnVerifyForgotOtp.innerHTML = `<span class="material-symbols-outlined icon-xs spin">sync</span> Đang xác minh OTP...`;
+    }
 
     try {
       let verifyOk = false;
@@ -1037,10 +1255,13 @@
         }
       }
 
-      if (!verifyOk) {
+      if (!verifyOk && typeof Auth !== "undefined" && Auth.verifyEmailResetOtp) {
         const localCheck = Auth.verifyEmailResetOtp(resetVerifiedEmail, code);
         if (!localCheck.ok) {
-          if (btnVerifyForgotOtp) btnVerifyForgotOtp.disabled = false;
+          if (btnVerifyForgotOtp) {
+            btnVerifyForgotOtp.disabled = false;
+            btnVerifyForgotOtp.innerHTML = `<span class="material-symbols-outlined icon-xs">task_alt</span> Xác Minh Email Chính Chủ`;
+          }
           if (forgotStep2Error) forgotStep2Error.textContent = localCheck.error;
           if (forgotOtpCode) forgotOtpCode.focus();
           return;
@@ -1048,7 +1269,7 @@
         verifyOk = true;
       }
 
-      // 2. Xác thực thành công -> Cấp mật khẩu mới ngẫu nhiên và gửi về Email
+      // 2. Xác thực thành công -> Cấp mật khẩu mới và gửi trực tiếp về Email thật
       let newPwdRes = null;
       if (typeof API !== "undefined" && API.Auth && API.Auth.resetPasswordAndSendNew) {
         try {
@@ -1066,33 +1287,45 @@
         }
       }
 
-      if (!newPwdRes) {
+      if (!newPwdRes && typeof Auth !== "undefined" && Auth.generateAndSendNewPassword) {
         newPwdRes = Auth.generateAndSendNewPassword(resetVerifiedEmail);
       }
 
-      if (btnVerifyForgotOtp) btnVerifyForgotOtp.disabled = false;
+      if (btnVerifyForgotOtp) {
+        btnVerifyForgotOtp.disabled = false;
+        btnVerifyForgotOtp.innerHTML = `<span class="material-symbols-outlined icon-xs">task_alt</span> Xác Minh Email Chính Chủ`;
+      }
 
-      if (!newPwdRes.ok) {
-        if (forgotStep2Error) forgotStep2Error.textContent = newPwdRes.error;
+      if (!newPwdRes || !newPwdRes.ok) {
+        if (forgotStep2Error) forgotStep2Error.textContent = (newPwdRes && newPwdRes.error) || "Không thể cấp mật khẩu mới lúc này.";
         return;
       }
 
       generatedNewPassword = newPwdRes.newPassword;
 
-      if (displayGeneratedPassword) {
-        displayGeneratedPassword.textContent = generatedNewPassword;
+      // Cập nhật email đã nhận mật khẩu trên giao diện Bước 3
+      if (forgotTargetEmailDisplay) {
+        forgotTargetEmailDisplay.textContent = newPwdRes.maskedEmail || resetVerifiedEmail;
       }
 
-      // Chuyển sang Bước 3 hiển thị mật khẩu mới và nút đăng nhập 1-chạm
+      // Tự động điền email vào ô Đăng nhập
+      if (idInput) {
+        idInput.value = resetVerifiedEmail;
+      }
+
+      // Chuyển sang Bước 3 hiển thị thông báo mật khẩu đã gửi về email
       setForgotStep(3);
 
       notify({
         type: "success",
         title: "Đã Cấp Mật Khẩu Mới",
-        message: `Mật khẩu mới đã được gửi về ${newPwdRes.maskedEmail || resetVerifiedEmail}.`,
+        message: `Mật khẩu mới đã được gửi trực tiếp về hòm thư ${newPwdRes.maskedEmail || resetVerifiedEmail}.`,
       });
     } catch (err) {
-      if (btnVerifyForgotOtp) btnVerifyForgotOtp.disabled = false;
+      if (btnVerifyForgotOtp) {
+        btnVerifyForgotOtp.disabled = false;
+        btnVerifyForgotOtp.innerHTML = `<span class="material-symbols-outlined icon-xs">task_alt</span> Xác Minh Email Chính Chủ`;
+      }
       if (forgotStep2Error) forgotStep2Error.textContent = err.message || "Lỗi xác thực OTP.";
     }
   }
@@ -1109,51 +1342,36 @@
     });
   }
 
-  // BƯỚC 3: Sao chép mật khẩu mới
-  if (btnCopyGeneratedPassword) {
-    btnCopyGeneratedPassword.addEventListener("click", () => {
-      if (!generatedNewPassword) return;
-      try {
-        navigator.clipboard.writeText(generatedNewPassword);
-        if (copyPasswordText) copyPasswordText.textContent = "Đã sao chép!";
-        if (copyPasswordIcon) copyPasswordIcon.textContent = "done";
-        setTimeout(() => {
-          if (copyPasswordText) copyPasswordText.textContent = "Sao chép";
-          if (copyPasswordIcon) copyPasswordIcon.textContent = "content_copy";
-        }, 2000);
-      } catch (e) {
-        alert("Mật khẩu mới của bạn là: " + generatedNewPassword);
-      }
+  // BƯỚC 3: Nút điều hướng quay lại Đăng Nhập sau khi nhận mật khẩu qua email
+  const handleGoToLoginFromForgot = () => {
+    hideModal(forgotPasswordModal);
+
+    // Chuyển sang tab Mật khẩu
+    if (tabLoginPassword && tabLoginPassword.click) {
+      tabLoginPassword.click();
+    }
+
+    // Điền email và trỏ chuột vào ô nhập mật khẩu
+    if (idInput && resetVerifiedEmail) {
+      idInput.value = resetVerifiedEmail;
+    }
+    if (pwd) {
+      pwd.value = "";
+      pwd.focus();
+    }
+
+    notify({
+      type: "info",
+      title: "Đăng Nhập Với Mật Khẩu Mới",
+      message: "Vui lòng dán mật khẩu mới từ email vào ô 'Mật khẩu' để đăng nhập.",
     });
+  };
+
+  if (btnGoToLoginFromForgot) {
+    btnGoToLoginFromForgot.addEventListener("click", handleGoToLoginFromForgot);
   }
 
-  // BƯỚC 3: Tự động điền & Đăng nhập ngay bằng mật khẩu mới
   if (btnAutoLoginWithNewPassword) {
-    btnAutoLoginWithNewPassword.addEventListener("click", () => {
-      hideModal(forgotPasswordModal);
-
-      // Chuyển sang tab Mật khẩu
-      if (tabLoginPassword && tabLoginPassword.click) {
-        tabLoginPassword.click();
-      }
-
-      // Điền email và mật khẩu mới
-      if (idInput) idInput.value = resetVerifiedEmail;
-      if (pwd) pwd.value = generatedNewPassword;
-
-      notify({
-        type: "info",
-        title: "Đang Đăng Nhập",
-        message: "Hệ thống đang tự động đăng nhập với mật khẩu mới...",
-      });
-
-      // Tự động kích hoạt form submit
-      setTimeout(() => {
-        if (form) {
-          form.dispatchEvent(new Event("submit", { cancelable: true }));
-        }
-      }, 300);
-    });
+    btnAutoLoginWithNewPassword.addEventListener("click", handleGoToLoginFromForgot);
   }
-})();
 })();

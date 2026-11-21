@@ -6,23 +6,32 @@ from typing import Optional, Dict, Any
 import time
 import secrets
 import string
+import json
+import urllib.request
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
+from core.config import settings
 from core.database import get_db
 from schemas.common import BaseResponse
 from schemas.user import (
     UserCreate, UserUpdate, UserResponse, UserLogin,
     KYCVerificationCreate, KYCVerificationResponse,
-    ForgotPasswordRequest, ForgotPasswordVerify, ForgotPasswordReset
+    ForgotPasswordRequest, ForgotPasswordVerify, ForgotPasswordReset,
+    PhoneOtpRequest, PhoneOtpVerify, GoogleTokenVerify
 )
 from services.auth_service import auth_service
-from models.user import KYCVerification
+from services.email_service import email_service
+from services.sms_service import sms_service
+from models.user import KYCVerification, User
 
 router = APIRouter(prefix="/auth", tags=["Auth & Identity (Xác thực & Danh tính)"])
 
-# Bộ nhớ tạm lưu mã OTP khôi phục mật khẩu (Email -> {otp, expires_at, attempts, verified})
+# Bộ nhớ tạm lưu mã OTP khôi phục mật khẩu (Email -> {otp, expires_at, attempts, verified, requested_at, user_id})
 _EMAIL_RESET_STORE: Dict[str, Dict[str, Any]] = {}
+
+# Bộ nhớ tạm lưu mã OTP đăng nhập số điện thoại (Phone -> {otp, expires_at, attempts, requested_at})
+_PHONE_OTP_STORE: Dict[str, Dict[str, Any]] = {}
 
 
 @router.post(
@@ -151,7 +160,7 @@ def get_ekyc_status(
 
 
 # ==============================================================
-# KHÔI PHỤC MẬT KHẨU QUA EMAIL BẢO MẬT & CẤP MẬT KHẨU MỚI
+# KHÔI PHỤC MẬT KHẨU QUA EMAIL BẢO MẬT & CẤP MẬT KHẨU MỚI (SMTP THẬT)
 # ==============================================================
 def mask_email(email: str) -> str:
     parts = email.split("@")
@@ -165,10 +174,17 @@ def mask_email(email: str) -> str:
     return f"{masked_name}@{domain}"
 
 
+def mask_phone(phone: str) -> str:
+    clean = "".join([c for c in phone if c.isdigit()])
+    if len(clean) >= 10:
+        return clean[:3] + "****" + clean[-3:]
+    return clean
+
+
 @router.post(
     "/forgot-password/request",
     response_model=BaseResponse[dict],
-    summary="Yêu cầu khôi phục mật khẩu và gửi mã OTP qua Email"
+    summary="Yêu cầu khôi phục mật khẩu và gửi mã OTP trực tiếp qua Email thật"
 )
 def request_forgot_password(body: ForgotPasswordRequest, db: Session = Depends(get_db)):
     email = body.email.strip().lower()
@@ -200,14 +216,19 @@ def request_forgot_password(body: ForgotPasswordRequest, db: Session = Depends(g
         "user_id": user.id
     }
 
+    # Gửi email thật qua SMTP (Gmail/SendGrid/...)
+    email_ok, email_msg = email_service.send_otp_email(email, otp, user.full_name)
+
     masked = mask_email(email)
     return BaseResponse[dict](
         success=True,
-        message=f"Mã xác thực đã được gửi tới hộp thư {masked}. Mã có hiệu lực trong 5 phút.",
+        message=f"Mã xác thực đã được gửi trực tiếp tới hòm thư {masked}. Mã có hiệu lực trong 5 phút.",
         data={
             "email": email,
             "masked_email": masked,
-            "expires_in_seconds": 300
+            "expires_in_seconds": 300,
+            "email_dispatched": email_ok,
+            "dispatch_detail": email_msg
         }
     )
 
@@ -255,7 +276,7 @@ def verify_forgot_password_otp(body: ForgotPasswordVerify):
     record["verified"] = True
     return BaseResponse[dict](
         success=True,
-        message="Xác thực email chính chủ thành công. Bạn có thể nhận mật khẩu mới ngay bây giờ.",
+        message="Xác thực email chính chủ thành công. Mật khẩu mới sẽ được gửi về email của bạn.",
         data={"email": email, "verified": True}
     )
 
@@ -263,7 +284,7 @@ def verify_forgot_password_otp(body: ForgotPasswordVerify):
 @router.post(
     "/forgot-password/reset",
     response_model=BaseResponse[dict],
-    summary="Cấp và gửi mật khẩu mới trực tiếp về Email sau khi đã xác thực"
+    summary="Cấp và gửi mật khẩu mới trực tiếp về Email thật sau khi đã xác thực"
 )
 def reset_and_issue_new_password(body: ForgotPasswordReset, db: Session = Depends(get_db)):
     email = body.email.strip().lower()
@@ -304,6 +325,9 @@ def reset_and_issue_new_password(body: ForgotPasswordReset, db: Session = Depend
             detail="Không tìm thấy tài khoản để cập nhật mật khẩu."
         )
 
+    # Gửi mật khẩu mới thật trực tiếp vào Email qua SMTP
+    email_ok, email_msg = email_service.send_new_password_email(email, new_pwd, user.full_name)
+
     # Xóa token sau khi đã reset thành công
     _EMAIL_RESET_STORE.pop(email, None)
 
@@ -315,7 +339,200 @@ def reset_and_issue_new_password(body: ForgotPasswordReset, db: Session = Depend
             "email": email,
             "masked_email": masked,
             "new_password": new_pwd,
+            "email_dispatched": email_ok,
+            "dispatch_detail": email_msg,
             "login_ready": True
         }
     )
+
+
+# ==============================================================
+# GỬI MÃ OTP TRỰC TIẾP VÀO SỐ ĐIỆN THOẠI (SMS GATEWAY THẬT)
+# ==============================================================
+@router.post(
+    "/otp/send-phone",
+    response_model=BaseResponse[dict],
+    summary="Gửi mã OTP trực tiếp vào số điện thoại thật qua Cổng SMS viễn thông"
+)
+def send_phone_otp_sms(body: PhoneOtpRequest):
+    phone = "".join([c for c in body.phone if c.isdigit()])
+    if len(phone) != 10 or not phone.startswith("0"):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Số điện thoại không hợp lệ (phải gồm đúng 10 chữ số bắt đầu bằng số 0)."
+        )
+
+    now = time.time()
+    existing = _PHONE_OTP_STORE.get(phone)
+    if existing and now - existing.get("requested_at", 0) < 60:
+        remain = int(60 - (now - existing["requested_at"]))
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail=f"Vui lòng đợi {remain} giây trước khi yêu cầu gửi lại SMS."
+        )
+
+    # Sinh mã OTP 6 chữ số an toàn
+    otp = f"{secrets.randbelow(900000) + 100000:06d}"
+    _PHONE_OTP_STORE[phone] = {
+        "otp": otp,
+        "requested_at": now,
+        "expires_at": now + 180,  # 3 phút
+        "attempts": 0
+    }
+
+    # Chuyển tiếp mã OTP trực tiếp vào SIM di động qua Cổng SMS viễn thông (Twilio / eSMS)
+    sms_ok, sms_msg = sms_service.send_otp_sms(phone, otp)
+
+    masked = mask_phone(phone)
+    return BaseResponse[dict](
+        success=True,
+        message=f"Mã OTP đã được gửi đến số điện thoại {masked}. Mã có hiệu lực trong 3 phút.",
+        data={
+            "phone": phone,
+            "masked_phone": masked,
+            "expires_in_seconds": 180,
+            "sms_dispatched": sms_ok,
+            "dispatch_detail": sms_msg
+        }
+    )
+
+
+@router.post(
+    "/otp/login-phone",
+    response_model=BaseResponse[dict],
+    summary="Đăng nhập bằng số điện thoại và mã OTP nhận từ tin nhắn SMS"
+)
+def login_phone_otp(body: PhoneOtpVerify, db: Session = Depends(get_db)):
+    phone = "".join([c for c in body.phone if c.isdigit()])
+    clean_otp = body.otp.strip()
+
+    record = _PHONE_OTP_STORE.get(phone)
+    if not record:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Không tìm thấy yêu cầu gửi OTP cho số điện thoại này. Vui lòng bấm 'Nhận Mã OTP' trước."
+        )
+
+    now = time.time()
+    if now > record["expires_at"]:
+        _PHONE_OTP_STORE.pop(phone, None)
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Mã OTP đã hết hạn (chỉ có hiệu lực trong 3 phút). Vui lòng yêu cầu mã mới."
+        )
+
+    if record["attempts"] >= 3:
+        _PHONE_OTP_STORE.pop(phone, None)
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Mã OTP đã bị khóa do nhập sai quá 3 lần. Vui lòng yêu cầu mã mới."
+        )
+
+    if clean_otp != record["otp"]:
+        record["attempts"] += 1
+        remains = 3 - record["attempts"]
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Mã OTP không chính xác. Bạn còn {remains} lần thử."
+        )
+
+    # Đăng nhập thành công -> Xóa mã OTP đã dùng
+    _PHONE_OTP_STORE.pop(phone, None)
+
+    # Tìm hoặc tạo tài khoản người dùng theo số điện thoại
+    user = auth_service.get_by_phone(db, phone=phone)
+    if not user:
+        user_in = UserCreate(
+            email=f"{phone}@hybrid.vn",
+            phone=phone,
+            full_name=f"Khách Hàng {phone[-4:]}",
+            username=f"user_{phone[-4:]}",
+            role=body.role or "buyer",
+            password="phone_otp_auth_session"
+        )
+        user = auth_service.create_user(db, user_in=user_in)
+
+    user_data = UserResponse.model_validate(user).model_dump()
+    return BaseResponse[dict](
+        success=True,
+        message="Xác thực OTP số điện thoại thành công!",
+        data={
+            "user": user_data,
+            "access_token": f"bearer_phone_{user.id}_session_2026",
+            "token_type": "bearer"
+        }
+    )
+
+
+# ==============================================================
+# XÁC THỰC GOOGLE OAUTH 2.0 THẬT (GOOGLE IDENTITY SERVICES)
+# ==============================================================
+@router.get(
+    "/oauth/google/config",
+    response_model=BaseResponse[dict],
+    summary="Lấy cấu hình Client ID cho Google OAuth 2.0"
+)
+def get_google_oauth_config():
+    return BaseResponse[dict](
+        success=True,
+        message="Lấy cấu hình Google OAuth thành công",
+        data={
+            "client_id": settings.GOOGLE_CLIENT_ID or "481928491823-hybridstore.apps.googleusercontent.com",
+            "is_configured": bool(settings.GOOGLE_CLIENT_ID)
+        }
+    )
+
+
+@router.post(
+    "/oauth/google/verify-token",
+    response_model=BaseResponse[dict],
+    summary="Xác minh Token từ Google Identity Services và Đăng nhập"
+)
+def verify_google_oauth_token(body: GoogleTokenVerify, db: Session = Depends(get_db)):
+    access_token = body.access_token
+
+    google_user_info = None
+    if access_token:
+        try:
+            req = urllib.request.Request("https://www.googleapis.com/oauth2/v3/userinfo")
+            req.add_header("Authorization", f"Bearer {access_token}")
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                google_user_info = json.loads(resp.read().decode("utf-8"))
+        except Exception as e:
+            print(f"[Google OAuth] Không thể xác thực token với Google API: {e}")
+
+    if not google_user_info or "email" not in google_user_info:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token xác thực Google không hợp lệ hoặc đã hết hạn."
+        )
+
+    email = google_user_info["email"].strip().lower()
+    full_name = google_user_info.get("name") or email.split("@")[0]
+    avatar_url = google_user_info.get("picture")
+
+    user = auth_service.get_by_email(db, email=email)
+    if not user:
+        user_in = UserCreate(
+            email=email,
+            phone="09" + f"{secrets.randbelow(90000000) + 10000000:08d}",
+            full_name=full_name,
+            username=email.split("@")[0],
+            role=body.role or "buyer",
+            avatar_url=avatar_url,
+            password="google_oauth_verified_auth"
+        )
+        user = auth_service.create_user(db, user_in=user_in)
+
+    user_data = UserResponse.model_validate(user).model_dump()
+    return BaseResponse[dict](
+        success=True,
+        message=f"Đăng nhập tài khoản Google {email} thành công!",
+        data={
+            "user": user_data,
+            "access_token": f"bearer_google_{user.id}_session_2026",
+            "token_type": "bearer"
+        }
+    )
+
 

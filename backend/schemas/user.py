@@ -38,6 +38,22 @@ class ForgotPasswordReset(BaseModel):
     new_password: Optional[str] = Field(default=None, description="Mật khẩu mới (tùy chọn, nếu không nhập hệ thống sẽ tự sinh)")
 
 
+class PhoneOtpRequest(BaseModel):
+    phone: str = Field(..., min_length=10, max_length=12, description="Số điện thoại nhận tin nhắn SMS OTP")
+
+
+class PhoneOtpVerify(BaseModel):
+    phone: str = Field(..., min_length=10, max_length=12, description="Số điện thoại")
+    otp: str = Field(..., min_length=6, max_length=6, description="Mã OTP 6 chữ số")
+    role: Optional[str] = Field(default="buyer", description="Vai trò đăng nhập")
+
+
+class GoogleTokenVerify(BaseModel):
+    access_token: Optional[str] = Field(default=None, description="OAuth 2.0 Access Token từ Google")
+    id_token: Optional[str] = Field(default=None, description="Google ID Token (JWT)")
+    role: Optional[str] = Field(default="buyer", description="Vai trò đăng nhập")
+
+
 class UserCreate(UserBase):
     password: str = Field(..., min_length=6, max_length=50, description="Mật khẩu khởi tạo tài khoản")
 

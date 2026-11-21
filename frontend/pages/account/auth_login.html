@@ -105,7 +105,7 @@
               </div>
             </div>
 
-            <!-- Nút Đăng nhập Google một chạm từ tài khoản thiết bị -->
+            <!-- Nút Đăng nhập Google thật (Chuyển hướng trực tiếp accounts.google.com) -->
             <div class="google-auth-wrapper">
               <button type="button" class="btn-social-google" id="btnGoogleLogin">
                 <svg viewBox="0 0 24 24" width="20" height="20">
@@ -114,15 +114,15 @@
                   <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
                   <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
                 </svg>
-                <span id="googleLoginBtnText">Tiếp tục với tài khoản Google</span>
+                <span id="googleLoginBtnText">Đăng nhập bằng tài khoản Google</span>
               </button>
-              <div class="google-hint-row" id="googleHintRow" style="display: none;">
-                <span class="text-xs text-muted">
-                  <span class="material-symbols-outlined icon-xs text-success" style="vertical-align: -2px;">devices</span>
-                  <span id="googleAccountStatus">Tài khoản Google trên thiết bị này</span>
+              <div class="google-hint-row" id="googleHintRow" style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+                <span class="text-2xs text-muted flex items-center gap-1">
+                  <span class="material-symbols-outlined icon-xs text-success">verified_user</span>
+                  <span id="googleAccountStatus">Chuyển sang trang xác minh danh tính Google</span>
                 </span>
-                <button type="button" class="btn-text-link" id="btnSwitchGoogleAccount">
-                  Đổi tài khoản khác
+                <button type="button" class="btn-text-link text-2xs" id="btnConfigGoogleClient" title="Cài đặt Google OAuth 2.0 Client ID">
+                  Cấu hình Client ID
                 </button>
               </div>
             </div>
@@ -243,20 +243,8 @@
                 <div class="flex-1">
                   <div class="text-xs fw-700 text-secondary">Mã OTP bảo mật đã được gửi!</div>
                   <div class="text-2xs text-muted" id="secureSmsNoticeText">
-                    Hệ thống đã gửi mã OTP 6 số đến số điện thoại. Mã có hiệu lực trong 3 phút.
+                    Hệ thống đã gửi mã OTP 6 số trực tiếp đến số điện thoại di động của bạn. Vui lòng mở tin nhắn SMS trên điện thoại để lấy mã (hiệu lực 3 phút).
                   </div>
-                </div>
-              </div>
-
-              <!-- Bảng tra cứu tin nhắn SMS cho môi trường Thử Nghiệm / QA Sandbox -->
-              <div class="qa-simulation-box" id="qaSmsBox" style="display: none; margin-bottom: 12px;">
-                <button type="button" class="btn-text-link text-2xs text-muted flex items-center gap-1" id="btnToggleQaSms">
-                  <span class="material-symbols-outlined icon-xs text-warning">developer_mode</span>
-                  <span>[QA / Demo Sandbox] Xem tin nhắn SMS gửi đến</span>
-                </button>
-                <div class="qa-sms-content p-2 rounded mt-1" id="qaSmsContent" style="display: none; background: rgba(255,255,255,0.03); border: 1px dashed var(--border); font-size: 11px;">
-                  <span class="material-symbols-outlined icon-xs text-warning" style="vertical-align: -2px;">lock</span>
-                  <span id="qaSmsText" class="mono text-muted">Chưa có tin nhắn nào.</span>
                 </div>
               </div>
 
@@ -336,9 +324,9 @@
       </div>
     </footer>
 
-    <!-- ===== MODAL 1: ĐĂNG NHẬP GOOGLE IDENTITY SERVICES (GIS) ===== -->
+    <!-- ===== MODAL 1: CẤU HÌNH & XÁC THỰC GOOGLE OAUTH 2.0 THẬT ===== -->
     <div class="modal-backdrop" id="googleAuthModal" role="dialog" aria-modal="true">
-      <div class="modal google-oauth-modal" style="max-width: 480px;">
+      <div class="modal google-oauth-modal" style="max-width: 520px;">
         <div class="modal-head">
           <div class="flex items-center gap-2">
             <svg viewBox="0 0 24 24" width="22" height="22">
@@ -347,56 +335,51 @@
               <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
               <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
             </svg>
-            <h4 class="modal-title" style="font-size: 16px; font-weight: 700;">Đăng Nhập Bằng Google</h4>
+            <h4 class="modal-title" style="font-size: 16px; font-weight: 700;">Google OAuth 2.0 Identity Services</h4>
           </div>
           <button class="modal-close" type="button" id="btnCloseGoogleModal" aria-label="Đóng"><span class="material-symbols-outlined">close</span></button>
         </div>
         <div class="modal-body">
-          <p class="text-xs text-muted mb-3" style="line-height: 1.5;">
-            Chọn một tài khoản Google để tiếp tục truy cập sàn thương mại điện tử <strong>HYBRID.STORE</strong>:
+          <p class="text-xs text-muted mb-3" style="line-height: 1.6;">
+            Khi bấm nút <strong>Đăng nhập bằng tài khoản Google</strong>, hệ thống sẽ chuyển hướng bạn trực tiếp sang cổng xác minh danh tính chính thức của Google (<strong>accounts.google.com</strong>) để bạn nhập mật khẩu / xác thực 2 lớp bảo mật (2FA).
           </p>
 
-          <!-- Danh sách các tài khoản Google khả dụng trên trình duyệt / thiết bị -->
-          <div class="google-accounts-picker" id="googleAccountsPicker">
-            <!-- Được render động bởi login.js -->
+          <div class="form-group mb-3">
+            <label class="form-label text-xs" for="inputGoogleClientId">Google Client ID (OAuth 2.0):</label>
+            <div class="input-group">
+              <span class="icon-left material-symbols-outlined">vpn_key</span>
+              <input class="input text-xs mono" id="inputGoogleClientId" type="text" placeholder="xxxx-yyyy.apps.googleusercontent.com" />
+            </div>
+            <span class="text-3xs text-muted mt-1 block">Tạo và lấy Client ID từ Google Cloud Console (APIs &amp; Services &gt; Credentials).</span>
           </div>
 
-          <!-- Nút chọn mở form tài khoản Google khác -->
-          <button type="button" class="google-other-acc-btn mb-3" id="btnToggleOtherGoogle">
-            <span class="material-symbols-outlined icon-sm">person_add</span>
-            <span>Sử dụng một tài khoản Google khác</span>
-          </button>
-
-          <!-- Form nhập tài khoản Google khác (mặc định ẩn) -->
-          <div class="p-3 rounded mb-3" id="otherGoogleForm" style="display: none; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border);">
-            <div class="form-group mb-2">
-              <label class="form-label text-xs" for="customGoogleEmail">Email Google của bạn (*)</label>
-              <div class="input-group">
-                <span class="icon-left material-symbols-outlined">alternate_email</span>
-                <input class="input text-xs" id="customGoogleEmail" type="email" placeholder="ten-cua-ban@gmail.com" required />
-              </div>
-            </div>
-            <div class="form-group mb-2">
-              <label class="form-label text-xs" for="customGoogleName">Họ và tên hiển thị</label>
-              <div class="input-group">
-                <span class="icon-left material-symbols-outlined">person</span>
-                <input class="input text-xs" id="customGoogleName" type="text" placeholder="Ví dụ: Nguyễn Văn A" />
-              </div>
-            </div>
-            <div class="flex items-center justify-between mt-3 flex-wrap gap-2">
-              <label class="check text-xs">
-                <input type="checkbox" id="rememberCustomGoogle" checked />
-                <span>Ghi nhớ trên thiết bị này</span>
-              </label>
-              <button class="btn btn-primary btn-sm" id="btnSubmitCustomGoogle" type="button" style="white-space: nowrap;">
-                <span class="material-symbols-outlined icon-xs">login</span> Đăng Nhập Ngay
-              </button>
+          <div class="form-group mb-3">
+            <label class="form-label text-xs">Redirect URI (Đường dẫn chuyển tiếp về sàn sau xác thực):</label>
+            <div class="input-group">
+              <span class="icon-left material-symbols-outlined">link</span>
+              <input class="input text-xs mono" id="displayRedirectUri" type="text" readonly />
+              <button type="button" class="btn btn-sm btn-secondary" id="btnCopyRedirectUri">Sao chép</button>
             </div>
           </div>
 
-          <div class="google-privacy-disclaimer">
-            <span class="material-symbols-outlined icon-xs text-muted">lock</span>
-            <span>Để tiếp tục, Google sẽ chia sẻ tên, địa chỉ email và ảnh hồ sơ của bạn với HYBRID.STORE theo chuẩn OAuth 2.0 an toàn.</span>
+          <div class="google-privacy-disclaimer mb-3" style="background: rgba(66, 133, 244, 0.08); border: 1px solid rgba(66, 133, 244, 0.2); padding: 10px 12px; border-radius: 8px;">
+            <div class="flex items-center gap-2 text-xs text-secondary mb-1 fw-700">
+              <span class="material-symbols-outlined icon-xs">security</span>
+              <span>Chuẩn xác thực bảo mật OAuth 2.0 &amp; OpenID Connect</span>
+            </div>
+            <span class="text-2xs text-muted">
+              Google bảo vệ hoàn toàn mật khẩu và bảo mật hai lớp của bạn. HYBRID.STORE chỉ nhận thông tin hồ sơ cơ bản (Email, Họ tên, Ảnh đại diện) sau khi Google cấp phép.
+            </span>
+          </div>
+
+          <div class="modal-foot p-0 flex justify-end gap-2 flex-wrap">
+            <button class="btn btn-secondary btn-sm" type="button" id="btnCancelGoogleConfig">Đóng</button>
+            <button class="btn btn-primary btn-sm" type="button" id="btnSaveGoogleConfig">
+              <span class="material-symbols-outlined icon-xs">save</span> Lưu Cấu Hình
+            </button>
+            <button class="btn btn-cta btn-sm" type="button" id="btnTestGoogleRedirect">
+              <span class="material-symbols-outlined icon-xs">open_in_new</span> Chuyển Hướng Xác Minh Ngay
+            </button>
           </div>
         </div>
       </div>
@@ -459,20 +442,8 @@
               <div class="flex-1">
                 <div class="text-xs fw-700 text-secondary">Mã xác minh đã được gửi!</div>
                 <div class="text-2xs text-muted">
-                  Hệ thống đã gửi mã OTP 6 số đến: <strong id="forgotMaskedEmailText" class="text-secondary mono">p***c@hybrid.store</strong>. Mã có hiệu lực trong 5 phút.
+                  Hệ thống đã gửi mã OTP 6 số trực tiếp đến hòm thư: <strong id="forgotMaskedEmailText" class="text-secondary mono">p***c@hybrid.store</strong>. Mã có hiệu lực trong 5 phút. Vui lòng mở hòm thư Gmail/Email của bạn để kiểm tra.
                 </div>
-              </div>
-            </div>
-
-            <!-- Khung Sandbox mô phỏng xem thư đến cho môi trường Demo / QA -->
-            <div class="qa-simulation-box mb-3" id="qaEmailBox">
-              <button type="button" class="btn-text-link text-2xs text-muted flex items-center gap-1" id="btnToggleQaEmail">
-                <span class="material-symbols-outlined icon-xs text-warning">developer_mode</span>
-                <span>[QA / Demo Sandbox] Xem nội dung email gửi đến</span>
-              </button>
-              <div class="qa-email-content p-2 rounded mt-1" id="qaEmailContent" style="display: none; background: rgba(255,255,255,0.03); border: 1px dashed var(--border); font-size: 11px;">
-                <span class="material-symbols-outlined icon-xs text-warning" style="vertical-align: -2px;">mail</span>
-                <span id="qaEmailText" class="mono text-muted">Chưa có email nào.</span>
               </div>
             </div>
 
@@ -500,41 +471,36 @@
             </div>
           </div>
 
-          <!-- BƯỚC 3: CẤP MẬT KHẨU MỚI & TỰ ĐỘNG ĐĂNG NHẬP -->
+          <!-- BƯỚC 3: MẬT KHẨU MỚI ĐÃ ĐƯỢC GỬI TRỰC TIẾP VỀ HÒM THƯ EMAIL -->
           <div class="wizard-step" id="forgotStep3">
-            <div class="panel p-3 mb-3" style="background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.25);">
-              <div class="text-xs text-success fw-700 flex items-center gap-1 mb-1">
-                <span class="material-symbols-outlined icon-sm">verified</span>
-                Xác thực email chính chủ thành công!
+            <div class="panel p-4 mb-3 text-center" style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 12px;">
+              <span class="material-symbols-outlined text-success" style="font-size: 48px; margin-bottom: 8px;">mark_email_read</span>
+              <h4 class="text-sm text-success fw-700 mb-2">Mật Khẩu Mới Đã Gửi Về Email Của Bạn!</h4>
+              <p class="text-xs text-muted mb-0" style="line-height: 1.6;">
+                Hệ thống bảo mật HYBRID.STORE đã tạo một mật khẩu mới ngẫu nhiên an toàn và gửi trực tiếp vào hòm thư:
+                <br>
+                <strong id="forgotTargetEmailDisplay" class="text-secondary mono" style="font-size: 13px;">user@example.com</strong>
+              </p>
+            </div>
+
+            <div class="p-3 rounded mb-3" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); font-size: 12px; line-height: 1.6;">
+              <div class="flex items-start gap-2 text-warning mb-1">
+                <span class="material-symbols-outlined icon-sm" style="margin-top: 1px;">shield</span>
+                <span class="fw-700">Chính sách bảo mật tối đa:</span>
               </div>
-              <div class="text-xs text-muted">
-                Hệ thống bảo mật đã tạo một mật khẩu mới ngẫu nhiên và gửi trực tiếp về email của bạn:
+              <div class="text-muted">
+                Để bảo vệ quyền riêng tư và chống nhìn lén màn hình tại nơi công cộng, mật khẩu không in trực tiếp trên trang web. Vui lòng mở hòm thư email của bạn để lấy mật khẩu mới, sau đó đăng nhập vào tài khoản.
               </div>
             </div>
 
-            <!-- Thẻ hiển thị mật khẩu mới an toàn -->
-            <div class="new-password-display-box mb-3">
-              <div class="text-2xs uppercase fw-700 text-muted mb-1 flex items-center gap-1">
-                <span class="material-symbols-outlined icon-xs text-secondary">key</span>
-                MẬT KHẨU MỚI ĐƯỢC CẤP:
-              </div>
-              <div class="password-highlight-row">
-                <span class="password-code mono" id="displayGeneratedPassword">Hyb#8392@2026</span>
-                <button type="button" class="btn btn-sm btn-secondary flex items-center gap-1" id="btnCopyGeneratedPassword">
-                  <span class="material-symbols-outlined icon-xs" id="copyPasswordIcon">content_copy</span>
-                  <span id="copyPasswordText">Sao chép</span>
-                </button>
-              </div>
-              <div class="text-2xs text-muted mt-2 flex items-center gap-1">
-                <span class="material-symbols-outlined icon-xs text-warning">info</span>
-                <span>Thông tin mật khẩu đã được cập nhật vào tài khoản và gửi đến hòm thư của bạn.</span>
-              </div>
-            </div>
-
-            <div class="modal-foot p-0 pt-3">
-              <button class="btn btn-cta is-full" type="button" id="btnAutoLoginWithNewPassword">
+            <div class="modal-foot p-0 pt-2 flex flex-col gap-2">
+              <a href="https://mail.google.com" target="_blank" rel="noopener noreferrer" class="btn btn-secondary is-full flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined icon-sm text-secondary">open_in_new</span>
+                <span>Mở Hộp Thư Gmail Đến</span>
+              </a>
+              <button class="btn btn-cta is-full" type="button" id="btnGoToLoginFromForgot">
                 <span class="material-symbols-outlined">login</span>
-                <span>TỰ ĐỘNG ĐIỀN &amp; ĐĂNG NHẬP NGAY</span>
+                <span>QUAY LẠI ĐĂNG NHẬP NGAY</span>
                 <span class="material-symbols-outlined icon-sm">arrow_forward</span>
               </button>
             </div>

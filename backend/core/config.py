@@ -48,6 +48,26 @@ class Settings(BaseSettings):
     # Tự động Fallback sang SQLite nội bộ nếu MySQL chưa bật
     USE_SQLITE_FALLBACK: bool = True
 
+    # 4. Cấu hình Đăng Nhập Google OAuth 2.0 (Google Identity Services)
+    GOOGLE_CLIENT_ID: str = Field(default="", description="Google OAuth 2.0 Client ID từ Google Cloud Console")
+    GOOGLE_CLIENT_SECRET: str = Field(default="", description="Google OAuth 2.0 Client Secret")
+    GOOGLE_REDIRECT_URI: Optional[str] = Field(default=None, description="URL Callback nhận OAuth Token")
+
+    # 5. Cấu hình Gửi Email Thật qua SMTP (Gmail, SendGrid, Mailgun, Outlook...)
+    SMTP_SERVER: str = Field(default="smtp.gmail.com", description="Máy chủ SMTP (mặc định: smtp.gmail.com)")
+    SMTP_PORT: int = Field(default=587, description="Cổng SMTP (587 TLS hoặc 465 SSL)")
+    SMTP_USER: str = Field(default="", description="Tài khoản email gửi (ví dụ: your_email@gmail.com)")
+    SMTP_PASSWORD: str = Field(default="", description="Mật khẩu ứng dụng (Gmail App Password gồm 16 ký tự)")
+    EMAIL_FROM: str = Field(default="HYBRID.STORE Security <security@hybrid.store>", description="Tên và email người gửi")
+
+    # 6. Cấu hình Cổng Gửi SMS Thật (Twilio, eSMS.vn, SpeedSMS)
+    SMS_PROVIDER: str = Field(default="twilio", description="Nhà cung cấp SMS (twilio hoặc esms)")
+    TWILIO_ACCOUNT_SID: str = Field(default="", description="Twilio Account SID")
+    TWILIO_AUTH_TOKEN: str = Field(default="", description="Twilio Auth Token")
+    TWILIO_FROM_NUMBER: str = Field(default="", description="Số điện thoại Twilio hoặc Brandname")
+    ESMS_API_KEY: str = Field(default="", description="eSMS.vn API Key")
+    ESMS_SECRET_KEY: str = Field(default="", description="eSMS.vn Secret Key")
+
     @property
     def database_url(self) -> str:
         """

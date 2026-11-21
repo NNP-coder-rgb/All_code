@@ -120,6 +120,33 @@
       });
     },
 
+    // Gửi tin nhắn SMS thật đến số điện thoại qua Cổng Viễn thông
+    async sendPhoneOtpSms(phone) {
+      return await request("/auth/otp/send-phone", {
+        method: "POST",
+        body: JSON.stringify({ phone })
+      });
+    },
+
+    async loginWithPhoneOtp(phone, otp, role = "buyer") {
+      return await request("/auth/otp/login-phone", {
+        method: "POST",
+        body: JSON.stringify({ phone, otp, role })
+      });
+    },
+
+    // Lấy cấu hình Google OAuth 2.0 & xác thực Token thật
+    async getGoogleOAuthConfig() {
+      return await request("/auth/oauth/google/config");
+    },
+
+    async verifyGoogleOAuthToken(accessToken, role = "buyer") {
+      return await request("/auth/oauth/google/verify-token", {
+        method: "POST",
+        body: JSON.stringify({ access_token: accessToken, role })
+      });
+    },
+
     async getAddresses(userId) {
       return await request(`/users/${userId}/addresses`);
     },
