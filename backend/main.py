@@ -7,7 +7,7 @@ Cấu hình CORS Middleware, Tự động khởi tạo bảng CSDL (create_all),
 import os
 import sys
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI, Request, status, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -19,7 +19,7 @@ if CURRENT_DIR not in sys.path:
     sys.path.insert(0, CURRENT_DIR)
 
 from core.config import settings
-from core.database import engine, Base, create_all_tables
+from core.database import engine, Base, create_all_tables, get_db, Session
 from routers import api_router
 
 
@@ -107,6 +107,46 @@ def health_check():
         "project": settings.PROJECT_NAME,
         "version": settings.VERSION,
         "database": "connected"
+    }
+
+
+@app.get(
+    "/api/v1/system/db-info",
+    tags=["System"],
+    summary="Kiểm tra nguồn cơ sở dữ liệu thực tế và thống kê bản ghi"
+)
+def get_db_info(db: Session = Depends(get_db)):
+    is_mysql_active = engine is not None and str(engine.url).startswith("mysql")
+    raw_url = str(engine.url) if engine else "unknown"
+    masked_url = raw_url
+    if "@" in raw_url and ":" in raw_url:
+        try:
+            prefix, rest = raw_url.split("://", 1)
+            user_part, host_part = rest.split("@", 1)
+            user = user_part.split(":", 1)[0]
+            masked_url = f"{prefix}://{user}:***@{host_part}"
+        except Exception:
+            pass
+
+    counts = {}
+    try:
+        from models import User, Product, Order, Category, Dispute, EscrowWallet
+        counts["users (người dùng)"] = db.query(User).count()
+        counts["products (sản phẩm)"] = db.query(Product).count()
+        counts["orders (đơn hàng)"] = db.query(Order).count()
+        counts["categories (danh mục)"] = db.query(Category).count()
+        counts["disputes (tranh chấp)"] = db.query(Dispute).count()
+        counts["escrow_wallets (ví ký quỹ)"] = db.query(EscrowWallet).count()
+    except Exception as e:
+        counts["error"] = str(e)
+
+    return {
+        "status": "connected",
+        "database_engine": "MySQL (Chạy trên máy tính cá nhân qua cổng 3306)" if is_mysql_active else "SQLite (Cơ sở dữ liệu nhúng sẵn trên Cloud Render)",
+        "connection_url": masked_url,
+        "is_mysql": is_mysql_active,
+        "is_sqlite": not is_mysql_active,
+        "tables_summary": counts
     }
 
 
