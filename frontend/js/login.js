@@ -441,6 +441,50 @@
     }, 600);
   });
 
+  // Các nút điền nhanh tài khoản mẫu kiểm thử 1-chạm
+  const quickFillAdminBtn = document.getElementById("quickFillAdminBtn");
+  const quickFillBuyerBtn = document.getElementById("quickFillBuyerBtn");
+  const quickFillSellerBtn = document.getElementById("quickFillSellerBtn");
+
+  if (quickFillAdminBtn) {
+    quickFillAdminBtn.addEventListener("click", () => {
+      if (idInput) idInput.value = "admin";
+      if (pwd) pwd.value = "admin123456";
+      role = "admin";
+      updateRoleDestHint("admin");
+      if (form) {
+        if (typeof form.requestSubmit === "function") form.requestSubmit();
+        else form.dispatchEvent(new Event("submit"));
+      }
+    });
+  }
+
+  if (quickFillBuyerBtn) {
+    quickFillBuyerBtn.addEventListener("click", () => {
+      if (idInput) idInput.value = "phuc@hybrid.store";
+      if (pwd) pwd.value = "password123";
+      role = "buyer";
+      updateRoleDestHint("buyer");
+      if (form) {
+        if (typeof form.requestSubmit === "function") form.requestSubmit();
+        else form.dispatchEvent(new Event("submit"));
+      }
+    });
+  }
+
+  if (quickFillSellerBtn) {
+    quickFillSellerBtn.addEventListener("click", () => {
+      if (idInput) idInput.value = "binh@sneakers.vn";
+      if (pwd) pwd.value = "password123";
+      role = "seller";
+      updateRoleDestHint("seller");
+      if (form) {
+        if (typeof form.requestSubmit === "function") form.requestSubmit();
+        else form.dispatchEvent(new Event("submit"));
+      }
+    });
+  }
+
   // =========================================================================
   // 3. ĐĂNG NHẬP BẰNG TÀI KHOẢN GOOGLE CHUẨN GOOGLE IDENTITY SERVICES (GIS)
   // =========================================================================
