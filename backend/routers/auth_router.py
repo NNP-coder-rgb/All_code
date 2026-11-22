@@ -466,7 +466,7 @@ def login_phone_otp(body: PhoneOtpVerify, db: Session = Depends(get_db)):
         _PHONE_OTP_STORE.pop(key, None)
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Mã OTP đã bị khóa do nhập sai quá 3 lần. Vui lòng yêu cầu mã mới."
+            detail="Mã OTP đã bị khóa do nhập sai quá 3 lần. Vui lòng bấm 'Nhận Mã OTP' để nhận mã mới."
         )
 
     if clean_otp != record["otp"]:

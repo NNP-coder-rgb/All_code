@@ -24,8 +24,15 @@ class EmailService:
         """Gửi email thật qua Resend REST API (cổng 443 HTTPS - không bao giờ bị Render chặn)."""
         try:
             url = "https://api.resend.com/emails"
+            # Resend miễn phí chỉ cho phép gửi từ domain onboarding@resend.dev (trừ khi đã xác thực domain riêng).
+            # Nếu người dùng vô tình đặt EMAIL_FROM là @gmail.com cá nhân, Resend sẽ trả về lỗi 403 Forbidden.
+            # Do đó tự động chuẩn hóa người gửi để luôn thành công.
+            sender = (settings.EMAIL_FROM or "").strip()
+            if not sender or any(f in sender.lower() for f in ["@gmail.com", "@yahoo", "@hotmail", "@outlook"]):
+                sender = "HYBRID.STORE Security <onboarding@resend.dev>"
+
             payload = {
-                "from": settings.EMAIL_FROM or "HYBRID.STORE Security <onboarding@resend.dev>",
+                "from": sender,
                 "to": [to_email],
                 "subject": subject,
                 "html": html_content,
