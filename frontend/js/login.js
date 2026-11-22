@@ -984,7 +984,7 @@
         // 1. Xác thực và đăng nhập qua Backend API
         if (typeof API !== "undefined" && API.Auth && API.Auth.loginWithPhoneOtp) {
           try {
-            const apiLogin = await API.Auth.loginWithPhoneOtp(cleanPhone, otpVal, role);
+            const apiLogin = await API.Auth.loginWithPhoneOtp(cleanTarget, otpVal, role);
             if (apiLogin && apiLogin.success && apiLogin.data) {
               loginSuccess = true;
               sessionUser = apiLogin.data.user;
@@ -993,14 +993,14 @@
               }
             }
           } catch (e) {
-            console.warn("[Phone Login] API backend login fallback:", e.message);
+            console.warn("[Phone/Email Login] API backend login fallback:", e.message);
             errorMsg = e.message;
           }
         }
 
         // 2. Dự phòng Auth cục bộ nếu backend offline
         if (!loginSuccess && typeof Auth !== "undefined" && Auth.loginWithPhone) {
-          const localLogin = Auth.loginWithPhone(cleanPhone, otpVal, role);
+          const localLogin = Auth.loginWithPhone(cleanTarget, otpVal, role);
           if (localLogin.ok) {
             loginSuccess = true;
             sessionUser = localLogin.user;
@@ -1020,7 +1020,7 @@
             showPopup({
               type: "error",
               title: "Xác thực OTP thất bại",
-              message: errorMsg || "Mã OTP không chính xác hoặc đã hết hạn. Vui lòng kiểm tra lại tin nhắn SMS trên điện thoại.",
+              message: errorMsg || (isEmail ? "Mã OTP không chính xác hoặc đã hết hạn. Vui lòng kiểm tra lại hòm thư email của bạn." : "Mã OTP không chính xác hoặc đã hết hạn. Vui lòng kiểm tra lại tin nhắn SMS trên điện thoại."),
               confirmText: "Thử lại",
             });
           }
@@ -1040,12 +1040,13 @@
         const confirmLabel = getConfirmButtonLabel(targetAfterLogin, sessionUser, role);
 
         if (typeof showPopup === "function") {
+          const targetDisplay = (sessionUser && (sessionUser.phone || sessionUser.email)) || cleanTarget;
           showPopup({
             type: "success",
             title: "Đăng nhập thành công!",
             message:
-              "Xác thực số điện thoại " +
-              (sessionUser.phone || cleanPhone) +
+              (isEmail ? "Xác thực địa chỉ Email " : "Xác thực số điện thoại ") +
+              targetDisplay +
               " thành công. " +
               getWelcomeMessage(sessionUser, role),
             confirmText: confirmLabel,

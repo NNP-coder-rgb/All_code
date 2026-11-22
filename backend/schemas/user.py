@@ -39,11 +39,11 @@ class ForgotPasswordReset(BaseModel):
 
 
 class PhoneOtpRequest(BaseModel):
-    phone: str = Field(..., min_length=10, max_length=12, description="Số điện thoại nhận tin nhắn SMS OTP")
+    phone: str = Field(..., min_length=3, max_length=120, description="Số điện thoại hoặc Email nhận mã OTP")
 
 
 class PhoneOtpVerify(BaseModel):
-    phone: str = Field(..., min_length=10, max_length=12, description="Số điện thoại")
+    phone: str = Field(..., min_length=3, max_length=120, description="Số điện thoại hoặc Email nhận mã OTP")
     otp: str = Field(..., min_length=6, max_length=6, description="Mã OTP 6 chữ số")
     role: Optional[str] = Field(default="buyer", description="Vai trò đăng nhập")
 

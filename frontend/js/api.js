@@ -42,7 +42,18 @@
       const data = isJson ? await response.json() : await response.text();
 
       if (!response.ok) {
-        const errorMsg = (data && (data.detail || data.message)) || `Lỗi HTTP ${response.status}`;
+        let errorMsg = `Lỗi HTTP ${response.status}`;
+        if (data) {
+          if (typeof data.detail === "string") {
+            errorMsg = data.detail;
+          } else if (Array.isArray(data.detail)) {
+            errorMsg = data.detail.map((e) => (e && e.msg) || (typeof e === "string" ? e : JSON.stringify(e))).join("; ");
+          } else if (typeof data.message === "string") {
+            errorMsg = data.message;
+          } else if (typeof data.detail === "object" && data.detail !== null) {
+            errorMsg = JSON.stringify(data.detail);
+          }
+        }
         throw new Error(errorMsg);
       }
 
