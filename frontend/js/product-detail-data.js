@@ -11,6 +11,13 @@
      * Phân giải sản phẩm từ ID URL query (?id=...)
      */
     resolveProduct: function (productId) {
+      const aliasMap = {
+        m01: "f2",
+        c01: "t2",
+      };
+      if (productId && aliasMap[String(productId).toLowerCase()]) {
+        productId = aliasMap[String(productId).toLowerCase()];
+      }
       let p = null;
       if (typeof PRODUCTS !== "undefined" && Array.isArray(PRODUCTS) && PRODUCTS.length) {
         if (productId) {

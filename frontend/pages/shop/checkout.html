@@ -1229,26 +1229,49 @@
             items = Utils.Cart.getItems();
           }
 
+          if (items && items.length > 0) {
+            // Đồng bộ dữ liệu chính xác với danh mục mock_data.js nếu có
+            items = items.map((item) => {
+              let prodId = item.id;
+              if (prodId === "m01") prodId = "f2";
+              if (prodId === "c01") prodId = "t2";
+              let matched = null;
+              if (typeof PRODUCTS !== "undefined" && Array.isArray(PRODUCTS) && prodId) {
+                matched = PRODUCTS.find((p) => String(p.id).toLowerCase() === String(prodId).toLowerCase());
+              }
+              return {
+                id: prodId,
+                name: matched ? (matched.name || matched.short) : (item.name || item.title || "Sản phẩm"),
+                price: matched ? Number(matched.price) : (Number(item.price) || 0),
+                type: matched ? matched.type : (item.type || "mall"),
+                condition: item.condition || (matched && matched.cond ? `${matched.cond}% MỚI` : (matched && matched.type === "mall" ? "MỚI 100%" : "LIKE NEW")),
+                variant: item.variant || (matched && matched.specs ? matched.specs[0] : ""),
+                img: matched ? matched.img : (item.img || item.image || ""),
+                qty: item.qty || item.quantity || 1
+              };
+            });
+          }
+
           if (!items || items.length === 0) {
-            // Mẫu sản phẩm mặc định để trải nghiệm
+            // Mẫu sản phẩm mặc định chuẩn xác trong kho hàng
             items = [
               {
-                id: "m01",
+                id: "f2",
                 name: "Áo Khoác Bomber Cyberpunk J1A-GT Multi-Pocket",
-                price: 4690000,
+                price: 1250000,
                 type: "mall",
-                variant: "Size M • Nguyên seal",
-                img: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=200",
+                variant: "Size L • Đen Cyber",
+                img: "assets/images/products/ao-jacket-blazer-runway-nam.png",
                 qty: 1
               },
               {
-                id: "c01",
-                name: "iPhone 15 Pro Max 256GB Titan Tự Nhiên (Like New 99%)",
-                price: 21990000,
+                id: "t2",
+                name: "iPhone 15 Pro Max 256GB Titan Tự Nhiên",
+                price: 24500000,
                 type: "c2c",
                 condition: "99% MỚI",
-                seller: "Việt Dũng Store",
-                img: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=200",
+                seller: "Apple Store VN",
+                img: "assets/images/products/dien-thoai-smartphone-flagship.png",
                 qty: 1
               }
             ];
@@ -1269,13 +1292,20 @@
           function renderRow(item) {
             const isUsed = item.type === "c2c";
             const qty = item.qty || item.quantity || 1;
-            const imgSrc = (typeof window !== "undefined" && window.resolveAssetUrl ? window.resolveAssetUrl(item.img || item.image) : item.img || item.image) || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200";
+            const imgSrc = (typeof window !== "undefined" && window.resolveAssetUrl ? window.resolveAssetUrl(item.img || item.image) : item.img || item.image) || "../../assets/images/products/phone-sample.svg";
+            const detailUrl = isUsed
+              ? `product_used.html?id=${encodeURIComponent(item.id)}`
+              : `product_new.html?id=${encodeURIComponent(item.id)}`;
 
             return `
               <div class="checkout-item-row">
-                <img class="checkout-item-thumb" src="${imgSrc}" alt="${item.name}" />
+                <a href="${detailUrl}" class="flex-shrink-0" title="${item.name}">
+                  <img class="checkout-item-thumb" src="${imgSrc}" alt="${item.name}" loading="lazy" />
+                </a>
                 <div class="flex-1" style="min-width: 0;">
-                  <div class="text-xs fw-600 line-clamp-1" title="${item.name}">${item.name}</div>
+                  <div class="text-xs fw-600 line-clamp-1" title="${item.name}">
+                    <a href="${detailUrl}" class="text-hover-primary" title="${item.name}">${item.name}</a>
+                  </div>
                   <div class="text-xs text-muted flex items-center gap-1.5 mt-0.5">
                     <span>x${qty}</span>
                     <span>•</span>
