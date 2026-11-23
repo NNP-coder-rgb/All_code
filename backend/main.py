@@ -41,6 +41,13 @@ async def lifespan(app: FastAPI):
     try:
         create_all_tables()
         print("✅ [SQLAlchemy] Toàn bộ bảng cơ sở dữ liệu đã sẵn sàng.")
+
+        # 2. Tự động nạp dữ liệu mẫu ban đầu nếu CSDL mới tinh
+        try:
+            from seed_data import auto_seed_if_empty
+            auto_seed_if_empty()
+        except Exception as seed_err:
+            print(f"ℹ️ [AutoSeed] Bỏ qua auto-seed: {seed_err}")
     except Exception as e:
         print(f"⚠️ [SQLAlchemy] Lỗi khi tạo bảng CSDL: {e}")
 
@@ -67,6 +74,7 @@ app = FastAPI(
 # ==============================================================
 app.add_middleware(
     CORSMiddleware,
+    allow_origin_regex=".*",
     allow_origins=settings.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],

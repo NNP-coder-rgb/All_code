@@ -1,8 +1,8 @@
 /**
  * sw.js — Service Worker cho HYBRID.STORE (PWA & Tự động làm mới Cache)
- * Phiên bản: v20261122_v15 (Hỗ trợ nút đăng nhập nhanh 1-chạm và đồng bộ tài khoản Admin)
+ * Phiên bản: v20261123_v16 (Tối ưu hóa toàn diện API Client, CSDL và điều hướng hệ thống)
  */
-const CACHE_NAME = "hybrid-store-v20261122_v15";
+const CACHE_NAME = "hybrid-store-v20261123_v16";
 
 self.addEventListener("install", (e) => {
   // Lập tức kích hoạt Service Worker mới không chờ đợi

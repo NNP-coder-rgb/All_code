@@ -26,15 +26,16 @@ from models import (
 )
 
 
-def seed():
+def seed(drop_existing: bool = True):
     print("=" * 68)
     print("🌱 BẮT ĐẦU NẠP DỮ LIỆU SEED DATA QUA PYTHON & SQLALCHEMY ORM")
     print(f"📁 Database: {DB_PATH}")
     print("=" * 68)
 
     # 1. Làm sạch và tạo mới toàn bộ 23 bảng
-    print("🔨 Đang tạo mới toàn bộ cấu trúc bảng...")
-    Base.metadata.drop_all(bind=engine)
+    if drop_existing:
+        print("🔨 Đang làm mới toàn bộ cấu trúc bảng...")
+        Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
 
     db = SessionLocal()
@@ -644,6 +645,24 @@ def seed():
         db.rollback()
         print(f"❌ Lỗi khi nạp dữ liệu: {e}")
         raise e
+    finally:
+        db.close()
+
+
+def auto_seed_if_empty():
+    """Tự động kiểm tra và nạp dữ liệu khởi tạo nếu CSDL đang rỗng."""
+    db = SessionLocal()
+    try:
+        user_count = db.query(User).count()
+        cat_count = db.query(Category).count()
+        if user_count == 0 or cat_count == 0:
+            print("🌱 [AutoSeed] Phát hiện CSDL chưa có dữ liệu mẫu. Đang tự động nạp...")
+            seed(drop_existing=False)
+            print("✅ [AutoSeed] Đã nạp dữ liệu mẫu ban đầu thành công!")
+        else:
+            print(f"ℹ️ [AutoSeed] CSDL đã sẵn sàng với {user_count} người dùng và {cat_count} danh mục.")
+    except Exception as e:
+        print(f"⚠️ [AutoSeed] Bỏ qua nạp dữ liệu tự động: {e}")
     finally:
         db.close()
 
