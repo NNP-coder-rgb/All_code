@@ -370,6 +370,18 @@
     position: static;
   }
 }
+@media (max-width: 768px) {
+  .catalog-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+}
+@media (max-width: 560px) {
+  .catalog-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+}
 
 /* =====================================================================
    GIAO DIỆN SÁNG CHO TRANG CATALOG (LIGHT THEME CATALOG — TƯƠNG PHẢN CAO)

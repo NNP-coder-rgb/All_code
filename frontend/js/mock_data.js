@@ -2875,10 +2875,10 @@ const PRODUCTS = [
   },
 ];
 
-// Thứ tự hiển thị trong Flash Sale (id sản phẩm)
+// Thứ tự hiển thị trong Flash Sale (id sản phẩm: 6 sản phẩm chuẩn phân bổ giao diện 2x3 mobile & 4 desktop)
 const FLASH_SALE = {
   endsInSeconds: 3 * 3600 + 42 * 60 + 19,
-  items: ["t4", "t2", "t5", "t6"],
+  items: ["t4", "t2", "t5", "t6", "t1", "t3"],
 };
 
 // Dòng chạy "Giao Dịch Mới"
