@@ -183,13 +183,94 @@
         ];
       }
 
+      // 8. Balo & Túi xách cao cấp
+      if (name.toLowerCase().includes("balo") || name.toLowerCase().includes("túi xách")) {
+        return [
+          { label: "Thương hiệu", value: p.sub || "Mark Ryden / Luxury Brand" },
+          { label: "Dòng sản phẩm", value: p.short || p.name },
+          { label: "Chất liệu chính", value: name.toLowerCase().includes("balo") ? "Vải Oxford 900D chống thấm nước nhiều lớp, lót Polyester bền bỉ" : "Da bò tự nhiên cao cấp, bề mặt dập vân chống trầy xước" },
+          { label: "Ngăn chứa & Sức chứa", value: name.toLowerCase().includes("balo") ? "Ngăn đệm laptop 15.6 inch chống sốc, ngăn chính rộng 20-30L, ngăn bí mật chống trộm" : "Ngăn lớn đựng điện thoại, ví tiền, mỹ phẩm cùng nhiều ngăn phụ có khóa kéo" },
+          { label: "Khóa kéo & Phụ kiện", value: "Khóa kim loại đúc mạ tĩnh điện chống gỉ sét, kéo êm ái mượt mà" },
+          { label: "Kích thước & Trọng lượng", value: name.toLowerCase().includes("balo") ? "46 x 30 x 16 cm • Trọng lượng 850g siêu nhẹ có đệm lưng thoáng khí" : "24 x 16 x 8 cm • Kèm quai đeo chéo da có thể tháo rời" },
+          { label: "Tình trạng sản phẩm", value: isMall ? "Mới 100% nguyên tem mác phân phối chính hãng" : `Đồ cũ Like New ${p.cond || 98}% (Vải/da nguyên form, không sờn rách)` },
+          { label: "Chế độ bảo hành", value: warranty },
+        ];
+      }
+
+      // 9. Kính mắt thời trang
+      if (name.toLowerCase().includes("kính") || (p.img && p.img.includes("kinh-mat"))) {
+        return [
+          { label: "Thương hiệu", value: p.sub || "Gentle Monster / Eyewear Boutique" },
+          { label: "Chất liệu tròng kính", value: "Tròng phân cực Polarized chống chói lóa, chống tia UV400 chuẩn quang học" },
+          { label: "Chất liệu gọng", value: "Hợp kim Titan cao cấp siêu nhẹ, chống oxy hóa, chuôi bọc Acetate êm tai" },
+          { label: "Đệm mũi & Bản lề", value: "Đệm mũi silicone y tế chống lún, bản lề 5 chấu chắc chắn đàn hồi" },
+          { label: "Kích thước gọng", value: "Chiều rộng mắt 54mm • Cầu mũi 18mm • Chiều dài càng kính 145mm" },
+          { label: "Phụ kiện đi kèm", value: "Hộp da cao cấp, khăn lau microfiber chuyên dụng, thẻ xác thực chính hãng" },
+          { label: "Tình trạng sản phẩm", value: isMall ? "Mới 100% Fullbox nguyên seal" : `Like New ${p.cond || 99}% (Tròng không vết xước dăm)` },
+          { label: "Bảo hành", value: warranty },
+        ];
+      }
+
+      // 10. Nước hoa cao cấp
+      if (name.toLowerCase().includes("nước hoa") || (p.img && p.img.includes("nuoc-hoa"))) {
+        return [
+          { label: "Thương hiệu", value: p.sub || "Luxury Perfume House" },
+          { label: "Nồng độ & Dung tích", value: "Eau De Parfum (EDP) • Dung tích chai 100ml" },
+          { label: "Nhóm hương (Olfactive)", value: "Woody Spicy — Hương gỗ tuyết tùng, hổ phách ấm áp và cam Bergamot tươi mát" },
+          { label: "Độ lưu hương", value: "Lâu — Từ 8 đến 12 giờ trên da, hơn 24 giờ trên quần áo" },
+          { label: "Độ tỏa hương", value: "Gần — Tỏa hương thoang thoảng trong vòng 1 cánh tay" },
+          { label: "Thời điểm khuyên dùng", value: "Thích hợp dùng cả ngày lẫn đêm, mùa thu đông hoặc phòng máy lạnh" },
+          { label: "Tình trạng chai", value: isMall ? "Mới 100% nguyên seal nilon phân phối" : `Đồ cũ Like New ${p.cond || 99}% (Còn 95/100ml, vòi xịt phun sương mịn)` },
+          { label: "Bảo hành xuất xứ", value: "Cam kết chính hãng 100% • Bao check mã vạch và batch code" },
+        ];
+      }
+
+      // 11. Son môi & Mỹ phẩm chăm sóc da
+      if (name.toLowerCase().includes("son") || name.toLowerCase().includes("kem dưỡng") || (p.img && (p.img.includes("son-moi") || p.img.includes("kem-duong")))) {
+        return [
+          { label: "Thương hiệu", value: p.sub || "YSL Beauty / MAC Cosmetics" },
+          { label: "Phân loại sản phẩm", value: name.toLowerCase().includes("son") ? "Son môi thỏi lì mịn Velvet Matte bền màu" : "Kem dưỡng ẩm & phục hồi chuyên sâu Skincare Serum" },
+          { label: "Thành phần nổi bật", value: name.toLowerCase().includes("son") ? "Tinh dầu dưỡng ẩm Jojoba, Vitamin E chống thâm môi, hạt màu khoáng tự nhiên" : "Vitamin B5, Ceramide NP, Hyaluronic Acid cấp ẩm đa tầng" },
+          { label: "Hiệu ứng bề mặt", value: name.toLowerCase().includes("son") ? "Lì mịn như nhung, che rãnh môi hoàn hảo, không gây khô căng" : "Thấm nhanh không nhờn rít, củng cố hàng rào bảo vệ da" },
+          { label: "Hạn sử dụng", value: "Hạn dùng 36 tháng kể từ ngày sản xuất (Date xa 2027)" },
+          { label: "Tình trạng", value: isMall ? "Mới 100% nguyên hộp tem phụ tiếng Việt" : `Độ mới ${p.cond || 99}% (Chưa sử dụng, bảo quản phòng mát)` },
+          { label: "Cam kết sàn", value: "100% hàng chính hãng, bồi hoàn 500% nếu phát hiện hàng giả" },
+        ];
+      }
+
+      // 12. Đồng hồ thông minh Smartwatch
+      if (name.toLowerCase().includes("đồng hồ") || name.toLowerCase().includes("smartwatch") || name.toLowerCase().includes("apple watch") || name.toLowerCase().includes("garmin") || name.toLowerCase().includes("smart band")) {
+        return [
+          { label: "Thương hiệu", value: p.sub || "Apple / Garmin / Huawei" },
+          { label: "Màn hình hiển thị", value: "AMOLED / Retina Display độ sáng cao, mặt kính cường lực chống trầy" },
+          { label: "Tính năng sức khỏe", value: "Đo nhịp tim quang học 24/7, SpO2 nồng độ oxy, theo dõi giấc ngủ sâu, ECG" },
+          { label: "Chế độ thể thao", value: "Hơn 100 chế độ tập luyện: Chạy bộ, Bơi lội, Đạp xe, Leo núi, Yoga" },
+          { label: "Khả năng chống nước", value: "Chuẩn kháng nước 5ATM / IP68 (chịu áp lực nước 50m bơi lội thoải mái)" },
+          { label: "Thời lượng sử dụng pin", value: name.toLowerCase().includes("garmin") || name.toLowerCase().includes("band") ? "Pin trâu 7 - 14 ngày sử dụng liên tục" : "Pin 36 - 72 giờ tùy cường độ bật GPS" },
+          { label: "Khả năng kết nối", value: "Bluetooth 5.2, GPS độc lập, đồng bộ thông báo cuộc gọi & tin nhắn với iOS/Android" },
+          { label: "Tình trạng sản phẩm", value: isMall ? "Mới 100% nguyên seal hộp chính hãng" : `Đồ cũ Like New ${p.cond || 98}% (Pin khỏe, cảm biến hoạt động nhạy 100%)` },
+          { label: "Chế độ bảo hành", value: warranty },
+        ];
+      }
+
+      // 13. Nến thơm, Ly gốm sứ & Mũ nón
+      if (name.toLowerCase().includes("nến") || name.toLowerCase().includes("ly") || name.toLowerCase().includes("gốm") || name.toLowerCase().includes("mũ")) {
+        return [
+          { label: "Thương hiệu", value: p.sub || "Aroma Boutique / Thủ Công Mỹ Nghệ" },
+          { label: "Chất liệu chế tác", value: name.toLowerCase().includes("nến") ? "Sáp đậu nành tự nhiên kết hợp tinh dầu hoa oải hương, bấc gỗ không khói" : name.toLowerCase().includes("ly") ? "Đất sét cao cấp nung nhiệt độ 1300°C, men mộc mạ viền vàng thủ công an toàn" : "100% Cotton thoáng mát, khóa kim loại điều chỉnh size linh hoạt" },
+          { label: "Công năng nổi bật", value: name.toLowerCase().includes("nến") ? "Thời gian cháy 45-50 giờ, tỏa hương thơm êm dịu giúp thư giãn và ngủ ngon" : name.toLowerCase().includes("ly") ? "Dung tích 350ml, giữ nhiệt tốt, dùng được cho lò vi sóng và máy rửa bát" : "Form nón cứng cáp, chống tia cực tím UV bảo vệ da mặt" },
+          { label: "Tình trạng sản phẩm", value: isMall ? "Mới 100% Fullbox nguyên hộp sang trọng" : `Đồ cũ Like New ${p.cond || 99}% (Nguyên vẹn không tì vết)` },
+          { label: "Bảo hành & Hỗ trợ", value: "Bao vỡ hỏng trong quá trình vận chuyển • Đổi mới 100%" },
+        ];
+      }
+
       // Mặc định cho các ngành hàng khác
       return [
         { label: "Thương hiệu", value: p.sub || "Thương Hiệu Chính Hãng" },
         { label: "Tên sản phẩm", value: p.name },
         { label: "Danh mục", value: ProductDetailData.getCategoryMeta(cat).name },
         { label: "Tình trạng", value: isMall ? "Mới 100% Nguyên Seal" : `Đồ cũ Like New ${p.cond || 98}%` },
-        { label: "Phụ kiện đi kèm", value: "Đầy đủ hộp, cáp sạc hoặc phụ kiện zin theo sản phẩm" },
+        { label: "Phụ kiện đi kèm", value: "Đầy đủ hộp và phụ kiện zin tiêu chuẩn theo sản phẩm" },
         { label: "Đặc điểm nổi bật", value: p.desc || "Hoàn thiện cao cấp, kiểm định chất lượng nghiêm ngặt" },
         { label: "Chế độ bảo hành", value: warranty },
         { label: "Chính sách đổi trả", value: "1 đổi 1 trong 7 ngày nếu phát sinh lỗi kỹ thuật" },
@@ -203,6 +284,27 @@
       if (!p) return [];
       const cat = p.category || "tech";
       const cond = p.cond || 98;
+      const name = (p.name || "").toLowerCase();
+
+      // Balo & Túi xách
+      if (name.includes("balo") || name.includes("túi xách")) {
+        return [
+          { title: "Chất liệu & Độ bền", value: "Không sờn rách, bề mặt vải/da chống thấm nước đạt chuẩn", icon: "verified", ok: true },
+          { title: "Khóa kéo & Khuy bấm", value: "Khóa kim loại trơn tru, kéo êm ái mượt mà", icon: "lock", ok: true },
+          { title: "Quai đeo & Đường may", value: "Đường chỉ may kép chịu tải trên 20kg", icon: "checkroom", ok: true },
+          { title: "Vệ sinh & Khử khuẩn", value: "Đã làm sạch sâu và chiếu đèn UV diệt khuẩn", icon: "clean_hands", ok: true },
+        ];
+      }
+
+      // Kính mắt, Nước hoa, Mỹ phẩm, Ly gốm sứ, Nến thơm
+      if (name.includes("kính") || name.includes("nước hoa") || name.includes("son") || name.includes("ly") || name.includes("nến") || name.includes("kem")) {
+        return [
+          { title: "Ngoại quan & Thân vỏ", value: `Độ mới ${cond}%, bề mặt không tì vết`, icon: "check_circle", ok: true },
+          { title: "Xác thực mã vạch/Batch", value: "Mã code & tem chống giả hợp lệ 100%", icon: "qr_code_2", ok: true },
+          { title: "Chất lượng nguyên bản", value: "Mùi hương/tròng kính/men mộc nguyên bản", icon: "thumb_up", ok: true },
+          { title: "Phụ kiện & Bao bì", value: "Đầy đủ hộp và phụ kiện kèm theo", icon: "inventory_2", ok: true },
+        ];
+      }
 
       if (cat === "tech" || cat === "gaming") {
         return [
@@ -258,6 +360,48 @@
     getVariants: function (p) {
       if (!p) return [];
       const cat = p.category || "tech";
+      const name = (p.name || "").toLowerCase();
+
+      // Balo & Túi xách
+      if (name.includes("balo") || name.includes("túi xách")) {
+        return [
+          { label: "Màu Đen Cyber (Black)", value: "black", active: true },
+          { label: "Màu Xám Khói (Grey)", value: "grey" },
+          { label: "Màu Nâu Tây (Caramel)", value: "caramel" },
+        ];
+      }
+
+      // Kính mắt
+      if (name.includes("kính")) {
+        return [
+          { label: "Gọng Đen • Tròng Đen Khói", value: "black", active: true },
+          { label: "Gọng Bạc • Tròng Phân Cực", value: "silver" },
+        ];
+      }
+
+      // Nước hoa
+      if (name.includes("nước hoa")) {
+        return [
+          { label: "Chai Fullbox 100ml", value: "100ml", active: true },
+          { label: "Chai Chiết 10ml Dùng Thử", value: "10ml" },
+        ];
+      }
+
+      // Son môi
+      if (name.includes("son")) {
+        return [
+          { label: "Màu Đỏ Đất (Trendy)", value: "red-earth", active: true },
+          { label: "Màu Cam Cháy (Chic)", value: "orange" },
+        ];
+      }
+
+      // Đồng hồ thông minh
+      if (cat === "watches" || name.includes("smartwatch") || name.includes("đồng hồ") || name.includes("apple watch")) {
+        return [
+          { label: "Bản Dây Cao Su Thể Thao Sport Band", value: "sport", active: true },
+          { label: "Bản Dây Thép Không Gỉ Milanese", value: "steel" },
+        ];
+      }
 
       if (cat === "fashion") {
         return [

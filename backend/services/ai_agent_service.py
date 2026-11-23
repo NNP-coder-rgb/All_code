@@ -20,79 +20,77 @@ from schemas.ai_agent import (
 # Danh mục tri thức mẫu các sản phẩm tiêu biểu trên sàn để AI Agent tư vấn
 RECOMMENDED_CATALOG = [
     {
-        "id": "sp-mall-01",
+        "id": "t2",
         "name": "Apple iPhone 15 Pro Max 256GB Titan Tự Nhiên (VN/A)",
         "price": 29990000,
         "old_price": 34990000,
         "type": "mall",
         "category": "phone",
-        "img": "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600&auto=format&fit=crop&q=80",
+        "img": "assets/images/products/dien-thoai-smartphone-flagship.png",
         "badge": "CHÍNH HÃNG MALL",
         "desc": "Flagship đỉnh cao chip A17 Pro, khung viền Titan siêu nhẹ, camera tiềm vọng 5x.",
-        "url": "pages/shop/product_new.html?id=sp-mall-01"
+        "url": "pages/shop/product_detail.html?id=t2"
     },
     {
-        "id": "sp-used-01",
-        "name": "Apple iPhone 14 Pro Max 128GB Tím Deep Purple (Like New 99%)",
-        "price": 20990000,
-        "old_price": 29990000,
-        "type": "c2c",
-        "cond": 99,
-        "category": "phone",
-        "img": "https://images.unsplash.com/photo-1678685888221-cda773a3dcdb?w=600&auto=format&fit=crop&q=80",
-        "badge": "LIKE NEW 99%",
-        "desc": "Đã qua 15 bước kiểm định Lab: Pin 98%, màn hình không ám ố, Face ID nhạy bén, sạc cáp zin.",
-        "url": "pages/shop/product_used.html?id=sp-used-01"
-    },
-    {
-        "id": "sp-used-02",
-        "name": "Apple MacBook Pro 14 M3 (18GB RAM / 512GB SSD Space Black Like New)",
-        "price": 36800000,
-        "old_price": 49990000,
-        "type": "c2c",
-        "cond": 98,
+        "id": "t1",
+        "name": "Apple MacBook Pro 16 inch M3 Max (36GB RAM / 1TB SSD Space Black)",
+        "price": 54990000,
+        "old_price": 68990000,
+        "type": "mall",
         "category": "laptop",
-        "img": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&auto=format&fit=crop&q=80",
-        "badge": "LIKE NEW 98%",
-        "desc": "Máy kỹ thuật viên đồ họa dùng lướt, chu kỳ sạc 42 lần, bảo hành 6 tháng toàn diện phần cứng.",
-        "url": "pages/shop/product_used.html?id=sp-used-02"
+        "img": "assets/images/products/may-tinh-laptop-mong-nhe.png",
+        "badge": "BRAND MALL 100%",
+        "desc": "Cỗ máy đồ họa tối thượng chip M3 Max 16 nhân, màn hình Liquid Retina XDR 120Hz ProMotion.",
+        "url": "pages/shop/product_detail.html?id=t1"
     },
     {
-        "id": "sp-mall-03",
-        "name": "Tai Nghe Chống Ồn Cao Cấp Sony WH-1000XM5 Chính Hãng",
+        "id": "t4",
+        "name": "Tai Nghe Chống Ồn Không Dây Sony WH-1000XM5 Chính Hãng",
         "price": 7490000,
         "old_price": 8990000,
         "type": "mall",
         "category": "audio",
-        "img": "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=600&auto=format&fit=crop&q=80",
+        "img": "assets/images/products/tai-nghe-sony-wh-ch520.png",
         "badge": "CHÍNH HÃNG SONY",
-        "desc": "Chống ồn chủ động ANC hàng đầu thế giới, thời lượng pin 30h, âm thanh Hi-Res Audio không dây.",
-        "url": "pages/shop/product_new.html?id=sp-mall-03"
+        "desc": "Chống ồn chủ động ANC đỉnh cao, thời lượng pin 30h, âm thanh Hi-Res Audio không dây.",
+        "url": "pages/shop/product_detail.html?id=t4"
     },
     {
-        "id": "sp-used-04",
-        "name": "Giày Sneaker Nike Air Jordan 1 Retro High OG 'Chicago Lost & Found'",
+        "id": "s2",
+        "name": "Giày Sneaker Air Jordan 1 Retro High OG 'Chicago Lost & Found'",
         "price": 4250000,
         "old_price": 6500000,
         "type": "c2c",
         "cond": 99,
         "category": "fashion",
-        "img": "https://images.unsplash.com/photo-1552346154-21d32810aba3?w=600&auto=format&fit=crop&q=80",
+        "img": "assets/images/products/giay-the-thao-nam-sneaker-de-day.png",
         "badge": "LIKE NEW 99%",
         "desc": "Đã qua kiểm định soi da, đường chỉ và đế giày, full phụ kiện dây sơ cua và tem kiểm định Lab.",
-        "url": "pages/shop/product_used.html?id=sp-used-04"
+        "url": "pages/shop/product_detail.html?id=s2"
     },
     {
-        "id": "sp-mall-02",
+        "id": "w9",
         "name": "Đồng Hồ Thông Minh Apple Watch Ultra 2 GPS + Cellular 49mm",
         "price": 19490000,
         "old_price": 21990000,
         "type": "mall",
         "category": "watch",
-        "img": "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=600&auto=format&fit=crop&q=80",
+        "img": "assets/images/products/dong-ho-thong-minh-smartwatch.png",
         "badge": "BRAND MALL MỚI 100%",
         "desc": "Vỏ Titan siêu bền bỉ, màn hình độ sáng 3000 nits, định vị GPS kép chuyên dụng thể thao mạo hiểm.",
-        "url": "pages/shop/product_new.html?id=sp-mall-02"
+        "url": "pages/shop/product_detail.html?id=w9"
+    },
+    {
+        "id": "w5",
+        "name": "Balo Thời Trang Cao Cấp Chống Nước Có Ngăn Laptop 15.6 Inch",
+        "price": 890000,
+        "old_price": 1250000,
+        "type": "mall",
+        "category": "accessories",
+        "img": "assets/images/products/balo-thoi-trang-chong-nuoc.png",
+        "badge": "MARK RYDEN MALL",
+        "desc": "Vải Oxford 900D chống thấm nước, đệm lưng thoáng khí chống gù, tích hợp cổng sạc USB.",
+        "url": "pages/shop/product_detail.html?id=w5"
     }
 ]
 
