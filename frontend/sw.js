@@ -1,8 +1,8 @@
 /**
  * sw.js — Service Worker cho HYBRID.STORE (PWA & Tự động làm mới Cache)
- * Phiên bản: v20261123_v21 (Giao diện đơn mua chuẩn Shopee và các sàn TMĐT hàng đầu)
+ * Phiên bản: v20261123_v22 (Rà soát toàn diện 25 trang, chuẩn hóa layout Seller Dashboard & Product Detail)
  */
-const CACHE_NAME = "hybrid-store-v20261123_v21";
+const CACHE_NAME = "hybrid-store-v20261123_v22";
 
 self.addEventListener("install", (e) => {
   // Lập tức kích hoạt Service Worker mới không chờ đợi
