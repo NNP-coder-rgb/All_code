@@ -4912,3 +4912,76 @@ body.light-theme .courier-gps-map-box {
     font-size: 1.35rem !important;
   }
 }
+
+/* =====================================================================
+   9. TỐI ƯU TOÀN DIỆN KHÔNG TRÀN & KHÔNG THIẾU DIỆN TÍCH CHO CÁC MÀN HÌNH NÂNG CAO
+   ===================================================================== */
+@media (max-width: 768px) {
+  /* Seller Chat Drawer dạng Bottom Sheet */
+  .seller-chat-drawer {
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 75vh !important;
+    max-height: 85vh !important;
+    border-radius: 20px 20px 0 0 !important;
+    border-bottom: none !important;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.7) !important;
+  }
+
+  /* Compare Modal & Matrix */
+  .compare-modal-box {
+    padding: 16px 12px !important;
+    max-width: calc(100vw - 16px) !important;
+  }
+  .compare-matrix-table,
+  .compare-table {
+    display: block !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Review Summary Card */
+  .reviews-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  .reviews-summary-card {
+    padding: 16px !important;
+  }
+
+  /* Specs Table */
+  .specs-table-wrapper {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  .specs-table {
+    min-width: 100% !important;
+  }
+  .specs-table td,
+  .specs-table th {
+    padding: 8px 10px !important;
+    font-size: 12px !important;
+  }
+
+  /* Sticky Buy Bar */
+  .mobile-sticky-buy-bar {
+    padding: 8px 12px !important;
+    gap: 8px !important;
+  }
+  .mobile-sticky-buy-bar .sticky-price-info {
+    min-width: 0 !important;
+  }
+  .mobile-sticky-buy-bar .sticky-actions {
+    gap: 6px !important;
+  }
+  .mobile-sticky-buy-bar .btn {
+    padding: 6px 10px !important;
+    font-size: 12px !important;
+    min-height: 36px !important;
+  }
+}
+
